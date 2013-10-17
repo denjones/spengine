@@ -1,0 +1,953 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{faffb511-1fcc-43c4-aa85-19ce4b0b7b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPShower">
+      <UniqueIdentifier>{288b0588-e0a7-4c4f-bc53-3b2ed2bd38c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI">
+      <UniqueIdentifier>{3c1b2a39-1518-4d59-b82c-aff23abdda6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUIComponent">
+      <UniqueIdentifier>{8ee77a74-c126-4975-af81-6f34875dcd39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUITransition">
+      <UniqueIdentifier>{e77ac002-11b4-4244-aa4f-37e7f1a22995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUITransition\SUIAnimation">
+      <UniqueIdentifier>{04bb3471-c6ad-4935-bde4-7b5754a095f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUITransition\SUIEffect">
+      <UniqueIdentifier>{85cac246-ba71-4916-b0d0-c65821573d6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUITransition\SUITransformation">
+      <UniqueIdentifier>{4ec4a280-04d7-4d7b-a983-9128c7673240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Effects">
+      <UniqueIdentifier>{879e4fb6-c91a-4ae0-9e31-80a580a9e2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Effecf Textures">
+      <UniqueIdentifier>{34ca6380-3e76-48bb-9c3f-cd05907cd50c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUIComponent\SUIText">
+      <UniqueIdentifier>{f4d45384-dcf8-4455-84d1-5eae93b9e864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUIComponent\SUIImage">
+      <UniqueIdentifier>{13c030d2-afeb-4ba4-8734-b398ff841b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\MixModes">
+      <UniqueIdentifier>{0bb3c719-c4bb-4aa5-a7e2-c04ed4f1632b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Transformation">
+      <UniqueIdentifier>{36043aae-bae3-4b4f-9e30-a643a165de7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SScript">
+      <UniqueIdentifier>{4ad475f8-5eb2-405a-abb9-ce2404c66e82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SScript\SScriptFunction">
+      <UniqueIdentifier>{36e6b059-cbe3-45bb-92f0-05c278198670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUIMixMode">
+      <UniqueIdentifier>{f157952b-71c4-4918-903c-a70fc95c8397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Font">
+      <UniqueIdentifier>{c92dedd3-f706-4eff-8d5c-b485cf9790ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Images">
+      <UniqueIdentifier>{8e8363f0-d09e-40a5-ba1e-a3ccbafc5cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Images\ST">
+      <UniqueIdentifier>{8102c90c-eed1-4a51-a900-d97992d752f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUIEvent">
+      <UniqueIdentifier>{88da2f96-bf57-4f0f-a3cf-2d9777ce940e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SGUI\SUIComponent\SUIList">
+      <UniqueIdentifier>{2ebdc0f8-d49c-4431-aa4c-02d81db08acb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Blend">
+      <UniqueIdentifier>{6e2bacee-2995-4ec7-a133-6914af660073}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SPShower.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="expat.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\images\mask_st_02.jpg">
+      <Filter>Resource Files\Images\ST</Filter>
+    </None>
+    <None Include="data\images\st_01.png">
+      <Filter>Resource Files\Images\ST</Filter>
+    </None>
+    <None Include="data\images\st_01_01.png">
+      <Filter>Resource Files\Images\ST</Filter>
+    </None>
+    <None Include="data\images\st_02.jpg">
+      <Filter>Resource Files\Images\ST</Filter>
+    </None>
+    <None Include="data\images\st_03.png">
+      <Filter>Resource Files\Images\ST</Filter>
+    </None>
+    <None Include="mask\mask_001.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_002.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_003.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_004.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_005.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_006.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_007.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_008.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_009.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_010.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_011.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_012.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_013.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_014.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_015.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_016.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_017.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_018.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_019.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_020.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_021.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_022.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_023.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_024.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_025.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_026.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_027.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_028.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_029.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_030.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_031.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_032.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_033.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_034.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_035.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_036.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_037.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_038.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="mask\mask_040.png">
+      <Filter>Resource Files\Effecf Textures</Filter>
+    </None>
+    <None Include="first.ks" />
+    <None Include="font\FZMWFont.ttf">
+      <Filter>Resource Files\Font</Filter>
+    </None>
+    <None Include="data\images\bg_01.jpg">
+      <Filter>Resource Files\Images</Filter>
+    </None>
+    <None Include="data\images\blue.png">
+      <Filter>Resource Files\Images</Filter>
+    </None>
+    <None Include="data\images\black.png">
+      <Filter>Resource Files\Images</Filter>
+    </None>
+    <None Include="data\images\loading.png">
+      <Filter>Resource Files\Images</Filter>
+    </None>
+    <None Include="data\images\sicily.jpg">
+      <Filter>Resource Files\Images</Filter>
+    </None>
+    <None Include="pre.ks" />
+    <None Include="effect\effect_grayvalue.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mask.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mosaic.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mosaicAll.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_posure.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_relievo.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_average.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_laplace.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_pencilFilter.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_glow.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_shadow.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_stroke.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_watercolor.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_zigzag.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="mix\mix_color_burn.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_color_dodge.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_darken.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_difference.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_exclusion.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_hard.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_hard_light.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_lighten.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_burn.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_dodge.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_light.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_mask.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_multiply.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_normal.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_overlay.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_pin_light.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_screen.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_soft_light.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_vivid_light.fx">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="trans\trans_fade.fx">
+      <Filter>Resource Files\Transformation</Filter>
+    </None>
+    <None Include="effect\effect_frequency_gauss.fx">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="trans\trans_fade.fxa">
+      <Filter>Resource Files\Transformation</Filter>
+    </None>
+    <None Include="trans\trans_fade.fxo">
+      <Filter>Resource Files\Transformation</Filter>
+    </None>
+    <None Include="mix\mix_color_burn.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_color_dodge.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_darken.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_difference.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_exclusion.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_hard.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_hard_light.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_lighten.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_burn.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_dodge.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_light.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_mask.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_multiply.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_normal.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_overlay.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_pin_light.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_screen.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_soft_light.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_vivid_light.fxa">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_color_burn.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_color_dodge.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_darken.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_difference.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_exclusion.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_hard.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_hard_light.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_lighten.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_burn.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_dodge.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_linear_light.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_mask.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_multiply.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_normal.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_overlay.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_pin_light.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_screen.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_soft_light.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="mix\mix_vivid_light.fxo">
+      <Filter>Resource Files\MixModes</Filter>
+    </None>
+    <None Include="effect\effect_frequency_gauss.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_grayvalue.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mask.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mosaic.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mosaicAll.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_posure.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_relievo.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_average.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_laplace.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_pencilFilter.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_glow.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_shadow.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_stroke.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_watercolor.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_zigzag.fxa">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_frequency_gauss.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_grayvalue.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mask.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mosaic.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_mosaicAll.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_posure.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_relievo.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_average.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_laplace.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_spacial_pencilFilter.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_glow.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_shadow.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_text_stroke.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_watercolor.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="effect\effect_zigzag.fxo">
+      <Filter>Resource Files\Effects</Filter>
+    </None>
+    <None Include="avcodec-lav-54.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="avfilter-lav-3.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="avformat-lav-54.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="avresample-lav-1.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="avutil-lav-52.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="libbluray.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="swscale-lav-2.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LAVAudio.ax">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LAVSplitter.ax">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LAVVideo.ax">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SpeShow.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="blend\blend_normal.fx">
+      <Filter>Resource Files\Blend</Filter>
+    </None>
+    <None Include="rt_manif.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SPShower.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SPGameShow.h">
+      <Filter>Source\SPShower</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIManager.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIBlankComponent.h">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUITransition.h">
+      <Filter>Source\SGUI\SUITransition</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIComponent.h">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIComponentComposite.h">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIProperties.h">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIAnimation.h">
+      <Filter>Source\SGUI\SUITransition\SUIAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIEffect.h">
+      <Filter>Source\SGUI\SUITransition\SUIEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIGenerator.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SRectangle.h">
+      <Filter>Source\SPShower</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIAnimationManager.h">
+      <Filter>Source\SGUI\SUITransition\SUIAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIText.h">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIEffectManager.h">
+      <Filter>Source\SGUI\SUITransition\SUIEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIPictureBox.h">
+      <Filter>Source\SGUI\SUIComponent\SUIImage</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIPictureList.h">
+      <Filter>Source\SGUI\SUIComponent\SUIImage</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIMixImage.h">
+      <Filter>Source\SGUI\SUIComponent\SUIImage</Filter>
+    </ClInclude>
+    <ClInclude Include="SUITransformation.h">
+      <Filter>Source\SGUI\SUITransition\SUITransformation</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIScreen.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SScriptManager.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SScriptCommand.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFPicture.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFPictureBox.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFScreen.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SScriptFunction.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIPictureManager.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFComponent.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFMixPicture.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIMixModeManager.h">
+      <Filter>Source\SGUI\SUIMixMode</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIMixMode.h">
+      <Filter>Source\SGUI\SUIMixMode</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFWaitClick.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFSwitchPicture.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUITransformationManager.h">
+      <Filter>Source\SGUI\SUITransition\SUITransformation</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFTextBox.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFFont.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFAddText.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFClearText.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFAnimation.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFAddAnimation.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFSwitchScreen.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFWaitTime.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFEffect.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFSound.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUITextBox.h">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFRegisterFont.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFExit.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFScript.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFTag.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFGoTo.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFVideo.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIVideoManager.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIEventHandler.h">
+      <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIEvent.h">
+      <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIEventHandleScript.h">
+      <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIList.h">
+      <Filter>Source\SGUI\SUIComponent\SUIList</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFList.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFTrack.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIDialogBox.h">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFDialogBox.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFNext.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFWaitDialog.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFSaveGameData.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFSavePicture.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFLoadGameData.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SScriptHelper.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFVar.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFWindowText.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFDisplay.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFWait.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFFirst.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFCursor.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFFps.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFExecute.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFSkip.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SSFParticleSystem.h">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIParticleSystemManager.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SPShower.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SPGameShow.cpp">
+      <Filter>Source\SPShower</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIManager.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIBlankComponent.cpp">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITransition.cpp">
+      <Filter>Source\SGUI\SUITransition</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIComponent.cpp">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIComponentComposite.cpp">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIProperties.cpp">
+      <Filter>Source\SGUI\SUIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIAnimation.cpp">
+      <Filter>Source\SGUI\SUITransition\SUIAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIEffect.cpp">
+      <Filter>Source\SGUI\SUITransition\SUIEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIGenerator.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SRectangle.cpp">
+      <Filter>Source\SPShower</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIAnimationManager.cpp">
+      <Filter>Source\SGUI\SUITransition\SUIAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIText.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIEffectManager.cpp">
+      <Filter>Source\SGUI\SUITransition\SUIEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIPictureBox.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIImage</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIPictureList.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIImage</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIMixImage.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIImage</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITransformation.cpp">
+      <Filter>Source\SGUI\SUITransition\SUITransformation</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIScreen.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SScriptManager.cpp">
+      <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SScriptCommand.cpp">
+      <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SScriptFunction.cpp">
+      <Filter>Source\SScript\SScriptFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIPictureManager.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIMixMode.cpp">
+      <Filter>Source\SGUI\SUIMixMode</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIMixModeManager.cpp">
+      <Filter>Source\SGUI\SUIMixMode</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITransformationManager.cpp">
+      <Filter>Source\SGUI\SUITransition\SUITransformation</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITextBox.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIVideoManager.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIEventHandleScript.cpp">
+      <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIEvent.cpp">
+      <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIList.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIList</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIDialogBox.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClCompile>
+    <ClCompile Include="SScriptHelper.cpp">
+      <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIParticleSystemManager.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SPShower.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

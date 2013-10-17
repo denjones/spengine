@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7D08C877-AE72-4B95-84B5-7814950B1502}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SPEngine</RootNamespace>
+    <SccProjectName>Svn</SccProjectName>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);$(DXSDK_DIR)Utilities\Bin\x86;</ExecutablePath>
+    <IncludePath>..\Vorbis;..\Antlr;$(CEGUI)cegui\include;\CEGUI\dependency\include;..\DirectShow;..\KScript;$(DXSDK_DIR)Include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(FrameworkSDKDir)\include;..\SimpleXMLPersistence;..\zlib\include</IncludePath>
+    <LibraryPath>$(CEGUI)lib;..\DirectShow\Debug;..\KScript\Debug;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(FrameworkSDKDir)\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath);..\SimpleXMLPersistence;..\zlib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\Vorbis;..\Antlr;$(CEGUI)cegui\include;$(DXSDK_DIR)Include;..\DirectShow;..\SimpleXMLPersistence;..\KScript;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\zlib\include</IncludePath>
+    <ExecutablePath>$(CEGUI)bin;$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>$(CEGUI)lib;$(DXSDK_DIR)Lib\x86; $(DXSDK_DIR)Lib\x64;.\DirectShow;.;$(LibraryPath);..\zlib</LibraryPath>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/MACHINE:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/MACHINE:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="small.ico" />
+    <None Include="SPEngine.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\zlib\include\zconf.h" />
+    <ClInclude Include="..\zlib\include\zlib.h" />
+    <ClInclude Include="ISPDrawable.h" />
+    <ClInclude Include="ISPFilePackingMethod.h" />
+    <ClInclude Include="ISPInputDevice.h" />
+    <ClInclude Include="ISPLoadable.h" />
+    <ClInclude Include="ISPUpdatable.h" />
+    <ClInclude Include="SPAnimatedTexture.h" />
+    <ClInclude Include="SPBaseScreen.h" />
+    <ClInclude Include="SPCamera.h" />
+    <ClInclude Include="SPColorHelper.h" />
+    <ClInclude Include="SPComponentFactory.h" />
+    <ClInclude Include="SPComposite.h" />
+    <ClInclude Include="SPDirectInput.h" />
+    <ClInclude Include="SPDShowData.h" />
+    <ClInclude Include="SPEffect.h" />
+    <ClInclude Include="SPEffectCore.h" />
+    <ClInclude Include="SPEffectManager.h" />
+    <ClInclude Include="SPEmptyPackingMethod.h" />
+    <ClInclude Include="SPFactory.h" />
+    <ClInclude Include="SPComponentManager.h" />
+    <ClInclude Include="SPConfig.h" />
+    <ClInclude Include="SPConfigManager.h" />
+    <ClInclude Include="SPFile.h" />
+    <ClInclude Include="SPFileHelper.h" />
+    <ClInclude Include="SPFileManager.h" />
+    <ClInclude Include="SPFilePacker.h" />
+    <ClInclude Include="SPFileSourceFilter.h" />
+    <ClInclude Include="SPFileStream.h" />
+    <ClInclude Include="SPFontHelper.h" />
+    <ClInclude Include="SPfPackingMethod.h" />
+    <ClInclude Include="SPLogHelper.h" />
+    <ClInclude Include="SPMessageHelper.h" />
+    <ClInclude Include="PackageHelper.h" />
+    <ClInclude Include="SPDevice.h" />
+    <ClInclude Include="SPFont.h" />
+    <ClInclude Include="SPFontWriter.h" />
+    <ClInclude Include="SPGameFactory.h" />
+    <ClInclude Include="SPGameManager.h" />
+    <ClInclude Include="SPHandle.h" />
+    <ClInclude Include="SPHandleManager.h" />
+    <ClInclude Include="SPIterator.h" />
+    <ClInclude Include="SPOggFile.h" />
+    <ClInclude Include="SPParticleSystem2D.h" />
+    <ClInclude Include="SPParticleSystemManager.h" />
+    <ClInclude Include="SPParticleSystemTexture.h" />
+    <ClInclude Include="SPPixelShader.h" />
+    <ClInclude Include="SPPixelShaderCore.h" />
+    <ClInclude Include="SPPointer.h" />
+    <ClInclude Include="SPRectangle.h" />
+    <ClInclude Include="SPShaderManager.h" />
+    <ClInclude Include="SPSoundFile.h" />
+    <ClInclude Include="SPSoundStreamingContext.h" />
+    <ClInclude Include="SPSoundTrack.h" />
+    <ClInclude Include="SPSprite3D.h" />
+    <ClInclude Include="SPSpriteManager3D.h" />
+    <ClInclude Include="SPSingleton.h" />
+    <ClInclude Include="SPString.h" />
+    <ClInclude Include="SPStringMap.h" />
+    <ClInclude Include="SPTextSprite.h" />
+    <ClInclude Include="SPTextureManager.h" />
+    <ClInclude Include="SPTextureSprite.h" />
+    <ClInclude Include="SPUpdatableTexture.h" />
+    <ClInclude Include="SPVideo.h" />
+    <ClInclude Include="SPVideoManager.h" />
+    <ClInclude Include="SPVideoTexture.h" />
+    <ClInclude Include="SPWavFile.h" />
+    <ClInclude Include="SPWindow.h" />
+    <ClInclude Include="SPFontManager.h" />
+    <ClInclude Include="FPSDisplayer.h" />
+    <ClInclude Include="SPComponent.h" />
+    <ClInclude Include="SPDInputDevice.h" />
+    <ClInclude Include="SPInputManager.h" />
+    <ClInclude Include="SPJoystick.h" />
+    <ClInclude Include="SPKeyboard.h" />
+    <ClInclude Include="SPLightManager.h" />
+    <ClInclude Include="SPMaterialManager.h" />
+    <ClInclude Include="SPMouse.h" />
+    <ClInclude Include="SPParticleSystem3D.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SPScreenManager.h" />
+    <ClInclude Include="SPScriptManager.h" />
+    <ClInclude Include="SPSound.h" />
+    <ClInclude Include="SPSoundManager.h" />
+    <ClInclude Include="SPEngine.h" />
+    <ClInclude Include="SPGame.h" />
+    <ClInclude Include="SPSprite.h" />
+    <ClInclude Include="SPSpriteManager.h" />
+    <ClInclude Include="SPXAudio.h" />
+    <ClInclude Include="SPXInput.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SPStringHelper.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="SPTextToWrite.h" />
+    <ClInclude Include="SPTexture.h" />
+    <ClInclude Include="SPTransition.h" />
+    <ClInclude Include="SPVertex.h" />
+    <ClInclude Include="SPVideoHelper.h" />
+    <ClInclude Include="SPVideoRenderer.h" />
+    <ClInclude Include="SPXController.h" />
+    <ClInclude Include="xAudio2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SPAnimatedTexture.cpp" />
+    <ClCompile Include="SPBaseScreen.cpp" />
+    <ClCompile Include="SPCamera.cpp" />
+    <ClCompile Include="SPColorHelper.cpp" />
+    <ClCompile Include="SPComponentManager.cpp" />
+    <ClCompile Include="SPConfig.cpp" />
+    <ClCompile Include="SPConfigManager.cpp" />
+    <ClCompile Include="SPEffect.cpp" />
+    <ClCompile Include="SPEffectCore.cpp" />
+    <ClCompile Include="SPEffectManager.cpp" />
+    <ClCompile Include="SPEmptyPackingMethod.cpp" />
+    <ClCompile Include="SPFile.cpp" />
+    <ClCompile Include="SPFileHelper.cpp" />
+    <ClCompile Include="SPFileManager.cpp" />
+    <ClCompile Include="SPFilePacker.cpp" />
+    <ClCompile Include="SPFileSourceFilter.cpp" />
+    <ClCompile Include="SPFontHelper.cpp" />
+    <ClCompile Include="SPfPackingMethod.cpp" />
+    <ClCompile Include="SPLogHelper.cpp" />
+    <ClCompile Include="SPMessageHelper.cpp" />
+    <ClCompile Include="PackageHelper.cpp" />
+    <ClCompile Include="SPDevice.cpp" />
+    <ClCompile Include="SPDirectInput.cpp" />
+    <ClCompile Include="SPDShowData.cpp" />
+    <ClCompile Include="SPFont.cpp" />
+    <ClCompile Include="SPFontWriter.cpp" />
+    <ClCompile Include="SPOggFile.cpp" />
+    <ClCompile Include="SPParticleSystem2D.cpp" />
+    <ClCompile Include="SPParticleSystemManager.cpp" />
+    <ClCompile Include="SPParticleSystemTexture.cpp" />
+    <ClCompile Include="SPPixelShader.cpp" />
+    <ClCompile Include="SPPixelShaderCore.cpp" />
+    <ClCompile Include="SPRectangle.cpp" />
+    <ClCompile Include="SPShaderManager.cpp" />
+    <ClCompile Include="SPSoundFile.cpp" />
+    <ClCompile Include="SPSoundStreamingContext.cpp" />
+    <ClCompile Include="SPSoundTrack.cpp" />
+    <ClCompile Include="SPSprite3D.cpp" />
+    <ClCompile Include="SPSpriteManager3D.cpp" />
+    <ClCompile Include="SPTextSprite.cpp" />
+    <ClCompile Include="SPTextureManager.cpp" />
+    <ClCompile Include="SPTextureSprite.cpp" />
+    <ClCompile Include="SPVideoManager.cpp" />
+    <ClCompile Include="SPVideoTexture.cpp" />
+    <ClCompile Include="SPWavFile.cpp" />
+    <ClCompile Include="SPWindow.cpp" />
+    <ClCompile Include="SPFontManager.cpp" />
+    <ClCompile Include="FPSDisplayer.cpp" />
+    <ClCompile Include="SPComponent.cpp" />
+    <ClCompile Include="SPInputManager.cpp" />
+    <ClCompile Include="SPJoystick.cpp" />
+    <ClCompile Include="SPKeyboard.cpp" />
+    <ClCompile Include="SPLightManager.cpp" />
+    <ClCompile Include="SPMaterialManager.cpp" />
+    <ClCompile Include="SPMouse.cpp" />
+    <ClCompile Include="SPParticleSystem3D.cpp" />
+    <ClCompile Include="SPScreenManager.cpp" />
+    <ClCompile Include="SPScriptManager.cpp" />
+    <ClCompile Include="SPSound.cpp" />
+    <ClCompile Include="SPSoundManager.cpp" />
+    <ClCompile Include="SPGame.cpp" />
+    <ClCompile Include="SPSprite.cpp" />
+    <ClCompile Include="SPSpriteManager.cpp" />
+    <ClCompile Include="SPXAudio.cpp" />
+    <ClCompile Include="SPXInput.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SPStringHelper.cpp" />
+    <ClCompile Include="SPTextToWrite.cpp" />
+    <ClCompile Include="SPTexture.cpp" />
+    <ClCompile Include="SPTransition.cpp" />
+    <ClCompile Include="SPVideoHelper.cpp" />
+    <ClCompile Include="SPVideo.cpp" />
+    <ClCompile Include="SPXController.cpp" />
+    <ClCompile Include="SPVideoRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SPEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectShow\DirectShow.vcxproj">
+      <Project>{e63ad8c5-3fff-4be7-8798-3f87d3e1e8fb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\KScript\KScript.vcxproj">
+      <Project>{cf8c946e-f346-467e-bf72-116e26cabc01}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleXMLPersistence\SimpleXMLPersistence.vcxproj">
+      <Project>{d2fe6f40-ad61-424b-994b-4d7993551961}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Vorbis\Vorbis.vcxproj">
+      <Project>{e25b6c31-5a99-496d-a32a-c52cebf02f82}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\zlib\zlibwapi.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{93F41327-A725-445F-8F3F-678ABA8251C5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SPShower</RootNamespace>
+    <ProjectName>SpeShow</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);$(DXSDK_DIR)Utilities\Bin\x86;.\dll</ExecutablePath>
+    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\SPEngine;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;$(DXSDK_DIR)Include;..\SPAVG;..\SimpleXMLPersistence;.\zlib\include</IncludePath>
+    <LibraryPath>..\KScript\Debug;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\Antlr;..\DirectShow;$(DXSDK_DIR)Include;..\KScript;..\SPEngine;..\SPAVG;$(IncludePath);..\SimpleXMLPersistence</IncludePath>
+    <LibraryPath>..\SPENGINE;..\SimpleXMLPersistence;..\DirectShow\Release;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath);..\zlib</LibraryPath>
+    <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
+    <EmbedManifest>true</EmbedManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <Manifest>
+      <OutputManifestFile>
+      </OutputManifestFile>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="avcodec-lav-54.dll" />
+    <None Include="avfilter-lav-3.dll" />
+    <None Include="avformat-lav-54.dll" />
+    <None Include="avresample-lav-1.dll" />
+    <None Include="avutil-lav-52.dll" />
+    <None Include="blend\blend_normal.fx" />
+    <None Include="data\images\bg_01.jpg" />
+    <None Include="data\images\black.png" />
+    <None Include="data\images\blue.png" />
+    <None Include="data\images\loading.png" />
+    <None Include="data\images\mask_st_02.jpg" />
+    <None Include="data\images\sicily.jpg" />
+    <None Include="data\images\st_01.png" />
+    <None Include="data\images\st_01_01.png" />
+    <None Include="data\images\st_02.jpg" />
+    <None Include="data\images\st_03.png" />
+    <None Include="effect\effect_frequency_gauss.fx">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(DXSDK_DIR)Utilities\Bin\x86\fxc.exe" /Gec /T fx_2_0 /Fc $(InputDir)\$(InputName).txt /Fo $(InputPath)\effect\%(Filename).fxo effect\%(Filename).fx $(InputPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">HLSL Compiler</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).fxo</Outputs>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="effect\effect_frequency_gauss.fxa" />
+    <None Include="effect\effect_frequency_gauss.fxo" />
+    <None Include="effect\effect_grayvalue.fx" />
+    <None Include="effect\effect_grayvalue.fxa" />
+    <None Include="effect\effect_grayvalue.fxo" />
+    <None Include="effect\effect_mask.fx" />
+    <None Include="effect\effect_mask.fxa" />
+    <None Include="effect\effect_mask.fxo" />
+    <None Include="effect\effect_mosaic.fx" />
+    <None Include="effect\effect_mosaic.fxa" />
+    <None Include="effect\effect_mosaic.fxo" />
+    <None Include="effect\effect_mosaicAll.fx" />
+    <None Include="effect\effect_mosaicAll.fxa" />
+    <None Include="effect\effect_mosaicAll.fxo" />
+    <None Include="effect\effect_posure.fx" />
+    <None Include="effect\effect_posure.fxa" />
+    <None Include="effect\effect_posure.fxo" />
+    <None Include="effect\effect_relievo.fx" />
+    <None Include="effect\effect_relievo.fxa" />
+    <None Include="effect\effect_relievo.fxo" />
+    <None Include="effect\effect_spacial_average.fx" />
+    <None Include="effect\effect_spacial_average.fxa" />
+    <None Include="effect\effect_spacial_average.fxo" />
+    <None Include="effect\effect_spacial_laplace.fx" />
+    <None Include="effect\effect_spacial_laplace.fxa" />
+    <None Include="effect\effect_spacial_laplace.fxo" />
+    <None Include="effect\effect_spacial_pencilFilter.fx" />
+    <None Include="effect\effect_spacial_pencilFilter.fxa" />
+    <None Include="effect\effect_spacial_pencilFilter.fxo" />
+    <None Include="effect\effect_text_glow.fx" />
+    <None Include="effect\effect_text_glow.fxa" />
+    <None Include="effect\effect_text_glow.fxo" />
+    <None Include="effect\effect_text_shadow.fx" />
+    <None Include="effect\effect_text_shadow.fxa" />
+    <None Include="effect\effect_text_shadow.fxo" />
+    <None Include="effect\effect_text_stroke.fx" />
+    <None Include="effect\effect_text_stroke.fxa" />
+    <None Include="effect\effect_text_stroke.fxo" />
+    <None Include="effect\effect_watercolor.fx" />
+    <None Include="effect\effect_watercolor.fxa" />
+    <None Include="effect\effect_watercolor.fxo" />
+    <None Include="effect\effect_zigzag.fx" />
+    <None Include="effect\effect_zigzag.fxa" />
+    <None Include="effect\effect_zigzag.fxo" />
+    <None Include="expat.dll" />
+    <None Include="first.ks" />
+    <None Include="font\FZMWFont.ttf" />
+    <None Include="LAVAudio.ax" />
+    <None Include="LAVSplitter.ax" />
+    <None Include="LAVVideo.ax" />
+    <None Include="libbluray.dll" />
+    <None Include="mask\mask_001.png" />
+    <None Include="mask\mask_002.png" />
+    <None Include="mask\mask_003.png" />
+    <None Include="mask\mask_004.png" />
+    <None Include="mask\mask_005.png" />
+    <None Include="mask\mask_006.png" />
+    <None Include="mask\mask_007.png" />
+    <None Include="mask\mask_008.png" />
+    <None Include="mask\mask_009.png" />
+    <None Include="mask\mask_010.png" />
+    <None Include="mask\mask_011.png" />
+    <None Include="mask\mask_012.png" />
+    <None Include="mask\mask_013.png" />
+    <None Include="mask\mask_014.png" />
+    <None Include="mask\mask_015.png" />
+    <None Include="mask\mask_016.png" />
+    <None Include="mask\mask_017.png" />
+    <None Include="mask\mask_018.png" />
+    <None Include="mask\mask_019.png" />
+    <None Include="mask\mask_020.png" />
+    <None Include="mask\mask_021.png" />
+    <None Include="mask\mask_022.png" />
+    <None Include="mask\mask_023.png" />
+    <None Include="mask\mask_024.png" />
+    <None Include="mask\mask_025.png" />
+    <None Include="mask\mask_026.png" />
+    <None Include="mask\mask_027.png" />
+    <None Include="mask\mask_028.png" />
+    <None Include="mask\mask_029.png" />
+    <None Include="mask\mask_030.png" />
+    <None Include="mask\mask_031.png" />
+    <None Include="mask\mask_032.png" />
+    <None Include="mask\mask_033.png" />
+    <None Include="mask\mask_034.png" />
+    <None Include="mask\mask_035.png" />
+    <None Include="mask\mask_036.png" />
+    <None Include="mask\mask_037.png" />
+    <None Include="mask\mask_038.png" />
+    <None Include="mask\mask_040.png" />
+    <None Include="mix\mix_color_burn.fx" />
+    <None Include="mix\mix_color_burn.fxa" />
+    <None Include="mix\mix_color_burn.fxo" />
+    <None Include="mix\mix_color_dodge.fx" />
+    <None Include="mix\mix_color_dodge.fxa" />
+    <None Include="mix\mix_color_dodge.fxo" />
+    <None Include="mix\mix_darken.fx" />
+    <None Include="mix\mix_darken.fxa" />
+    <None Include="mix\mix_darken.fxo" />
+    <None Include="mix\mix_difference.fx" />
+    <None Include="mix\mix_difference.fxa" />
+    <None Include="mix\mix_difference.fxo" />
+    <None Include="mix\mix_exclusion.fx" />
+    <None Include="mix\mix_exclusion.fxa" />
+    <None Include="mix\mix_exclusion.fxo" />
+    <None Include="mix\mix_hard.fx" />
+    <None Include="mix\mix_hard.fxa" />
+    <None Include="mix\mix_hard.fxo" />
+    <None Include="mix\mix_hard_light.fx" />
+    <None Include="mix\mix_hard_light.fxa" />
+    <None Include="mix\mix_hard_light.fxo" />
+    <None Include="mix\mix_lighten.fx" />
+    <None Include="mix\mix_lighten.fxa" />
+    <None Include="mix\mix_lighten.fxo" />
+    <None Include="mix\mix_linear_burn.fx" />
+    <None Include="mix\mix_linear_burn.fxa" />
+    <None Include="mix\mix_linear_burn.fxo" />
+    <None Include="mix\mix_linear_dodge.fx" />
+    <None Include="mix\mix_linear_dodge.fxa" />
+    <None Include="mix\mix_linear_dodge.fxo" />
+    <None Include="mix\mix_linear_light.fx" />
+    <None Include="mix\mix_linear_light.fxa" />
+    <None Include="mix\mix_linear_light.fxo" />
+    <None Include="mix\mix_mask.fx" />
+    <None Include="mix\mix_mask.fxa" />
+    <None Include="mix\mix_mask.fxo" />
+    <None Include="mix\mix_multiply.fx" />
+    <None Include="mix\mix_multiply.fxa" />
+    <None Include="mix\mix_multiply.fxo" />
+    <None Include="mix\mix_normal.fx" />
+    <None Include="mix\mix_normal.fxa" />
+    <None Include="mix\mix_normal.fxo" />
+    <None Include="mix\mix_overlay.fx" />
+    <None Include="mix\mix_overlay.fxa" />
+    <None Include="mix\mix_overlay.fxo" />
+    <None Include="mix\mix_pin_light.fx" />
+    <None Include="mix\mix_pin_light.fxa" />
+    <None Include="mix\mix_pin_light.fxo" />
+    <None Include="mix\mix_screen.fx" />
+    <None Include="mix\mix_screen.fxa" />
+    <None Include="mix\mix_screen.fxo" />
+    <None Include="mix\mix_soft_light.fx" />
+    <None Include="mix\mix_soft_light.fxa" />
+    <None Include="mix\mix_soft_light.fxo" />
+    <None Include="mix\mix_vivid_light.fx" />
+    <None Include="mix\mix_vivid_light.fxa" />
+    <None Include="mix\mix_vivid_light.fxo" />
+    <None Include="pre.ks" />
+    <None Include="ReadMe.txt" />
+    <None Include="rt_manif.bin">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="small.ico" />
+    <None Include="SpeShow.ico" />
+    <None Include="SPShower.ico" />
+    <None Include="swscale-lav-2.dll" />
+    <None Include="trans\trans_fade.fx" />
+    <None Include="trans\trans_fade.fxa" />
+    <None Include="trans\trans_fade.fxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SScriptHelper.h" />
+    <ClInclude Include="SSFAddAnimation.h" />
+    <ClInclude Include="SSFAddText.h" />
+    <ClInclude Include="SSFAnimation.h" />
+    <ClInclude Include="SSFClearText.h" />
+    <ClInclude Include="SSFComponent.h" />
+    <ClInclude Include="SSFCursor.h" />
+    <ClInclude Include="SSFDialogBox.h" />
+    <ClInclude Include="SSFDisplay.h" />
+    <ClInclude Include="SSFEffect.h" />
+    <ClInclude Include="SSFExecute.h" />
+    <ClInclude Include="SSFExit.h" />
+    <ClInclude Include="SSFFirst.h" />
+    <ClInclude Include="SSFFont.h" />
+    <ClInclude Include="SSFFps.h" />
+    <ClInclude Include="SSFGoTo.h" />
+    <ClInclude Include="SSFList.h" />
+    <ClInclude Include="SSFLoadGameData.h" />
+    <ClInclude Include="SSFMixPicture.h" />
+    <ClInclude Include="SSFNext.h" />
+    <ClInclude Include="SSFParticleSystem.h" />
+    <ClInclude Include="SSFPicture.h" />
+    <ClInclude Include="SSFPictureBox.h" />
+    <ClInclude Include="SSFRegisterFont.h" />
+    <ClInclude Include="SSFSaveGameData.h" />
+    <ClInclude Include="SSFSavePicture.h" />
+    <ClInclude Include="SSFScreen.h" />
+    <ClInclude Include="SPGameShow.h" />
+    <ClInclude Include="SPShower.h" />
+    <ClInclude Include="SRectangle.h" />
+    <ClInclude Include="SScriptCommand.h" />
+    <ClInclude Include="SScriptFunction.h" />
+    <ClInclude Include="SScriptManager.h" />
+    <ClInclude Include="SSFScript.h" />
+    <ClInclude Include="SSFSkip.h" />
+    <ClInclude Include="SSFSound.h" />
+    <ClInclude Include="SSFSwitchPicture.h" />
+    <ClInclude Include="SSFSwitchScreen.h" />
+    <ClInclude Include="SSFTag.h" />
+    <ClInclude Include="SSFTextBox.h" />
+    <ClInclude Include="SSFTrack.h" />
+    <ClInclude Include="SSFVar.h" />
+    <ClInclude Include="SSFVideo.h" />
+    <ClInclude Include="SSFWait.h" />
+    <ClInclude Include="SSFWaitClick.h" />
+    <ClInclude Include="SSFWaitTime.h" />
+    <ClInclude Include="SSFWindowText.h" />
+    <ClInclude Include="SUIAnimation.h" />
+    <ClInclude Include="SUIAnimationManager.h" />
+    <ClInclude Include="SUIBlankComponent.h" />
+    <ClInclude Include="SUIComponent.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SUIComponentComposite.h" />
+    <ClInclude Include="SUIEffectManager.h" />
+    <ClInclude Include="SUIEvent.h" />
+    <ClInclude Include="SUIEventHandler.h" />
+    <ClInclude Include="SUIGenerator.h" />
+    <ClInclude Include="SUIList.h" />
+    <ClInclude Include="SUIDialogBox.h" />
+    <ClInclude Include="SUIMixImage.h" />
+    <ClInclude Include="SUIMixMode.h" />
+    <ClInclude Include="SUIMixModeManager.h" />
+    <ClInclude Include="SUIParticleSystemManager.h" />
+    <ClInclude Include="SUIPictureBox.h" />
+    <ClInclude Include="SUIPictureList.h" />
+    <ClInclude Include="SUIPictureManager.h" />
+    <ClInclude Include="SUIProperties.h" />
+    <ClInclude Include="SUIEffect.h" />
+    <ClInclude Include="SUIManager.h" />
+    <ClInclude Include="SUIScreen.h" />
+    <ClInclude Include="SUIEventHandleScript.h" />
+    <ClInclude Include="SUIText.h" />
+    <ClInclude Include="SUITextBox.h" />
+    <ClInclude Include="SUITransformation.h" />
+    <ClInclude Include="SUITransformationManager.h" />
+    <ClInclude Include="SUITransition.h" />
+    <ClInclude Include="SUIVideoManager.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="SSFWaitDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SPGameShow.cpp" />
+    <ClCompile Include="SPShower.cpp" />
+    <ClCompile Include="SRectangle.cpp" />
+    <ClCompile Include="SScriptCommand.cpp" />
+    <ClCompile Include="SScriptFunction.cpp" />
+    <ClCompile Include="SScriptHelper.cpp" />
+    <ClCompile Include="SScriptManager.cpp" />
+    <ClCompile Include="SUIAnimation.cpp" />
+    <ClCompile Include="SUIAnimationManager.cpp" />
+    <ClCompile Include="SUIBlankComponent.cpp" />
+    <ClCompile Include="SUIComponent.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SUIComponentComposite.cpp" />
+    <ClCompile Include="SUIEffectManager.cpp" />
+    <ClCompile Include="SUIEvent.cpp" />
+    <ClCompile Include="SUIEventHandleScript.cpp" />
+    <ClCompile Include="SUIGenerator.cpp" />
+    <ClCompile Include="SUIList.cpp" />
+    <ClCompile Include="SUIDialogBox.cpp" />
+    <ClCompile Include="SUIMixImage.cpp" />
+    <ClCompile Include="SUIMixMode.cpp" />
+    <ClCompile Include="SUIMixModeManager.cpp" />
+    <ClCompile Include="SUIParticleSystemManager.cpp" />
+    <ClCompile Include="SUIPictureBox.cpp" />
+    <ClCompile Include="SUIPictureList.cpp" />
+    <ClCompile Include="SUIPictureManager.cpp" />
+    <ClCompile Include="SUIProperties.cpp" />
+    <ClCompile Include="SUIEffect.cpp" />
+    <ClCompile Include="SUIManager.cpp" />
+    <ClCompile Include="SUIScreen.cpp" />
+    <ClCompile Include="SUIText.cpp" />
+    <ClCompile Include="SUITextBox.cpp" />
+    <ClCompile Include="SUITransformation.cpp" />
+    <ClCompile Include="SUITransformationManager.cpp" />
+    <ClCompile Include="SUITransition.cpp" />
+    <ClCompile Include="SUIVideoManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SPShower.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectShow\DirectShow.vcxproj">
+      <Project>{e63ad8c5-3fff-4be7-8798-3f87d3e1e8fb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\KScript\KScript.vcxproj">
+      <Project>{cf8c946e-f346-467e-bf72-116e26cabc01}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleXMLPersistence\SimpleXMLPersistence.vcxproj">
+      <Project>{d2fe6f40-ad61-424b-994b-4d7993551961}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SPENGINE\SPENGINE.vcxproj">
+      <Project>{7d08c877-ae72-4b95-84b5-7814950b1502}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

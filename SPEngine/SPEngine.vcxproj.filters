@@ -1,0 +1,650 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{3bf13cc6-c940-42fe-961f-08644e64c63e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{b66340f2-2bd5-43a8-a061-d65e4b8ecf35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPWindow">
+      <UniqueIdentifier>{e499d3b3-efea-4690-89d7-5adb6a5eb161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics">
+      <UniqueIdentifier>{493e310b-8533-488d-b5d5-caa9b07618f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPStructure">
+      <UniqueIdentifier>{164ff42f-fca8-4da5-a19b-c522305591b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPConfig">
+      <UniqueIdentifier>{6823409b-c46b-4a2d-88a7-423e557278b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPInterface">
+      <UniqueIdentifier>{6179ed7f-ae15-4c38-bbe8-fa26e5a11973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPComponent">
+      <UniqueIdentifier>{f2013ec5-27a7-4f66-b68c-01f2aeebef5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPInput">
+      <UniqueIdentifier>{f10dba24-399f-41e7-ac3b-6076fd6c6571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPHelper">
+      <UniqueIdentifier>{70b476a7-6a2f-4318-9f3d-b88b48cdba18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGame">
+      <UniqueIdentifier>{f23bb4a5-1d4b-43ef-a89d-cd016ca45b07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPFile">
+      <UniqueIdentifier>{ec6d6576-3d23-4c12-8a25-47f03e4b669e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPFont">
+      <UniqueIdentifier>{290c9912-fd98-4c03-ade0-efca087d381d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPSprite">
+      <UniqueIdentifier>{812ffec1-9407-4088-9ae2-2c39336c993d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPTexture">
+      <UniqueIdentifier>{eac36d84-02bf-4842-8acd-35842d0fdb55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPVideo">
+      <UniqueIdentifier>{6fbfe5bf-aa26-44ac-acd2-24940fdc49f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPScreen">
+      <UniqueIdentifier>{fc635c75-40cc-49c1-b968-ed0b79412a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Not to use">
+      <UniqueIdentifier>{32c75b18-03f4-49b1-aed2-10f67052af64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Not to use\Graphics">
+      <UniqueIdentifier>{b3d814bf-5a8e-4811-87e8-8f0504194b6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Not to use\Helper">
+      <UniqueIdentifier>{2583e6c7-4e9d-44c8-a317-6b5d7faf5347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPSound">
+      <UniqueIdentifier>{89ffb68b-d829-4bdd-89d3-2b74042023c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPScript">
+      <UniqueIdentifier>{ceb99bbf-b41d-4714-bbf9-6835df59ebf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPVideo\Filter">
+      <UniqueIdentifier>{bb8b6f12-3333-4c1a-ac58-9d95530c7bf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPFile\SPPackingMethod">
+      <UniqueIdentifier>{85a8c85b-9ceb-4d1d-aa5e-381c55b5ff2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPShader">
+      <UniqueIdentifier>{ba5f733c-2c33-4572-9b9a-ba1302eb3ff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPLight">
+      <UniqueIdentifier>{302f3155-6ce1-4175-b17a-a13318c8573d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPCamera">
+      <UniqueIdentifier>{53942222-92cd-4609-8152-d311952c18a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPMaterial">
+      <UniqueIdentifier>{f765bb0e-174f-4d19-9946-5dc2b8bd6cff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPEffect">
+      <UniqueIdentifier>{3ceddfec-3e46-475f-a108-63fd60eaac07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPFile\zlib">
+      <UniqueIdentifier>{51918d2c-143f-4d84-b787-589cd8cf9f49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SPGraphics\SPParticleSystem">
+      <UniqueIdentifier>{2207c1fd-5dcc-4ccc-984e-419b3e3491c5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SPEngine.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PackageHelper.h">
+      <Filter>Source\Not to use\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\zlib\include\zconf.h">
+      <Filter>Source\SPFile\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\zlib\include\zlib.h">
+      <Filter>Source\SPFile\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SPEngine.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SPWindow.h">
+      <Filter>Source\SPWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="SPDevice.h">
+      <Filter>Source\SPGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SPHandle.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSingleton.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPPointer.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPStringMap.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPIterator.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPHandleManager.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPConfigManager.h">
+      <Filter>Source\SPConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="SPConfig.h">
+      <Filter>Source\SPConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="ISPUpdatable.h">
+      <Filter>Source\SPInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ISPDrawable.h">
+      <Filter>Source\SPInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ISPLoadable.h">
+      <Filter>Source\SPInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="SPComponent.h">
+      <Filter>Source\SPComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SPComponentManager.h">
+      <Filter>Source\SPComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFactory.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPComponentFactory.h">
+      <Filter>Source\SPComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SPStringHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="ISPInputDevice.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPDInputDevice.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPDirectInput.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPMouse.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPKeyboard.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPJoystick.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPXInput.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPInputManager.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPXController.h">
+      <Filter>Source\SPInput</Filter>
+    </ClInclude>
+    <ClInclude Include="SPGameManager.h">
+      <Filter>Source\SPGame</Filter>
+    </ClInclude>
+    <ClInclude Include="SPGameFactory.h">
+      <Filter>Source\SPGame</Filter>
+    </ClInclude>
+    <ClInclude Include="SPGame.h">
+      <Filter>Source\SPGame</Filter>
+    </ClInclude>
+    <ClInclude Include="SPColorHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="SPXAudio.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFontManager.h">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFont.h">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSprite.h">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSpriteManager.h">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTextureManager.h">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTexture.h">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="SPAnimatedTexture.h">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFontWriter.h">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTextToWrite.h">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSpriteManager3D.h">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSprite3D.h">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVertex.h">
+      <Filter>Source\SPGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SPDShowData.h">
+      <Filter>Source\SPVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVideo.h">
+      <Filter>Source\SPVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVideoTexture.h">
+      <Filter>Source\SPVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="SPUpdatableTexture.h">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="SPMessageHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="SPLogHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVideoHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSDisplayer.h">
+      <Filter>Source\SPComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVideoRenderer.h">
+      <Filter>Source\SPVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVideoManager.h">
+      <Filter>Source\SPVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="SPBaseScreen.h">
+      <Filter>Source\SPScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="SPScreenManager.h">
+      <Filter>Source\SPScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSoundManager.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSoundTrack.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSound.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPScriptManager.h">
+      <Filter>Source\SPScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFileSourceFilter.h">
+      <Filter>Source\SPVideo\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFileStream.h">
+      <Filter>Source\SPVideo\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTransition.h">
+      <Filter>Source\SPScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFile.h">
+      <Filter>Source\SPFile</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFileManager.h">
+      <Filter>Source\SPFile</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFilePacker.h">
+      <Filter>Source\SPFile</Filter>
+    </ClInclude>
+    <ClInclude Include="ISPFilePackingMethod.h">
+      <Filter>Source\SPFile</Filter>
+    </ClInclude>
+    <ClInclude Include="SPEmptyPackingMethod.h">
+      <Filter>Source\SPFile\SPPackingMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="SPPixelShader.h">
+      <Filter>Source\SPGraphics\SPShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SPShaderManager.h">
+      <Filter>Source\SPGraphics\SPShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SPLightManager.h">
+      <Filter>Source\SPGraphics\SPLight</Filter>
+    </ClInclude>
+    <ClInclude Include="SPCamera.h">
+      <Filter>Source\SPGraphics\SPCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="SPMaterialManager.h">
+      <Filter>Source\SPGraphics\SPMaterial</Filter>
+    </ClInclude>
+    <ClInclude Include="SPRectangle.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPComposite.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPString.h">
+      <Filter>Source\SPStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="SPPixelShaderCore.h">
+      <Filter>Source\SPGraphics\SPShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SPEffect.h">
+      <Filter>Source\SPGraphics\SPEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="SPEffectCore.h">
+      <Filter>Source\SPGraphics\SPEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="SPEffectManager.h">
+      <Filter>Source\SPGraphics\SPEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFontHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="SPFileHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="SPfPackingMethod.h">
+      <Filter>Source\SPFile\SPPackingMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSoundStreamingContext.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="xAudio2.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPSoundFile.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPWavFile.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPOggFile.h">
+      <Filter>Source\SPSound</Filter>
+    </ClInclude>
+    <ClInclude Include="SPParticleSystemManager.h">
+      <Filter>Source\SPGraphics\SPParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SPParticleSystem3D.h">
+      <Filter>Source\SPGraphics\SPParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SPParticleSystem2D.h">
+      <Filter>Source\Not to use\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SPParticleSystemTexture.h">
+      <Filter>Source\SPGraphics\SPParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTextSprite.h">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTextureSprite.h">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PackageHelper.cpp">
+      <Filter>Source\Not to use\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPWindow.cpp">
+      <Filter>Source\SPWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="SPDevice.cpp">
+      <Filter>Source\SPGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SPConfigManager.cpp">
+      <Filter>Source\SPConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="SPConfig.cpp">
+      <Filter>Source\SPConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="SPComponent.cpp">
+      <Filter>Source\SPComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SPComponentManager.cpp">
+      <Filter>Source\SPComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SPStringHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPDirectInput.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPKeyboard.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPMouse.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPJoystick.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPXInput.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPInputManager.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPXController.cpp">
+      <Filter>Source\SPInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SPGame.cpp">
+      <Filter>Source\SPGame</Filter>
+    </ClCompile>
+    <ClCompile Include="SPColorHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPXAudio.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFontManager.cpp">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFont.cpp">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSprite.cpp">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSpriteManager.cpp">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SPTextureManager.cpp">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="SPTexture.cpp">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="SPAnimatedTexture.cpp">
+      <Filter>Source\SPGraphics\SPTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFontWriter.cpp">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClCompile>
+    <ClCompile Include="SPTextToWrite.cpp">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSprite3D.cpp">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSpriteManager3D.cpp">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SPDShowData.cpp">
+      <Filter>Source\SPVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVideo.cpp">
+      <Filter>Source\SPVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVideoTexture.cpp">
+      <Filter>Source\SPVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="SPMessageHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPLogHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVideoHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSDisplayer.cpp">
+      <Filter>Source\SPComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVideoRenderer.cpp">
+      <Filter>Source\SPVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVideoManager.cpp">
+      <Filter>Source\SPVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="SPBaseScreen.cpp">
+      <Filter>Source\SPScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="SPScreenManager.cpp">
+      <Filter>Source\SPScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSoundManager.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSoundTrack.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSound.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPScriptManager.cpp">
+      <Filter>Source\SPScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFileSourceFilter.cpp">
+      <Filter>Source\SPVideo\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="SPTransition.cpp">
+      <Filter>Source\SPScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFile.cpp">
+      <Filter>Source\SPFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFileManager.cpp">
+      <Filter>Source\SPFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFilePacker.cpp">
+      <Filter>Source\SPFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SPEmptyPackingMethod.cpp">
+      <Filter>Source\SPFile\SPPackingMethod</Filter>
+    </ClCompile>
+    <ClCompile Include="SPPixelShader.cpp">
+      <Filter>Source\SPGraphics\SPShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SPShaderManager.cpp">
+      <Filter>Source\SPGraphics\SPShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SPLightManager.cpp">
+      <Filter>Source\SPGraphics\SPLight</Filter>
+    </ClCompile>
+    <ClCompile Include="SPCamera.cpp">
+      <Filter>Source\SPGraphics\SPCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="SPMaterialManager.cpp">
+      <Filter>Source\SPGraphics\SPMaterial</Filter>
+    </ClCompile>
+    <ClCompile Include="SPRectangle.cpp">
+      <Filter>Source\SPStructure</Filter>
+    </ClCompile>
+    <ClCompile Include="SPPixelShaderCore.cpp">
+      <Filter>Source\SPGraphics\SPShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SPEffect.cpp">
+      <Filter>Source\SPGraphics\SPEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SPEffectCore.cpp">
+      <Filter>Source\SPGraphics\SPEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SPEffectManager.cpp">
+      <Filter>Source\SPGraphics\SPEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFontHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPFileHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPfPackingMethod.cpp">
+      <Filter>Source\SPFile\SPPackingMethod</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSoundStreamingContext.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPSoundFile.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPWavFile.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPOggFile.cpp">
+      <Filter>Source\SPSound</Filter>
+    </ClCompile>
+    <ClCompile Include="SPParticleSystem3D.cpp">
+      <Filter>Source\SPGraphics\SPParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SPParticleSystemManager.cpp">
+      <Filter>Source\SPGraphics\SPParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SPParticleSystem2D.cpp">
+      <Filter>Source\Not to use\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SPParticleSystemTexture.cpp">
+      <Filter>Source\SPGraphics\SPParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SPTextSprite.cpp">
+      <Filter>Source\SPGraphics\SPFont</Filter>
+    </ClCompile>
+    <ClCompile Include="SPTextureSprite.cpp">
+      <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SPEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\zlib\zlibwapi.lib">
+      <Filter>Library</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

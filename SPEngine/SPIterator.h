@@ -1,0 +1,29 @@
+//////////////////////////////////////////////////////////////////////////
+/// @file		SPIterator.h the header file of template SPIterator interface.
+/// @author		Ken.J
+/// @version	Alpha 0.7
+/// @date		2012-7-11
+//////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace SPEngine
+{
+	///////////////////////////////////////////////////////////////////////
+	/// @brief SPIterator to go through a container.
+	///
+	///////////////////////////////////////////////////////////////////////
+	template <typename T>
+	class SPIterator
+	{
+	public:
+		virtual void First() = 0;
+		virtual void Next() = 0;
+		virtual bool IsDone() const = 0;
+		virtual T CurrentItem() const = 0;
+	protected:
+		SPIterator() {}
+	};
+}
+
+

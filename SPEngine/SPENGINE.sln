@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPENGINE", "SPENGINE\SPENGINE.vcxproj", "{7D08C877-AE72-4B95-84B5-7814950B1502}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D2FE6F40-AD61-424B-994B-4D7993551961} = {D2FE6F40-AD61-424B-994B-4D7993551961}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPGTest1", "SPGTest1\SPGTest1.vcxproj", "{82EC60C8-6FB3-49BE-ABC9-537533DCB144}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7D08C877-AE72-4B95-84B5-7814950B1502} = {7D08C877-AE72-4B95-84B5-7814950B1502}
+		{2D11C7BF-548B-4329-8D94-B75A66780281} = {2D11C7BF-548B-4329-8D94-B75A66780281}
+		{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB} = {E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KScript", "KScript\KScript.vcxproj", "{CF8C946E-F346-467E-BF72-116E26CABC01}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPAVG", "SPAVG\SPAVG.vcxproj", "{2D11C7BF-548B-4329-8D94-B75A66780281}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CF8C946E-F346-467E-BF72-116E26CABC01} = {CF8C946E-F346-467E-BF72-116E26CABC01}
+		{7D08C877-AE72-4B95-84B5-7814950B1502} = {7D08C877-AE72-4B95-84B5-7814950B1502}
+		{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB} = {E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectShow", "DirectShow\DirectShow.vcxproj", "{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleXMLPersistence", "SimpleXMLPersistence\SimpleXMLPersistence.vcxproj", "{D2FE6F40-AD61-424B-994B-4D7993551961}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{A257A436-002F-4674-9D1A-327A80AD1B25}"
+	ProjectSection(SolutionItems) = preProject
+		docs\SD.docx = docs\SD.docx
+		docs\SRS.docx = docs\SRS.docx
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D08C877-AE72-4B95-84B5-7814950B1502}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7D08C877-AE72-4B95-84B5-7814950B1502}.Debug|Win32.Build.0 = Debug|Win32
+		{7D08C877-AE72-4B95-84B5-7814950B1502}.Release|Win32.ActiveCfg = Release|Win32
+		{7D08C877-AE72-4B95-84B5-7814950B1502}.Release|Win32.Build.0 = Release|Win32
+		{82EC60C8-6FB3-49BE-ABC9-537533DCB144}.Debug|Win32.ActiveCfg = Debug|Win32
+		{82EC60C8-6FB3-49BE-ABC9-537533DCB144}.Debug|Win32.Build.0 = Debug|Win32
+		{82EC60C8-6FB3-49BE-ABC9-537533DCB144}.Release|Win32.ActiveCfg = Release|Win32
+		{82EC60C8-6FB3-49BE-ABC9-537533DCB144}.Release|Win32.Build.0 = Release|Win32
+		{CF8C946E-F346-467E-BF72-116E26CABC01}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CF8C946E-F346-467E-BF72-116E26CABC01}.Debug|Win32.Build.0 = Debug|Win32
+		{CF8C946E-F346-467E-BF72-116E26CABC01}.Release|Win32.ActiveCfg = Release|Win32
+		{CF8C946E-F346-467E-BF72-116E26CABC01}.Release|Win32.Build.0 = Release|Win32
+		{2D11C7BF-548B-4329-8D94-B75A66780281}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2D11C7BF-548B-4329-8D94-B75A66780281}.Debug|Win32.Build.0 = Debug|Win32
+		{2D11C7BF-548B-4329-8D94-B75A66780281}.Release|Win32.ActiveCfg = Release|Win32
+		{2D11C7BF-548B-4329-8D94-B75A66780281}.Release|Win32.Build.0 = Release|Win32
+		{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}.Debug|Win32.Build.0 = Debug|Win32
+		{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}.Release|Win32.ActiveCfg = Release|Win32
+		{E63AD8C5-3FFF-4BE7-8798-3F87D3E1E8FB}.Release|Win32.Build.0 = Release|Win32
+		{D2FE6F40-AD61-424B-994B-4D7993551961}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2FE6F40-AD61-424B-994B-4D7993551961}.Debug|Win32.Build.0 = Debug|Win32
+		{D2FE6F40-AD61-424B-994B-4D7993551961}.Release|Win32.ActiveCfg = Release|Win32
+		{D2FE6F40-AD61-424B-994B-4D7993551961}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

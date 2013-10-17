@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="antlr3baserecognizer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3basetree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3basetreeadaptor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3bitset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3collections.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3commontoken.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3commontree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3commontreeadaptor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3commontreenodestream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3convertutf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3cyclicdfa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3debughandlers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3encodings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3exception.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3filestream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3inputstream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3intstream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3lexer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3parser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3rewritestreams.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3string.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3tokenstream.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="antlr3treeparser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="antlr3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3baserecognizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3basetree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3basetreeadaptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3bitset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3collections.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3commontoken.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3commontree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3commontreeadaptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3commontreenodestream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3convertutf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3cyclicdfa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3debugeventlistener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3encodings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3errors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3filestream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3interfaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3intstream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3lexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3parsetree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3recognizersharedstate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3rewritestreams.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3stringstream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3tokenstream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="antlr3treeparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
