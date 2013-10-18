@@ -7,6 +7,7 @@
 
 #pragma once
 #include <assert.h>
+#include "SPNullPointerException.h"
 
 using namespace std;
 
@@ -177,36 +178,32 @@ namespace SPEngine
 		/// @{
 		T* operator -> ()
 		{
-			assert(pointer);
-
 			if (pointer)
 			{
 				return pointer;
 			}
 
-			throw runtime_error("Access through NULL pointer"); 
+			throw SPNullPointerException(); 
 		}
 
 		T** operator & ()
 		{
-			assert(pointer);
-
 			if (pointer)
 			{
 				return &pointer;
 			}
+
+			throw SPNullPointerException(); 
 		}
 
 		T& operator * ()
 		{
-			assert(pointer);
-
 			if (pointer)
 			{
 				return *pointer;
 			}
 
-			throw runtime_error("Dereference of NULL pointer"); 
+			throw SPNullPointerException(); 
 		}
 		/// @}
 

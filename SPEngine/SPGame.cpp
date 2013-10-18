@@ -171,124 +171,131 @@ namespace SPEngine
 
 	DWORD WINAPI SPGame::GameThreadProc(PVOID pParam)
 	{
-		CoInitializeEx(NULL, COINIT_MULTITHREADED);
-
-		SPLogHelper::WriteLog("[Game] Game Thread Starts.");
-
-		SPGame* currentGame = (SPGame*)pParam;
-
-		//
-		// Check if the engine is successfully built.
-		// 
-
-		if (!currentGame->BuildEngine())
+		try
 		{
-			SPLogHelper::WriteLog("[Game] ERROR: Failed To Build Engine!");
-			return false;
-		}
+			CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
-		//
-		// Initialize components and load contents.
-		// 
+			SPLogHelper::WriteLog("[Game] Game Thread Starts.");
 
-		if(!currentGame->InitializeComponents())
-		{
-			SPLogHelper::WriteLog("[Game] ERROR: Failed To Initialize Game!");
-			return false;
-		}
+			SPGame* currentGame = (SPGame*)pParam;
 
-		if(!currentGame->Load())
-		{
-			SPLogHelper::WriteLog("[Game] ERROR: Failed To Load Game Content!");
-			return false;
-		}
-
-		SPLogHelper::WriteLog("============= Game Starts! =============");
-
-		SPWindow::GetSingleton().Update();
-		SPWindow::GetSingleton().Show();
-		SPWindow::GetSingleton().Focus();
-
-		while (true)
-		{
 			//
-			// Get time in millisecond.
+			// Check if the engine is successfully built.
 			// 
 
-			static float lastTimeMS = (float)timeGetTime();
+			if (!currentGame->BuildEngine())
+			{
+				SPLogHelper::WriteLog("[Game] ERROR: Failed To Build Engine!");
+				return false;
+			}
+
+			//
+			// Initialize components and load contents.
+			// 
+
+			if(!currentGame->InitializeComponents())
+			{
+				SPLogHelper::WriteLog("[Game] ERROR: Failed To Initialize Game!");
+				return false;
+			}
+
+			if(!currentGame->Load())
+			{
+				SPLogHelper::WriteLog("[Game] ERROR: Failed To Load Game Content!");
+				return false;
+			}
+
+			SPLogHelper::WriteLog("============= Game Starts! =============");
+
+			SPWindow::GetSingleton().Update();
+			SPWindow::GetSingleton().Show();
+			SPWindow::GetSingleton().Focus();
+
+			while (true)
+			{
+				//
+				// Get time in millisecond.
+				// 
+
+				static float lastTimeMS = (float)timeGetTime();
 			
-			float currentTimeMS = (float)timeGetTime();
-			float timeDeltaS = (currentTimeMS - lastTimeMS) * 0.001f;
-			lastTimeMS = currentTimeMS;		
+				float currentTimeMS = (float)timeGetTime();
+				float timeDeltaS = (currentTimeMS - lastTimeMS) * 0.001f;
+				lastTimeMS = currentTimeMS;		
 
-			if (currentGame->isExitButtonPressed)
-			{
-				currentGame->isExitButtonPressed = false;
-				currentGame->Exit();
-			}
-
-			if(currentGame->isExiting)
-			{
-				currentGame->isGameThreadRunning = false;
-				break;
-			}
-
-			//
-			// Render and calculate render time
-			// 
-
-			float renderTimeBeginMS = (float)timeGetTime();
-
-			if (!currentGame->Render(timeDeltaS))
-			{
-				currentGame->isGameThreadRunning = false;
-				currentGame->Exit();
-				break;
-			}
-
-			float renderTimeEndMS = (float)timeGetTime();
-
-			float renderTimeDeltaMS = renderTimeEndMS - renderTimeBeginMS;
-
-			//
-			// Lock FPS
-			// 
-
-			if (currentGame->IsLockFPS())
-			{
-				float timePerFrameMS = 1000.0f / currentGame->GetLockedFPS();
-
-				if (renderTimeDeltaMS < timePerFrameMS)
+				if (currentGame->isExitButtonPressed)
 				{
-					Sleep(timePerFrameMS - renderTimeDeltaMS);
+					currentGame->isExitButtonPressed = false;
+					currentGame->Exit();
 				}
+
+				if(currentGame->isExiting)
+				{
+					currentGame->isGameThreadRunning = false;
+					break;
+				}
+
+				//
+				// Render and calculate render time
+				// 
+
+				float renderTimeBeginMS = (float)timeGetTime();
+
+				if (!currentGame->Render(timeDeltaS))
+				{
+					currentGame->isGameThreadRunning = false;
+					currentGame->Exit();
+					break;
+				}
+
+				float renderTimeEndMS = (float)timeGetTime();
+
+				float renderTimeDeltaMS = renderTimeEndMS - renderTimeBeginMS;
+
+				//
+				// Lock FPS
+				// 
+
+				if (currentGame->IsLockFPS())
+				{
+					float timePerFrameMS = 1000.0f / currentGame->GetLockedFPS();
+
+					if (renderTimeDeltaMS < timePerFrameMS)
+					{
+						Sleep(timePerFrameMS - renderTimeDeltaMS);
+					}
+				}
+			
+			
 			}
-			
-			
+
+			//
+			// Don't know why program just crashed when exited in XP without sleeping.
+			// 
+			// 
+
+			//Sleep(1000);
+
+			if(!currentGame->UnloadContent())
+			{
+				SPLogHelper::WriteLog("[Game] ERROR: Failed To Unload Game Content!");
+				return false;
+			}
+
+			SPWindow::GetSingleton().UnregisterWindowClass();
+
+			currentGame->isGameThreadRunning = false;
+
+			CoUninitialize();
+
+			SetEvent(currentGame->hGameThreadExited);
+
+			BOOL resutl = PostMessage(SPWindow::GetSingleton().GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);		
 		}
-
-		//
-		// Don't know why program just crashed when exited in XP without sleeping.
-		// 
-		// 
-
-		//Sleep(1000);
-
-		if(!currentGame->UnloadContent())
+		catch(exception ex)
 		{
-			SPLogHelper::WriteLog("[Game] ERROR: Failed To Unload Game Content!");
-			return false;
+			SPLogHelper::WriteLog("[Game] Unhandled Exception: " + string(ex.what()));
 		}
-
-		SPWindow::GetSingleton().UnregisterWindowClass();
-
-		currentGame->isGameThreadRunning = false;
-
-		CoUninitialize();
-
-		SetEvent(currentGame->hGameThreadExited);
-
-		BOOL resutl = PostMessage(SPWindow::GetSingleton().GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);		
 
 		return 0;
 	}

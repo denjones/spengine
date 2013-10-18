@@ -98,6 +98,9 @@
     <Filter Include="Source\SPGraphics\SPParticleSystem">
       <UniqueIdentifier>{2207c1fd-5dcc-4ccc-984e-419b3e3491c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\SPException">
+      <UniqueIdentifier>{72adc69f-3c3d-4d15-ac54-eb2a7771081d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -412,6 +415,9 @@
     <ClInclude Include="SPTextureSprite.h">
       <Filter>Source\SPGraphics\SPSprite</Filter>
     </ClInclude>
+    <ClInclude Include="SPNullPointerException.h">
+      <Filter>Source\SPException</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PackageHelper.cpp">
@@ -635,6 +641,9 @@
     </ClCompile>
     <ClCompile Include="SPTextureSprite.cpp">
       <Filter>Source\SPGraphics\SPSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SPNullPointerException.cpp">
+      <Filter>Source\SPException</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

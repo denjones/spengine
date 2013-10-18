@@ -139,6 +139,7 @@
     <ClInclude Include="SPHandle.h" />
     <ClInclude Include="SPHandleManager.h" />
     <ClInclude Include="SPIterator.h" />
+    <ClInclude Include="SPNullPointerException.h" />
     <ClInclude Include="SPOggFile.h" />
     <ClInclude Include="SPParticleSystem2D.h" />
     <ClInclude Include="SPParticleSystemManager.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="SPDShowData.cpp" />
     <ClCompile Include="SPFont.cpp" />
     <ClCompile Include="SPFontWriter.cpp" />
+    <ClCompile Include="SPNullPointerException.cpp" />
     <ClCompile Include="SPOggFile.cpp" />
     <ClCompile Include="SPParticleSystem2D.cpp" />
     <ClCompile Include="SPParticleSystemManager.cpp" />
