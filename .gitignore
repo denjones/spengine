@@ -229,4 +229,6 @@ SSPackGuider/
 *.pixrun
 *.dat
 *.pak
+*.p
+*.pa
 SPShower/first2.ks
