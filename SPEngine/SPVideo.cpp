@@ -34,6 +34,7 @@ namespace SPEngine
 
 	SPVideo::~SPVideo()
 	{
+		Stop();
 		delete callBack;
 		callBack = NULL;
 		Unload();
