@@ -553,13 +553,7 @@
     <None Include="effect\effect_zigzag.fxo">
       <Filter>Resource Files\Effects</Filter>
     </None>
-    <None Include="avcodec-lav-54.dll">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="avfilter-lav-3.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="avformat-lav-54.dll">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="avresample-lav-1.dll">
@@ -590,6 +584,30 @@
       <Filter>Resource Files\Blend</Filter>
     </None>
     <None Include="rt_manif.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="antlr3c.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="avcodec-lav-55.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="avformat-lav-55.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="D3DCompiler_43.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="d3dx9_43.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="IntelQuickSyncDecoder.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="msvcp100.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="msvcr100.dll">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -949,5 +967,10 @@
     <ResourceCompile Include="SPShower.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="LAVFilters.Dependencies.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
   </ItemGroup>
 </Project>

@@ -131,6 +131,10 @@ namespace SPEngine
 				}				
 			}
 		}
+		else
+		{
+			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVSplitter.ax :" + SPStringHelper::ToString((int)GetLastError()));
+		}
 
 		//
 		// Add LAV Video filter
@@ -177,6 +181,10 @@ namespace SPEngine
 				}				
 			}
 		}
+		else
+		{
+			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVVideo.ax :" + SPStringHelper::ToString((int)GetLastError()));
+		}
 
 		//
 		// Add LAV Audio filter
@@ -222,6 +230,10 @@ namespace SPEngine
 					SAFE_RELEASE(pLAVAudio);
 				}				
 			}
+		}
+		else
+		{
+			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVAudio.ax :" + SPStringHelper::ToString((int)GetLastError()));
 		}
 
 		// Query for graph interfaces.
