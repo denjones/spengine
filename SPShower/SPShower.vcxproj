@@ -92,12 +92,15 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="avcodec-lav-54.dll" />
+    <None Include="antlr3c.dll" />
+    <None Include="avcodec-lav-55.dll" />
     <None Include="avfilter-lav-3.dll" />
-    <None Include="avformat-lav-54.dll" />
+    <None Include="avformat-lav-55.dll" />
     <None Include="avresample-lav-1.dll" />
     <None Include="avutil-lav-52.dll" />
     <None Include="blend\blend_normal.fx" />
+    <None Include="D3DCompiler_43.dll" />
+    <None Include="d3dx9_43.dll" />
     <None Include="data\images\bg_01.jpg" />
     <None Include="data\images\black.png" />
     <None Include="data\images\blue.png" />
@@ -161,6 +164,7 @@
     <None Include="expat.dll" />
     <None Include="first.ks" />
     <None Include="font\FZMWFont.ttf" />
+    <None Include="IntelQuickSyncDecoder.dll" />
     <None Include="LAVAudio.ax" />
     <None Include="LAVSplitter.ax" />
     <None Include="LAVVideo.ax" />
@@ -261,6 +265,8 @@
     <None Include="mix\mix_vivid_light.fx" />
     <None Include="mix\mix_vivid_light.fxa" />
     <None Include="mix\mix_vivid_light.fxo" />
+    <None Include="msvcp100.dll" />
+    <None Include="msvcr100.dll" />
     <None Include="pre.ks" />
     <None Include="ReadMe.txt" />
     <None Include="rt_manif.bin">
@@ -418,6 +424,9 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="LAVFilters.Dependencies.manifest" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

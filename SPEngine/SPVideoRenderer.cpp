@@ -351,17 +351,10 @@ namespace SPEngine
 			return -1;
 		}
 
-
 		// Retrieve the size of this media type
 		
-		VIDEOINFO *pviBmp;                      // Bitmap info header
+		VIDEOINFO *pviBmp;    // Bitmap info header
 		pviBmp = (VIDEOINFO *)pMediaType->Format();
-
-		//m_lVidWidth  = pviBmp->bmiHeader.biWidth;
-		//m_lVidHeight = abs(pviBmp->bmiHeader.biHeight);
-		//m_lVidPitch  = (m_lVidWidth * 3 + 3) & ~(3); // We are forcing RGB24
-
-		
 
 		// here let's check if we can use dynamic textures
 		D3DCAPS9 caps;
@@ -372,23 +365,8 @@ namespace SPEngine
 			m_bUseDynamicTextures = TRUE;
 		}
 
-		//if( caps.TextureCaps & D3DPTEXTURECAPS_POW2 )
-		//{
-		//	while( (LONG)uintWidth < m_lVidWidth )
-		//	{
-		//		uintWidth = uintWidth << 1;
-		//	}
-		//	while( (LONG)uintHeight < m_lVidHeight )
-		//	{
-		//		uintHeight = uintHeight << 1;
-		//	}
-		//	//video->UpgradeGeometry( m_lVidWidth, uintWidth, m_lVidHeight, uintHeight);
-		//}
-		//else
-		//{
-			uintWidth = m_lVidWidth;
-			uintHeight = m_lVidHeight;
-		//}		
+		uintWidth = m_lVidWidth;
+		uintHeight = m_lVidHeight;
 
 		if ((m_texture_format == D3DFMT_YUY2 ||
 			m_texture_format == D3DFMT_UYVY))
@@ -458,37 +436,10 @@ namespace SPEngine
 			}
 
 			m_lock.Unlock();
-
-			//Sleep(1000.0f / 60);
-
-			//m_lock.Lock();
-
-			//if (m_waitingToUpdate)
-			//{
-			//	break;
-			//}
-			//else
-			//{
-			//	m_needToBeUpdated = false;
-			//	m_lock.Unlock();				
-			//	return S_OK;
-			//}
 		}
 
-		//m_needToBeUpdated = false;
-		//m_lock.Unlock();
-		//return S_OK;
-
-		//m_lock.Lock();
-
-		//if (!m_waitingToUpdate)
-		//{
-		//	m_lock.Unlock();
-		//	return S_OK;
-		//}
-
 		BYTE  *pBmpBuffer, *pTxtBuffer;	// Bitmap buffer, texture buffer
-		LONG  lTxtPitch;					// Pitch of bitmap, texture
+		LONG  lTxtPitch;				// Pitch of bitmap, texture
 
 		BYTE  * pbS = NULL;
 		DWORD * pdwS = NULL;

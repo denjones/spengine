@@ -21,10 +21,10 @@ public:
 		}
 
 		// Load texture.
-		video = SPVideoManager::GetSingleton().GetVideo(L"bgv.mov");
+		video = SPVideoManager::GetSingleton().GetVideo(L"logo01.mpg");
 		//video->SetFlipVertical(true);
 		video->SetLoopTimes(-1);
-		texture = SPTextureManager::GetSingleton().GetVideo(L"bgv.mov");
+		texture = SPTextureManager::GetSingleton().GetVideo(L"logo01.mpg");
 
 		video->Play();
 
