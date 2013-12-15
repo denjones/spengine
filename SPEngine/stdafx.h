@@ -5,6 +5,7 @@
 
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
+#endif
 
 #if _MSC_VER > 1000
 #pragma once
@@ -13,37 +14,16 @@
 #include "targetver.h"
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-//// Windows Header Files:
-//#include <intsafe.h>
-//#include <objbase.h>
-//#include <windows.h>
-//
-//// C RunTime Header Files
-//#include <stdlib.h>
-//#include <malloc.h>
-//#include <memory.h>
-//#include <tchar.h>
-//#include <comdef.h>
-//#include <commdlg.h>
-//
-//
-//// TODO: reference additional headers your program requires here
-//#include <DShow.h>
-//#include <streams.h>
-//#include <d3d9.h>
-//#include <dinput.h>
-//#include <d3dx9math.h>
-//#include <CGuid.h>
-//#include <XAudio2.h>
-//#include <vmr9.h>
 #define DIRECTINPUT_VERSION 0x0800
+
+#pragma warning(disable:4018)
+#pragma warning(disable:4244)
 
 // Windows Header Files:
 #include <string>
 #include <intsafe.h>
 #include <objbase.h>
 #include <windows.h>
-
 
 // C RunTime Header Files
 #include <stdlib.h>
@@ -72,26 +52,6 @@
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "xinput.lib")
 
-//#ifdef DEBUG
-//#pragma comment(lib, "libvorbis_static_d.lib")
-//#pragma comment(lib, "libvorbisfile_static_d.lib")
-//#else
-//#pragma comment(lib, "libvorbis_static.lib")
-//#pragma comment(lib, "libvorbisfile_static.lib")
-//#endif
-
-//#pragma comment(lib, "KScript.lib")
-
-#ifdef CEGUI
-#ifdef DEBUG
-#pragma comment(lib, "CEGUIBase_d.lib")
-#pragma comment(lib, "CEGUIDirect3D9Renderer_d.lib")
-#else
-#pragma comment(lib, "CEGUIBase.lib")
-#pragma comment(lib, "CEGUIDirect3D9Renderer.lib")
-#endif
-#endif
-
 ///
 /// Define the foreach loop in C++
 /// Usage
@@ -115,6 +75,4 @@
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(x) { delete x; x = NULL; }
-#endif
-
 #endif

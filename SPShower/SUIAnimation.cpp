@@ -73,8 +73,8 @@ bool SUIAnimation::Update( float timeDelta )
 		GetTransition() + startPoint.backgroundY;
 
 
-	float startH, startS, startV;
-	float endH, endS, endV;
+	//float startH, startS, startV;
+	//float endH, endS, endV;
 
 	//SPColorHelper::RGBtoHSV(
 	//	startPoint.backgroundColor.r,

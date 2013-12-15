@@ -11,25 +11,28 @@
 #include <direct.h>
 #include <iomanip>
 
-#pragma warning(disable:4996)
-
 using namespace std;
 namespace SPEngine
 {
+	bool SPLogHelper::isLoggingOn = false;
+
 	SPLogHelper::SPLogHelper(void)
 	{
+		
 	}
-
 
 	SPLogHelper::~SPLogHelper(void)
 	{
 
-	}
-
-	
+	}	
 
 	void SPLogHelper::WriteLog( string log, ... )
 	{
+		if (!isLoggingOn)
+		{
+			return;
+		}
+
 		ofstream outLogFile;
 
 		outLogFile.open("log\\spengine.log", ios::app);
@@ -76,6 +79,11 @@ namespace SPEngine
 
 	void SPLogHelper::WriteLog( TCHAR *szFormat, ... )
 	{
+		if (!isLoggingOn)
+		{
+			return;
+		}
+
 		wstring log = wstring(szFormat);
 
 		wofstream outLogFile;
@@ -120,51 +128,15 @@ namespace SPEngine
 			str.append(szBuffer) << endl;
 
 		outLogFile.close();
-
-		//ofstream outLogFile;
-
-		//outLogFile.open("log\\spengine.log", ios::app);
-
-		//if (!outLogFile)
-		//{
-		//	CreatLogFile();
-		//	if (!outLogFile)
-		//		return;
-		//}
-
-		//TCHAR szBuffer[1024];  // Large buffer for long filenames or URLs
-		//const size_t NUMCHARS = sizeof(szBuffer) / sizeof(szBuffer[0]);
-		//const int LASTCHAR = NUMCHARS - 1;
-
-		//// Format the input string
-		//va_list pArgs;
-		//va_start(pArgs, szFormat);
-
-		//// Use a bounded buffer size to prevent buffer overruns.  Limit count to
-		//// character size minus one to allow for a NULL terminating character.
-		//(void)StringCchVPrintf(szBuffer, NUMCHARS - 1, szFormat, pArgs);
-		//va_end(pArgs);
-
-		//// Ensure that the formatted string is NULL-terminated
-		//szBuffer[LASTCHAR] = TEXT('\0');
-
-		//SYSTEMTIME sys; 
-		//GetLocalTime( &sys ); 
-
-		//outLogFile <<
-		//	sys.wYear << "-" << 
-		//	setw(2) <<  setfill('0') << sys.wMonth << "-" << 
-		//	setw(2) <<  setfill('0') << sys.wDay << " "<< 
-		//	setw(2) <<  setfill('0') << sys.wHour << ":" <<
-		//	setw(2) <<  setfill('0') << sys.wMinute << ":" <<
-		//	setw(2) <<  setfill('0') << sys.wSecond << " : " <<
-		//	szBuffer << endl;
-
-		//outLogFile.close();
 	}
 
 	void SPLogHelper::WriteLog( wstring log, ... )
 	{
+		if (!isLoggingOn)
+		{
+			return;
+		}
+
 		wofstream outLogFile;
 
 		outLogFile.open("log\\spengine.log", ios::app);
@@ -213,8 +185,18 @@ namespace SPEngine
 	{
 		ofstream outLogFile;
 		// Create folder
-		mkdir("log");
+		_mkdir("log");
 		outLogFile.open("log\\spengine.log", ios::app);
+	}
+
+	void SPLogHelper::TurnOnLogging()
+	{
+		isLoggingOn = true;
+	}
+
+	void SPLogHelper::TurnOffLogging()
+	{
+		isLoggingOn = false;
 	}
 
 }

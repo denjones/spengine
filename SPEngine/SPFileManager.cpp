@@ -6,6 +6,7 @@ namespace SPEngine
 	SPFileManager::SPFileManager(void)
 	{
 		setlocale(LC_ALL, "en_US.UTF-8");
+		filePacker = SPFilePacker::GetSingletonPtr();
 	}
 
 	SPFileManager::~SPFileManager(void)

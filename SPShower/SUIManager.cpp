@@ -12,8 +12,8 @@ SUIManager::SUIManager(void)
 	ZeroMemory(elapsedMouseClickMovementY, 3 * sizeof(int));
 	ZeroMemory(interceptMouseButtonEvent, 3 * sizeof(int));
 	ZeroMemory(interceptKeyboardKeyEvent, 256 * sizeof(int));
-	maxClickTime = 0.300;
-	maxDClickTime = 0.300;
+	maxClickTime = 0.300f;
+	maxDClickTime = 0.300f;
 	dispalyStack.clear();
 }
 

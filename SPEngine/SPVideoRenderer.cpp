@@ -231,7 +231,6 @@ namespace SPEngine
 			}
 		}
 
-
 		return hr;
 	}
 
@@ -711,33 +710,6 @@ namespace SPEngine
 			m_lock.Unlock();
 		}
 
-		//while(true)
-		//{
-		//	m_lock.Lock();
-
-		//	if (!m_waitingToUpdate )
-		//	{
-		//		m_lock.Unlock();
-		//		break;
-		//	}
-		//	else
-		//	{
-		//		LONGLONG position;
-		//		m_dShowData->m_pSeek->GetCurrentPosition(&position);
-
-		//		LONGLONG duration;
-		//		m_dShowData->m_pSeek->GetDuration(&duration);
-
-		//		if (position == duration)
-		//		{
-		//			m_lock.Unlock();
-		//			break;
-		//		}
-		//	}
-
-		//	m_lock.Unlock();
-		//}
-
 		return true;
 	}
 
@@ -747,12 +719,6 @@ namespace SPEngine
 		{
 			return false;
 		}
-		//if (m_videoTexture->GetHeight() == m_lVidHeight
-		//	&& m_videoTexture->GetWidth() == m_lVidWidth
-		//	&& m_videoTexture->GetFormat() == m_texture_format)
-		//{
-		//	return true;
-		//}
 
 		HRESULT hr = E_UNEXPECTED;
 
@@ -801,12 +767,6 @@ namespace SPEngine
 
 		// Save format info
 		m_texture_format = ddsd.Format;
-
-		//if (video->g_TextureFormat != D3DFMT_X8R8G8B8 &&
-		//	video->g_TextureFormat != D3DFMT_A1R5G5B5) {
-		//		//Msg(TEXT("Texture is format we can't handle! Format = 0x%x"), g_TextureFormat);
-		//		return VFW_E_TYPE_NOT_ACCEPTED;
-		//}
 
 		SPLogHelper::WriteLog("[DShow] Format accepted (%X) %dx%d", m_texture_format, m_lVidWidth, m_lVidHeight);
 

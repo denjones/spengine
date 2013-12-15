@@ -93,8 +93,6 @@ namespace SPEngine
 		freeSlots.push_back(index);
 	}
 
-#pragma warning(disable:4172)
-
 	template<typename DATA, typename HANDLE>
 	inline SPPointer<DATA>& SPHandleManager<DATA, HANDLE>::Dereference(HANDLE handle)
 	{

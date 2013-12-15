@@ -99,19 +99,19 @@ namespace SPEngine
 				cmt.SetType(&MEDIATYPE_Stream);
 				cmt.SetSubtype(&MEDIASUBTYPE_NULL);
 
-				std::wstring lpType = lpszFileName;
-				size_t dotPos = lpType.find_last_of(L".");
-				lpType = lpType.substr(dotPos + 1);
-				
-				if (lstrcmpi(lpType.c_str(), TEXT("avi")) == 0) 
-				{
-					cmt.SetSubtype(&MEDIASUBTYPE_Avi);
-				}
+				//std::wstring lpType = lpszFileName;
+				//size_t dotPos = lpType.find_last_of(L".");
+				//lpType = lpType.substr(dotPos + 1);
+				//
+				//if (lstrcmpi(lpType.c_str(), TEXT("avi")) == 0) 
+				//{
+				//	cmt.SetSubtype(&MEDIASUBTYPE_Avi);
+				//}
 
-				if (lstrcmpi(lpType.c_str(), TEXT("wmv")) == 0) 
-				{
-					cmt.SetSubtype(&MEDIASUBTYPE_ASF);
-				}
+				//if (lstrcmpi(lpType.c_str(), TEXT("wmv")) == 0) 
+				//{
+				//	cmt.SetSubtype(&MEDIASUBTYPE_ASF);
+				//}
 			} 
 			else 
 			{

@@ -4,8 +4,6 @@
 #include "SPDevice.h"
 #include <sxp.h>
 
-#pragma warning(disable:4996)
-
 namespace SPEngine
 {
 	SPConfigManager::SPConfigManager(void)
@@ -25,7 +23,7 @@ namespace SPEngine
 		FILE* file = NULL;
 
 		// Check if the config file exists.
-		file = fopen(configFile.c_str(),"rb");
+		fopen_s(&file, configFile.c_str(),"rb");
 
 		if (file)
 		{

@@ -22,9 +22,6 @@
 #define SOUND_TYPE_OGG L"ogg"
 #define SOUND_TYPE_WAV L"wav"
 
-#pragma warning(disable:4244)
-
-
 using namespace std;
 
 namespace SPEngine
@@ -399,6 +396,7 @@ namespace SPEngine
 		typeName = path;
 		typeName = typeName.substr(typeName.find_last_of(L".") + 1);
 		transform(typeName.begin(), typeName.end(), typeName.begin(), tolower);
+		xAudio = SPXAudio::GetSingletonPtr();
 	}
 
 	void SPSound::FadeOut(float second)
@@ -599,7 +597,7 @@ namespace SPEngine
 				}
 
 				// Else wait for current playing buffer to be free.
-				WaitForSingleObject( callback.hBufferEndEvent, INFINITE );
+				WaitForSingleObject( callback.hBufferEndEvent, 1000 );
 
 			}
 

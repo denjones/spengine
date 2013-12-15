@@ -78,7 +78,7 @@ namespace SPEngine
 
 			SPVideoPtr video = new SPVideo(videoPath);
 			video->SetLoopTimes(SPStringHelper::StringToInt(videoLoop));
-			video->SetFlipVertical(SPStringHelper::StringToInt(videoFilp));
+			video->SetFlipVertical(SPStringHelper::StringToInt(videoFilp) != 0);
 			if (SPStringHelper::StringToInt(videoState))
 			{
 				video->Play();

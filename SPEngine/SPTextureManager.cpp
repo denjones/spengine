@@ -8,8 +8,6 @@
 #include "StdAfx.h"
 #include "SPTextureManager.h"
 #include "SPColorHelper.h"
-#pragma warning(disable:4244)
-
 
 namespace SPEngine
 {

@@ -128,9 +128,9 @@
     <ClInclude Include="SPFileStream.h" />
     <ClInclude Include="SPFontHelper.h" />
     <ClInclude Include="SPfPackingMethod.h" />
+    <ClInclude Include="SPLavFilterFactory.h" />
     <ClInclude Include="SPLogHelper.h" />
     <ClInclude Include="SPMessageHelper.h" />
-    <ClInclude Include="PackageHelper.h" />
     <ClInclude Include="SPDevice.h" />
     <ClInclude Include="SPFont.h" />
     <ClInclude Include="SPFontWriter.h" />
@@ -219,9 +219,9 @@
     <ClCompile Include="SPFileSourceFilter.cpp" />
     <ClCompile Include="SPFontHelper.cpp" />
     <ClCompile Include="SPfPackingMethod.cpp" />
+    <ClCompile Include="SPLavFilterFactory.cpp" />
     <ClCompile Include="SPLogHelper.cpp" />
     <ClCompile Include="SPMessageHelper.cpp" />
-    <ClCompile Include="PackageHelper.cpp" />
     <ClCompile Include="SPDevice.cpp" />
     <ClCompile Include="SPDirectInput.cpp" />
     <ClCompile Include="SPDShowData.cpp" />

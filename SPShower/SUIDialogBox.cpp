@@ -436,5 +436,5 @@ D3DXVECTOR3 SUIDialogBox::PositionNext()
 		texPosY += pos.y;
 	}
 
-	return D3DXVECTOR3(texPosX, texPosY, CalDepth(0.1));
+	return D3DXVECTOR3(texPosX, texPosY, CalDepth(0.1f));
 }

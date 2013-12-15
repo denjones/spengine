@@ -15,8 +15,6 @@
 #include "SPFontManager.h"
 #include "SPTextSprite.h"
 
-#pragma warning(disable:4244)
-
 namespace SPEngine
 {
 	SPFontWriter::SPFontWriter(void)

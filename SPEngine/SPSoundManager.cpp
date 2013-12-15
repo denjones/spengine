@@ -4,8 +4,6 @@
 #include "SPXAudio.h"
 #include "SPStringHelper.h"
 
-#pragma warning(disable:4244)
-
 namespace SPEngine
 {
 	SPSoundManager::SPSoundManager(void)

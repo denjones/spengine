@@ -13,6 +13,7 @@
 #include "SPPointer.h"
 #include "SPFile.h"
 #include "SPSoundStreamingContext.h"
+#include "SPXAudio.h"
 
 #define STREAMING_BUFFER_SIZE 65536//*10
 #define MAX_BUFFER_COUNT 3
@@ -35,6 +36,8 @@ namespace SPEngine
 			Pausing,
 			Stoping,
 		};
+
+		SPPointer<SPXAudio> xAudio;
 
 		// ID
 		SPString path;
