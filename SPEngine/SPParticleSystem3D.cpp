@@ -223,7 +223,6 @@ void SPEngine::SPParticleSystem3D::LoadWith2D(
 
 bool SPEngine::SPParticleSystem3D::Init(SPTexturePtr texPtr, bool if3D)
 {
-	D3DXIMAGE_INFO i;
 	vb = 0;
 	tex = 0;
 

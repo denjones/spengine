@@ -265,7 +265,7 @@ public:
 
 			if (IsSet(L"special_rotation", args))
 			{
-				bool isOn = SPStringHelper::StringToInt(args[L"special_rotation"].value);
+				bool isOn = SPStringHelper::StringToInt(args[L"special_rotation"].value) != 0;
 
 				particleSystem->SetSpecialRotation(isOn);			
 

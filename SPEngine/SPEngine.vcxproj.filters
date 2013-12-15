@@ -62,9 +62,6 @@
     <Filter Include="Source\Not to use\Graphics">
       <UniqueIdentifier>{b3d814bf-5a8e-4811-87e8-8f0504194b6f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Not to use\Helper">
-      <UniqueIdentifier>{2583e6c7-4e9d-44c8-a317-6b5d7faf5347}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\SPSound">
       <UniqueIdentifier>{89ffb68b-d829-4bdd-89d3-2b74042023c2}</UniqueIdentifier>
     </Filter>
@@ -112,9 +109,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PackageHelper.h">
-      <Filter>Source\Not to use\Helper</Filter>
-    </ClInclude>
     <ClInclude Include="..\zlib\include\zconf.h">
       <Filter>Source\SPFile\zlib</Filter>
     </ClInclude>
@@ -289,9 +283,6 @@
     <ClInclude Include="FPSDisplayer.h">
       <Filter>Source\SPComponent</Filter>
     </ClInclude>
-    <ClInclude Include="SPVideoRenderer.h">
-      <Filter>Source\SPVideo</Filter>
-    </ClInclude>
     <ClInclude Include="SPVideoManager.h">
       <Filter>Source\SPVideo</Filter>
     </ClInclude>
@@ -418,11 +409,14 @@
     <ClInclude Include="SPNullPointerException.h">
       <Filter>Source\SPException</Filter>
     </ClInclude>
+    <ClInclude Include="SPLavFilterFactory.h">
+      <Filter>Source\SPVideo\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVideoRenderer.h">
+      <Filter>Source\SPVideo\Filter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PackageHelper.cpp">
-      <Filter>Source\Not to use\Helper</Filter>
-    </ClCompile>
     <ClCompile Include="SPWindow.cpp">
       <Filter>Source\SPWindow</Filter>
     </ClCompile>
@@ -530,9 +524,6 @@
     </ClCompile>
     <ClCompile Include="FPSDisplayer.cpp">
       <Filter>Source\SPComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="SPVideoRenderer.cpp">
-      <Filter>Source\SPVideo</Filter>
     </ClCompile>
     <ClCompile Include="SPVideoManager.cpp">
       <Filter>Source\SPVideo</Filter>
@@ -644,6 +635,12 @@
     </ClCompile>
     <ClCompile Include="SPNullPointerException.cpp">
       <Filter>Source\SPException</Filter>
+    </ClCompile>
+    <ClCompile Include="SPLavFilterFactory.cpp">
+      <Filter>Source\SPVideo\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVideoRenderer.cpp">
+      <Filter>Source\SPVideo\Filter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

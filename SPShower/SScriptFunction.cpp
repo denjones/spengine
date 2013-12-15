@@ -45,7 +45,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"absolute", args))
 	{
-		component->SetAbsoluteRender(SPStringHelper::StringToInt(args[L"absolute"].value));
+		component->SetAbsoluteRender(SPStringHelper::StringToInt(args[L"absolute"].value) != 0);
 
 		args.erase(L"absolute");
 	}

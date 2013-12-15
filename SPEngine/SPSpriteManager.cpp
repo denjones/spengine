@@ -17,8 +17,6 @@
 #include "SPStringHelper.h"
 #include "SPTextureSprite.h"
 
-#pragma warning (disable:4244)
-
 namespace SPEngine
 {
 	SPSpriteManager::SPSpriteManager(void)

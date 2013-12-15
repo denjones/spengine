@@ -4,9 +4,6 @@
 #include "SPFileManager.h"
 #include "SPStringHelper.h"
 
-#pragma warning(disable:4244)
-#pragma warning(disable:4996)
-
 namespace SPEngine
 {
 	typedef struct _tagTT_OFFSET_TABLE{
@@ -73,7 +70,7 @@ namespace SPEngine
 				file->Read(&tblDir, sizeof(TT_TABLE_DIRECTORY));
 
 				char* buffer = new char[5];
-				strncpy(buffer, tblDir.szTag, 4);
+				strncpy_s(buffer, 5, tblDir.szTag, 4);
 				string s = buffer;
 				delete [] buffer;
 				buffer = NULL;

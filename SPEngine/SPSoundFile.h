@@ -15,6 +15,7 @@ namespace SPEngine
 	class SPSoundFile : public SPFile
 	{
 	public:
+		virtual ~SPSoundFile(){};
 		virtual bool GetWFX(WAVEFORMATEX&) = 0;
 		virtual bool GetSoundLength(long&) = 0;
 		virtual bool NextStreamData(BYTE* pData, DWORD length, DWORD &readBytes, bool &eof) = 0;

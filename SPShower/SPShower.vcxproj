@@ -41,8 +41,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);$(DXSDK_DIR)Utilities\Bin\x86;.\dll</ExecutablePath>
-    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\SPEngine;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;$(DXSDK_DIR)Include;..\SPAVG;..\SimpleXMLPersistence;.\zlib\include</IncludePath>
-    <LibraryPath>..\KScript\Debug;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib</LibraryPath>
+    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\SPEngine;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;$(DXSDK_DIR)Include;..\SPAVG;..\SimpleXMLPersistence;.\zlib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\KScript\Debug;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -65,6 +65,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

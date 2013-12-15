@@ -6,6 +6,29 @@
 
 namespace SPEngine
 {
+	class FileInfo
+	{
+	public:
+		SPString fileName;
+		int fileSize;
+		int fileOffset;
+		SPString fileInWhichPack;
+		FileInfo()
+		{
+			fileName = L"";
+			fileSize = 0;
+			fileOffset = 0;
+			fileInWhichPack = L"";
+		};
+
+		virtual ~FileInfo()
+		{
+			;
+		};
+	};
+
+	typedef SPPointer<FileInfo> FileInfoPtr;
+
 	class SPfPackingMethod : public ISPFilePackingMethod
 	{
 	public:
@@ -17,21 +40,14 @@ namespace SPEngine
 		virtual bool PackFile(SPString path, char* &inData, LONGLONG &inLength);
 		
 	protected:
-		struct fileInfo
-		{
-			SPString fileName;
-			int fileSize;
-			int fileOffset;
-			SPString fileInWhichPack;
-		};
-		typedef struct fileInfo FileInfo;
+		
 		void DirectoryFile(SPString path);
 		void InitFiles();
-		int sizeOfFile(FILE* file);
+		int SizeOfFile(FILE* file);
 		SPString ChangeTheString(SPString str);
 		vector<SPString> fileNames;
 		vector<SPString> patchNames;
-		vector<FileInfo> fileInfos;
+		vector<FileInfoPtr> fileInfos;
 		//SPString lastFileName;
 		//int lastFileI;
 		wchar_t dicBuffer[MAX_PATH];

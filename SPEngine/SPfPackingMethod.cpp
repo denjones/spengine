@@ -35,7 +35,7 @@ namespace SPEngine
 
 		for(int i = 0;i < fileInfos.size();i++)
 		{
-			if(_wcsnicmp(tempPath.c_str(), fileInfos[i].fileName.c_str(), tempPath.length()) == 0)
+			if(_wcsnicmp(tempPath.c_str(), fileInfos[i]->fileName.c_str(), tempPath.length()) == 0)
 			{
 				//lastFileName = path;
 				//lastFileI = i;
@@ -60,11 +60,11 @@ namespace SPEngine
 
 		for(int i = 0;i < fileInfos.size();i++)
 		{
-			if(_wcsicmp(path.c_str(), fileInfos[i].fileName.c_str()) == 0)
+			if(_wcsicmp(path.c_str(), fileInfos[i]->fileName.c_str()) == 0)
 			{
 				//lastFileName = path;
 				//lastFileI = i;
-				return fileInfos[i].fileSize;
+				return fileInfos[i]->fileSize;
 			}
 		}
 
@@ -79,92 +79,9 @@ namespace SPEngine
 			return false;
 		}
 
-		//if(_wcsicmp(path.c_str(), lastFileName.c_str()) == 0)
-		//{
-		//	//FILE* packFile = NULL;
-		//	//_wfopen_s(&packFile, fileInfos[lastFileI].fileInWhichPack.c_str(), L"rb");
-
-		//	HANDLE file = NULL;
-		//	file = CreateFile(fileInfos[lastFileI].fileInWhichPack.c_str(),
-		//		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING,	NULL,NULL);
-
-		//	//if (!packFile)
-		//	//{
-		//	//	SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to open package file: " + path);
-		//	//	return false;
-		//	//}
-
-		//	if (!file)
-		//	{
-		//		SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to open package file: " + path);
-		//		return false;
-		//	}
-
-		//	//fread(&version, sizeof(int),1,packFile);
-		//	//fread(&myKey, sizeof(int), 1, packFile);
-
-		//	DWORD numOfBytesRead = 0;
-		//	if(ReadFile(file, &version, sizeof(int), &numOfBytesRead, NULL) != TRUE)
-		//	{
-		//		SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to read package version: " + path);
-		//		CloseHandle(file);
-		//		return false;
-		//	}
-
-		//	if(ReadFile(file, &myKey, sizeof(int), &numOfBytesRead, NULL) != TRUE)
-		//	{
-		//		SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to read package key: " + path);
-		//		CloseHandle(file);
-		//		return false;
-		//	}
-
-		//	if(version > 0)
-		//	{
-		//		myKey = 0;
-		//	}
-
-		//	//fseek(packFile, fileInfos[lastFileI].fileOffset, SEEK_SET);
-		//	//pData = new char[fileInfos[lastFileI].fileSize];
-		//	//fread(pData, sizeof(char), fileInfos[lastFileI].fileSize, packFile);
-
-		//	if(SetFilePointer(file, fileInfos[lastFileI].fileOffset, 0, FILE_BEGIN) == HFILE_ERROR)
-		//	{
-		//		SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to seek package file: " + path);
-		//		CloseHandle(file);
-		//		return false;
-		//	}
-
-		//	if (!pData)
-		//	{
-		//		SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to read package data: " + path);
-		//		CloseHandle(file);
-		//		return false;
-		//	}
-
-		//	if(ReadFile(file, pData, fileInfos[lastFileI].fileSize, &numOfBytesRead, NULL) != TRUE)
-		//	{
-		//		SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to read package data: " + path 
-		//			+ L" Error Type: " + SPStringHelper::ToWString((int)GetLastError()));
-		//		CloseHandle(file);
-		//		return false;
-		//	}
-
-		//	for(int i = 0;i < fileInfos[lastFileI].fileSize;i++)
-		//	{
-		//		pData[i] = pData[i] ^ myKey;
-		//	}
-
-		//	length = fileInfos[lastFileI].fileSize;
-
-		//	//fclose(packFile);
-		//	CloseHandle(file);
-
-		//	return true;
-		//}
-
 		for(int i = 0;i < fileInfos.size();i++)
 		{
-			if(_wcsicmp(path.c_str(), fileInfos[i].fileName.c_str()) == 0)
+			if(_wcsicmp(path.c_str(), fileInfos[i]->fileName.c_str()) == 0)
 			{
 				//lastFileName = path;
 				//lastFileI = i;
@@ -173,7 +90,7 @@ namespace SPEngine
 				//packFile = _wfopen(fileInfos[i].fileInWhichPack.c_str(), L"rb");
 
 				HANDLE file = NULL;
-				file = CreateFile(fileInfos[i].fileInWhichPack.c_str(),
+				file = CreateFile(fileInfos[i]->fileInWhichPack.c_str(),
 					GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,	NULL,NULL);
 
 				DWORD er = GetLastError();
@@ -217,7 +134,7 @@ namespace SPEngine
 				//pData = new char[fileInfos[i].fileSize];
 				//fread(pData, sizeof(char), fileInfos[i].fileSize, packFile);
 
-				if(SetFilePointer(file, fileInfos[i].fileOffset, 0, FILE_BEGIN) == HFILE_ERROR)
+				if(SetFilePointer(file, fileInfos[i]->fileOffset, 0, FILE_BEGIN) == HFILE_ERROR)
 				{
 					SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to seek package file: " + path);
 					CloseHandle(file);
@@ -231,22 +148,24 @@ namespace SPEngine
 					return false;
 				}
 
-				pData = new char[fileInfos[i].fileSize];
+				pData = new char[fileInfos[i]->fileSize];
 
-				if(ReadFile(file, pData, fileInfos[i].fileSize, &numOfBytesRead, NULL) != TRUE)
+				if(ReadFile(file, pData, fileInfos[i]->fileSize, &numOfBytesRead, NULL) != TRUE)
 				{
 					SPLogHelper::WriteLog(L"[SPFile] WARNING: Failed to read package data: " + path
 						+ L" Error Type: " + SPStringHelper::ToWString((int)GetLastError()));
 					CloseHandle(file);
+					delete pData;
+					pData = NULL;
 					return false;
 				}
 
-				for(int j = 0;j < fileInfos[i].fileSize;j++)
+				for(int j = 0;j < fileInfos[i]->fileSize;j++)
 				{
 					pData[j] = pData[j] ^ myKey;
 				}
 
-				length = fileInfos[i].fileSize;
+				length = fileInfos[i]->fileSize;
 
 				//fclose(packFile);
 
@@ -268,7 +187,6 @@ namespace SPEngine
 
 	void SPfPackingMethod::DirectoryFile(SPString path)
 	{
-		int i;
 		//CFileFind finder;
 		//SPString filePath;
 		//SPString findPath = path + L"//*.pak";
@@ -334,7 +252,7 @@ namespace SPEngine
 		FindClose(hFile2);
 	}
 
-	int SPfPackingMethod::sizeOfFile(FILE* file)
+	int SPfPackingMethod::SizeOfFile(FILE* file)
 	{
 		int len;
 		fseek(file, 0, SEEK_END);
@@ -346,11 +264,11 @@ namespace SPEngine
 	void SPfPackingMethod::InitFiles()
 	{
 		fileInfos.clear();
-		for(int i = patchNames.size() - 1;i >= 0;i--)
+		for(int i = patchNames.size() - 1; i >= 0; i--)
 		{
 			FILE* packFile;
 			int sizeOfPack;
-			packFile = _wfopen(patchNames[i].c_str(), L"rb");
+			_wfopen_s(&packFile, patchNames[i].c_str(), L"rb");
 
 			if (!packFile)
 			{
@@ -358,7 +276,7 @@ namespace SPEngine
 				continue;
 			}
 
-			sizeOfPack = sizeOfFile(packFile);
+			sizeOfPack = SizeOfFile(packFile);
 			fseek(packFile, 0, SEEK_SET);
 			while(ftell(packFile) < sizeOfPack)
 			{
@@ -383,13 +301,13 @@ namespace SPEngine
 					fread(dicFileName, sizeof(wchar_t), nameLen, packFile);
 					fread(&fileSize, sizeof(int), 1, packFile);
 					fread(&fileOffset, sizeof(int), 1, packFile);
-					FileInfo tempInfo;
-					tempInfo.fileName = dicFileName;
-					tempInfo.fileSize = fileSize;
-					tempInfo.fileOffset = fileOffset;
-					tempInfo.fileInWhichPack = patchNames[i];
+					FileInfoPtr tempInfo = new FileInfo();
+					tempInfo->fileName = dicFileName;
+					tempInfo->fileSize = fileSize;
+					tempInfo->fileOffset = fileOffset;
+					tempInfo->fileInWhichPack = patchNames[i];
 					fileInfos.push_back(tempInfo);
-					delete dicFileName;
+					delete [] dicFileName;
 					dicFileName = NULL;
 				}
 				fseek(packFile, dicSize, SEEK_CUR);
@@ -399,9 +317,9 @@ namespace SPEngine
 
 		for(int i = 0;i < fileNames.size();i++)
 		{
-			FILE* packFile;
+			FILE* packFile = NULL;
 			int sizeOfPack;
-			packFile = _wfopen(fileNames[i].c_str(), L"rb");
+			_wfopen_s(&packFile, fileNames[i].c_str(), L"rb");
 
 			if (!packFile)
 			{
@@ -410,7 +328,7 @@ namespace SPEngine
 			}
 
 			//packFile = fopen("pack1.pak", "rb+");
-			sizeOfPack = sizeOfFile(packFile);
+			sizeOfPack = SizeOfFile(packFile);
 			fseek(packFile, 0, SEEK_SET);
 			while(ftell(packFile) < sizeOfPack)
 			{
@@ -427,21 +345,21 @@ namespace SPEngine
 				for(int j = 0;j < dicFileNum;j++)
 				{
 					int nameLen;
-					wchar_t* dicFileName;
 					int fileSize;
 					int fileOffset;
 					fread(&nameLen, sizeof(int), 1, packFile);
-					dicFileName = new wchar_t[nameLen];
+					wchar_t* dicFileName = new wchar_t[nameLen];
 					fread(dicFileName, sizeof(wchar_t), nameLen, packFile);
 					fread(&fileSize, sizeof(int), 1, packFile);
 					fread(&fileOffset, sizeof(int), 1, packFile);
-					FileInfo tempInfo;
-					tempInfo.fileName = dicFileName;
-					tempInfo.fileSize = fileSize;
-					tempInfo.fileOffset = fileOffset;
-					tempInfo.fileInWhichPack = fileNames[i];
+					FileInfoPtr tempInfo = new FileInfo();
 					fileInfos.push_back(tempInfo);
-					delete dicFileName;
+					tempInfo->fileName = dicFileName;
+					tempInfo->fileSize = fileSize;
+					tempInfo->fileOffset = fileOffset;
+					tempInfo->fileInWhichPack = fileNames[i];	
+					tempInfo = NULL;
+					delete [] dicFileName;
 					dicFileName = NULL;
 				}
 				fseek(packFile, dicSize, SEEK_CUR);
@@ -462,7 +380,9 @@ namespace SPEngine
 
 	SPfPackingMethod::~SPfPackingMethod()
 	{
-
+		fileNames.clear();
+		patchNames.clear();
+		fileInfos.clear();
 	}
 
 }

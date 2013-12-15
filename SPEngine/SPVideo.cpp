@@ -15,7 +15,6 @@ namespace SPEngine
 	{
 		data = new SPDShowData();
 		callBack = new SPVideoEventCallback(this);
-		Load();
 	}
 
 	SPVideo::SPVideo( SPString path ) :
@@ -24,7 +23,6 @@ namespace SPEngine
 	{
 		data = new SPDShowData();
 		callBack = new SPVideoEventCallback(this);
-		Load();
 		OpenFile(path);
 	}
 
@@ -47,9 +45,11 @@ namespace SPEngine
 
 	bool SPVideo::OpenFile(SPString sFileName)
 	{
+		//Load();
+
 		videoPath = sFileName;
 
-		if (data->AddSource(sFileName))
+		if (data->Load(sFileName))
 		{
 			state = STATE_STOPPED;
 			return true;
@@ -273,7 +273,11 @@ namespace SPEngine
 
 	bool SPVideo::SetTexture( SPVideoTexture* setTex )
 	{
-		data->GetRenderer()->SetTexture(setTex);
+		if(data->GetRenderer())
+		{
+			data->GetRenderer()->SetTexture(setTex);
+			return true;
+		}
 
 		return false;
 	}
@@ -285,7 +289,7 @@ namespace SPEngine
 
 	bool SPVideo::Load()
 	{
-		return data->Load();
+		return true;//data->Load();
 	}
 
 	bool SPVideo::Unload()
@@ -299,7 +303,7 @@ namespace SPEngine
 	{
 		data->Unload();
 
-		data->Load();
+		//data->Load();
 
 		return OpenFile(videoPath);
 	}

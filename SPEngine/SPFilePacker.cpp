@@ -7,7 +7,7 @@ namespace SPEngine
 {
 	SPFilePacker::SPFilePacker(void)
 	{
-		packingMethod = new SPEmptyPackingMethod();
+		//packingMethod = new SPEmptyPackingMethod();
 		packingMethod = new SPfPackingMethod();
 	}
 

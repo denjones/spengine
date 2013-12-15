@@ -25,7 +25,7 @@ namespace SPEngine
 	};
 
 	//////////////////////////////////////////////////////////////////////
-	/// @brief SPDShowData to hold DShow data.
+	/// @brief SPDShowData to hold DShow data, including filters and filter graph.
 	///
 	//////////////////////////////////////////////////////////////////////
 	class SPDShowData
@@ -44,7 +44,6 @@ namespace SPEngine
 		SmartPtr<IMediaSeeking>		m_pSeek;
 		SmartPtr<IBasicAudio>		m_pAudio;
 		SmartPtr<SPFileSourceFilter>m_pSource;
-		//SmartPtr<IFileSourceFilter> m_pFile;
 		SmartPtr<SPVideoRenderer>	m_pRenderer;
 
 		HWND			m_hwndVideo;	///< Video clipping window
@@ -53,7 +52,7 @@ namespace SPEngine
 		DWORD			m_seekCaps;		///< Caps bits for IMediaSeeking
 
 		// Audio
-		BOOL            m_bAudioStream; ///< Is there an audio stream?
+		//BOOL            m_bAudioStream; ///< Is there an audio stream?
 		long			m_lVolume;		///< Current volume (unless muted)
 		BOOL			m_bMute;		///< Volume muted?		
 		bool			m_bControlling;
@@ -75,13 +74,10 @@ namespace SPEngine
 		HRESULT SetMute(bool isMute){m_bMute = isMute; return UpdateVolume();}
 		HRESULT SetVolume(long setVolume){m_lVolume = setVolume; return UpdateVolume();}
 
-		bool Load();
+		bool Load(SPString fileName);
 		bool Unload();
 
 		HRESULT UpdateVolume();
-
-		bool AddSource(SPString name);
-		//HRESULT RenderStreams(SmartPtr<IBaseFilter> pSource);
 		HRESULT RenderStreams(SmartPtr<SPFileSourceFilter> pSource);
 
 		// events

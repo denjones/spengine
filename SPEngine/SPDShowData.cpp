@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////////////////////////
+/// @file		SPDShowData.cpp SPDShowData class.
+/// @author		Ken.J
+/// @version	Beta 0.9
+/// @date		2013-12-14
+//////////////////////////////////////////////////////////////////////////
+
 #include "StdAfx.h"
 #include "SPDShowData.h"
 #include "SPLogHelper.h"
@@ -5,7 +12,7 @@
 #include "SPStringHelper.h"
 #include <strmif.h>
 #include "SPWindow.h"
-//#include <GDCLWMV\filter.h>
+#include "SPLavFilterFactory.h"
 
 namespace SPEngine
 {
@@ -19,7 +26,6 @@ namespace SPEngine
 		m_pSeek(NULL),
 		m_pAudio(NULL),
 		m_pRenderer(NULL),
-		//m_pFile(NULL),
 		m_pSource(NULL),
 		m_seekCaps(0),
 		m_bMute(FALSE),
@@ -33,11 +39,46 @@ namespace SPEngine
 		Unload();
 	}
 
-	typedef int (WINAPI *PROC_DllGetClassObject)(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv);
+	/// @brief Get an unconnected pin of a filter
+	IPin* GetPin(IBaseFilter *pFilter, PIN_DIRECTION dir)
+	{
+		IEnumPins* pEnumPins;
+		IPin* pOutpin;
+		PIN_DIRECTION pDir;
+		pFilter->EnumPins(&pEnumPins);
+		while (pEnumPins->Next(1,&pOutpin,NULL) == S_OK)
+		{
+			pOutpin->QueryDirection(&pDir);
+			if (pDir == dir)
+			{
+				IPin *pTmp=0;
+				HRESULT hr=pOutpin->ConnectedTo(&pTmp);
+				if (SUCCEEDED(hr))
+				{
+					;
+				}
+				else    
+				{
+					pEnumPins->Release();
+					return pOutpin;
+				}
+			}
+			pOutpin->Release();
+		}
+		pEnumPins->Release();
+		return 0;
+	}
 
-	bool SPDShowData::Load()
+
+	bool SPDShowData::Load(SPString fileName)
 	{
 		Unload();
+
+		IBaseFilter *pLAVSplitter = NULL;
+		IBaseFilter *pLAVVideo = NULL;
+		IBaseFilter *pLAVAudio = NULL;
+		IBaseFilter *pAudioRenderer = NULL;
+		SPVideoRenderer *pVideoRenderer = NULL;
 
 		HRESULT hr = S_OK;
 
@@ -50,8 +91,11 @@ namespace SPEngine
 			return false;
 		}
 
+		//
 		// Create filter graph.
-		hr = CoCreateInstance(CLSID_FilterGraph,NULL,CLSCTX_INPROC,IID_IFilterGraph,(void**)&m_pBase);
+		//
+
+		hr = CoCreateInstance(CLSID_FilterGraph, NULL,CLSCTX_INPROC, IID_IFilterGraph, (void**)&m_pBase);
 
 		if (FAILED(hr))
 		{
@@ -59,7 +103,10 @@ namespace SPEngine
 			return false;
 		}
 
+		//
 		// Create source filter.
+		//
+
 		m_pSource = new SPFileSourceFilter(NULL, &hr);
 
 		if (FAILED(hr))
@@ -68,7 +115,10 @@ namespace SPEngine
 			return false;
 		}
 
+		//
 		// Add source filter.
+		//
+
 		hr = m_pBase->AddFilter(m_pSource, NULL);
 
 		if (FAILED(hr))
@@ -77,7 +127,17 @@ namespace SPEngine
 			return false;
 		}
 
+		hr = m_pSource->Load(fileName.c_str(), NULL);
+		if (FAILED(hr))
+		{
+			SPLogHelper::WriteLog("[DShow] ERROR: Failed to load source file!");
+			return false;
+		}
+
+		//
 		// Create the filter graph builder.
+		//
+
 		hr = m_pBase->QueryInterface(IID_IGraphBuilder, (void**)&m_pGraph);
 
 		if (FAILED(hr))
@@ -90,153 +150,102 @@ namespace SPEngine
 		// Add LAV splitter filter
 		// 
 				
-		HMODULE hInstLibraryLAVSplitter = LoadLibrary(L"LAVSplitter.ax");
+		SPLavFilterFactory::GetSingleton().CreateLAVSplitter(pLAVSplitter);
 
-		if (hInstLibraryLAVSplitter )
+		if (!pLAVSplitter)
 		{
-			PROC_DllGetClassObject g_PROC_DllGetClassObject = NULL;	
-			g_PROC_DllGetClassObject = (PROC_DllGetClassObject)GetProcAddress(hInstLibraryLAVSplitter,"DllGetClassObject");
-
-			if(g_PROC_DllGetClassObject)
-			{
-				IClassFactory *pClassFactory = NULL;
-				IBaseFilter *pLAVSplitter = NULL;	
-
-				GUID CLSID_LAVSplitter;
-				CLSIDFromString(L"{171252A0-8820-4AFE-9DF8-5C92B2D66B04}",&CLSID_LAVSplitter);
-				g_PROC_DllGetClassObject(CLSID_LAVSplitter, IID_IClassFactory, (void**)&pClassFactory);
-				if (!pClassFactory)
-				{
-					SPLogHelper::WriteLog("[DShow] WARNING: Failed to create LAV Splitter filter class!");
-				}
-				else
-				{
-					pClassFactory->CreateInstance(0,IID_IBaseFilter, reinterpret_cast<void**>(&pLAVSplitter));
-
-					if (!pLAVSplitter)
-					{
-						SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Splitter filter to filter graph!");
-					}
-					else
-					{
-						hr = m_pBase->AddFilter(pLAVSplitter,L"LAV Splitter");
-
-						if (FAILED(hr))
-						{
-							SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Splitter filter to filter graph!");
-						}
-					}								
-
-					SAFE_RELEASE(pLAVSplitter);
-				}				
-			}
+			SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Splitter filter to filter graph!");
 		}
 		else
 		{
-			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVSplitter.ax :" + SPStringHelper::ToString((int)GetLastError()));
-		}
+			hr = m_pBase->AddFilter(pLAVSplitter, L"LAV Splitter");
+
+			if (FAILED(hr))
+			{
+				SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Splitter filter to filter graph!");
+			}
+		}								
 
 		//
 		// Add LAV Video filter
 		// 		
 		
-		HMODULE hInstLibraryLAVVideo = LoadLibrary(L"LAVVideo.ax");
+		SPLavFilterFactory::GetSingleton().CreateLAVVideo(pLAVVideo);
 
-		if (hInstLibraryLAVVideo )
+		if (!pLAVVideo)
 		{
-			PROC_DllGetClassObject g_PROC_DllGetClassObject = NULL;
-			g_PROC_DllGetClassObject = (PROC_DllGetClassObject)GetProcAddress(hInstLibraryLAVVideo,"DllGetClassObject");
-
-			if(g_PROC_DllGetClassObject)
-			{
-				IBaseFilter *pLAVVideo = NULL;
-				IClassFactory *pClassFactory = NULL;
-
-				GUID CLSID_LAVVideo;
-				CLSIDFromString(L"{EE30215D-164F-4A92-A4EB-9D4C13390F9F}",&CLSID_LAVVideo);
-				g_PROC_DllGetClassObject(CLSID_LAVVideo, IID_IClassFactory, (void**)&pClassFactory);
-				if (!pClassFactory)
-				{
-					SPLogHelper::WriteLog("[DShow] WARNING: Failed to create LAV Video filter class!");
-				}
-				else
-				{
-					pClassFactory->CreateInstance(0,IID_IBaseFilter, reinterpret_cast<void**>(&pLAVVideo));
-
-					if (!pLAVVideo)
-					{
-						SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Video filter to filter graph!");
-					}
-					else
-					{
-						hr = m_pBase->AddFilter(pLAVVideo,L"LAV Splitter");
-
-						if (FAILED(hr))
-						{
-							SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Video filter to filter graph!");
-						}
-					}
-
-					SAFE_RELEASE(pLAVVideo);
-				}				
-			}
+			SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Video filter to filter graph!");
 		}
 		else
 		{
-			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVVideo.ax :" + SPStringHelper::ToString((int)GetLastError()));
+			hr = m_pBase->AddFilter(pLAVVideo,L"LAV Splitter");
+
+			if (FAILED(hr))
+			{
+				SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Video filter to filter graph!");
+			}
 		}
 
 		//
 		// Add LAV Audio filter
-		// 		
+		// 
 
-		HMODULE hInstLibraryLAVAudio = LoadLibrary(L"LAVAudio.ax");
+		SPLavFilterFactory::GetSingleton().CreateLAVAudio(pLAVAudio);
 
-		if (hInstLibraryLAVAudio )
+		if (!pLAVAudio)
 		{
-			PROC_DllGetClassObject g_PROC_DllGetClassObject = NULL;
-			g_PROC_DllGetClassObject = (PROC_DllGetClassObject)GetProcAddress(hInstLibraryLAVAudio,"DllGetClassObject");
-
-			if(g_PROC_DllGetClassObject)
-			{
-				IBaseFilter *pLAVAudio = NULL;
-				IClassFactory *pClassFactory = NULL;
-
-				GUID CLSID_LAVAudio;
-				CLSIDFromString(L"{E8E73B6B-4CB3-44A4-BE99-4F7BCB96E491}",&CLSID_LAVAudio);
-				g_PROC_DllGetClassObject(CLSID_LAVAudio, IID_IClassFactory, (void**)&pClassFactory);
-				if (!pClassFactory)
-				{
-					SPLogHelper::WriteLog("[DShow] WARNING: Failed to create LAV Audio filter class!");
-				}
-				else
-				{
-					pClassFactory->CreateInstance(0,IID_IBaseFilter, reinterpret_cast<void**>(&pLAVAudio));
-
-					if (!pLAVAudio)
-					{
-						SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Audio filter to filter graph!");
-					}
-					else
-					{
-						hr = m_pBase->AddFilter(pLAVAudio,L"LAV Splitter");
-
-						if (FAILED(hr))
-						{
-							SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Audio filter to filter graph!");
-						}
-					}								
-
-					SAFE_RELEASE(pLAVAudio);
-				}				
-			}
+			SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Audio filter to filter graph!");
 		}
 		else
 		{
-			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVAudio.ax :" + SPStringHelper::ToString((int)GetLastError()));
+			hr = m_pBase->AddFilter(pLAVAudio,L"LAV Splitter");
+
+			if (FAILED(hr))
+			{
+				SPLogHelper::WriteLog("[DShow] WARNING: Failed to add LAV Audio filter to filter graph!");
+			}
 		}
 
+		//
+		// Add the DSound Renderer to the graph.
+		//
+
+		if (SUCCEEDED(hr))
+		{
+			hr = AddFilterByCLSID(m_pGraph, CLSID_DSoundRender, &pAudioRenderer, L"Audio Renderer");
+
+			if (FAILED(hr))
+			{
+				SPLogHelper::WriteLog("[DShow] WARNING: Failed to add DSound Renderer to filter graph!");
+			}
+		}
+
+		//
+		// Create the Texture Renderer object
+		//
+
+		pVideoRenderer = new SPVideoRenderer(this, NULL, &hr);
+
+		if (FAILED(hr))
+		{
+			SPLogHelper::WriteLog("[DShow] ERROR: Failed to create video renderer!");
+		}
+		else
+		{
+			// Add the render filter to the graph.
+
+			m_pRenderer = pVideoRenderer;
+			hr = m_pBase->AddFilter(m_pRenderer, L"TEXTURERENDERER");
+			if (FAILED(hr))
+			{
+				SPLogHelper::WriteLog("[DShow] ERROR: Failed to add the video renderer!");
+			}
+		}
+
+		//
 		// Query for graph interfaces.
+		//
+
 		if (SUCCEEDED(hr))
 		{
 			hr = m_pBase->QueryInterface(IID_IMediaControl, (void**)&m_pControl);
@@ -257,20 +266,167 @@ namespace SPEngine
 			hr = m_pBase->QueryInterface(IID_IBasicAudio, (void**)&m_pAudio);
 		}
 
+		//
 		// Set up event notification.
+		//
+
 		if (SUCCEEDED(hr))
 		{
 			hr = m_pEvent->SetNotifyWindow((OAHWND)m_hwndEvent, m_EventMsg, NULL);
 		}
 
-		//CoUninitialize();
+		//
+		// Try to connect filters automatically.
+		//
+
+		if (SUCCEEDED(hr))
+		{
+			hr = RenderStreams(m_pSource);
+
+			if (FAILED(hr))
+			{
+				//
+				// If failed to auto connect, try to connect pins manually.
+				//
+
+				SPLogHelper::WriteLog("[DShow] ERROR: Failed to render source stream! Trying to connect pins manually...");
+
+				//
+				// Connect source filter and splitter filter.
+				//
+
+				IPin* pFileOut = GetPin(m_pSource, PINDIR_OUTPUT);
+				if (pFileOut!= NULL)
+				{
+					// Is the pin unconnected? Obtain the input pin of the Splitter.
+
+					IPin* pSplitterIn = GetPin(pLAVSplitter, PINDIR_INPUT);
+					if (pSplitterIn!= NULL)
+					{
+						// Is the pin good? Connect the pins.
+
+						hr = m_pGraph->ConnectDirect(pFileOut, pSplitterIn, NULL);
+					}
+				}
+
+				//
+				// Connect splitter filter and video decoder filter.
+				//
+
+				if (SUCCEEDED(hr))
+				{
+					IPin* pSplitterOut1= GetPin(pLAVSplitter,PINDIR_OUTPUT);
+					if (pSplitterOut1!= NULL)
+					{
+						IPin* pVideoDecIn = GetPin(pLAVVideo, PINDIR_INPUT);
+						if (pVideoDecIn!= NULL)
+						{ 
+							hr = m_pGraph->ConnectDirect(pSplitterOut1, pVideoDecIn, NULL);
+						}
+					}
+				}
+
+				//
+				// Connect splitter filter and audio decoder filter.
+				//
+
+				if (SUCCEEDED(hr))
+				{
+					IPin* pSplitterOut2 = GetPin(pLAVSplitter, PINDIR_OUTPUT);
+					if (pSplitterOut2!= NULL)
+					{ 
+						IPin* pAudioDecIn = GetPin(pLAVAudio, PINDIR_INPUT);
+						if (pAudioDecIn!= NULL)
+						{
+							hr = m_pGraph->ConnectDirect(pSplitterOut2, pAudioDecIn, NULL);
+						}
+					}
+				}
+
+				//
+				// Connect audio decoder filter and audio renderer filter.
+				//
+
+				if (SUCCEEDED(hr))
+				{
+					IPin* pAudioDecOut = GetPin(pLAVAudio, PINDIR_OUTPUT);
+					if (pAudioDecOut!= NULL)
+					{ 
+						IPin* pAudioRenIn = GetPin(pAudioRenderer, PINDIR_INPUT);
+						if (pAudioRenIn!= NULL)
+						{ 
+							hr = m_pGraph->ConnectDirect(pAudioDecOut, pAudioRenIn, NULL);
+						}
+					}
+				}
+
+				//
+				// Connect video decoder filter and video renderer filter.
+				//
+
+				if (SUCCEEDED(hr))
+				{
+					IPin* pVideoColOut = GetPin(pLAVVideo, PINDIR_OUTPUT);
+					if (pVideoColOut!= NULL)
+					{ 
+						IPin* pVideoRenIn=GetPin(pVideoRenderer, PINDIR_INPUT);
+						if (pVideoRenIn!= NULL)
+						{ 
+							hr = m_pGraph->ConnectDirect(pVideoColOut,pVideoRenIn,NULL);
+						}
+					}
+				}
+
+				if(FAILED(hr))
+				{
+					SAFE_RELEASE(pLAVSplitter);
+					SAFE_RELEASE(pLAVVideo);
+					SAFE_RELEASE(pLAVAudio);
+					SPLogHelper::WriteLog("[DShow] ERROR: Manual connection failed.");
+					return false;
+				}
+			}	
+		}
+
+		SAFE_RELEASE(pLAVSplitter);
+		SAFE_RELEASE(pLAVVideo);
+		SAFE_RELEASE(pLAVAudio);
+		SAFE_RELEASE(pAudioRenderer);
+		//SAFE_RELEASE(pVideoRenderer);
+
+		//
+		// Get the seeking capabilities.
+		//
+
+		hr = m_pSeek->GetCapabilities(&m_seekCaps);
+
+		if (FAILED(hr))
+		{
+			SPLogHelper::WriteLog("[DShow] ERROR: Failed to get seek capability!");
+			return false;
+		}
+
+		//
+		// Set the volume.
+		//
+
+		hr = UpdateVolume();
+
+		if (FAILED(hr))
+		{
+			SPLogHelper::WriteLog("[DShow] ERROR: Failed to update volume!");
+			return false;
+		}	
 
 		return SUCCEEDED(hr);
 	}
 
 	bool SPDShowData::Unload()
 	{
+		//
 		// Stop sending event messages
+		//
+
 		if (m_pEvent)
 		{
 			m_pEvent->SetNotifyWindow((OAHWND)NULL, NULL, NULL);
@@ -282,15 +438,13 @@ namespace SPEngine
 		m_pSeek = NULL;
 		m_pAudio = NULL;
 		m_pSource = NULL;
-		//m_pFile = NULL;
 
 		m_seekCaps = 0;
-		m_bAudioStream = FALSE;
+		//m_bAudioStream = FALSE;
 
 		return true;
 	}
 
-	//HRESULT	SPDShowData::RenderStreams(SmartPtr<IBaseFilter> pSource)
 	HRESULT	SPDShowData::RenderStreams(SmartPtr<SPFileSourceFilter> pSource)
 	{
 		HRESULT hr = S_OK;
@@ -299,74 +453,50 @@ namespace SPEngine
 
 		IFilterGraph2 *pGraph2 = NULL;
 		IEnumPins *pEnum = NULL;
-		IBaseFilter *pAudioRenderer = NULL;
 
 		hr = m_pGraph->QueryInterface(IID_IFilterGraph2, (void**)&pGraph2);
 
-		// Add the video renderer to the graph
-		if (SUCCEEDED(hr))
-		{
-			//hr = CreateVideoRenderer();
-		}
-
-		// Add the DSound Renderer to the graph.
-		if (SUCCEEDED(hr))
-		{
-			hr = AddFilterByCLSID(m_pGraph, CLSID_DSoundRender, &pAudioRenderer, L"Audio Renderer");
-		}
-
+		//
 		// Enumerate the pins on the source filter.
+		//
+
 		if (SUCCEEDED(hr))
 		{
 			hr = pSource->EnumPins(&pEnum);
 		}
 
-		//hr = m_pGraph->Render(pSource->GetPin(0));
-
 		if (SUCCEEDED(hr))
 		{
+			//
 			// Loop through all the pins
+			//
+
 			IPin *pPin = NULL;
 
 			while (S_OK == pEnum->Next(1, &pPin, NULL))
 			{			
 				// Try to render this pin. 
-				// It's OK if we fail some pins, if at least one pin renders.
-				HRESULT hr2 = pGraph2->RenderEx(pPin, AM_RENDEREX_RENDERTOEXISTINGRENDERERS, NULL);
-				//HRESULT hr2 = pGraph2->Render(pPin);
-				
+				// It's OK if we fail some pins, if at least one pin rendered.
+
+				HRESULT hr2 = pGraph2->RenderEx(pPin, AM_RENDEREX_RENDERTOEXISTINGRENDERERS, NULL);				
 
 				pPin->Release();
 
 				if (SUCCEEDED(hr2))
 				{
 					bRenderedAnyPin = TRUE;
+					break;
 				}
 			}
 		}
 
-		// Try to remove the audio renderer.
-		if (SUCCEEDED(hr))
-		{
-			BOOL bRemoved = FALSE;
-			hr = RemoveUnconnectedRenderer(m_pGraph, pAudioRenderer, &bRemoved);
-
-			if (bRemoved)
-			{
-				m_bAudioStream = FALSE;
-			}
-			else
-			{
-				m_bAudioStream = TRUE;
-			}
-		}
-
 		SAFE_RELEASE(pEnum);
-		SAFE_RELEASE(pAudioRenderer);
 		SAFE_RELEASE(pGraph2);
 
+		//
 		// If we succeeded to this point, make sure we rendered at least one 
 		// stream.
+
 		if (SUCCEEDED(hr))
 		{
 			if (!bRenderedAnyPin)
@@ -376,123 +506,6 @@ namespace SPEngine
 		}
 
 		return hr;
-	}
-
-	bool SPDShowData::AddSource( SPString name )
-	{
-		HRESULT hr = S_OK;
-
-		//IBaseFilter *pSource = NULL;
-		//IBaseFilter *pFileSourceFilter = NULL;
-		//IFileSourceFilter *pIFileSourceFilter = NULL;
-
-		// Load at first!
-
-		// Create the Texture Renderer object
-		SPVideoRenderer *pCTR = NULL;
-
-		pCTR = new SPVideoRenderer(this, NULL, &hr);
-		if (FAILED(hr))
-		{
-			SPLogHelper::WriteLog("[DShow] ERROR: Failed to create video renderer!");
-			return false;
-		}	
-
-		// Add the render filter to the graph.
-		m_pRenderer = pCTR;
-		hr = m_pBase->AddFilter(m_pRenderer, L"TEXTURERENDERER");
-		if (FAILED(hr))
-		{
-			SPLogHelper::WriteLog("[DShow] ERROR: Failed to add the video renderer!");
-			return false;
-		}			
-
-		// Create and query source filter interface.
-		//SPFileSourceFilter* m_pSource = new SPFileSourceFilter(NULL, &hr);
-		//if (FAILED(hr))
-		//{
-		//	SPLogHelper::WriteLog("[DShow] ERROR: Failed to create source filter!");
-		//	m_pSource = NULL;
-		//	return false;
-		//}	
-
-		//SmartPtr<SPFileSourceFilter> sourceCopy = m_pSource;
-		//m_pSource->AddRef();
-
-		// Query source filter interface.
-		//hr = m_pSource->QueryInterface(IID_IBaseFilter, (void**)&pFileSourceFilter);
-		//if (FAILED(hr))
-		//{
-		//	SPLogHelper::WriteLog("[DShow] ERROR: Failed to get base filter interface form source filter!");
-		//	return false;
-		//}
-
-		//// Add to graph
-		//hr = m_pGraph->AddFilter(m_pSource, "File Source");
-		//if (FAILED(hr))
-		//{
-		//	SPLogHelper::WriteLog("[DShow] ERROR: Failed to add file source filter to graph!");
-		//	return false;
-		//}
-
-		// Query file source filter interface.
-		//hr = pFileSourceFilter->QueryInterface(IID_IFileSourceFilter, (void**)&pIFileSourceFilter);
-		//if (FAILED(hr))
-		//{
-		//	SPLogHelper::WriteLog("[DShow] ERROR: Failed to get file source filter interface form base filter!");
-		//	return false;
-		//}
-
-		hr = m_pSource->Load(name.c_str(), NULL);
-		if (FAILED(hr))
-		{
-			SPLogHelper::WriteLog("[DShow] ERROR: Failed to load source file!");
-			return false;
-		}
-
-
-
-		//// Add the source filter to the graph.
-		//hr = m_pGraph->AddSourceFilter(
-		//	SPStringHelper::MultiByteCStringToWideChar(name.c_str()),
-		//	NULL, &pSource);
-		//if (FAILED(hr))
-		//{
-		//	SPLogHelper::WriteLog("[DShow] ERROR: Failed to add source filter! No such file or directory: \"%s\"", name.c_str());
-		//	return false;
-		//}	
-
-		// Try to render the streams.
-		//hr = RenderStreams(pSource);
-		hr = RenderStreams(m_pSource);
-
-		if (FAILED(hr))
-		{
-			SPLogHelper::WriteLog("[DShow] ERROR: Failed to render source stream!");
-			return false;
-		}	
-
-		// Get the seeking capabilities.
-		hr = m_pSeek->GetCapabilities(&m_seekCaps);
-
-		if (FAILED(hr))
-		{
-			SPLogHelper::WriteLog("[DShow] ERROR: Failed to get seek capability!");
-			return false;
-		}	
-
-		// Set the volume.
-		hr = UpdateVolume();
-
-		if (FAILED(hr))
-		{
-			SPLogHelper::WriteLog("[DShow] ERROR: Failed to update volume!");
-			return false;
-		}	
-
-		//SAFE_RELEASE(pSource);
-
-		return true;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -573,16 +586,22 @@ namespace SPEngine
 	{
 		HRESULT hr = S_OK;
 
-		if (m_bAudioStream && m_pAudio)
+		if (m_pAudio)
 		{
+			//
 			// If the audio is muted, set the minimum volume. 
+			//
+
 			if (m_bMute)
 			{
 				hr = m_pAudio->put_Volume(MIN_VOLUME);
 			}
 			else
 			{
+				//
 				// Restore previous volume setting
+				//
+
 				hr = m_pAudio->put_Volume(m_lVolume);
 			}
 		}

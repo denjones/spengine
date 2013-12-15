@@ -21,9 +21,11 @@ namespace SPEngine
 	private:
 		SPLogHelper(void);
 		~SPLogHelper(void);
-
+		static bool isLoggingOn;
 		static void CreatLogFile();
 	public:
+		static void TurnOnLogging();
+		static void TurnOffLogging();
 		static void WriteLog(string log, ...);
 		static void WriteLog(wstring log, ...);
 		static void WriteLog(TCHAR *szFormat, ...);		

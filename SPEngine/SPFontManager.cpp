@@ -13,8 +13,6 @@
 #include "SPFileManager.h"
 #include "SPStringHelper.h"
 
-#pragma warning (disable:4244)
-
 namespace SPEngine
 {
 	SPFontManager::SPFontManager(void)

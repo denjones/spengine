@@ -15,8 +15,6 @@
 #include "SPFileManager.h"
 #include "SPFontHelper.h"
 
-#pragma warning (disable:4244)
-
 namespace SPEngine
 {
 	SPFont::~SPFont(void)

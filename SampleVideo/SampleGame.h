@@ -6,6 +6,7 @@ using namespace SPEngine;
 class SampleGame : public SPGame
 {
 	SPTexturePtr texture;
+	SPSoundPtr sound;
 	SPVideoPtr video;
 
 public:

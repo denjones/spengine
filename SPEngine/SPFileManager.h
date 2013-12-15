@@ -9,6 +9,7 @@
 #include "SPSingleton.h"
 #include "SPStringMap.h"
 #include "SPFile.h"
+#include "SPFilePacker.h"
 
 namespace SPEngine
 {
@@ -18,6 +19,7 @@ namespace SPEngine
 	class SPFileManager : public SPSingleton<SPFileManager>
 	{
 		SPWStringMap<SPFilePtr> files;
+		SPPointer<SPFilePacker> filePacker;
 
 	public:
 		SPFileManager(void);
