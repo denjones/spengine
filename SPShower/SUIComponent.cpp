@@ -318,30 +318,6 @@ bool SUIComponent::SetLayer( float setLayer )
 	return true;
 }
 
-float SUIComponent::GetDepth()
-{
-	if (isAbsoluteRender && father)
-	{
-		float base = MaxLayer + 1;
-		SUIComponentPtr com = father;
-
-		while(com && com->isAbsoluteRender)
-		{
-			com = com->father;
-			base *= MaxLayer + 2;
-		}
-
-		float fatherDepth = father->GetDepth();
-
-		float depth = fatherDepth  - (properties.layer + 1) / base;
-
-		return depth;
-	}
-
-	float depth =  (MaxLayer - properties.layer) / MaxLayer;
-	return depth;
-}
-
 bool SUIComponent::SetProperties( SUIProperties setProperties )
 {
 	properties = setProperties;
@@ -793,8 +769,42 @@ bool SUIComponent::ClearEffect()
 	return true;
 }
 
+float SUIComponent::Depth()
+{
+	if (isAbsoluteRender && father)
+	{
+		if (!_depth)
+		{
+			float base = MaxLayer + 1;
+			SUIComponentPtr com = father;
+
+			while(com && com->isAbsoluteRender)
+			{
+				com = com->father;
+				base *= MaxLayer + 2;
+			}
+
+			float fatherDepth = father->Depth();
+
+			float depth = fatherDepth  - (properties.layer + 1) / base;
+
+			_depth = new float(depth);
+		}
+
+		return *_depth;
+	}
+
+	float depth =  (MaxLayer - properties.layer) / MaxLayer;
+	return depth;
+}
+
 D3DXMATRIX SUIComponent::TransformMatrix()
 {
+	if (_transformMatrix)
+	{
+		return *_transformMatrix;
+	}
+
 	D3DXMATRIX transformMatrix;
 	D3DXMatrixTransformation2D(
 		&transformMatrix, 
@@ -807,7 +817,12 @@ D3DXMATRIX SUIComponent::TransformMatrix()
 
 	if (isAbsoluteRender && father)
 	{
-		return transformMatrix * father->TransformMatrix();
+		if (!_transformMatrix)
+		{
+			_transformMatrix = new D3DXMATRIX(transformMatrix * father->TransformMatrix());
+		}
+
+		return *_transformMatrix;
 	}
 
 	return transformMatrix;
@@ -815,6 +830,11 @@ D3DXMATRIX SUIComponent::TransformMatrix()
 
 D3DXMATRIX SUIComponent::TransformMatrixBG()
 {
+	if (_transformMatrixBG)
+	{
+		return *_transformMatrixBG;
+	}
+
 	D3DXMATRIX transformMatrix;
 	SPRectangle bRect = GetBackgroundRect();
 	D3DXMatrixTransformation2D(
@@ -829,7 +849,12 @@ D3DXMATRIX SUIComponent::TransformMatrixBG()
 
 	if (isAbsoluteRender && father)
 	{
-		return transformMatrix * TransformMatrix();
+		if (!_transformMatrixBG)
+		{
+			_transformMatrixBG = new D3DXMATRIX(transformMatrix * TransformMatrix());
+		}
+
+		return *_transformMatrixBG;
 	}
 
 	return transformMatrix;
@@ -839,25 +864,29 @@ D3DXVECTOR3 SUIComponent::Position()
 {
 	if (isAbsoluteRender && father)
 	{
-		D3DXVECTOR2 pos = GetPosition();
-		D3DXVECTOR2 fatherPos = father->Position();
-		return D3DXVECTOR3(
-			pos.x + fatherPos.x,
-			pos.y + fatherPos.y,
-			GetDepth());
+		if (!_position)
+		{
+			D3DXVECTOR2 pos = GetPosition();
+			D3DXVECTOR2 fatherPos = father->Position();
+			_position = new D3DXVECTOR3( pos.x + fatherPos.x, pos.y + fatherPos.y, Depth());
+		}
+		
+		return *_position;
 	}
 
-	return D3DXVECTOR3(properties.rectangle.X, properties.rectangle.Y, GetDepth());
+	return D3DXVECTOR3(properties.rectangle.X, properties.rectangle.Y, Depth());
 }
 
 D3DXVECTOR3 SUIComponent::PositionBG()
 {
 	if (isAbsoluteRender && father)
 	{
-		return D3DXVECTOR3(
-			Position().x,
-			Position().y,
-			CalDepth(0));
+		if (!_positionBG)
+		{
+			_positionBG = new D3DXVECTOR3(Position().x,	Position().y, CalDepth(0));
+		}
+		
+		return *_positionBG;
 	}
 	return D3DXVECTOR3(properties.backgroundX, properties.backgroundY, 1);
 }
@@ -866,7 +895,12 @@ SPTexturePtr SUIComponent::ChildTarget()
 {
 	if (isAbsoluteRender && father)
 	{
-		return father->ChildTarget();
+		if (!_childTarget)
+		{
+			_childTarget = father->ChildTarget();
+		}
+		
+		return _childTarget;
 	}
 
 	return childTarget;
@@ -883,7 +917,12 @@ float SUIComponent::Alpha()
 {
 	if (isAbsoluteRender && father)
 	{
-		return father->Alpha() * properties.transparency;
+		if (!_alpha)
+		{
+			_alpha = new float(father->Alpha() * properties.transparency);
+		}
+
+		return *_alpha;
 	}
 
 	return 1;
@@ -893,18 +932,24 @@ SPRectangle SUIComponent::BackgroundSrcRect()
 {
 	if (isAbsoluteRender)
 	{
-		SPRectangle rect = properties.rectangle;
-		rect.X = -properties.backgroundX;
-		rect.Y = -properties.backgroundY;
-		if (rect.Width > properties.backgroundImage->GetWidth())
+		if (!_backgroudSrcRect)
 		{
-			rect.Width = properties.backgroundImage->GetWidth();
+			SPRectangle rect = properties.rectangle;
+			rect.X = -properties.backgroundX;
+			rect.Y = -properties.backgroundY;
+			if (rect.Width > properties.backgroundImage->GetWidth())
+			{
+				rect.Width = properties.backgroundImage->GetWidth();
+			}
+			if (rect.Height > properties.backgroundImage->GetHeight())
+			{
+				rect.Height = properties.backgroundImage->GetHeight();
+			}
+
+			_backgroudSrcRect = new SPRectangle(rect);
 		}
-		if (rect.Height > properties.backgroundImage->GetHeight())
-		{
-			rect.Height = properties.backgroundImage->GetHeight();
-		}
-		return rect;
+		
+		return *_backgroudSrcRect;
 	}
 
 	return properties.backgroundImage->SourceRectangle();
@@ -914,20 +959,23 @@ float SUIComponent::CalDepth( float depth )
 {
 	if (isAbsoluteRender && father)
 	{
-		float base = MaxLayer + 1;
-		SUIComponentPtr com = father;
-
-		while(com && com->isAbsoluteRender)
+		if (!_calDepthBase)
 		{
-			com = com->father;
-			base *= MaxLayer + 2;
+			float base = MaxLayer + 1;
+			SUIComponentPtr com = father;
+
+			while(com && com->isAbsoluteRender)
+			{
+				com = com->father;
+				base *= MaxLayer + 2;
+			}
+
+			float base2 = base * (MaxLayer + 2);
+
+			_calDepthBase = new float(base2);
 		}
 
-		float base2 = base * (MaxLayer + 2);
-
-		float thisDepth = GetDepth();
-
-		float result = thisDepth - ((1 - depth) * (MaxLayer + 1) + 1) / (MaxLayer + 2) / base2;
+		float result = Depth() - ((1 - depth) * (MaxLayer + 1) + 1) / (MaxLayer + 2) / (*_calDepthBase);
 
 		return result;
 	}
@@ -937,6 +985,11 @@ float SUIComponent::CalDepth( float depth )
 
 D3DXMATRIX SUIComponent::TransformMatrixColor()
 {
+	if (_transformMatrixColor)
+	{
+		return *_transformMatrixColor;
+	}
+
 	D3DXMATRIX transformMatrix;
 	D3DXMatrixTransformation2D(
 		&transformMatrix, 
@@ -949,9 +1002,13 @@ D3DXMATRIX SUIComponent::TransformMatrixColor()
 
 	if (isAbsoluteRender && father)
 	{
-		D3DXMATRIX fMatrix = TransformMatrix();
-		D3DXMATRIX result = transformMatrix * fMatrix;
-		return result;
+		if (!_transformMatrixColor)
+		{
+			D3DXMATRIX fMatrix = TransformMatrix();
+			_transformMatrixColor = new D3DXMATRIX(transformMatrix * fMatrix);
+		}
+		
+		return *_transformMatrixColor;
 	}
 
 	return transformMatrix;
@@ -961,11 +1018,28 @@ D3DXVECTOR3 SUIComponent::PositionColor()
 {
 	if (isAbsoluteRender && father)
 	{
-		D3DXVECTOR3 pos = Position();
-		return D3DXVECTOR3(
-			pos.x,
-			pos.y,
-			GetDepth());
+		if (!_postionColor)
+		{
+			D3DXVECTOR3 pos = Position();
+			_postionColor = new D3DXVECTOR3(pos.x, pos.y, Depth());
+		}
+
+		return *_postionColor;
 	}
-	return D3DXVECTOR3(properties.rectangle.X, properties.rectangle.Y, GetDepth());
+	return D3DXVECTOR3(properties.rectangle.X, properties.rectangle.Y, Depth());
+}
+
+void SUIComponent::ClearAbsoluteCache()
+{
+	_position = NULL;
+	_positionBG = NULL;
+	_postionColor = NULL;
+	_transformMatrix = NULL;
+	_transformMatrixColor = NULL;
+	_transformMatrixBG = NULL;
+	_alpha = NULL;
+	_depth = NULL;
+	_childTarget = NULL;
+	_backgroudSrcRect = NULL;
+	_calDepthBase = NULL;
 }

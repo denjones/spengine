@@ -162,6 +162,15 @@ bool SUIScreen::Draw( float timeDelta )
 		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight),
 		SPColor::White, 0.5, NULL);
 
+	ComponentIterator iter(&componentMap);
+
+	// Clear Cache
+
+	for(iter.First(); !iter.IsDone(); iter.Next())
+	{
+		iter.CurrentItem()->ClearAbsoluteCache();
+	}
+
 	return true;
 }
 

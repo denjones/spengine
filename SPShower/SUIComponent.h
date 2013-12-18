@@ -146,7 +146,6 @@ public:
 
 	float GetLayer();
 	bool SetLayer(float setLayer);
-	float GetDepth();
 
 	bool SetBackgroundX(int setX);
 	int GetBackgroundX();
@@ -158,20 +157,64 @@ public:
 
 	SRectangle GetBackgroundRect();
 	bool SetProperties(VariableMap args);
-
-	// Absolute render 
-	bool SetAbsoluteRender(bool setOn);
-	D3DXVECTOR3 Position();
-	D3DXVECTOR3 PositionBG();
-	D3DXVECTOR3 PositionColor();
-	D3DXMATRIX TransformMatrix();
-	D3DXMATRIX TransformMatrixColor();
-	D3DXMATRIX TransformMatrixBG();
-	SPTexturePtr ChildTarget();
-	SPRectangle BackgroundSrcRect();
-	float CalDepth(float depth);
-	float Alpha();
 	/// @}
+
+	/// @name AbsoluteRender
+	/// @{
+	bool SetAbsoluteRender(bool setOn);
+
+	// Absolute position cache
+	SPPointer<D3DXVECTOR3> _position;
+	D3DXVECTOR3 Position();
+
+	// Absolute background position cache
+	SPPointer<D3DXVECTOR3> _positionBG;
+	D3DXVECTOR3 PositionBG();
+
+	// Absolute background color texture position cache
+	SPPointer<D3DXVECTOR3> _postionColor;
+	D3DXVECTOR3 PositionColor();
+
+	// Absolute transform matrix cache
+	SPPointer<D3DXMATRIX> _transformMatrix;
+	D3DXMATRIX TransformMatrix();
+
+	// Absolute color texture transform matrix cache
+	SPPointer<D3DXMATRIX> _transformMatrixColor;
+	D3DXMATRIX TransformMatrixColor();
+
+	// Absolute background transform matrix cache
+	SPPointer<D3DXMATRIX> _transformMatrixBG;
+	D3DXMATRIX TransformMatrixBG();
+
+	// Absolute alpha cache
+	SPPointer<float> _alpha;
+	float Alpha();
+
+	// Absolute alpha cache
+	SPPointer<float> _depth;
+	float Depth();
+
+	// Absolute child target
+	SPTexturePtr _childTarget;
+	SPTexturePtr ChildTarget();
+
+	// Absolute Background Source Rect
+	SPPointer<SPRectangle> _backgroudSrcRect;
+	SPRectangle BackgroundSrcRect();
+
+	// Absolute Cal Depth Base
+	SPPointer<float> _calDepthBase;
+	float CalDepth(float depth);
+
+	// Clear caches. Must be called before next render.
+	void ClearAbsoluteCache();
+
+	
+	
+	/// @}
+	
+	
 	/// @}
 
 public:

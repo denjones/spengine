@@ -29,16 +29,16 @@ namespace SPEngine
 	{
 		/// @name Inner Type
 		/// @{
-		typedef SPHandle<SPTextureTag> SPTextureHandle;
-		typedef SPHandleManager<SPTexture, SPTextureHandle> SPTextureHandleManager;
-		typedef SPHandleManager<SPUpdatableTexture, SPTextureHandle> SPUpdatableTextureHandleManager;
-		typedef SPWStringMap<SPTextureHandle> SPTextureMap;
+		//typedef SPHandle<SPTextureTag> SPTextureHandle;
+		//typedef SPHandleManager<SPTexture, SPTextureHandle> SPTextureHandleManager;
+		//typedef SPHandleManager<SPUpdatableTexture, SPTextureHandle> SPUpdatableTextureHandleManager;
+		typedef SPWStringMap<SPTexturePtr> SPTextureMap;
 		/// @}
 
-		SPTextureHandleManager textureHandleMgr;	///< Inner handle manager.
-		SPUpdatableTextureHandleManager updatableTextureHanldeMgr; ///< Inner anime handle manager.
-		SPTextureMap nameToTexture;					///< String to handle mapping.
-		SPTextureMap nameToUpdatable;				///< String to updatable handle mapping.
+		//SPTextureHandleManager textureHandleMgr;	///< Inner handle manager.
+		//SPUpdatableTextureHandleManager updatableTextureHanldeMgr; ///< Inner anime handle manager.
+		SPTextureMap textures;					///< String to handle mapping.
+		SPTextureMap updatableTextures;				///< String to updatable handle mapping.
 			
 	public:
 		SPTextureManager(void);

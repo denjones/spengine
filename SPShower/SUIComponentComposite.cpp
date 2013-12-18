@@ -171,7 +171,7 @@ bool SUIComponentComposite::PostDraw()
 		SPSpriteManager::GetSingleton().RenderWithRotation(
 			childTarget, 
 			GetCurrentEffect(), 
-			D3DXVECTOR3(GetPosition().x, GetPosition().y, GetDepth()),
+			D3DXVECTOR3(GetPosition().x, GetPosition().y, Depth()),
 			properties.rotationCenter,
 			properties.rotation,
 			properties.transparency * SPColor::White,
