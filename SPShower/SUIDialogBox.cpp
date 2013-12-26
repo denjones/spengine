@@ -30,7 +30,7 @@ bool SUIDialogBox::AddText( SUIText text )
 	//	textsToPush.push_back(SUIText(L"\t"));
 	//}	
 
-	if (texts.size() != 0)
+	if (CurrentLine()->size() != 0)
 	{
 		Next();
 	}	
@@ -86,7 +86,8 @@ bool SUIDialogBox::Update( float timeDelta )
 			}
 
 			// Push new character.
-			texts.push_back(characterToPush);
+			//texts.push_back(characterToPush);
+			SUITextBox::AddText(characterToPush);
 
 			// Remove the character.
 			textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -108,8 +109,7 @@ bool SUIDialogBox::Update( float timeDelta )
 
 					characterToPush.text = characterToPush.text.substr(0,1);	
 
-					if (characterToPush.text == L"\n"
-						|| characterToPush.text == L"\t")
+					if (characterToPush.text == L"\n" || characterToPush.text == L"\t")
 					{
 						waitingNextLine = true;
 						break;
@@ -122,7 +122,8 @@ bool SUIDialogBox::Update( float timeDelta )
 					}
 
 					// Push new character.
-					texts.push_back(characterToPush);
+					//texts.push_back(characterToPush);
+					SUITextBox::AddText(characterToPush);
 
 					// Remove the character.
 					textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -146,7 +147,7 @@ bool SUIDialogBox::Update( float timeDelta )
 				if (characterToPush.text == L"\f")
 				{
 					// Next page
-					texts.clear();
+					SUITextBox::Clear();
 				}
 				else if (characterToPush.text == L"\t")
 				{
@@ -155,7 +156,8 @@ bool SUIDialogBox::Update( float timeDelta )
 				else
 				{
 					// Push new character.
-					texts.push_back(characterToPush);
+					//texts.push_back(characterToPush);
+					SUITextBox::AddText(characterToPush);
 				}				
 
 				// Remove the character.
@@ -173,9 +175,6 @@ bool SUIDialogBox::Update( float timeDelta )
 		{
 			nextLine = false;
 		}
-
-		// Apply.
-		ApplyText();		
 
 		elapsedLastAddTime = 0;
 	}
@@ -242,10 +241,11 @@ bool SUIDialogBox::SetNextPageTex( SPTexturePtr setTex )
 bool SUIDialogBox::Clear()
 {
 	Clean();
+	SUITextBox::Clear();
 
 	isHasTextToClear = false;
 
-	if (textsToPush.size() == 0 && texts.size() == 0)
+	if (textsToPush.size() == 0 && CurrentLine()->size() == 0)
 	{
 		return true;
 	}
@@ -267,16 +267,7 @@ bool SUIDialogBox::LoadFromString( SPString stringStream )
 
 SPString SUIDialogBox::SaveAsString()
 {
-	SPString currentContent;
-
-	SUITextVector::iterator  iter = texts.begin();
-
-	while(iter != texts.end())
-	{
-		currentContent += iter->text;
-
-		iter++;
-	}
+	SPString currentContent = GetContent();
 
 	SUITextList::iterator tIter = textsToPush.begin();
 
@@ -296,16 +287,17 @@ SPString SUIDialogBox::SaveAsString()
 
 bool SUIDialogBox::ForceClear()
 {
-	texts.clear();
+	//texts.clear();
 	textsToPush.clear();
-	linesResult.clear();
+	Clear();
 
 	return true;
 }
 
 bool SUIDialogBox::ForceAddText( SUIText text )
 {
-	texts.push_back(text);
+	//texts.push_back(text);
+	SUITextBox::AddText(text);
 
 	return true;
 }
@@ -323,14 +315,15 @@ bool SUIDialogBox::Skip()
 
 		if (characterToPush.text == L"\f")
 		{
-			texts.clear();
+			SUITextBox::Clear();
 			characterToPush.text = L"";
 			waitingNextPage = true;			
 		}
 		else
 		{
 			// Push new character.
-			texts.push_back(characterToPush);
+			//texts.push_back(characterToPush);
+			SUITextBox::AddText(characterToPush);
 		}	
 
 		// Remove the character.
@@ -346,16 +339,14 @@ bool SUIDialogBox::Skip()
 		}
 	}
 
-	ApplyText();
-
 	return true;
 }
 
 bool SUIDialogBox::Clean()
 {
-	if(texts.size() == 1 && texts.front().text.size() == 0)
+	if(lines.size() == 1 && CurrentLine()->size() == 1 && CurrentLine()->front()->text.text.size() == 0)
 	{
-		texts.clear();
+		SUITextBox::Clear();
 	}
 
 	if(textsToPush.size() == 1 && textsToPush.front().text.size() == 0)
@@ -419,15 +410,15 @@ D3DXMATRIX SUIDialogBox::TransformMatrixNext()
 
 D3DXVECTOR3 SUIDialogBox::PositionNext()
 {
-	SRectangle lastRect =  linesResult.back().rect;
-	int texPosX = lastRect.CRect().right + lastRect.Height * wordSpace;
-	int texPosY = lastRect.CRect().top;	
+	D3DXVECTOR2 position = CurrentPosition();
+	int texPosX = position.x; //  + lastRect.Height * wordSpace;
+	int texPosY = position.y;	
 
-	if(linesResult.size() == 0)
-	{
-		texPosY = 0;
-		texPosX = 0;
-	}
+	//if(lines.size() == 1 && CurrentLine()->size() == 0)
+	//{
+	//	texPosY = 0;
+	//	texPosX = 0;
+	//}
 
 	if (isAbsoluteRender && father)
 	{

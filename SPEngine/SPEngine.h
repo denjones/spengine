@@ -110,6 +110,7 @@
 #include "SPPointer.h"
 #include "SPTransition.h"
 #include "SPSingleton.h"
+#include "SPRectangle.h"
 
 //////////////////////////////////////////////////////////////////////////
 

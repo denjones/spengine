@@ -356,6 +356,8 @@
     <ClInclude Include="SUIEventHandleScript.h" />
     <ClInclude Include="SUIText.h" />
     <ClInclude Include="SUITextBox.h" />
+    <ClInclude Include="SUITextLine.h" />
+    <ClInclude Include="SUITextSpan.h" />
     <ClInclude Include="SUITransformation.h" />
     <ClInclude Include="SUITransformationManager.h" />
     <ClInclude Include="SUITransition.h" />
@@ -399,6 +401,8 @@
     <ClCompile Include="SUIScreen.cpp" />
     <ClCompile Include="SUIText.cpp" />
     <ClCompile Include="SUITextBox.cpp" />
+    <ClCompile Include="SUITextLine.cpp" />
+    <ClCompile Include="SUITextSpan.cpp" />
     <ClCompile Include="SUITransformation.cpp" />
     <ClCompile Include="SUITransformationManager.cpp" />
     <ClCompile Include="SUITransition.cpp" />
