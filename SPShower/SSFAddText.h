@@ -166,8 +166,6 @@ public:
 
 		textBox->AddText(text);		
 
-		textBox->ApplyText();
-
 		OutLogUnusedProperties(args);
 
 		return true;

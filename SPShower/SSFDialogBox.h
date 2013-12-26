@@ -45,7 +45,7 @@ public:
 			{
 				float padding = SPStringHelper::StringToFloat(args[L"padding"].value);
 
-				dialogBox->SetPadding(D3DXVECTOR4(padding, padding, padding, padding));
+				dialogBox->SetPadding(SUIPadding(padding, padding, padding, padding));
 
 				args.erase(L"padding");
 			}
@@ -319,7 +319,7 @@ public:
 				args.erase(L"content");
 			}
 
-			dialogBox->ApplyText();
+			dialogBox->RefreshText();
 
 			args.erase(L"name");
 		}

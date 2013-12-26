@@ -2,45 +2,62 @@
 #include <vector>
 #include "SUIText.h"
 #include "SUIComponentComposite.h"
+#include "SUITextLine.h"
 
 using namespace std;
+
+struct SUIPadding
+{
+	float left;
+	float right;
+	float top;
+	float bottom;
+
+	SUIPadding(float top, float right, float bottom, float left)
+	{
+		this->left = left;
+		this->right = right;
+		this->top = top;
+		this->bottom = bottom;
+	}
+
+	SUIPadding()
+	{
+		left = 0;
+		right = 0;
+		top = 0;
+		bottom = 0;
+	}
+};
 
 class SUITextBox : public SUIComponentComposite
 {
 protected:
-	struct TextSpan
-	{
-	public:
-		SUIText text;
-		SRectangle rect;
-
-		TextSpan(SUIText setText, SRectangle setRect)
-		{
-			text = setText;
-			rect = setRect;
-		}
-	};
-
 	typedef vector<SUIText> SUITextVector;
 	typedef SUITextVector::iterator SUITextIterator;
-	typedef vector<TextSpan> TextBlock;
 	typedef list<SUIText> SUITextList;
+	typedef vector<SUITextLinePtr> SUITextBlock;
 
-	SPFontPtr	defaultFont;
-	SUITextVector texts;
-	D3DXVECTOR4 padding;
-	float		lineSpace;
-	float		wordSpace;
-	TextBlock	linesResult;
-	D3DCOLOR	defaultColor;
-	SUIEffectPtr defaultBackEffect;
-	SUIEffectPtr defaultFrontEffect;
-	SPString	punctuations;
+	
+private:
+	//SUITextVector	texts;
+
+protected:
+	SPFontPtr		defaultFont;
+	SUIPadding		padding;
+	float			lineSpace;
+	float			wordSpace;
+	D3DCOLOR		defaultColor;
+	SUIEffectPtr	defaultBackEffect;
+	SUIEffectPtr	defaultFrontEffect;
+	SPString		punctuations;
+	D3DXVECTOR2		currentPosition;
+	SUITextBlock	lines;
 
 public:
 	bool SetLineSpace(float setSpace);
 	bool SetWordSpace(float setSpace);
-	bool SetPadding(D3DXVECTOR4 setPadding);
+	bool SetPadding(SUIPadding setPadding);
 	SRectangle GetTextRect();
 	bool SetDefaultFont(SPFontPtr setFont);
 	bool SetDefaultColor(D3DCOLOR setColor);
@@ -53,8 +70,8 @@ public:
 	D3DXMATRIX TransformMatrixText();
 	D3DXVECTOR3 PositionText();
 	D3DXVECTOR3 PositionTextBG();
-	//add
-	bool ApplyText();
+
+	void RefreshText();
 
 public:
 	SUITextBox(void);
@@ -62,11 +79,23 @@ public:
 
 	virtual bool AddText(SUIText text);	
 	virtual bool Clear();
+	void NewLine();
+	void AddTextDirectly(SUITextSpanPtr textSpan);
+	D3DXVECTOR2 CurrentPosition();
+	SUITextLinePtr CurrentLine();
+	bool WillExceeded(float length);
+	bool WillCurrentLineExceeded(float addedLength);
+	SPString GetContent();
+
 	virtual bool Update(float timeDelta);
 	virtual bool Draw(float timeDelta);
 
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
+
+private:
+	bool IsPunctuation(SPString character);
+	bool IsAlphabet(SPString character);
 };
 
 typedef SPPointer<SUITextBox> SUITextBoxPtr;

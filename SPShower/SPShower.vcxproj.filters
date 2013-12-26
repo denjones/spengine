@@ -852,6 +852,12 @@
     <ClInclude Include="Resource.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="SUITextLine.h">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClInclude>
+    <ClInclude Include="SUITextSpan.h">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -961,6 +967,12 @@
     </ClCompile>
     <ClCompile Include="SUIParticleSystemManager.cpp">
       <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITextLine.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITextSpan.cpp">
+      <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
