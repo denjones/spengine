@@ -26,7 +26,7 @@ namespace KScript
 		/// Complete the method to build a function.
 		/// @param[in] vector<Value> arguments list.
 		/// @return Value type.
-		virtual Value Function(Script* currentScript, vector<Value> args) = 0;
+		virtual KSValue Function(KSScript* currentScript, vector<KSValue> args) = 0;
 	};
 
 	typedef KSmartPtr<ExtendedArgsFunction> ArgsFunctionPtr;
@@ -43,7 +43,7 @@ namespace KScript
 		/// Complete the method to build a function.
 		/// @param[in] VariableMap arguments list.
 		/// @return Value type.
-		virtual Value Function(Script* currentScript, VariableMap args) = 0;
+		virtual KSValue Function(KSScript* currentScript, VariableMap args) = 0;
 	};
 
 	typedef KSmartPtr<ExtendedMapArgsFunction> MapArgsFunctionPtr;
@@ -61,9 +61,9 @@ namespace KScript
 	public:
 		virtual ~UserDefinedMapArgsFunction(){}
 
-		UserDefinedMapArgsFunction(KScriptRunner* setRunner, Script* sourceScript, KString funcName);
+		UserDefinedMapArgsFunction(KScriptRunner* setRunner, KSScript* sourceScript, KString funcName);
 
-		Value Function(Script* currentScript, VariableMap args);
+		KSValue Function(KSScript* currentScript, VariableMap args);
 	};
 
 
@@ -77,7 +77,7 @@ namespace KScript
 		IncludeFunction(KScriptRunner* setRunner);
 		KScriptRunner* runner;
 
-		Value Function(Script* currentScript, vector<Value> args);
+		KSValue Function(KSScript* currentScript, vector<KSValue> args);
 
 	};
 
@@ -91,7 +91,7 @@ namespace KScript
 		IncludeMapArgsFunction(KScriptRunner* setRunner);
 		KScriptRunner* runner;
 
-		Value Function(Script* currentScript, VariableMap args);
+		KSValue Function(KSScript* currentScript, VariableMap args);
 
 	};
 
@@ -107,7 +107,7 @@ namespace KScript
 		KString scriptString;
 		ScriptPtr innerScript;
 
-		Value Function(Script* currentScript, VariableMap args);
+		KSValue Function(KSScript* currentScript, VariableMap args);
 
 	};
 
@@ -123,7 +123,7 @@ namespace KScript
 	class KScriptRunner
 	{
 	protected:
-		friend class Script;
+		friend class KSScript;
 		friend class UserDefinedMapArgsFunction;
 
 		ScriptPtr script;	///< Inner script.
@@ -153,11 +153,11 @@ namespace KScript
 		/// Run a function with given name and arguments.
 		/// @param[in] name The name of the function.
 		/// @param[in] args The arguments list.
-		virtual Value ExecuteExtendedCommand(Script* currentScript, KString name, vector<Value> args);
-		virtual Value ExecuteExtendedCommand(Script* currentScript, KString name, VariableMap args);
+		virtual KSValue ExecuteExtendedCommand(KSScript* currentScript, KString name, vector<KSValue> args);
+		virtual KSValue ExecuteExtendedCommand(KSScript* currentScript, KString name, VariableMap args);
 
 		/// @brief Execute Execute the script.
-		virtual Value Execute();
+		virtual KSValue Execute();
 
 		/// @brief AddExtension Add an extended function.
 		/// @param[in] name The name of the function.

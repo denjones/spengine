@@ -11,6 +11,7 @@
 #include "SPMessageHelper.h"
 #include "SPString.h"
 #include <shlwapi.h>
+#include "SPStringHelper.h"
 
 #pragma comment(lib,"Shlwapi.lib")
 
@@ -84,14 +85,14 @@ namespace SPEngine
 		}
 		else
 		{
-			SPLogHelper::WriteLog("[XAudio] ERROR: Failed to create XAudio2! %d %d", __uuidof(IXAudio2), __uuidof(XAudio2_Debug));
+			SPLogHelper::WriteLog(SPStringHelper::Format("[XAudio] ERROR: Failed to create XAudio2! %d %d", __uuidof(IXAudio2), __uuidof(XAudio2_Debug)));
 		}
 
 		//hr = XAudio2Create( &xAudio, 0, XAUDIO2_DEFAULT_PROCESSOR );
 
 		if (FAILED(hr))
 		{
-			SPLogHelper::WriteLog("[XAudio] ERROR: Failed to create XAudio2! %d %d", hr, GetLastError());
+			SPLogHelper::WriteLog(SPStringHelper::Format("[XAudio] ERROR: Failed to create XAudio2! %d %d", hr, GetLastError()));
 			
 			SPMessageHelper::Msg("Failed to create XAudio2!");
 			return false;

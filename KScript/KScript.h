@@ -31,15 +31,15 @@ namespace KScript
 	//////////////////////////////////////////////////////////////////////
 	/// @brief Value class. To represent a base variable type in the script.
 	//////////////////////////////////////////////////////////////////////
-	class Value
+	class KSValue
 	{
 	public:
 		KString value;			///< The real value in KString.
 		ANTLR3_UINT32 type;		///< The running type.
 
 		/// @brief The constructor of a value.
-		Value();
-		Value(KString setValue, ANTLR3_UINT32 setType);
+		KSValue();
+		KSValue(KString setValue, ANTLR3_UINT32 setType);
 	};
 
 	//////////////////////////////////////////////////////////////////////
@@ -67,16 +67,16 @@ namespace KScript
 		bool operator()(const KString &string1, const KString &string2) const;
 	};
 
-	typedef hash_map<KString, Value, HashString> VariableMap;
+	typedef hash_map<KString, KSValue, HashString> VariableMap;
 
-	class Script;
+	class KSScript;
 
-	typedef KSmartPtr<Script> ScriptPtr;
+	typedef KSmartPtr<KSScript> ScriptPtr;
 
 	//////////////////////////////////////////////////////////////////////
 	/// @brief Script class. To represent a script.
 	//////////////////////////////////////////////////////////////////////
-	class Script
+	class KSScript
 	{
 		void* parser;
 		void* lexer;		
@@ -85,7 +85,7 @@ namespace KScript
 
 		bool isInnerScript;
 		bool isNeedToReturn;
-		Value returnValue;
+		KSValue returnValue;
 		
 
 	public:
@@ -96,10 +96,10 @@ namespace KScript
 		int functionOrder;
 
 		/// @brief Constructor of a script.
-		Script();
-		Script(KString setScript, KScriptRunner* setRunner, bool isInner = false);
-		Script(KScriptRunner* setRunner, bool isInner = false);
-		virtual ~Script();
+		KSScript();
+		KSScript(KString setScript, KScriptRunner* setRunner, bool isInner = false);
+		KSScript(KScriptRunner* setRunner, bool isInner = false);
+		virtual ~KSScript();
 
 		/// @brief Load a script from a file.
 		bool LoadScript(KString path);
@@ -108,8 +108,8 @@ namespace KScript
 		bool LoadScriptStream(void* pBuffer, DWORD length, KString path = L"" );
 
 		/// @brief Execute the script file.
-		Value Execute();
-		Value Execute(pANTLR3_BASE_TREE root);
+		KSValue Execute();
+		KSValue Execute(pANTLR3_BASE_TREE root);
 
 		/// @brief Check if a variable name is valid.
 		bool IsIDValid( KString name );
@@ -130,15 +130,15 @@ namespace KScript
 		int GetChildCount(pANTLR3_BASE_TREE theTree);
 
 		/// @brief Get variables.
-		hash_map<KString, Value, HashString> GetVariableMap();
+		hash_map<KString, KSValue, HashString> GetVariableMap();
 
 		/// @brief Set variables.
 		bool ClearVariableMap();
-		bool SetVariableMap(hash_map<KString, Value, HashString> newMap);
-		bool UpdateVariableMap(hash_map<KString, Value, HashString> newMap);
+		bool SetVariableMap(hash_map<KString, KSValue, HashString> newMap);
+		bool UpdateVariableMap(hash_map<KString, KSValue, HashString> newMap);
 
 		/// @brief Analyze a tree recursively.
-		Value Analyze(pANTLR3_BASE_TREE subTree);
+		KSValue Analyze(pANTLR3_BASE_TREE subTree);
 
 		bool Unload();
 

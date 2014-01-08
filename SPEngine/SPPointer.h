@@ -183,6 +183,7 @@ namespace SPEngine
 				return pointer;
 			}
 
+			__debugbreak();
 			throw SPNullPointerException(); 
 		}
 
@@ -193,6 +194,7 @@ namespace SPEngine
 				return &pointer;
 			}
 
+			__debugbreak();
 			throw SPNullPointerException(); 
 		}
 
@@ -203,6 +205,7 @@ namespace SPEngine
 				return *pointer;
 			}
 
+			__debugbreak();
 			throw SPNullPointerException(); 
 		}
 		/// @}

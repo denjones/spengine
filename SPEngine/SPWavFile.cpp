@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "SPWavFile.h"
 #include "SPLogHelper.h"
+#include "SPStringHelper.h"
 
 #define fourccRIFF 'FFIR'
 #define fourccDATA 'atad'
@@ -78,7 +79,7 @@ namespace SPEngine
 
 		if(!SetPosition(overlapped.Offset) || !Read(pData, length, &overlapped))
 		{
-			SPLogHelper::WriteLog("[XAudio] ERROR: Couldn't start async read: error %#X", HRESULT_FROM_WIN32( GetLastError() ) );
+			SPLogHelper::WriteLog(SPStringHelper::Format("[XAudio] ERROR: Couldn't start async read: error %#X", HRESULT_FROM_WIN32( GetLastError() ) ));
 			return false;
 		}
 

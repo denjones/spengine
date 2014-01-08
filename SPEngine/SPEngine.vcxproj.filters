@@ -415,6 +415,10 @@
     <ClInclude Include="SPVideoRenderer.h">
       <Filter>Source\SPVideo\Filter</Filter>
     </ClInclude>
+    <ClInclude Include="SPV8ScriptEngine.h">
+      <Filter>Source\SPScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SPV8Function.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPWindow.cpp">
@@ -642,6 +646,10 @@
     <ClCompile Include="SPVideoRenderer.cpp">
       <Filter>Source\SPVideo\Filter</Filter>
     </ClCompile>
+    <ClCompile Include="SPV8ScriptEngine.cpp">
+      <Filter>Source\SPScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SPV8Function.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPEngine.rc">

@@ -425,7 +425,7 @@ namespace SPEngine
 			font = defaultFont;
 		}
 
-		D3DXVECTOR2 size = font->GetTextSize(text, Center | CenterVertical);
+		D3DXVECTOR2 size = font->GetTextSize(text, Center | CenterVertical, space);
 
 		return WriteCentered(font, ps, text, SPRectangle((int)position.x - (int)size.x / 2,
 			(int)position.y - (int)size.y / 2, (int)size.x,

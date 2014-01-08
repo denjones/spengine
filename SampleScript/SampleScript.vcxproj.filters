@@ -29,6 +29,8 @@
     <None Include="test.ks" />
     <None Include="test_include.ks" />
     <None Include="test_inner_include.ks" />
+    <None Include="test.js" />
+    <None Include="test2.js" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

@@ -32,6 +32,7 @@
 #include "SPVideoManager.h"
 #include "SPParticleSystemManager.h"
 #include "SPFilePacker.h"
+#include "SPV8ScriptEngine.h"
 
 namespace SPEngine
 {
@@ -444,6 +445,7 @@ namespace SPEngine
 		SPShaderManager::GetSingleton();
 		SPParticleSystemManager::GetSingleton();
 		SPFilePacker::GetSingleton();
+		SPV8ScriptEngine::GetSingleton();
 
 		// Register components.
 		componentManager->RegisterComponent(L"texture", SPTextureManager::GetSingletonPtr());
@@ -458,6 +460,7 @@ namespace SPEngine
 		componentManager->RegisterComponent(L"sound", SPSoundManager::GetSingletonPtr());		
 		componentManager->RegisterComponent(L"shader", SPShaderManager::GetSingletonPtr());
 		componentManager->RegisterComponent(L"font", SPFontManager::GetSingletonPtr());		
+		componentManager->RegisterComponent(L"v8", SPV8ScriptEngine::GetSingletonPtr());	
 
 		Initialize();
 
@@ -481,6 +484,7 @@ namespace SPEngine
 		SPSoundManager::GetSingleton().Enable();
 		SPScreenManager::GetSingleton().Enable();
 		SPParticleSystemManager::GetSingleton().Enable();
+		SPV8ScriptEngine::GetSingleton().Enable();
 
 		// Enable custom component.
 		SPComponentManager::GetSingleton().GetComponent(L"fps")->Enable();

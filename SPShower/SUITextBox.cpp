@@ -316,7 +316,7 @@ SPString SUITextBox::SaveAsString()
 {
 	SPString currentContent = GetContent();
 
-	propertiesMap[L"content"] = Value(currentContent, 70);
+	propertiesMap[L"content"] = KSValue(currentContent, 70);
 
 	SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUITB");
 

@@ -7,14 +7,14 @@
 
 namespace KScript
 {
-	Value ExtendedArgsFunction::Function(Script* currentScript, vector<Value> args)
+	KSValue ExtendedArgsFunction::Function(KSScript* currentScript, vector<KSValue> args)
 	{
-		return Value(L"0", INT);
+		return KSValue(L"0", INT);
 	}
 
 	KScriptRunner::KScriptRunner(void)
 	{
-		script = new Script(this);
+		script = new KSScript(this);
 		includeFunction = NULL;
 		includeFunction = new IncludeFunction(this);
 		AddExtension(L"include", includeFunction);
@@ -51,15 +51,15 @@ namespace KScript
 		return script->LoadScript(path);
 	}
 
-	Value KScriptRunner::Execute()
+	KSValue KScriptRunner::Execute()
 	{
 		return script->Execute();
 	}
 
-	Value KScriptRunner::ExecuteExtendedCommand(
-		Script* currentScript, KString name, vector<Value> args)
+	KSValue KScriptRunner::ExecuteExtendedCommand(
+		KSScript* currentScript, KString name, vector<KSValue> args)
 	{
-		Value result(L"0", INT);
+		KSValue result(L"0", INT);
 
 		if (IsArgsFunctionValid(name))
 		{
@@ -69,9 +69,9 @@ namespace KScript
 		return result;
 	}
 
-	Value KScriptRunner::ExecuteExtendedCommand( Script* currentScript, KString name, VariableMap args )
+	KSValue KScriptRunner::ExecuteExtendedCommand( KSScript* currentScript, KString name, VariableMap args )
 	{
-		Value result(L"0", INT);
+		KSValue result(L"0", INT);
 
 		if (IsMapArgsFunctionValid(name))
 		{
@@ -103,11 +103,11 @@ namespace KScript
 		return true;
 	}
 
-	Value IncludeFunction::Function(Script* currentScript, vector<Value> args )
+	KSValue IncludeFunction::Function(KSScript* currentScript, vector<KSValue> args )
 	{
 		if (args.size() == 0)
 		{
-			return Value();
+			return KSValue();
 		}
 
 		bool inherit = false;
@@ -124,7 +124,7 @@ namespace KScript
 		}
 
 		KString path = args[0].value;
-		Script innerScript(path, runner, true);
+		KSScript innerScript(path, runner, true);
 		innerScript.fileName = currentScript->fileName;
 
 		if (inherit)
@@ -132,7 +132,7 @@ namespace KScript
 			innerScript.SetVariableMap(currentScript->GetVariableMap());
 		}
 
-		Value result = innerScript.Execute();
+		KSValue result = innerScript.Execute();
 
 		if (rewrite)
 		{
@@ -152,28 +152,28 @@ namespace KScript
 	{
 		runner = setRunner;
 		scriptString = setScriptString;
-		innerScript = new Script(runner, true);
+		innerScript = new KSScript(runner, true);
 		innerScript->LoadStringScript(scriptString, L"");
 	}
 
-	KScript::Value ScriptStringFunction::Function( Script* currentScript, VariableMap args )
+	KScript::KSValue ScriptStringFunction::Function( KSScript* currentScript, VariableMap args )
 	{	
 		innerScript->SetVariableMap(currentScript->GetVariableMap());
 		innerScript->SetVariableMap(args);
 		innerScript->fileName = currentScript->fileName;
 		innerScript->functionOrder = currentScript->functionOrder;
-		Value result = innerScript->Execute();
+		KSValue result = innerScript->Execute();
 		currentScript->UpdateVariableMap(innerScript->GetVariableMap());
 
 		return result;
 	}
 
 
-	KScript::Value IncludeMapArgsFunction::Function( Script* currentScript, VariableMap args )
+	KScript::KSValue IncludeMapArgsFunction::Function( KSScript* currentScript, VariableMap args )
 	{
 		if (args.size() == 0)
 		{
-			return Value();
+			return KSValue();
 		}
 
 		bool inherit = false;
@@ -191,11 +191,11 @@ namespace KScript
 
 		if (args.find(L"file") == args.end())
 		{
-			return Value();
+			return KSValue();
 		}
 
 		KString path = args[L"file"].value;
-		Script innerScript(path, runner, true);
+		KSScript innerScript(path, runner, true);
 		innerScript.fileName = currentScript->fileName;
 		innerScript.functionOrder = currentScript->functionOrder;
 
@@ -204,7 +204,7 @@ namespace KScript
 			innerScript.SetVariableMap(currentScript->GetVariableMap());
 		}		
 
-		Value result = innerScript.Execute();
+		KSValue result = innerScript.Execute();
 
 		if (rewrite)
 		{
@@ -220,18 +220,18 @@ namespace KScript
 	}
 
 
-	Value UserDefinedMapArgsFunction::Function( Script* currentScript, VariableMap args )
+	KSValue UserDefinedMapArgsFunction::Function( KSScript* currentScript, VariableMap args )
 	{
 		innerScript->SetVariableMap(currentScript->GetVariableMap());
 		innerScript->SetVariableMap(args);
 		innerScript->functionOrder = currentScript->functionOrder;
 		innerScript->fileName = currentScript->fileName;
-		Value result = innerScript->Execute(functionRoot);
+		KSValue result = innerScript->Execute(functionRoot);
 		currentScript->UpdateVariableMap(innerScript->GetVariableMap());
 		return result;
 	}
 
-	UserDefinedMapArgsFunction::UserDefinedMapArgsFunction( KScriptRunner* setRunner, Script* sourceScript , KString funcName)
+	UserDefinedMapArgsFunction::UserDefinedMapArgsFunction( KScriptRunner* setRunner, KSScript* sourceScript , KString funcName)
 	{
 		runner = setRunner;
 		innerScript = sourceScript->Copy();

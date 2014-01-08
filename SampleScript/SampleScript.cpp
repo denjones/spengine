@@ -5,6 +5,7 @@
 #include "SampleScript.h"
 #include <SPEngine.h>
 #include "SampleGame.h"
+#include <v8.h>
 
 //
 // Memory leaks detection
@@ -33,6 +34,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(435960);
 
+	v8::Isolate* isolate = v8::Isolate::GetCurrent();
 
 	SPGameFactory<SampleGame>::GetSingleton().Produce(hInstance);
 	SPGameManager::GetSingleton().Start();

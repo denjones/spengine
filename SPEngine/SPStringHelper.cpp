@@ -8,6 +8,8 @@
 #include "StdAfx.h"
 #include "SPStringHelper.h"
 #include <vector>
+#include <direct.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -325,6 +327,52 @@ namespace SPEngine
 		string result = src.substr(src.find(endString) + endString.size());
 
 		return result;
+	}
+
+	std::string SPStringHelper::Format( string str,  ... )
+	{
+		CHAR szBuffer[1024];  // Large buffer for long filenames or URLs
+		const size_t NUMCHARS = sizeof(szBuffer) / sizeof(szBuffer[0]);
+		const int LASTCHAR = NUMCHARS - 1;
+
+		va_list pArgs;
+		va_start(pArgs, str);
+
+		// Use a bounded buffer size to prevent buffer overruns.  Limit count to
+		// character size minus one to allow for a NULL terminating character.
+		(void)StringCchVPrintfA(szBuffer, NUMCHARS - 1, str.c_str(), pArgs);
+
+		va_end(pArgs);
+
+		// Ensure that the formatted string is NULL-terminated
+		szBuffer[LASTCHAR] = TEXT('\0');
+
+		str = string(szBuffer);
+
+		return str;
+	}
+
+	std::wstring SPStringHelper::Format( wstring str, ... )
+	{
+		TCHAR szBuffer[1024];  // Large buffer for long filenames or URLs
+		const size_t NUMCHARS = sizeof(szBuffer) / sizeof(szBuffer[0]);
+		const int LASTCHAR = NUMCHARS - 1;
+
+		va_list pArgs;
+		va_start(pArgs, str);
+
+		// Use a bounded buffer size to prevent buffer overruns.  Limit count to
+		// character size minus one to allow for a NULL terminating character.
+		(void)StringCchVPrintfW(szBuffer, NUMCHARS - 1, str.c_str(), pArgs);
+
+		va_end(pArgs);
+
+		// Ensure that the formatted string is NULL-terminated
+		szBuffer[LASTCHAR] = TEXT('\0');
+
+		str = wstring(szBuffer);
+
+		return str;
 	}
 
 }

@@ -61,6 +61,9 @@ namespace SPEngine
 
 		static wstring XMLRemoveFirst(wstring src, wstring surrounding);
 		static string XMLRemoveFirst(string src, string surrounding);
+
+		static string Format(string str, ...);
+		static wstring Format(wstring str, ...);
 	};
 }
 

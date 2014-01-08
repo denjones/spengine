@@ -38,7 +38,7 @@ public:
 
 		if (IsSet(L"effect", args))
 		{
-			Value arg = args[L"effect"];
+			KSValue arg = args[L"effect"];
 
 			if ( arg.type == 39 && arg.value == L"0")
 			{
@@ -54,7 +54,7 @@ public:
 
 		if (IsSet(L"effect_src", args))
 		{
-			Value arg = args[L"effect_src"];
+			KSValue arg = args[L"effect_src"];
 
 			if ( arg.type == 39 && arg.value == L"0")
 			{

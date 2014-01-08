@@ -10,6 +10,7 @@
 #include "SPLogHelper.h"
 #include "SPDevice.h"
 #include "SPWindow.h"
+#include "SPStringHelper.h"
 
 namespace SPEngine
 {
@@ -98,10 +99,10 @@ namespace SPEngine
 
 		if( error != SXP::err_no_error )
 		{
-			SPLogHelper::WriteLog("[Config] ERROR: Oops, error \"%s\" at line %d, char %d",
+			SPLogHelper::WriteLog(SPStringHelper::Format("[Config] ERROR: Oops, error \"%s\" at line %d, char %d",
 				parser->GetErrorStr().c_str(),
 				parser->GetErrorLine(),
-				parser->GetErrorCol());
+				parser->GetErrorCol()));
 		}
 
 		if (parser)

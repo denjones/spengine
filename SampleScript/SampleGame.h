@@ -1,7 +1,10 @@
 #pragma once
 #include <SPEngine.h>
+#include <v8.h>
+#include <map>
 
 using namespace SPEngine;
+using namespace std;
 
 class PrintScriptManager : public SPScriptManager
 {
@@ -10,10 +13,33 @@ public:
 	~PrintScriptManager(){}	
 };
 
+void Print4(const v8::FunctionCallbackInfo<v8::Value>& args) {
+	SPString printResult = L"";
+	bool first = true;
+
+	for (int i = 0; i < args.Length(); i++) 
+	{
+		v8::HandleScope handle_scope(args.GetIsolate());
+		if (first) 
+		{
+			first = false;
+		} 
+		else 
+		{
+			printResult += L" ";
+		}
+		printResult += SPV8ScriptEngine::StringToSPString(args[i]->ToString());
+	}
+
+	SPFontWriter::GetSingleton().Write(SPFontManager::GetSingleton().GetFont(L"yy_20"), NULL,
+		L"Script: " + printResult,
+		D3DXVECTOR2(0, 0), SPColor::Magenta, 1, 0, NULL);
+}
+
 class Print : public ExtendedArgsFunction
 {	
 public:
-	virtual Value Function(KScript::Script* currentScript, vector<Value> args )
+	virtual KScript::KSValue Function(KScript::KSScript* currentScript, vector<KScript::KSValue> args )
 	{
 		SPFontWriter::GetSingleton().Write(SPFontManager::GetSingleton().GetFont(L"yy_20"), NULL,
 			L"Script: " + args[0].value,
@@ -26,7 +52,7 @@ public:
 class Print2 : public ExtendedMapArgsFunction
 {	
 public:
-	virtual Value Function(KScript::Script* currentScript, VariableMap args )
+	virtual KScript::KSValue Function(KScript::KSScript* currentScript, VariableMap args )
 	{
 		SPFontWriter::GetSingleton().Write(SPFontManager::GetSingleton().GetFont(L"yy_20"), NULL, 
 			L"Script: " + args[0].value,
@@ -39,7 +65,7 @@ public:
 class Print3 : public ExtendedMapArgsFunction
 {	
 public:
-	virtual Value Function(KScript::Script* currentScript, VariableMap args )
+	virtual KScript::KSValue Function(KScript::KSScript* currentScript, VariableMap args )
 	{
 		SPString s = L"Script : " + args[L"Í·"].value + L"\n" + args[L"Öµ"].value;
 		SPFontWriter::GetSingleton().Write(SPFontManager::GetSingleton().GetFont(L"yy_20"), NULL,
@@ -59,7 +85,9 @@ class SampleGame : public SPGame
 	PrintScriptManager print;
 
 public:
-	SampleGame(HINSTANCE hInstance) : SPGame(hInstance) {}
+	SampleGame(HINSTANCE hInstance) : SPGame(hInstance)
+	{
+	}
 
 	SampleGame(void) : SPGame() 
 	{
@@ -95,6 +123,8 @@ public:
 		p2 = new Print2();
 		p = new Print();
 
+		SPV8ScriptEngine::GetSingleton().AddFunction(L"print", Print4);
+
 		// Load script.
 		print.Load(L"test.ks");
 
@@ -103,19 +133,32 @@ public:
 		//print.AddExtension("print", p2);
 		print.AddExtension(L"ÏÔÊ¾", p3);
 
+		SPV8ScriptEngine::GetSingleton().RunScript(L"a = 0;");
+
 		return true;
 	}
 
 	bool Draw(float timeDelta)
-	{		
-		// Using 3D sprite manager.
+	{	
+		// The following statements are necessary for real time V8 script execution.
+		Locker lock(SPV8ScriptEngine::GetSingleton().GetIsolate());
+		Isolate::Scope isolateScope(SPV8ScriptEngine::GetSingleton().GetIsolate());		
+		HandleScope handleScope(SPV8ScriptEngine::GetSingleton().GetIsolate());
+		Handle<Context> context = SPV8ScriptEngine::GetSingleton().GetContext();
+		Context::Scope contextScope(context);
+		
+		// Run the script to get the result.
+		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(L"test.js", true);
+		SPV8ScriptEngine::GetSingleton().EvalFile(L"test2.js", true);
+		Handle<String> theResult = result->ToString();
 
-		SPFontWriter::GetSingleton().WriteCentered(font, NULL, L"¹þ¹þ", D3DXVECTOR2(400,300), SPColor::Wheat, 1, 0, NULL);
+		// Convert the result to an ASCII string and print it.
+		SPFontWriter::GetSingleton().WriteCentered(font, NULL, SPV8ScriptEngine::StringToSPString(theResult), D3DXVECTOR2(400,300), SPColor::Wheat, 0, 0, NULL);
 
 		SPSpriteManager3D::GetSingleton().RenderByPosition(texture, NULL, D3DXVECTOR3(0, 0, 0));
 
 		// Execute script.
-		print.Execute();
+		print.Execute();		
 
 		return SPGame::Draw(timeDelta);
 	}

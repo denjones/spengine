@@ -43,9 +43,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);$(DXSDK_DIR)Utilities\Bin\x86;</ExecutablePath>
-    <IncludePath>..\Vorbis;..\Antlr;$(CEGUI)cegui\include;\CEGUI\dependency\include;..\DirectShow;..\KScript;$(DXSDK_DIR)Include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(FrameworkSDKDir)\include;..\SimpleXMLPersistence;..\zlib\include</IncludePath>
-    <LibraryPath>$(CEGUI)lib;..\DirectShow\Debug;..\KScript\Debug;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(FrameworkSDKDir)\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath);..\SimpleXMLPersistence;..\zlib</LibraryPath>
+    <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>..\Vorbis;..\Antlr;..\DirectShow;..\KScript;..\SimpleXMLPersistence;..\zlib\include;..\LibV8;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\DirectShow\Debug;..\KScript\Debug;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -161,6 +161,8 @@
     <ClInclude Include="SPTextureManager.h" />
     <ClInclude Include="SPTextureSprite.h" />
     <ClInclude Include="SPUpdatableTexture.h" />
+    <ClInclude Include="SPV8Function.h" />
+    <ClInclude Include="SPV8ScriptEngine.h" />
     <ClInclude Include="SPVideo.h" />
     <ClInclude Include="SPVideoManager.h" />
     <ClInclude Include="SPVideoTexture.h" />
@@ -244,6 +246,8 @@
     <ClCompile Include="SPTextSprite.cpp" />
     <ClCompile Include="SPTextureManager.cpp" />
     <ClCompile Include="SPTextureSprite.cpp" />
+    <ClCompile Include="SPV8Function.cpp" />
+    <ClCompile Include="SPV8ScriptEngine.cpp" />
     <ClCompile Include="SPVideoManager.cpp" />
     <ClCompile Include="SPVideoTexture.cpp" />
     <ClCompile Include="SPWavFile.cpp" />

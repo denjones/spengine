@@ -48,11 +48,11 @@ namespace SPEngine
 		AddExtension(L"include", new SPIncludeFunction(this));
 	}
 
-	Value SPIncludeFunction::Function(Script* currentScript, vector<Value> args )
+	KSValue SPIncludeFunction::Function(KSScript* currentScript, vector<KSValue> args )
 	{
 		if (args.size() == 0)
 		{
-			return Value();
+			return KSValue();
 		}
 
 		bool inherit = false;
@@ -75,7 +75,7 @@ namespace SPEngine
 		if (!file)
 		{
 			SPLogHelper::WriteLog(L"[SPScript] WARNING: Failed to open script file: " + path);
-			return Value();
+			return KSValue();
 		}
 
 		LONGLONG length = file->GetFileLength();
@@ -84,18 +84,18 @@ namespace SPEngine
 		if (!file->Read(pData, (DWORD)length))
 		{
 			SPLogHelper::WriteLog(L"[SPScript] WARNING: Failed to read script file: " + path);
-			return Value();
+			return KSValue();
 		}
 
 		SPFileManager::GetSingleton().CloseFile(path);
 
-		Script innerScript(runner);
+		KSScript innerScript(runner);
 
 		if (!innerScript.LoadScriptStream(pData, (DWORD)length, path))
 		{
 			delete [] pData;
 			pData = NULL;
-			return Value();
+			return KSValue();
 		}
 
 		//Script innerScript(path, runner);
@@ -112,7 +112,7 @@ namespace SPEngine
 			currentScript->SetVariableMap(innerScript.GetVariableMap());
 		}
 
-		return Value();
+		return KSValue();
 	}
 
 	SPIncludeFunction::SPIncludeFunction( SPScriptManager* setRunner )

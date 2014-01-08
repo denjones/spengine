@@ -1,10 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPEngine", "SPEngine\SPENGINE.vcxproj", "{7D08C877-AE72-4B95-84B5-7814950B1502}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPENGINE", "SPEngine\SPENGINE.vcxproj", "{7D08C877-AE72-4B95-84B5-7814950B1502}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E25B6C31-5A99-496D-A32A-C52CEBF02F82} = {E25B6C31-5A99-496D-A32A-C52CEBF02F82}
 		{D2FE6F40-AD61-424B-994B-4D7993551961} = {D2FE6F40-AD61-424B-994B-4D7993551961}
+		{8B56736D-5BB7-453F-9367-21C885910446} = {8B56736D-5BB7-453F-9367-21C885910446}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibKScript", "KScript\KScript.vcxproj", "{CF8C946E-F346-467E-BF72-116E26CABC01}"
@@ -33,6 +34,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleSprite3D", "SampleSprite3D\SampleSprite3D.vcxproj", "{F9BFB419-CB80-4D13-8DFB-D5ADA1DB97E6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleScript", "SampleScript\SampleScript.vcxproj", "{A97BA120-04D0-467D-835B-20C6F147FFD7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B56736D-5BB7-453F-9367-21C885910446} = {8B56736D-5BB7-453F-9367-21C885910446}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleVideo", "SampleVideo\SampleVideo.vcxproj", "{14ADA05B-3001-4005-A532-BA8D95DC367B}"
 EndProject
@@ -43,6 +47,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibVorbis", "Vorbis\Vorbis.vcxproj", "{E25B6C31-5A99-496D-A32A-C52CEBF02F82}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPHLSLCompiler", "HLSLCompiler\HLSLCompiler.vcxproj", "{667F2686-3BDA-4613-8294-5C5CA0B8FA62}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibV8", "LibV8\LibV8.vcxproj", "{8B56736D-5BB7-453F-9367-21C885910446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +104,10 @@ Global
 		{667F2686-3BDA-4613-8294-5C5CA0B8FA62}.Debug|Win32.Build.0 = Debug|Win32
 		{667F2686-3BDA-4613-8294-5C5CA0B8FA62}.Release|Win32.ActiveCfg = Release|Win32
 		{667F2686-3BDA-4613-8294-5C5CA0B8FA62}.Release|Win32.Build.0 = Release|Win32
+		{8B56736D-5BB7-453F-9367-21C885910446}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8B56736D-5BB7-453F-9367-21C885910446}.Debug|Win32.Build.0 = Debug|Win32
+		{8B56736D-5BB7-453F-9367-21C885910446}.Release|Win32.ActiveCfg = Release|Win32
+		{8B56736D-5BB7-453F-9367-21C885910446}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

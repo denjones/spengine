@@ -46,7 +46,7 @@ using namespace KScript;
 
 SScriptManager::SScriptManager(void): SPScriptManager()
 {
-	innerScript = new Script(this);
+	innerScript = new KSScript(this);
 	currentPosition = commands.begin();
 	firstName = L"first.ks";
 	currentOrder = 0;
@@ -147,7 +147,7 @@ bool SScriptManager::Update( float timeDelta )
 	return true;
 }
 
-bool SScriptManager::AddCommand(SScriptCommand newCommand, KScript::Script* currentScript)
+bool SScriptManager::AddCommand(SScriptCommand newCommand, KScript::KSScript* currentScript)
 {
 	//
 	// If immediate mode is on, just add command to immediate list.
@@ -577,11 +577,11 @@ bool SScriptManager::SetFirst( SPString setPath )
 	return true;
 }
 
-KScript::Value SScriptManager::Execute()
+KScript::KSValue SScriptManager::Execute()
 {
 	currentOrder = 0;
 	script->SetVariableMap(systemVariables);
-	Value result = script->Execute();
+	KSValue result = script->Execute();
 	currentOrder = 0;
 
 	return result;

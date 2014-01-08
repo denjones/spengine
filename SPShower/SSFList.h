@@ -83,7 +83,7 @@ public:
 
 			if (IsSet(L"on_scroll_down_max",args))
 			{
-				Value arg = args[L"on_scroll_down_max"];
+				KSValue arg = args[L"on_scroll_down_max"];
 
 				if ( arg.type == 39 && arg.value == L"0")
 				{
@@ -99,7 +99,7 @@ public:
 
 			if (IsSet(L"on_scroll_up_min",args))
 			{
-				Value arg = args[L"on_scroll_up_min"];
+				KSValue arg = args[L"on_scroll_up_min"];
 
 				if ( arg.type == 39 && arg.value == L"0")
 				{

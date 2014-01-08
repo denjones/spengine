@@ -90,7 +90,7 @@ KScript::VariableMap SScriptCommand::StringToArgs( SPString stringStream )
 		SPString argType = SPStringHelper::XMLExcludeFrom(propertyString, L"T");
 		SPString argValue = SPStringHelper::XMLExcludeFrom(propertyString, L"V");
 
-		argsMap[argName] = Value(argValue, SPStringHelper::StringToInt(argType));
+		argsMap[argName] = KSValue(argValue, SPStringHelper::StringToInt(argType));
 	}
 
 	return argsMap;
