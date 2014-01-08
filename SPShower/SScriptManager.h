@@ -48,7 +48,7 @@ public:
 	SScriptManager(void);
 	virtual ~SScriptManager(void);
 
-	bool AddCommand(SScriptCommand newCommand, KScript::Script* currentScript = NULL );
+	bool AddCommand(SScriptCommand newCommand, KScript::KSScript* currentScript = NULL );
 	bool AddFunction(SPString name, SScriptFunctionPtr function);
 
 	bool ExecuteInnerScript(SPString stringScript);
@@ -96,7 +96,7 @@ public:
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
 
-	virtual Value Execute();
+	virtual KSValue Execute();
 
 private:
 	bool IsCommandRead(SScriptCommand command);
@@ -112,10 +112,10 @@ public:
 	AddCommandToCommandList(SPString setName){ name = setName;}
 	virtual ~AddCommandToCommandList(){}
 
-	virtual Value Function(KScript::Script* currentScript, VariableMap args )
+	virtual KSValue Function(KScript::KSScript* currentScript, VariableMap args )
 	{
 		SScriptManager::GetSingleton().AddCommand(SScriptCommand(name, args, currentScript->fileName, 0), currentScript);
-		return Value();
+		return KSValue();
 	}
 };
 
@@ -126,11 +126,11 @@ class IncludeMapArgsFunc : public ExtendedMapArgsFunction
 public:
 	IncludeMapArgsFunc(KScriptRunner* setRunner){ runner = setRunner;}
 	virtual ~IncludeMapArgsFunc(){}
-	virtual Value Function(KScript::Script* currentScript, VariableMap args )
+	virtual KSValue Function(KScript::KSScript* currentScript, VariableMap args )
 	{
 		if (args.size() == 0)
 		{
-			return Value();
+			return KSValue();
 		}
 
 		bool inherit = true;
@@ -148,7 +148,7 @@ public:
 
 		if (args.find(L"file") == args.end())
 		{
-			return Value();
+			return KSValue();
 		}
 
 		KString path = args[L"file"].value;
@@ -157,7 +157,7 @@ public:
 
 		if (!file)
 		{
-			return Value();
+			return KSValue();
 		}
 
 		LONGLONG length = file->GetFileLength();
@@ -165,17 +165,17 @@ public:
 
 		if(!file->Read(pBuffer, (DWORD)length))
 		{
-			return Value();
+			return KSValue();
 		}
 
 		SPFileManager::GetSingleton().CloseFile(path);
 
-		Script innerScript(runner);
+		KSScript innerScript(runner);
 
 		if(!innerScript.LoadScriptStream(pBuffer, (DWORD)length, path))
 		{
 			delete [] pBuffer;
-			return Value();
+			return KSValue();
 		}
 
 		delete [] pBuffer;
@@ -186,7 +186,7 @@ public:
 			innerScript.SetVariableMap(currentScript->GetVariableMap());
 		}		
 
-		Value result = innerScript.Execute();
+		KSValue result = innerScript.Execute();
 
 		if (rewrite)
 		{

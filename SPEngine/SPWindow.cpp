@@ -211,7 +211,7 @@ namespace SPEngine
 	void SPWindow::AdjustMainWindow(bool bExclusive, 
 		int nScreenWidth, int nScreenHeight)
 	{
-		SPLogHelper::WriteLog("[SPWindow] Adjusting window to %d x %d", nScreenWidth, nScreenHeight);	
+		SPLogHelper::WriteLog(SPStringHelper::Format("[SPWindow] Adjusting window to %d x %d", nScreenWidth, nScreenHeight));	
 		string winMode = bExclusive ? "full screen":"windowed";
 		SPLogHelper::WriteLog("[SPWindow] Window mode: " + winMode);
 

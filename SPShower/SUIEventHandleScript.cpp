@@ -5,7 +5,7 @@
 bool SUIEventHandleScript::SetStringScript( SPString setScript )
 {
 	stringScript = setScript;
-	script = new KScript::Script();
+	script = new KScript::KSScript();
 	script->LoadStringScript(setScript, L"SUIEvent");
 	return true;
 }

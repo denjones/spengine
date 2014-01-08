@@ -37,7 +37,7 @@ namespace SPEngine
 		SPIncludeFunction(SPScriptManager* setRunner);
 		SPScriptManager* runner;
 
-		Value Function(Script* currentScript, vector<Value> args);
+		KSValue Function(KSScript* currentScript, vector<KSValue> args);
 
 	};
 }

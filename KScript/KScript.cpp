@@ -15,13 +15,13 @@ using namespace KScript::StringHelper;
 
 namespace KScript 
 {
-	Value::Value()
+	KSValue::KSValue()
 	{
 		value = L"";
 		type = 0;
 	}
 
-	Value::Value(KString setValue, ANTLR3_UINT32 setType)
+	KSValue::KSValue(KString setValue, ANTLR3_UINT32 setType)
 	{
 		value = setValue;
 		type = setType;
@@ -53,7 +53,7 @@ namespace KScript
 		return string1.compare(string2) == 0;
 	}
 
-	Script::Script()
+	KSScript::KSScript()
 	{
 		tree = NULL;
 		runner = NULL;
@@ -62,10 +62,10 @@ namespace KScript
 		input = NULL;
 		tstream = NULL;
 		isNeedToReturn = false;
-		returnValue = Value(L"0",INT);
+		returnValue = KSValue(L"0",INT);
 	}
 
-	Script::Script(KString setScript, KScriptRunner* setRunner, bool isInner)
+	KSScript::KSScript(KString setScript, KScriptRunner* setRunner, bool isInner)
 	{
 		tree = NULL;
 		runner = NULL;
@@ -76,12 +76,12 @@ namespace KScript
 		runner = setRunner;
 		isInnerScript = isInner;
 		isNeedToReturn = false;
-		returnValue = Value(L"0",INT);
+		returnValue = KSValue(L"0",INT);
 		LoadScript(setScript);
 		fileName = setScript;
 	}
 
-	Script::Script(KScriptRunner* setRunner, bool isInner)
+	KSScript::KSScript(KScriptRunner* setRunner, bool isInner)
 	{
 		tree = NULL;
 		runner = NULL;
@@ -92,10 +92,10 @@ namespace KScript
 		isInnerScript = isInner;
 		runner = setRunner;
 		isNeedToReturn = false;
-		returnValue = Value(L"0",INT);
+		returnValue = KSValue(L"0",INT);
 	}
 
-	bool Script::LoadScript(KString path)
+	bool KSScript::LoadScript(KString path)
 	{
 		Unload();
 
@@ -170,7 +170,7 @@ namespace KScript
 		return true;
 	}
 
-	bool Script::LoadStringScript( KString script , KString path)
+	bool KSScript::LoadStringScript( KString script , KString path)
 	{
 		string stringScript = StringHelper::WStringToUTF8String(script.c_str());
 		DWORD size = stringScript.size() + 1;
@@ -185,7 +185,7 @@ namespace KScript
 	}
 
 
-	bool Script::LoadScriptStream( void* pBuffer, DWORD length, KString path)
+	bool KSScript::LoadScriptStream( void* pBuffer, DWORD length, KString path)
 	{
 		Unload();
 
@@ -327,14 +327,14 @@ namespace KScript
 		return true;
 	}
 
-	Value Script::Execute()
+	KSValue KSScript::Execute()
 	{
 		return Execute(tree);
 	}
 
-	KScript::Value Script::Execute( pANTLR3_BASE_TREE root )
+	KScript::KSValue KSScript::Execute( pANTLR3_BASE_TREE root )
 	{
-		Value result;
+		KSValue result;
 
 		try
 		{
@@ -370,7 +370,7 @@ namespace KScript
 		return result;
 	}
 
-	bool Script::IsIDValid( KString name )
+	bool KSScript::IsIDValid( KString name )
 	{
 		if (variables.find(name) == variables.end())
 		{
@@ -380,12 +380,12 @@ namespace KScript
 		return true;
 	}
 
-	void Script::NewID(KString id)
+	void KSScript::NewID(KString id)
 	{
-		variables[id] = Value(L"0", REAL);
+		variables[id] = KSValue(L"0", REAL);
 	}
 
-	KString Script::GetText(pANTLR3_BASE_TREE theTree)
+	KString KSScript::GetText(pANTLR3_BASE_TREE theTree)
 	{
 		//setlocale(LC_ALL, "chs");		
 		//wstring s = (wchar_t*)(theTree->getText(theTree))->chars;
@@ -394,26 +394,26 @@ namespace KScript
 		return s;
 	}
 
-	ANTLR3_UINT32 Script::GetType(pANTLR3_BASE_TREE theTree)
+	ANTLR3_UINT32 KSScript::GetType(pANTLR3_BASE_TREE theTree)
 	{
 		return theTree->getType(theTree);
 	}
 
-	pANTLR3_BASE_TREE Script::GetChild(pANTLR3_BASE_TREE theTree, int index)
+	pANTLR3_BASE_TREE KSScript::GetChild(pANTLR3_BASE_TREE theTree, int index)
 	{
 		return (pANTLR3_BASE_TREE)theTree->getChild(theTree, index);
 	}
 
-	int Script::GetChildCount(pANTLR3_BASE_TREE theTree)
+	int KSScript::GetChildCount(pANTLR3_BASE_TREE theTree)
 	{
 		return theTree->getChildCount(theTree);
 	}		
 
-	Value Script::Analyze(pANTLR3_BASE_TREE subTree)
+	KSValue KSScript::Analyze(pANTLR3_BASE_TREE subTree)
 	{		
 		if (isNeedToReturn)
 		{
-			return Value(L"0", INT);
+			return KSValue(L"0", INT);
 		}
 
 		ANTLR3_UINT32 type = INT;
@@ -422,7 +422,7 @@ namespace KScript
 
 		if (type >= EOF || type < 0 )
 		{
-			return Value(L"EOF", EOF);
+			return KSValue(L"EOF", EOF);
 		}
 
 		if (type == RETURN)
@@ -435,23 +435,23 @@ namespace KScript
 			}
 			else
 			{
-				returnValue =  Value(L"0", INT);	
+				returnValue =  KSValue(L"0", INT);	
 			}
 
-			return Value(L"0", INT);
+			return KSValue(L"0", INT);
 		}
 
 		#pragma region Base Type 基本类型
 
 		if (type == KNULL)
 		{
-			return Value(L"0", INT);
+			return KSValue(L"0", INT);
 		}
 
 		if (type == INT ||
 			type == REAL)
 		{
-			return Value(GetText(subTree), type);
+			return KSValue(GetText(subTree), type);
 		}
 
 		if (type == HEX)
@@ -459,7 +459,7 @@ namespace KScript
 			wstring hex = GetText(subTree);
 			UINT decimalValue;
 			swscanf(hex.c_str(), L"%x", &decimalValue);
-			return Value(StringHelper::ToWString((int)decimalValue),INT);
+			return KSValue(StringHelper::ToWString((int)decimalValue),INT);
 		}
 
 		if (type == STRING)
@@ -473,24 +473,24 @@ namespace KScript
 			str = StringHelper::ReplaceAll(str, L"\\'", L"\'");
 			str = StringHelper::ReplaceAll(str, L"\\\"", L"\"");
 
-			return Value(str, STRING);
+			return KSValue(str, STRING);
 		}
 
 		if (type == BTRUE)
 		{
-			return Value(L"1",INT);
+			return KSValue(L"1",INT);
 		}
 
 		if (type == BFALSE)
 		{
-			return Value(L"0",INT);
+			return KSValue(L"0",INT);
 		}
 		#pragma endregion
 
 		#pragma region Identifier 标识符
 		if (type == IDENTIFIER)
 		{
-			Value result;
+			KSValue result;
 
 			if (IsIDValid(GetText(subTree)))
 			{
@@ -542,7 +542,7 @@ namespace KScript
 		#pragma region Simple Assignment 一般赋值
 		if (type == ASSIGN)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -562,7 +562,7 @@ namespace KScript
 		#pragma region Add and Assign 加等于
 		if (type == PLUSASSIGN)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -594,7 +594,7 @@ namespace KScript
 		#pragma region Subtract and Assign 减等于
 		if (type == MINUSASSIGN)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -626,7 +626,7 @@ namespace KScript
 		#pragma region Multiply and Assign 乘等于
 		if (type == MULTASSIGN)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -658,7 +658,7 @@ namespace KScript
 		#pragma region Divide and Assign 除等于
 		if (type == DIVIDEASSIGN)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -692,7 +692,7 @@ namespace KScript
 		#pragma region Self Addition 自加
 		if (type == PLUSPLUS)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -724,7 +724,7 @@ namespace KScript
 		#pragma region Self Subtraction 自减
 		if (type == MINUSMINUS)
 		{
-			Value result;
+			KSValue result;
 
 			KString parameterA = GetText(GetChild(subTree, 0));
 
@@ -756,9 +756,9 @@ namespace KScript
 		#pragma region Addition 加法
 		if (type == PLUS)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -788,9 +788,9 @@ namespace KScript
 		#pragma region Subtraction 减法
 		if (type == MINUS)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 				
@@ -834,9 +834,9 @@ namespace KScript
 		#pragma region Multiplication 乘法
 		if (type == STAR)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -861,9 +861,9 @@ namespace KScript
 		#pragma region Division 除法
 		if (type == DIVIDE)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -888,9 +888,9 @@ namespace KScript
 		#pragma region Modulus 取余
 		if (type == MOD)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -906,9 +906,9 @@ namespace KScript
 		#pragma region Exponentiation 求幂
 		if (type == POWER)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -934,9 +934,9 @@ namespace KScript
 		#pragma region Logical Operation 逻辑运算
 		if (type == AND)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -975,9 +975,9 @@ namespace KScript
 
 		if (type == OR)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1016,8 +1016,8 @@ namespace KScript
 
 		if (type == NOT)
 		{
-			Value result;
-			Value parameterA;
+			KSValue result;
+			KSValue parameterA;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 
@@ -1053,9 +1053,9 @@ namespace KScript
 
 		if (type == GREATERTHAN)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1094,9 +1094,9 @@ namespace KScript
 
 		if (type == LESSTHAN)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1135,9 +1135,9 @@ namespace KScript
 
 		if (type == LESSTHANOREQUALTO)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1176,9 +1176,9 @@ namespace KScript
 
 		if (type == GREATERTHANOREQUALTO)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1218,9 +1218,9 @@ namespace KScript
 		if (type == NOTEQUAL1 ||
 			type == NOTEQUAL2)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1259,9 +1259,9 @@ namespace KScript
 
 		if (type == EQUALTO)
 		{
-			Value result;
-			Value parameterA;
-			Value parameterB;
+			KSValue result;
+			KSValue parameterA;
+			KSValue parameterB;
 
 			parameterA = Analyze(GetChild(subTree, 0));
 			parameterB = Analyze(GetChild(subTree, 1));
@@ -1302,12 +1302,12 @@ namespace KScript
 		#pragma region Conditional Statement 条件语句
 		if (type == IF)
 		{
-			Value parameterA = Analyze(GetChild(subTree, 0));
+			KSValue parameterA = Analyze(GetChild(subTree, 0));
 
 			if (StringToInt(parameterA.value) > 0)
 			{
 				int count = GetChildCount(subTree);
-				Value result;
+				KSValue result;
 
 				// Skip Else
 				if (GetType(GetChild(subTree, count - 1)) == ELSE)
@@ -1329,7 +1329,7 @@ namespace KScript
 			{
 				if (GetType(GetChild(subTree, GetChildCount(subTree) - 1)) == ELSE)
 				{
-					Value result;
+					KSValue result;
 
 					for (int num = 0; num < GetChildCount(
 						GetChild(subTree, GetChildCount(subTree) - 1)); num++)
@@ -1348,17 +1348,17 @@ namespace KScript
 
 		if (type == QUESTION)
 		{
-			Value result;
-			Value parameterA = Analyze(GetChild(subTree, 0));
+			KSValue result;
+			KSValue parameterA = Analyze(GetChild(subTree, 0));
 
 			if (StringToInt(parameterA.value) > 0)
 			{
-				Value parameterB = Analyze(GetChild(subTree, 1));
+				KSValue parameterB = Analyze(GetChild(subTree, 1));
 				return parameterB;
 			}
 			else
 			{
-				Value parameterC = Analyze(GetChild(subTree, 2));
+				KSValue parameterC = Analyze(GetChild(subTree, 2));
 				return parameterC;
 			}
 		}
@@ -1369,7 +1369,7 @@ namespace KScript
 		{
 			while (StringToInt(Analyze(GetChild(subTree, 0)).value) > 0)
 			{
-				Value result(L"0", INT);
+				KSValue result(L"0", INT);
 
 				for (int num = 1; num < GetChildCount(subTree); num++)
 				{
@@ -1393,7 +1393,7 @@ namespace KScript
 				}
 			}
 
-			return Value(L"0", INT);
+			return KSValue(L"0", INT);
 		}
 
 		if (type == DO)
@@ -1401,7 +1401,7 @@ namespace KScript
 			double parameterA = 1;
 			do
 			{
-				Value result(L"0", INT);
+				KSValue result(L"0", INT);
 
 				for (int num = 0; num < GetChildCount(subTree) - 1; num++)
 				{
@@ -1428,11 +1428,11 @@ namespace KScript
 
 		if (type == FOR)
 		{
-			Value result(L"0", INT);
+			KSValue result(L"0", INT);
 
 			KString parameterA = GetText(GetChild(subTree, 0));
-			Value parameterB = Analyze(GetChild(subTree, 1));
-			Value parameterC = Analyze(GetChild(subTree, 2));
+			KSValue parameterB = Analyze(GetChild(subTree, 1));
+			KSValue parameterC = Analyze(GetChild(subTree, 2));
 
 			if (StringToInt(parameterB.value) < 
 				StringToInt(parameterC.value))
@@ -1555,19 +1555,19 @@ namespace KScript
 		#pragma region Jump Operation 跳转操作
 		if (type == BREAK)
 		{
-			return Value(L"break", BREAK);
+			return KSValue(L"break", BREAK);
 		}
 
 		if (type == CONTINUE)
 		{
-			return Value(L"continue", CONTINUE);
+			return KSValue(L"continue", CONTINUE);
 		}
 		#pragma endregion
 
 		#pragma region Extented Statement 扩展语句
 		if (type == AT)
 		{
-			Value result(L"0", INT);
+			KSValue result(L"0", INT);
 			KString name = GetText(GetChild(subTree, 0));
 
 			if (GetChildCount(subTree) > 1 
@@ -1578,7 +1578,7 @@ namespace KScript
 				for (int num = 2; num < GetChildCount(subTree); num++)
 				{
 					KString key = GetText(GetChild(subTree, num));
-					Value v = Analyze(GetChild(subTree, ++num));
+					KSValue v = Analyze(GetChild(subTree, ++num));
 					commandParts[key] = v;
 				}
 
@@ -1620,7 +1620,7 @@ namespace KScript
 			}
 			else
 			{
-				vector<Value> commandParts;
+				vector<KSValue> commandParts;
 				for (int num = 1; num < GetChildCount(subTree); num++)
 				{
 					commandParts.push_back(Analyze(GetChild(subTree, num)));
@@ -1638,17 +1638,17 @@ namespace KScript
 		}
 		#pragma endregion
 
-		return Value(L"0", INT);
+		return KSValue(L"0", INT);
 	}
 
-	hash_map<KString, Value, HashString> Script::GetVariableMap()
+	hash_map<KString, KSValue, HashString> KSScript::GetVariableMap()
 	{
 		return variables;
 	}
 
-	bool Script::SetVariableMap( hash_map<KString, Value, HashString> newMap )
+	bool KSScript::SetVariableMap( hash_map<KString, KSValue, HashString> newMap )
 	{
-		for(hash_map<KString, Value, HashString>::iterator iter = newMap.begin();
+		for(hash_map<KString, KSValue, HashString>::iterator iter = newMap.begin();
 			iter != newMap.end(); iter++)
 		{
 			variables[iter->first] = iter->second;
@@ -1657,14 +1657,14 @@ namespace KScript
 		return true;
 	}
 
-	Script::~Script()
+	KSScript::~KSScript()
 	{
 		Unload();
 		
 		return;
 	}
 
-	bool Script::Unload()
+	bool KSScript::Unload()
 	{
 		functionOrder = -1;
 
@@ -1701,9 +1701,9 @@ namespace KScript
 		return true;
 	}
 
-	bool Script::UpdateVariableMap( hash_map<KString, Value, HashString> newMap )
+	bool KSScript::UpdateVariableMap( hash_map<KString, KSValue, HashString> newMap )
 	{
-		for(hash_map<KString, Value, HashString>::iterator iter = newMap.begin();
+		for(hash_map<KString, KSValue, HashString>::iterator iter = newMap.begin();
 			iter != newMap.end(); iter++)
 		{
 			if (IsIDValid(iter->first))
@@ -1715,23 +1715,23 @@ namespace KScript
 		return true;
 	}
 
-	bool Script::ClearVariableMap()
+	bool KSScript::ClearVariableMap()
 	{
 		variables.clear();
 
 		return true;
 	}
 
-	KScript::ScriptPtr Script::Copy()
+	KScript::ScriptPtr KSScript::Copy()
 	{
-		ScriptPtr copy = new Script(runner, true);
+		ScriptPtr copy = new KSScript(runner, true);
 
 		copy->LoadScriptStream(input->data, (DWORD)input->sizeBuf, fileName);
 
 		return copy;
 	}
 
-	pANTLR3_BASE_TREE Script::FindFunctionRoot( KString name , pANTLR3_BASE_TREE subTree)
+	pANTLR3_BASE_TREE KSScript::FindFunctionRoot( KString name , pANTLR3_BASE_TREE subTree)
 	{
 		if (!subTree)
 		{

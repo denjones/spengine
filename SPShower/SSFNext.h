@@ -10,13 +10,13 @@ using namespace KScript;
 class SSFNext : public ExtendedMapArgsFunction
 {
 public:
-	Value Function(KScript::Script* currentScript, VariableMap args)
+	KSValue Function(KScript::KSScript* currentScript, VariableMap args)
 	{
 		SUIDialogBoxPtr dialogBox;
 
 		if (args.find(L"box") == args.end())
 		{
-			return Value();
+			return KSValue();
 		}
 
 		SPString name = args[L"box"].value;
@@ -27,7 +27,7 @@ public:
 			dialogBox->Next();
 		}
 
-		return Value();
+		return KSValue();
 	}
 };
 

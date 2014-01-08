@@ -22,12 +22,14 @@ namespace SPEngine
 		SPLogHelper(void);
 		~SPLogHelper(void);
 		static bool isLoggingOn;
+		static bool isDebug;
 		static void CreatLogFile();
 	public:
 		static void TurnOnLogging();
 		static void TurnOffLogging();
-		static void WriteLog(string log, ...);
-		static void WriteLog(wstring log, ...);
-		static void WriteLog(TCHAR *szFormat, ...);		
+		static void WriteDebug(string log);
+		static void WriteDebug(wstring log);
+		static void WriteLog(string log);
+		static void WriteLog(wstring log);
 	};
 }

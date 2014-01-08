@@ -13,6 +13,7 @@
 #include "SPLogHelper.h"
 #include "SPDevice.h"
 #include "SPVideoTexture.h"
+#include "SPStringHelper.h"
 
 namespace SPEngine
 {
@@ -212,10 +213,10 @@ namespace SPEngine
 			else
 			{
 				GUID subtype = *pMediaType->Subtype();
-				SPLogHelper::WriteLog("[DShow] GUID {%.8x, %.4x, %.4x, {%.2x, %.2x, %.2x, %.2x, %.2x, %.2x, %.2x, %.2x}}",
+				SPLogHelper::WriteLog(SPStringHelper::Format("[DShow] GUID {%.8x, %.4x, %.4x, {%.2x, %.2x, %.2x, %.2x, %.2x, %.2x, %.2x, %.2x}}",
 					subtype.Data1, subtype.Data2, subtype.Data3,
 					subtype.Data4[0], subtype.Data4[1], subtype.Data4[2], subtype.Data4[3],
-					subtype.Data4[4], subtype.Data4[5], subtype.Data4[6], subtype.Data4[7]);
+					subtype.Data4[4], subtype.Data4[5], subtype.Data4[6], subtype.Data4[7]));
 			}
 
 			if (   IsEqualGUID(*pMediaType->Subtype(), MEDIASUBTYPE_UYVY) 
@@ -344,7 +345,7 @@ namespace SPEngine
 				break;
 		}
 
-		SPLogHelper::WriteLog("[DShow] Trying to initialize %dx%dx%d", m_lVidWidth, m_lVidHeight, m_bit_per_pixel);
+		SPLogHelper::WriteLog(SPStringHelper::Format("[DShow] Trying to initialize %dx%dx%d", m_lVidWidth, m_lVidHeight, m_bit_per_pixel));
 		if (m_lVidWidth <= 0 || m_lVidHeight <= 0)
 		{
 			return -1;
@@ -744,7 +745,7 @@ namespace SPEngine
 
 		if( FAILED(hr))
 		{
-			SPLogHelper::WriteLog("[DShow] WARNING: Could not create the D3DX texture!  hr=0x%x", hr);
+			SPLogHelper::WriteLog(SPStringHelper::Format("[DShow] WARNING: Could not create the D3DX texture!  hr=0x%x", hr));
 			return false;
 		}
 
@@ -754,7 +755,7 @@ namespace SPEngine
 
 		if (FAILED( hr = m_videoTexture->texture->GetLevelDesc(0, &ddsd)))
 		{
-			SPLogHelper::WriteLog("[DShow] WARNING: Could not get level Description of D3DX texture! hr = 0x%x", hr);
+			SPLogHelper::WriteLog(SPStringHelper::Format("[DShow] WARNING: Could not get level Description of D3DX texture! hr = 0x%x", hr));
 			return false;
 		}
 
@@ -768,7 +769,7 @@ namespace SPEngine
 		// Save format info
 		m_texture_format = ddsd.Format;
 
-		SPLogHelper::WriteLog("[DShow] Format accepted (%X) %dx%d", m_texture_format, m_lVidWidth, m_lVidHeight);
+		SPLogHelper::WriteLog(SPStringHelper::Format("[DShow] Format accepted (%X) %dx%d", m_texture_format, m_lVidWidth, m_lVidHeight));
 
 		m_videoTexture->height = m_lVidHeight;
 		m_videoTexture->width = m_lVidWidth;

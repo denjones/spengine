@@ -115,7 +115,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"background_image", args))
 	{
-		Value arg = args[L"background_image"];
+		KSValue arg = args[L"background_image"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -253,7 +253,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_click", args))
 	{
-		Value arg = args[L"on_click"];
+		KSValue arg = args[L"on_click"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -269,7 +269,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_dclick", args))
 	{
-		Value arg = args[L"on_dclick"];
+		KSValue arg = args[L"on_dclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -285,7 +285,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_up", args))
 	{
-		Value arg = args[L"on_up"];
+		KSValue arg = args[L"on_up"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -301,7 +301,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_down", args))
 	{
-		Value arg = args[L"on_down"];
+		KSValue arg = args[L"on_down"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -317,7 +317,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_rclick", args))
 	{
-		Value arg = args[L"on_rclick"];
+		KSValue arg = args[L"on_rclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -333,7 +333,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_rdclick", args))
 	{
-		Value arg = args[L"on_rdclick"];
+		KSValue arg = args[L"on_rdclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -349,7 +349,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_rup", args))
 	{
-		Value arg = args[L"on_rup"];
+		KSValue arg = args[L"on_rup"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -365,7 +365,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_rdown", args))
 	{
-		Value arg = args[L"on_rdown"];
+		KSValue arg = args[L"on_rdown"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -381,7 +381,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mclick", args))
 	{
-		Value arg = args[L"on_mclick"];
+		KSValue arg = args[L"on_mclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -397,7 +397,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mdclick", args))
 	{
-		Value arg = args[L"on_mdclick"];
+		KSValue arg = args[L"on_mdclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -413,7 +413,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mup", args))
 	{
-		Value arg = args[L"on_mup"];
+		KSValue arg = args[L"on_mup"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -429,7 +429,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mdown", args))
 	{
-		Value arg = args[L"on_mdown"];
+		KSValue arg = args[L"on_mdown"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -445,7 +445,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_scroll_up", args))
 	{
-		Value arg = args[L"on_scroll_up"];
+		KSValue arg = args[L"on_scroll_up"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -461,7 +461,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_scroll_down", args))
 	{
-		Value arg = args[L"on_scroll_down"];
+		KSValue arg = args[L"on_scroll_down"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -477,7 +477,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mouse", args))
 	{
-		Value arg = args[L"on_mouse"];
+		KSValue arg = args[L"on_mouse"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -493,7 +493,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mouse_in", args))
 	{
-		Value arg = args[L"on_mouse_in"];
+		KSValue arg = args[L"on_mouse_in"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -509,7 +509,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"on_mouse_out", args))
 	{
-		Value arg = args[L"on_mouse_out"];
+		KSValue arg = args[L"on_mouse_out"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -525,7 +525,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_click", args))
 	{
-		Value arg = args[L"catch_click"];
+		KSValue arg = args[L"catch_click"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -541,7 +541,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_dclick", args))
 	{
-		Value arg = args[L"catch_dclick"];
+		KSValue arg = args[L"catch_dclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -557,7 +557,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_up", args))
 	{
-		Value arg = args[L"catch_up"];
+		KSValue arg = args[L"catch_up"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -573,7 +573,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_down", args))
 	{
-		Value arg = args[L"catch_down"];
+		KSValue arg = args[L"catch_down"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -589,7 +589,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_rclick", args))
 	{
-		Value arg = args[L"catch_rclick"];
+		KSValue arg = args[L"catch_rclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -605,7 +605,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_rdclick", args))
 	{
-		Value arg = args[L"catch_rdclick"];
+		KSValue arg = args[L"catch_rdclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -621,7 +621,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_rup", args))
 	{
-		Value arg = args[L"catch_rup"];
+		KSValue arg = args[L"catch_rup"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -637,7 +637,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_rdown", args))
 	{
-		Value arg = args[L"catch_rdown"];
+		KSValue arg = args[L"catch_rdown"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -653,7 +653,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_mclick", args))
 	{
-		Value arg = args[L"catch_mclick"];
+		KSValue arg = args[L"catch_mclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -669,7 +669,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_mdclick", args))
 	{
-		Value arg = args[L"catch_mdclick"];
+		KSValue arg = args[L"catch_mdclick"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -685,7 +685,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_mup", args))
 	{
-		Value arg = args[L"catch_mup"];
+		KSValue arg = args[L"catch_mup"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -701,7 +701,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_mdown", args))
 	{
-		Value arg = args[L"catch_mdown"];
+		KSValue arg = args[L"catch_mdown"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -717,7 +717,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_scroll_up", args))
 	{
-		Value arg = args[L"catch_scroll_up"];
+		KSValue arg = args[L"catch_scroll_up"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -733,7 +733,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 	if (IsSet(L"catch_scroll_down", args))
 	{
-		Value arg = args[L"catch_scroll_down"];
+		KSValue arg = args[L"catch_scroll_down"];
 
 		if ( arg.type == 39 && arg.value == L"0")
 		{
@@ -752,7 +752,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 	{
 		if (iter->first.find(L"on_key_press_") != iter->first.npos)
 		{
-			Value arg = iter->second;
+			KSValue arg = iter->second;
 			SPString keyName = iter->first.substr(13);
 			UINT key = SPInputManager::GetSingleton().GetKeyboard()->KeyNameToKey(keyName);
 
@@ -769,7 +769,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 		}
 		else if (iter->first.find(L"on_key_down_") != iter->first.npos)
 		{
-			Value arg = iter->second;
+			KSValue arg = iter->second;
 			SPString keyName = iter->first.substr(12);
 			UINT key = SPInputManager::GetSingleton().GetKeyboard()->KeyNameToKey(keyName);
 
@@ -786,7 +786,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 		}
 		else if (iter->first.find(L"on_key_up_") != iter->first.npos)
 		{
-			Value arg = iter->second;
+			KSValue arg = iter->second;
 			SPString keyName = iter->first.substr(10);
 			UINT key = SPInputManager::GetSingleton().GetKeyboard()->KeyNameToKey(keyName);
 
