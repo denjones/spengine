@@ -166,6 +166,7 @@
     <None Include="expat.dll" />
     <None Include="first.ks" />
     <None Include="font\FZMWFont.ttf" />
+    <None Include="init.js" />
     <None Include="IntelQuickSyncDecoder.dll" />
     <None Include="LAVAudio.ax" />
     <None Include="LAVSplitter.ax" />
@@ -363,6 +364,8 @@
     <ClInclude Include="SUITransformationManager.h" />
     <ClInclude Include="SUITransition.h" />
     <ClInclude Include="SUIVideoManager.h" />
+    <ClInclude Include="SV8Function.h" />
+    <ClInclude Include="SV8ScriptManager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="SSFWaitDialog.h" />
   </ItemGroup>
@@ -408,6 +411,8 @@
     <ClCompile Include="SUITransformationManager.cpp" />
     <ClCompile Include="SUITransition.cpp" />
     <ClCompile Include="SUIVideoManager.cpp" />
+    <ClCompile Include="SV8Function.cpp" />
+    <ClCompile Include="SV8ScriptManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPShower.rc" />

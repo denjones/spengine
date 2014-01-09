@@ -28,4 +28,4 @@
 履历编号 = 0;
 
 // 设置入口脚本
-@first{ file:"script/logo.ks" }
+//@first{ file:"script/logo.ks" }

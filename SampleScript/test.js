@@ -1,2 +1,4 @@
 '呵呵呵呵呵' + 'asdf';
-a+=1;
+var m = using('test2.js');
+a += 1;
+m.s;

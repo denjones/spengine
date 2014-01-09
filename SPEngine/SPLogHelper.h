@@ -21,6 +21,7 @@ namespace SPEngine
 	private:
 		SPLogHelper(void);
 		~SPLogHelper(void);
+		static CCritSec logLock;
 		static bool isLoggingOn;
 		static bool isDebug;
 		static void CreatLogFile();

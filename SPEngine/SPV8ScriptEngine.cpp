@@ -15,6 +15,11 @@ namespace SPEngine
 
 	SPV8ScriptEngine::~SPV8ScriptEngine(void)
 	{
+		StopThread();
+
+		persistentContext->ClearAndLeak();
+		persistentContext = NULL;
+
 		if (isolate)
 		{
 			isolate->Dispose();
@@ -35,12 +40,7 @@ namespace SPEngine
 	bool SPV8ScriptEngine::Initialize()
 	{
 		isolate = Isolate::New();
-		hExit = CreateEvent( NULL, FALSE, FALSE, NULL );
-		return true;
-	}
 
-	bool SPV8ScriptEngine::Load()
-	{
 		Locker locker(isolate); 
 		Isolate::Scope isolateScope(isolate);
 		HandleScope handleScope(isolate);
@@ -49,22 +49,22 @@ namespace SPEngine
 		// Make context persistent.
 		persistentContext = new Persistent<Context>(isolate, Context::New(isolate));
 
+		// Global Function
+		AddFunction(L"using", Import);
+		AddFunction(L"include", Include);
+
 		StartThread();
 
 		return true;
 	}
 
+	bool SPV8ScriptEngine::Load()
+	{
+		return true;
+	}
+
 	bool SPV8ScriptEngine::Unload()
 	{
-		StopThread();
-
-		Locker locker(isolate); 
-		Isolate::Scope isolateScope(isolate);
-		HandleScope handleScope(isolate);
-
-		persistentContext->ClearAndLeak();
-		persistentContext = NULL;
-
 		return true;
 	}
 
@@ -72,6 +72,7 @@ namespace SPEngine
 	{
 		SPPointer<Locker> innerLocker;
 		SPPointer<Isolate::Scope> isolateScope;
+		SPPointer<Context::Scope> contextScope;
 
 		if (!isInScope)
 		{
@@ -83,8 +84,11 @@ namespace SPEngine
 
 		EscapableHandleScope escapableHandleScope(isolate);
 
-		Handle<Context> realContext = GetContext();
-		Context::Scope contextScope(realContext);
+		if (!isInScope)
+		{
+			Handle<Context> context = GetContext();
+			contextScope = new Context::Scope(context);
+		}
 
 		// Try.
 
@@ -133,6 +137,7 @@ namespace SPEngine
 	{
 		SPPointer<Locker> innerLocker;
 		SPPointer<Isolate::Scope> isolateScope;
+		SPPointer<Context::Scope> contextScope;
 
 		if (!isInScope)
 		{
@@ -144,8 +149,11 @@ namespace SPEngine
 
 		EscapableHandleScope escapableHandleScope(isolate);
 
-		Handle<Context> realContext = GetContext();
-		Context::Scope contextScope(realContext);
+		if (!isInScope)
+		{
+			Handle<Context> context = GetContext();
+			contextScope = new Context::Scope(context);
+		}
 
 		// Try.
 
@@ -245,10 +253,9 @@ namespace SPEngine
 
 	void SPV8ScriptEngine::LogMessage( Handle<Message> &msg )
 	{
-		SPLogHelper::WriteLog(
-			L"[SPScript] Error: " + StringToSPString(msg->Get()) + L"\n" + 
-			L"in " + StringToSPString(msg->GetScriptResourceName()->ToString()) +
-			L", line " + SPStringHelper::ToWString(msg->GetLineNumber()) + 
+		SPLogHelper::WriteLog(L"[SPScript] Error: " + StringToSPString(msg->Get()));
+		SPLogHelper::WriteLog(L"[SPScript] in \"" + StringToSPString(msg->GetScriptResourceName()->ToString()) +
+			L"\", line " + SPStringHelper::ToWString(msg->GetLineNumber()) + 
 			L", col " + SPStringHelper::ToWString(msg->GetEndColumn()));
 			//L"\nCall Stack: \n" + StringToSPString(msg->GetStackTrace()));
 	}
@@ -459,6 +466,53 @@ namespace SPEngine
 		return String::NewFromTwoByte(SPV8ScriptEngine::GetSingleton().GetIsolate(), (uint16_t*)str.c_str());
 	}
 
+	void SPV8ScriptEngine::Import( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		HandleScope handleScope(isolate);
+		Handle<Context> context = isolate->GetCurrentContext();
+
+		if (args.Length() == 0) {
+			isolate->ThrowException(Exception::TypeError(SPV8ScriptEngine::SPStringToString(L"Null Argument")));
+			return;
+		}
+
+		// Ensure one module can only be imported once!
+
+		Handle<String> moduleName = Handle<String>::Cast(args[0]);
+		Handle<Object> loadedModules = Handle<Object>::Cast(context->Global()->GetHiddenValue(
+			SPV8ScriptEngine::SPStringToString(L"_loadedModules")));
+
+		if (loadedModules.IsEmpty()) {
+			loadedModules = Object::New();
+			context->Global()->SetHiddenValue(SPV8ScriptEngine::SPStringToString(L"_loadedModules"), loadedModules);
+		}
+
+		if (loadedModules->HasOwnProperty(moduleName)) {
+			args.GetReturnValue().Set(loadedModules->Get(moduleName));
+			return;
+		}
+
+		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
+
+		loadedModules->Set(moduleName, result);
+		args.GetReturnValue().Set(result);
+	}
+
+	void SPV8ScriptEngine::Include( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		HandleScope handleScope(isolate);
+
+		if (args.Length() == 0) {
+			isolate->ThrowException(Exception::TypeError(SPV8ScriptEngine::SPStringToString(L"Null Argument")));
+			return;
+		}
+
+		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
+
+		return;
+	}
 
 
 }

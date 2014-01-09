@@ -8,6 +8,7 @@
 #pragma once
 #include <assert.h>
 #include "SPPointer.h"
+#include <wxutil.h>
 namespace SPEngine
 {
 	///////////////////////////////////////////////////////////////////////
@@ -19,6 +20,7 @@ namespace SPEngine
 	template<typename T> class SPSingleton
 	{
 		static SPPointer<T> singleton; ///< Pointer to hold the singleton.
+		static SPPointer<CCritSec> singletonLock;
 
 	public:
 		SPSingleton(void)
@@ -66,10 +68,14 @@ namespace SPEngine
 		/// @return T&
 		static T& GetSingleton()
 		{
+			singletonLock->Lock();
+
 			if (!singleton)
 			{
 				CreateSingleton();
 			}
+
+			singletonLock->Unlock();
 
 			assert(singleton);
 			return (*singleton);
@@ -86,6 +92,8 @@ namespace SPEngine
 
 	template<typename T> 
 	SPPointer<T> SPSingleton<T>::singleton = NULL;
+	template<typename T> 
+	SPPointer<CCritSec> SPSingleton<T>::singletonLock = new CCritSec();
 }
 
 
