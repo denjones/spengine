@@ -418,7 +418,9 @@
     <ClInclude Include="SPV8ScriptEngine.h">
       <Filter>Source\SPScript</Filter>
     </ClInclude>
-    <ClInclude Include="SPV8Function.h" />
+    <ClInclude Include="SPV8Function.h">
+      <Filter>Source\SPScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPWindow.cpp">
@@ -649,7 +651,9 @@
     <ClCompile Include="SPV8ScriptEngine.cpp">
       <Filter>Source\SPScript</Filter>
     </ClCompile>
-    <ClCompile Include="SPV8Function.cpp" />
+    <ClCompile Include="SPV8Function.cpp">
+      <Filter>Source\SPScript</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPEngine.rc">
