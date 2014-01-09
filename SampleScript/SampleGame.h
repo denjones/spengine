@@ -13,7 +13,8 @@ public:
 	~PrintScriptManager(){}	
 };
 
-void Print4(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Print4(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
 	SPString printResult = L"";
 	bool first = true;
 
@@ -149,7 +150,6 @@ public:
 		
 		// Run the script to get the result.
 		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(L"test.js", true);
-		SPV8ScriptEngine::GetSingleton().EvalFile(L"test2.js", true);
 		Handle<String> theResult = result->ToString();
 
 		// Convert the result to an ASCII string and print it.

@@ -16,6 +16,7 @@ namespace SPEngine
 {
 	bool SPLogHelper::isLoggingOn = true;
 	bool SPLogHelper::isDebug = true;
+	CCritSec SPLogHelper::logLock;
 
 	SPLogHelper::SPLogHelper(void)
 	{
@@ -34,6 +35,8 @@ namespace SPEngine
 			return;
 		}
 
+		logLock.Lock();
+
 		ofstream outLogFile;
 
 		outLogFile.open("log\\spengine.log", ios::app);
@@ -42,7 +45,10 @@ namespace SPEngine
 		{
 			CreatLogFile();
 			if (!outLogFile)
+			{
+				logLock.Unlock();
 				return;
+			}
 		}
 
 		SYSTEMTIME sys; 
@@ -58,6 +64,8 @@ namespace SPEngine
 			log << endl;
 
 		outLogFile.close();
+
+		logLock.Unlock();
 	}
 
 	void SPLogHelper::WriteLog( wstring log )
@@ -67,6 +75,8 @@ namespace SPEngine
 			return;
 		}
 
+		logLock.Lock();
+
 		wofstream outLogFile;
 
 		outLogFile.open("log\\spengine.log", ios::app);
@@ -75,7 +85,10 @@ namespace SPEngine
 		{
 			CreatLogFile();
 			if (!outLogFile)
+			{
+				logLock.Unlock();
 				return;
+			}
 		}
 
 		SYSTEMTIME sys; 
@@ -91,6 +104,8 @@ namespace SPEngine
 			log << endl;
 
 		outLogFile.close();
+
+		logLock.Unlock();
 	}
 
 	void SPLogHelper::CreatLogFile()

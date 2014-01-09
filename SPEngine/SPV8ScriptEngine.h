@@ -69,15 +69,13 @@ namespace SPEngine
 		CCritSec stoppingLock;
 		bool isStopping;
 
-		HANDLE hExit;
-
 	public:
 		bool IsStopping();
 		Isolate* GetIsolate();
 		Handle<Context> GetContext();
 
 		SPV8ScriptEngine(void);
-		~SPV8ScriptEngine(void);
+		virtual ~SPV8ScriptEngine(void);
 
 		// Inheritance
 
@@ -111,6 +109,10 @@ namespace SPEngine
 		static SPString StringToSPString(Handle<String> str);
 		static DWORD WINAPI ScriptRunningThread(void* context);
 		static Handle<String> SPStringToString(SPString str);
+
+	private:
+		static void Import(const FunctionCallbackInfo<Value>& args);
+		static void Include(const FunctionCallbackInfo<Value>& args);
 
 	private:
 		void LogMessage(Handle<Message>& msg);

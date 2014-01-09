@@ -9,6 +9,7 @@
 #include "SUIPictureManager.h"
 #include "SScriptHelper.h"
 #include "SUIParticleSystemManager.h"
+#include "SV8ScriptManager.h"
 
 #pragma warning(disable:4244)
 
@@ -36,13 +37,13 @@ bool SPGameShow::UnloadContent()
 
 bool SPGameShow::Initialize()
 {
-	SScriptManager::GetSingleton().Enable();
+	SV8ScriptManager::GetSingleton().Enable();
 	SUIManager::GetSingleton().Enable();	
 	SUIEffectManager::GetSingleton();
 	SUIMixModeManager::GetSingleton();
 	SUITransformationManager::GetSingleton();
 
-	SPComponentManager::GetSingleton().RegisterComponent(L"SScript", SScriptManager::GetSingletonPtr());
+	SPComponentManager::GetSingleton().RegisterComponent(L"SScript", SV8ScriptManager::GetSingletonPtr());
 	SPComponentManager::GetSingleton().RegisterComponent(L"SUI", SUIManager::GetSingletonPtr());		
 	SPComponentManager::GetSingleton().RegisterComponent(L"SEffect", SUIEffectManager::GetSingletonPtr());
 	SPComponentManager::GetSingleton().RegisterComponent(L"SMixMode", SUIMixModeManager::GetSingletonPtr());

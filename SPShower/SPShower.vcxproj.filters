@@ -610,6 +610,7 @@
     <None Include="msvcr100.dll">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="init.js" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -858,6 +859,12 @@
     <ClInclude Include="SUITextSpan.h">
       <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
     </ClInclude>
+    <ClInclude Include="SV8ScriptManager.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Function.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -973,6 +980,12 @@
     </ClCompile>
     <ClCompile Include="SUITextSpan.cpp">
       <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8ScriptManager.cpp">
+      <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Function.cpp">
+      <Filter>Source\SScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
