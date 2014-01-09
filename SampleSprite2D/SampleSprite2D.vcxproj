@@ -49,9 +49,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\Antlr;..\DirectShow;$(DXSDK_DIR)Include;..\KScript;..\SPEngine;$(IncludePath);..\SimpleXMLPersistence</IncludePath>
+    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
-    <LibraryPath>..\SPENGINE;..\SimpleXMLPersistence;..\DirectShow\Release;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath);..\zlib</LibraryPath>
+    <LibraryPath>..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,6 +80,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>v8.lib;icui18n.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

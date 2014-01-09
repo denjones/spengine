@@ -47,8 +47,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\Antlr;..\DirectShow;$(DXSDK_DIR)Include;..\KScript;..\SPEngine;..\SPAVG;$(IncludePath);..\SimpleXMLPersistence</IncludePath>
-    <LibraryPath>..\SPENGINE;..\SimpleXMLPersistence;..\DirectShow\Release;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath);..\zlib</LibraryPath>
+    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
     <EmbedManifest>true</EmbedManifest>
   </PropertyGroup>
@@ -87,6 +87,7 @@
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>v8.lib;icui18n.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <OutputManifestFile>
