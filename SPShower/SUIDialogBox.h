@@ -25,7 +25,7 @@ public:
 	bool IsDisplayAllDone();
 
 public:
-	SUIDialogBox(void);
+	SUIDialogBox(SUIScreen* screen);
 	virtual ~SUIDialogBox(void);
 
 	virtual bool AddText(SUIText text);

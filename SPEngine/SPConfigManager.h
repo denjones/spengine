@@ -18,6 +18,7 @@ namespace SPEngine
 	{
 		string configFile;		///< File path;
 		SPConfig currentConfig; ///< Current config.
+		CCritSec modificationLock;
 
 	public:
 		SPConfigManager(void);

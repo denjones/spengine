@@ -40,6 +40,7 @@ namespace SPEngine
 
 		LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 		LoadString(hInstance, IDC_SPENGINE, szWindowClass, MAX_LOADSTRING);
+		title = szTitle;
 
 		// Register window class.
 		RegisterWindowClass(hInstance);
@@ -324,91 +325,6 @@ namespace SPEngine
 			SetThreadExecutionState( ES_CONTINUOUS );
 		}
 
-		//if( bExclusive && !isFullScreen)
-		//{
-
-		//	
-		//	resizelock.Lock();
-		//	SetWindowLong(hWnd, GWL_STYLE, WS_POPUP |WS_SYSMENU |WS_VISIBLE);
-		//	resizelock.Unlock();
-
-		//	////Set the window position
-		//	RECT windowRect;
-		//	GetWindowRect(hWnd, &windowRect);
-
-		//	resizelock.Lock();
-		//	SetWindowPos(hWnd, HWND_NOTOPMOST,
-		//		windowRect.left, windowRect.top,
-		//		(windowRect.right - windowRect.left),
-		//		(windowRect.bottom - windowRect.top),
-		//		NULL);
-		//	resizelock.Unlock();
-
-		//	isFullScreen = true;
-
-		//}
-		//else
-		//{
-		//	// windowed mode code
-
-		//	//RECT clientRect;
-		//	//GetClientRect(hWnd, &clientRect);
-
-		//	//if (clientRect.right - clientRect.left == nScreenWidth &&
-		//	//	clientRect.bottom - clientRect.top == nScreenHeight)
-		//	//{
-		//	//	Unhide();
-		//	//	return;
-		//	//}
-
-		//	Hide();
-
-		//	// calculate the new window rect
-		//	SIZE szDesiredClient;
-
-		//	szDesiredClient.cx = nScreenWidth;
-		//	szDesiredClient.cy = nScreenHeight;
-
-		//	// resize the window according to the new rect
-		//	resizelock.Lock();
-		//	SetWindowLong(hWnd, GWL_STYLE, WS_OVERLAPPED | 
-		//		WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
-		//	resizelock.Unlock();
-
-		//	//SetWindowPos(hWnd, HWND_NOTOPMOST,
-		//	//	rcNewWindowRect.left, rcNewWindowRect.top,
-		//	//	(rcNewWindowRect.right - rcNewWindowRect.left),
-		//	//	(rcNewWindowRect.bottom - rcNewWindowRect.top),
-		//	//	NULL);
-		//	RECT rcNewWindowRect = CalculateWindowRect(
-		//		hWnd, szDesiredClient);
-
-		//	resizelock.Lock();
-		//	SetWindowPos(hWnd, HWND_NOTOPMOST,
-		//		rcNewWindowRect.left, rcNewWindowRect.top,
-		//		(rcNewWindowRect.right - rcNewWindowRect.left),
-		//		(rcNewWindowRect.bottom - rcNewWindowRect.top),
-		//		NULL);
-		//	resizelock.Unlock();
-
-		//	//MoveWindow(hWnd, rcNewWindowRect.left, rcNewWindowRect.top, 
-		//	//	(rcNewWindowRect.right - rcNewWindowRect.left),
-		//	//	(rcNewWindowRect.bottom - rcNewWindowRect.top), true);
-
-		//	rcNewWindowRect = CalculateWindowRect(
-		//		hWnd, szDesiredClient);
-
-		//	MoveWindow(hWnd, rcNewWindowRect.left, rcNewWindowRect.top, 
-		//		(rcNewWindowRect.right - rcNewWindowRect.left),
-		//		(rcNewWindowRect.bottom - rcNewWindowRect.top), true);
-
-		//	isFullScreen = false;
-
-		//}
-
-		//// unhide the window now that we're done with it
-		//Unhide();
-
 		isFullScreen = bExclusive;
 	}
 
@@ -454,9 +370,50 @@ namespace SPEngine
 
 	bool SPWindow::SetCursor( HCURSOR setCur )
 	{
+		modificationLock.Lock();
 		hCursor = setCur;
+		modificationLock.Unlock();
 
 		return true;
+	}
+
+	void SPWindow::SetTitle( SPString title )
+	{
+		modificationLock.Lock();
+		SetWindowText(GetHWnd(), title.c_str());
+		this->title = title;
+		modificationLock.Unlock();
+	}
+
+	SPString SPWindow::GetTitle()
+	{
+		return title;
+	}
+
+	void SPWindow::SetWidth(int setWidth)
+	{
+		modificationLock.Lock();
+		AdjustMainWindow(isFullScreen, setWidth, height);
+		modificationLock.Unlock();
+	}
+
+	void SPWindow::SetHeight(int setHeight)
+	{
+		modificationLock.Lock();
+		AdjustMainWindow(isFullScreen, width, setHeight);
+		modificationLock.Unlock();
+	}
+
+	bool SPWindow::IsFullScreen()
+	{
+		return isFullScreen;
+	}
+
+	void SPWindow::SetFullScreen( bool on )
+	{
+		modificationLock.Lock();
+		AdjustMainWindow(on, width, height);
+		modificationLock.Unlock();
 	}
 
 #pragma endregion

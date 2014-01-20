@@ -3,7 +3,7 @@
 
 #pragma warning(disable : 4244)
 
-SUIPictureBox::SUIPictureBox(void)
+SUIPictureBox::SUIPictureBox(SUIScreen* screen) : SUIComponent(screen)
 {
 	imagePos = D3DXVECTOR2(0,0);
 	fillMode = ResizeBox;
@@ -217,7 +217,7 @@ bool SUIPictureBox::PreDraw()
 {
 	GetTexRect();
 
-	return SUIComponentComposite::PreDraw();
+	return SUIComponent::PreDraw();
 }
 
 bool SUIPictureBox::SetPositionMode( ImagePosition setMode )
@@ -270,7 +270,7 @@ bool SUIPictureBox::Update( float timeDelta )
 		}
 	}
 
-	return SUIComponentComposite::Update(timeDelta);
+	return SUIComponent::Update(timeDelta);
 }
 
 bool SUIPictureBox::SetPicture( SUIPictureListPtr setPicture )

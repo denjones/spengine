@@ -37,6 +37,7 @@ bool SUIManager::AddScreen( SUIScreenPtr newScreen )
 	screenMap.Set(newScreen->GetName(), newScreen);
 	newScreen->Initialize();
 	newScreen->Load();
+	SetPersistentScreen(newScreen);
 	return true;
 }
 
@@ -143,6 +144,8 @@ bool SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
 	newScreen->Initialize();
 	newScreen->Load();
 
+	SetPersistentScreen(newScreen);
+
 	return true;
 }
 
@@ -164,13 +167,18 @@ bool SUIManager::FocusScreen( SPString name )
 		return false;
 	}
 
-	ScreenStack::iterator iter = find(dispalyStack.begin(), dispalyStack.end(), screenMap[name]);
+	return FocusScreen(screenMap[name]);
+}
+
+bool SUIManager::FocusScreen( SUIScreenPtr screen )
+{
+	ScreenStack::iterator iter = find(dispalyStack.begin(), dispalyStack.end(), screen);
 	if (iter != dispalyStack.end())
 	{
 		dispalyStack.erase(iter);
 	}
 
-	dispalyStack.push_back(screenMap[name]);
+	dispalyStack.push_back(screen);
 
 	return true;
 }
@@ -501,5 +509,20 @@ bool SUIManager::InterceptKeyboardKey( int key )
 	interceptKeyboardKeyEvent[key] = 1;
 
 	return true;
+}
+
+void SUIManager::SetPersistentScreen( SUIScreenPtr screen )
+{
+	persistentScreenMap[screen.get()] = screen;
+}
+
+SUIScreenPtr SUIManager::GetPersistentScreen( SUIScreen* screenPtr )
+{
+	if (persistentScreenMap.find(screenPtr) == persistentScreenMap.end())
+	{
+		return NULL;
+	}
+
+	return persistentScreenMap[screenPtr];
 }
 

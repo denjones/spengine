@@ -9,6 +9,8 @@
 #include "SPPointer.h"
 #include "SPConfig.h"
 
+using namespace std;
+
 //////////////////////////////////////////////////////////////////////////
 /// @brief SPEngine The namespace which contains all engine elements.
 ///
@@ -49,6 +51,8 @@ namespace SPEngine
 		CCritSec			drawWhileLoadingLock;
 		CCritSec			exitLock;
 		CCritSec			exitBtnLock;
+		CCritSec			modificationLock;
+		SPPointer<SPConfig>	configToApply;
 		/// @}
 
 		float				elapsedLastTimeS;///< The time last Frame
@@ -70,6 +74,7 @@ namespace SPEngine
 		/// @brief    IsRendering
 		/// @return   IsRendering
 		bool IsRendering();
+		bool IsExiting();
 
 		bool IsGameThreadRunning();
 		/// @}
@@ -189,6 +194,7 @@ namespace SPEngine
 		bool		ExitButtonPressed();
 
 		bool ApplyConfig(SPConfig config);
+		void ApplyConfigWhenCurrentDrawFinished(SPConfig config);
 
 		bool LockDrawingWhileLoading();
 		bool UnlockDrawingWhileLoading();

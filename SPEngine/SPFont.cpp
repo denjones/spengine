@@ -14,6 +14,7 @@
 #include "SPFile.h"
 #include "SPFileManager.h"
 #include "SPFontHelper.h"
+#include "SPGameManager.h"
 
 namespace SPEngine
 {
@@ -52,6 +53,7 @@ namespace SPEngine
 		DWORD		PitchAndFamily, 
 		SPString	FontName )
 	{
+		unloaded = true;
 		float rate = SPFontManager::GetSingleton().GetSizeRate();
 
 		if (FAILED(D3DXCreateFont(
@@ -73,6 +75,7 @@ namespace SPEngine
 		italic = Italic == TRUE;
 		miplevel = MipLevels;
 		name = FontName;
+		unloaded = false;
 
 		return true;
 	}
@@ -91,6 +94,7 @@ namespace SPEngine
 	{
 		if (font)
 		{
+			unloaded = true;
 			font->Release();
 			font = NULL;
 		}
@@ -119,8 +123,18 @@ namespace SPEngine
 	D3DXVECTOR2 SPFont::GetTextSize( wstring text, float spaceRate )
 	{
 		float rate = SPFontManager::GetSingleton().GetSizeRate();
-
 		RECT rect = {0,0,0,0};
+
+		while(unloaded)
+		{
+			if (SPGameManager::GetSingleton().GetGame()->IsExiting())
+			{
+				throw exception("Use Font With Game Exited!");
+			}
+
+			Sleep(1);
+		}
+
 		font->DrawTextW(NULL, text.c_str(), -1, &rect, DT_CALCRECT, 0 );
 
 		D3DXVECTOR2 size((float)(rect.right - rect.left + (height * spaceRate) * ( text.size() - 1 )) / rate, (float)(rect.bottom - rect.top) / rate);
@@ -131,8 +145,13 @@ namespace SPEngine
 	D3DXVECTOR2 SPFont::GetTextSize( wstring text, DWORD format, float spaceRate )
 	{
 		float rate = SPFontManager::GetSingleton().GetSizeRate();
-
 		RECT rect = {0,0,0,0};
+
+		while(unloaded)
+		{
+			Sleep(1);
+		}
+
 		font->DrawTextW(NULL, text.c_str(), -1, &rect, format | DT_CALCRECT, 0 );
 
 		D3DXVECTOR2 size((float)(rect.right - rect.left  + height * spaceRate * ( text.size() - 1 )) / rate, (float)(rect.bottom - rect.top) / rate);

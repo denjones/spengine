@@ -118,7 +118,7 @@ namespace SPEngine
 			}
 			else
 			{
-				SPLogHelper::WriteLog("[Game] WARNING: Removing an nonexistent index from map!");
+				SPLogHelper::WriteDebug("[Game] WARNING: Removing an nonexistent index from map!");
 			}
 		}
 

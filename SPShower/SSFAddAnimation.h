@@ -233,7 +233,7 @@ public:
 
 			if (positionMode == L"CengerRight")
 			{
-				endPoint.backgroundPosition = SUIProperties::CengerRight;
+				endPoint.backgroundPosition = SUIProperties::CenterRight;
 			}
 
 			if (positionMode == L"CenterAll")

@@ -27,7 +27,7 @@ public:
 
 			if (!list)
 			{
-				list = new SUIList();
+				list = new SUIList(SUIManager::GetSingleton().GetCurrentScreen().get());
 				list->SetName(name);
 
 				SUIManager::GetSingleton().GetCurrentScreen()->AddComponent(list);

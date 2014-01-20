@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include "SUIText.h"
-#include "SUIComponentComposite.h"
 #include "SUITextLine.h"
+#include "SUIComponent.h"
 
 using namespace std;
 
@@ -30,7 +30,7 @@ struct SUIPadding
 	}
 };
 
-class SUITextBox : public SUIComponentComposite
+class SUITextBox : public SUIComponent
 {
 protected:
 	typedef vector<SUIText> SUITextVector;
@@ -53,30 +53,57 @@ protected:
 	SPString		punctuations;
 	D3DXVECTOR2		currentPosition;
 	SUITextBlock	lines;
+	bool			isAutoHeight;
 
 public:
+	bool IsAutoHeight();
+	void SetAutoHeight(bool on);
+
+	float GetLineSpace();
 	bool SetLineSpace(float setSpace);
+
+	float GetWordSpace();
 	bool SetWordSpace(float setSpace);
+
+	SUIPadding GetPadding();
 	bool SetPadding(SUIPadding setPadding);
+
+	float GetPaddingTop();
+	void SetPaddingTop(float setTop);
+
+	float GetPaddingRight();
+	void SetPaddingRight(float setRight);
+
+	float GetPaddingBottom();
+	void SetPaddingBottom(float setTop);
+
+	float GetPaddingLeft();
+	void SetPaddingLeft(float setRight);
+
 	SRectangle GetTextRect();
+
 	bool SetDefaultFont(SPFontPtr setFont);
+
 	bool SetDefaultColor(D3DCOLOR setColor);
 	D3DCOLOR GetDefaultColor();
+
 	bool SetPunctuations(SPString setPun);
+
 	bool SetDefaultBackEffect(SUIEffectPtr setEffect);
+
 	bool SetDefaultFrontEffect(SUIEffectPtr setEffect);
+
 	SPFontPtr GetDefaultFont();
 
 	D3DXMATRIX TransformMatrixText();
 	D3DXVECTOR3 PositionText();
 	D3DXVECTOR3 PositionTextBG();
 
-	void RefreshText();
-
 public:
-	SUITextBox(void);
+	SUITextBox(SUIScreen* screen);
 	virtual ~SUITextBox(void);
 
+	void RefreshText();
 	virtual bool AddText(SUIText text);	
 	virtual bool Clear();
 	void NewLine();
@@ -92,6 +119,7 @@ public:
 
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
+	virtual Handle<Object> GetV8Obj();
 
 private:
 	bool IsPunctuation(SPString character);

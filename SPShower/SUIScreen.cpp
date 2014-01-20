@@ -1,12 +1,13 @@
 #include "StdAfx.h"
 #include "SUIScreen.h"
-#include "SUIComponentComposite.h"
+#include "SUIComponent.h"
 #include "SScriptHelper.h"
 #include "SSFComponent.h"
 #include "SSFList.h"
 #include "SSFPictureBox.h"
 #include "SSFTextBox.h"
 #include "SSFDialogBox.h"
+#include "SV8ScriptManager.h"
 
 #pragma warning (disable:4244)
 
@@ -21,6 +22,7 @@ SUIScreen::SUIScreen(void)
 SUIScreen::~SUIScreen(void)
 {
 	Clear();
+	v8Obj->ClearAndLeak();
 }
 
 SPString SUIScreen::GetName()
@@ -30,8 +32,9 @@ SPString SUIScreen::GetName()
 
 bool SUIScreen::SetName( SPString setName )
 {
+	modificationLock.Lock();
 	name = setName;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -52,13 +55,16 @@ SUIComponentPtr SUIScreen::GetComponent( SPString name )
 
 bool SUIScreen::AddComponent( SUIComponentPtr newComponent )
 {
+	modificationLock.Lock();
 	componentMap.Set(newComponent->GetName(), newComponent);
+	SetPersistentComponent(newComponent);
+	modificationLock.Unlock();
 	return true;
 }
 
 bool SUIScreen::Initialize()
 {
-	topComponent = new SUIComponentComposite();
+	topComponent = new SUIComponent(this);
 
 	SUIProperties topProperties;
 
@@ -81,7 +87,7 @@ bool SUIScreen::Initialize()
 	topComponent->SetName(L"global_root");
 	topComponent->SetAbsoluteRender(false);
 
-	componentMap.Set(L"global_root", topComponent);
+	AddComponent(topComponent);
 
 	return true;
 }
@@ -162,13 +168,14 @@ bool SUIScreen::Draw( float timeDelta )
 		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight),
 		SPColor::White, 0.5, NULL);
 
-	ComponentIterator iter(&componentMap);
+	PersistentComponentMap::iterator iter = persistentComponentMap.begin();
 
 	// Clear Cache
 
-	for(iter.First(); !iter.IsDone(); iter.Next())
+	while (iter!= persistentComponentMap.end())
 	{
-		iter.CurrentItem()->ClearAbsoluteCache();
+		iter->second->ClearAbsoluteCache();
+		iter++;
 	}
 
 	return true;
@@ -177,7 +184,9 @@ bool SUIScreen::Draw( float timeDelta )
 bool SUIScreen::CreateComponent( SPString name, SUIComponentPtr newComponent )
 {
 	newComponent->SetName(name);
+	modificationLock.Lock();
 	componentMap.Set(name, newComponent);
+	modificationLock.Unlock();
 
 	return true;
 }
@@ -200,14 +209,18 @@ bool SUIScreen::AddChildComponent( SPString fatherName, SPString childName )
 
 bool SUIScreen::SetTargetScreen( SUIScreenPtr setTarget )
 {
+	modificationLock.Lock();
 	targetScreen = setTarget;
+	modificationLock.Unlock();
 
 	return true;
 }
 
 bool SUIScreen::SetTransformation( SUITransformationPtr setTrans )
 {
+	modificationLock.Lock();
 	transformation = setTrans;
+	modificationLock.Unlock();
 
 	return true;
 }
@@ -232,14 +245,18 @@ bool SUIScreen::DrawOffScreen( float timeDelta )
 
 bool SUIScreen::SetCurrentTextBox( SUITextBoxPtr setTextBox )
 {
+	modificationLock.Lock();
 	currentTextBox = setTextBox;
+	modificationLock.Unlock();
 
 	return true;
 }
 
 bool SUIScreen::SetCurrentPictureBox( SUIPictureBoxPtr setPictureBox )
 {
+	modificationLock.Lock();
 	currentPictureBox = setPictureBox;
+	modificationLock.Unlock();
 	
 	return true;
 }
@@ -256,7 +273,9 @@ SUIPictureBoxPtr SUIScreen::GetCurrentPictureBox()
 
 bool SUIScreen::SetCurrentComponent( SUIComponentPtr setComponent )
 {
+	modificationLock.Lock();
 	currentComponent = setComponent;
+	modificationLock.Unlock();
 
 	return true;
 }
@@ -449,27 +468,35 @@ bool SUIScreen::LoadFromString( SPString stringStream )
 
 bool SUIScreen::SetPopUp( bool setPopUp )
 {
+	modificationLock.Lock();
 	isPopup = setPopUp;
+	modificationLock.Unlock();
 
 	return true;
 }
 
 bool SUIScreen::RemoveComponent( SPString name )
 {
+	modificationLock.Lock();
 	componentMap.Remove(name);
+	modificationLock.Unlock();
 
 	return true;
 }
 
 bool SUIScreen::SetBackgroundColor( D3DCOLOR setColor )
 {
+	modificationLock.Lock();
 	backgroundColor = setColor;
+	modificationLock.Unlock();
 
 	return true;
 }
 
 bool SUIScreen::Clear()
 {
+	modificationLock.Lock();
+
 	//
 	// Clear the circle references.
 	//
@@ -491,5 +518,55 @@ bool SUIScreen::Clear()
 	currentTextBox = NULL;
 	currentPictureBox = NULL;	
 
+	modificationLock.Unlock();
+
 	return true;
+}
+
+D3DCOLOR SUIScreen::GetBackgroundColor()
+{
+	return backgroundColor;
+}
+
+Handle<Object> SUIScreen::GetV8Obj()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+
+	if (!v8Obj)
+	{
+		Local<Object> obj = Handle<Object>();
+
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetScreenTemplate();
+		obj = handleTempl->NewInstance();
+
+		if(!obj.IsEmpty())
+		{
+			obj->SetInternalField(0, External::New(
+				SPV8ScriptEngine::GetSingleton().GetIsolate(), this));
+			v8Obj = new Persistent<Object>(isolate, obj);
+		}
+	}
+
+	return Handle<Object>::New(isolate, *v8Obj);
+}
+
+void SUIScreen::SetPersistentComponent( SUIComponentPtr pointer )
+{
+	SUIComponent* realPointer = pointer.get();
+	persistentComponentMap[realPointer] = pointer;
+}
+
+SUIComponentPtr SUIScreen::GetPersistentComponent( SUIComponent* component )
+{
+	if (persistentComponentMap.find(component) != persistentComponentMap.end())
+	{
+		return persistentComponentMap[component];
+	}
+	
+	return NULL;
+}
+
+void SUIScreen::Focus()
+{
+	SUIManager::GetSingleton().FocusScreen(SUIManager::GetSingleton().GetPersistentScreen(this));
 }

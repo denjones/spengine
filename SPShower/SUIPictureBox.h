@@ -1,12 +1,9 @@
 #pragma once
-#include "SUIBlankComponent.h"
 #include "SUIMixImage.h"
 #include "SUIPictureList.h"
-#include "SUIComponentComposite.h"
+#include "SUIComponent.h"
 
-
-
-class SUIPictureBox : public SUIComponentComposite
+class SUIPictureBox : public SUIComponent
 {
 public:
 	enum ImageMode
@@ -43,7 +40,7 @@ protected:
 	SUIPictureListPtr	targetPicture;
 
 public:
-	SUIPictureBox(void);
+	SUIPictureBox(SUIScreen* screen);
 	virtual ~SUIPictureBox(void);
 
 	bool SetImagePosition(D3DXVECTOR2 setPos);

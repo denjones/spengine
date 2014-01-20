@@ -354,6 +354,14 @@ namespace SPEngine
 			hr = SPDevice::GetSingleton().GetD3DDevice()->Present(0, 0, 0, 0);
 		}
 
+		if (configToApply)
+		{
+			ApplyConfig(*configToApply);
+			modificationLock.Lock();
+			configToApply = NULL;
+			modificationLock.Unlock();
+		}
+
 		// Get current config.
 		SPConfig currentConfig = SPConfigManager::GetSingleton().GetCurrentConfig();
 
@@ -777,4 +785,18 @@ namespace SPEngine
 
 		return true;
 	}
+
+	void SPGame::ApplyConfigWhenCurrentDrawFinished( SPConfig config )
+	{
+		modificationLock.Lock();
+		configToApply = new SPConfig(config);
+		SPConfigManager::GetSingleton().SetConfig(config);
+		modificationLock.Unlock();
+	}
+
+	bool SPGame::IsExiting()
+	{
+		return isExiting;
+	}
+
 }

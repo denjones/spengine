@@ -64,6 +64,9 @@ namespace SPEngine
 
 		static string Format(string str, ...);
 		static wstring Format(wstring str, ...);
+
+		static bool EqualsIgnoreCase(string str1, string str2);
+		static bool EqualsIgnoreCase(wstring str1, wstring str2);
 	};
 }
 

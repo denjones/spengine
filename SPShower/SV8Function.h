@@ -10,5 +10,26 @@ class SV8Function
 private:
 	SV8Function(void);
 	~SV8Function(void);
+
+public:
+
+	//
+	// Global Function
+	//
+
+	static void CreateScreen(const FunctionCallbackInfo<Value>& args);
+
+	//
+	// SpeShow Command
+	//
+
+	
+	
+	//
+	// Helper
+	//
+
+	static bool HasProperty(SPString propertyName, Handle<Object> obj);
+	static Handle<Value> GetProperty(SPString propertyName, Handle<Object> obj);
 };
 

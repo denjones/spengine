@@ -1,22 +1,52 @@
 #include "StdAfx.h"
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
+#include "SV8Function.h"
+#include "SV8Screen.h"
+#include "SV8Component.h"
+#include "SV8Window.h"
+#include "SV8TextBox.h"
 
 
 SV8ScriptManager::SV8ScriptManager(void)
 {
+	SPV8ScriptEngine::GetSingleton();
+	requireEngine = SPV8ScriptEngine::GetSingletonPtr();
 }
 
 
 SV8ScriptManager::~SV8ScriptManager(void)
 {
-	screenTempl->ClearAndLeak();
-	screenTempl = NULL;
+	if (screenTempl)
+	{
+		screenTempl->ClearAndLeak();
+		screenTempl = NULL;
+	}
+	
+	if (componentTempl)
+	{
+		componentTempl->ClearAndLeak();
+		componentTempl = NULL;
+	}
+
+	if (windowTempl)
+	{
+		windowTempl->ClearAndLeak();
+		windowTempl = NULL;
+	}	
 }
 
 bool SV8ScriptManager::Initialize()
 {
+	//
+	// Init Global Functions
+	//
+
+	SPV8ScriptEngine::GetSingleton().AddFunction(L"createScreen", SV8Function::CreateScreen);
+
+	//
 	// Enter
+	//
 
 	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
 	Locker locker(isolate); 
@@ -25,24 +55,37 @@ bool SV8ScriptManager::Initialize()
 	Handle<Context> context = SPV8ScriptEngine::GetSingleton().GetContext();
 	Context::Scope contextScope(context);
 
-	// Create Global Screen Object
-	// Set ScreenGetter/ScreenSetter
-
-	context->Global()->SetAccessor(	
-		SPV8ScriptEngine::SPStringToString(L"screen"),
-		ScreenGetter);
-
 	//
 	// Create All Templates
 	//
 
-	// Screen
-	Handle<ObjectTemplate> templScreen = ObjectTemplate::New();
-	screenTempl = new Persistent<ObjectTemplate>(isolate, templScreen);
-	templScreen->SetInternalFieldCount(1);
-	templScreen->SetNamedPropertyHandler(GetScreenProperty, SetScreenProperty);
+	screenTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8Screen::GetTemplate());
+	componentTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8Component::GetTemplate());
+	windowTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8Window::GetTemplate());
+	textBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8TextBox::GetTemplate());
 
-	// Component
+	//
+	// Set Global Window Object
+	//
+
+	context->Global()->Set(SPV8ScriptEngine::SPStringToString(L"window"), GetWindowTemplate()->NewInstance());
+
+	//
+	// Create Global Screen Object
+	//
+
+	context->Global()->SetAccessor(SPV8ScriptEngine::SPStringToString(L"screen"),
+		SV8Screen::ScreenGetter);
+
+	//
+	// Create Global Persistent Object
+	//
+
+	context->Global()->Set(SPV8ScriptEngine::SPStringToString(L"global"), Object::New());
 
 	//
 	// Init Script
@@ -73,26 +116,14 @@ bool SV8ScriptManager::Unload()
 	return true;
 }
 
-
-void SV8ScriptManager::ScreenGetter(Local<String> property, const PropertyCallbackInfo<Value>& info)
+bool SV8ScriptManager::HasProperty( SPString propertyName, Handle<Object> obj )
 {
-	Handle<ObjectTemplate> realTemplate = SV8ScriptManager::GetSingleton().GetScreenTemplate();
-	Local<Object> obj = realTemplate->NewInstance();
-	obj->SetInternalField(0, External::New(
-		SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SUIManager::GetSingleton().GetCurrentScreen()));
-
-	info.GetReturnValue().Set(obj);
-
-	return ;
+	return SV8Function::HasProperty(propertyName, obj);
 }
 
-void SV8ScriptManager::ScreenSetter(
-	Local<String> property,
-	Local<Value> value,
-	const PropertyCallbackInfo<void>& info) 
+Handle<Value> SV8ScriptManager::GetProperty( SPString propertyName, Handle<Object> obj )
 {
-	return;
+	return SV8Function::GetProperty(propertyName, obj);
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetScreenTemplate()
@@ -100,26 +131,18 @@ Handle<ObjectTemplate> SV8ScriptManager::GetScreenTemplate()
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*screenTempl));
 }
 
-void SV8ScriptManager::GetScreenProperty( Local<String> property, const PropertyCallbackInfo<Value>& info )
+Handle<ObjectTemplate> SV8ScriptManager::GetComponentTemplate()
 {
-	TryCatch tryCatch;
-	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
-	SUIScreen* screen = (SUIScreen*)field->Value();
-	if (screen == NULL)
-	{
-		SPV8ScriptEngine::GetSingleton().GetIsolate()->ThrowException(
-			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
-	}
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*componentTempl));
 }
 
-void SV8ScriptManager::SetScreenProperty( Local<String> property, Local<Value> value, const PropertyCallbackInfo<Value>& info )
+Handle<ObjectTemplate> SV8ScriptManager::GetWindowTemplate()
 {
-	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
-	SUIScreen* screen = (SUIScreen*)field->Value();
-	if (screen == NULL)
-	{
-		SPV8ScriptEngine::GetSingleton().GetIsolate()->ThrowException(
-			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
-	}
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*windowTempl));
+}
+
+Handle<ObjectTemplate> SV8ScriptManager::GetTextBoxTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*textBoxTempl));
 }
 

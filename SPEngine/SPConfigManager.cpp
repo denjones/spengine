@@ -40,8 +40,10 @@ namespace SPEngine
 
 	bool SPConfigManager::SetConfig( SPConfig &config )
 	{
+		modificationLock.Lock();
 		currentConfig = config;
 		currentConfig.SaveAsFile(configFile);
+		modificationLock.Unlock();
 
 		return true;
 	}

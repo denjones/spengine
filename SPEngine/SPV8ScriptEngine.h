@@ -13,7 +13,7 @@
 #include <list>
 #include "SPPointer.h"
 #include <map>
-#include "SPV8Function.h"
+#include "SPStringMap.h"
 
 using namespace v8;
 using namespace std;
@@ -50,18 +50,22 @@ namespace SPEngine
 		public SPComponent, 
 		public SPSingleton<SPV8ScriptEngine>
 	{
+		typedef list<ScriptToRunPtr> ScriptList;
+		typedef list<int> FunctionList;
+		typedef map<int, FunctionList> TimeOutFunctionMap;
+		typedef map<int, SPPointer<Persistent<Function>>> TimeOutMap;
+
 		Isolate* isolate;
 		SPPointer<Persistent<Context>> persistentContext;
 		SPPointer<Locker> locker;
 		SPPointer<Locker> threadLocker;
 
-		CCritSec scriptToRunLock;
-		typedef list<ScriptToRunPtr> ScriptList;
+		CCritSec scriptToRunLock;		
 		ScriptList scriptToRun;
 
-		CCritSec timingScriptToRunLock;
-		typedef map<int, ScriptList> TimeingScriptMap;
-		TimeingScriptMap timingScriptToRun;
+		CCritSec timingScriptToRunLock;		
+		TimeOutMap	timeOutMap;
+		TimeOutFunctionMap timeOutFunctionToRun;
 
 		CCritSec threadRunningLock;
 		bool isThreadRunning;
@@ -88,9 +92,12 @@ namespace SPEngine
 		// Script Related
 
 		void AddFunction(SPString funcName, FunctionCallback function);
-		void AddTimingScript(ScriptToRunPtr script, int timeoutMS);
+		Handle<Number> SetTimeOutFunction( Handle<Function> func, int timeoutMS );
+		void ClearTimeOutFunction( Handle<Number> id);
+
 		ScriptToRunPtr NextScriptToRun();
 		bool RunNextScript();
+		bool RunTimeOutFunc();
 		void RunScript(SPString script);
 		void RunScriptFromFile(SPString path);
 		Handle<Value> Eval(SPString script, bool isInScope = false);
@@ -113,6 +120,9 @@ namespace SPEngine
 	private:
 		static void Import(const FunctionCallbackInfo<Value>& args);
 		static void Include(const FunctionCallbackInfo<Value>& args);
+		static void SleepFunc(const FunctionCallbackInfo<Value>& args);
+		static void SetTimeOut(const FunctionCallbackInfo<Value>& args);
+		static void ClearTimeOut(const FunctionCallbackInfo<Value>& args);
 
 	private:
 		void LogMessage(Handle<Message>& msg);

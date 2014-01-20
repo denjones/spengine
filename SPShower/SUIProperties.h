@@ -26,7 +26,7 @@ public:
 		BottomRight,
 		BottomCenter,
 		CenterLeft,
-		CengerRight,
+		CenterRight,
 		CenterAll,
 	};
 
@@ -46,5 +46,10 @@ public:
 public:
 	SUIProperties(void);
 	virtual ~SUIProperties(void);
+
+	static SPString BackgroundModeToString(BackgroundMode mode);
+	static SPString BackgroundPositionToString(BackgroundPosition mode);
+	static BackgroundMode StringToBackgroundMode(SPString modeName);
+	static BackgroundPosition StringToBackgroundPosition(SPString modeName);
 };
 

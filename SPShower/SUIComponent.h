@@ -12,17 +12,22 @@
 using namespace SPEngine;
 
 class SUIComponent;
+class SUIScreen;
 
 typedef SPPointer<SUIComponent> SUIComponentPtr;
 
 class SUIComponent : 
 	public SPTransition,
 	public ISPDrawable,
-	public ISPLoadable	
+	public ISPLoadable
 {
 protected:
 	typedef list<SUIAnimationPtr> AnimationQueue;
 	typedef list<SUIEffectPtr> EffectQueue;
+	typedef list<SUIComponentPtr> Children;
+	typedef	Children::iterator ChildIterator;
+
+	Children children; ///< Children component list;
 
 	/// @name Event Handlers
 	/// @{
@@ -79,6 +84,8 @@ public:
 protected:
 	/// @name Properties
 	/// @{
+	SUIScreen*			screenBelongsTo;
+	CCritSec			modificationLock;
 	SPString			name;
 	SUIProperties		properties;
 	AnimationQueue		animations;
@@ -88,11 +95,14 @@ protected:
 	SUIComponentPtr		father;
 	VariableMap			propertiesMap;
 	bool				isAbsoluteRender;
+	SPPointer<Persistent<Object>> v8Obj;
 	/// @}	
 	
 public:
 	/// @name Getter and Setter
 	/// @{
+	SUIScreen* GetScreen();
+
 	SPString GetName();
 	bool SetName(SPString setName);
 
@@ -147,13 +157,17 @@ public:
 	float GetLayer();
 	bool SetLayer(float setLayer);
 
-	bool SetBackgroundX(int setX);
 	int GetBackgroundX();
-	bool SetBackgroundY(int setY);
+	bool SetBackgroundX(int setX);
+	
 	int GetBackgroundY();
-
+	bool SetBackgroundY(int setY);
+	
+	SUIProperties::BackgroundMode GetBackgroundMode();
 	bool SetBackgroundMode(SUIProperties::BackgroundMode setMode);
-	bool SetBackgroundPositionMode(SUIProperties::BackgroundPosition setMode);
+	
+	SUIProperties::BackgroundPosition GetBackgroundPositionMode();
+	bool SetBackgroundPositionMode(SUIProperties::BackgroundPosition setMode);	
 
 	SRectangle GetBackgroundRect();
 	bool SetProperties(VariableMap args);
@@ -210,7 +224,7 @@ public:
 	// Clear caches. Must be called before next render.
 	void ClearAbsoluteCache();
 
-	
+	virtual Handle<Object> GetV8Obj();
 	
 	/// @}
 	
@@ -218,17 +232,17 @@ public:
 	/// @}
 
 public:
-	SUIComponent(void);
+	SUIComponent(SUIScreen* screen);
 	virtual ~SUIComponent(void);
 
-	virtual bool Update(float timeDelta) = 0;
-	virtual bool PreDraw() = 0;
-	virtual bool Draw(float timeDelta) = 0;
-	virtual bool PostDraw() = 0;
-	virtual bool Load() = 0;
-	virtual bool Unload() = 0;
-	virtual bool Reload() = 0;
-	virtual bool HandleEvent(SUIEventPtr e) = 0;
+	virtual bool Update(float timeDelta);
+	virtual bool PreDraw();
+	virtual bool Draw(float timeDelta);
+	virtual bool PostDraw();
+	virtual bool Load();
+	virtual bool Unload();
+	virtual bool Reload();
+	virtual bool HandleEvent(SUIEventPtr e);
 	virtual bool Render(float timeDelta);
 	virtual bool AddChild(SUIComponentPtr setChild);
 	virtual bool RemoveChild(SUIComponentPtr setChild);
@@ -238,13 +252,14 @@ public:
 	bool Hide();
 	bool Unhide();
 	bool IsDisplay();
+	bool IsAbsoluteRender();
 	
 	bool PlayAnimation();
 	bool PlayEffect();
-	virtual bool Skip() = 0;
+	virtual bool Skip();
 
-	virtual bool LoadFromString(SPString stringStream) = 0;
-	virtual SPString SaveAsString() = 0;
+	virtual bool LoadFromString(SPString stringStream);
+	virtual SPString SaveAsString();
 	bool SaveAsImage(SPString path);
 	SPTexturePtr SaveAsTexture();
 

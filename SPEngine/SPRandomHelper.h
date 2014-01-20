@@ -1,0 +1,29 @@
+//////////////////////////////////////////////////////////////////////////
+/// @file		SPRandomHelper.h the header file of SPRandomHelper class.
+/// @author		Ken.J
+/// @version	Beta 0.9
+/// @date		2014-01-14
+//////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+using namespace std;
+
+namespace SPEngine
+{
+	//////////////////////////////////////////////////////////////////////
+	/// @brief SPRandomHelper static class to generate random value 
+	///
+	//////////////////////////////////////////////////////////////////////
+	class SPRandomHelper
+	{
+		static int seed;
+		static bool isInitialized;
+
+	public:
+		static void Initialize();
+		static int NextInt(int range);
+	};
+}
+
+
