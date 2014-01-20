@@ -30,6 +30,7 @@ namespace SPEngine
 		TCHAR		szWindowClass[MAX_LOADSTRING];	///< The main window class name.
 		HWND		hWnd;							///< Handle of window.
 		HCURSOR		hCursor;
+		SPString	title;
 
 		WINDOWPLACEMENT windowedPlacement;
 		INT			width;	///< The width of window custom area.
@@ -39,6 +40,7 @@ namespace SPEngine
 		bool		isActive;
 
 		CCritSec	resizelock;
+		CCritSec	modificationLock;
 
 	public:
 		/// @name Properties
@@ -47,6 +49,10 @@ namespace SPEngine
 		HINSTANCE	GetHInstance();
 		int			GetWidth();
 		int			GetHeight();
+		void		SetWidth(int setWidth);
+		void		SetHeight(int setHeight);
+		void		SetFullScreen(bool on);
+		bool		IsFullScreen();
 		/// @}
 
 	public:
@@ -131,5 +137,8 @@ namespace SPEngine
 
 		HCURSOR GetCursor();
 		bool SetCursor(HCURSOR setCur);
+
+		void SetTitle(SPString title);
+		SPString GetTitle();
 	};
 }

@@ -30,7 +30,7 @@ public:
 
 			if (!textBox)
 			{
-				textBox = new SUITextBox();
+				textBox = new SUITextBox(SUIManager::GetSingleton().GetCurrentScreen().get());
 				textBox->SetName(name);
 
 				SUIManager::GetSingleton().GetCurrentScreen()->AddComponent(textBox);

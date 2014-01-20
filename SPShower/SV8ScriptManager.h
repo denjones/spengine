@@ -1,5 +1,4 @@
 #pragma once
-#include <SPV8ScriptEngine.h>
 #include "SScriptCommand.h"
 
 using namespace SPEngine;
@@ -16,19 +15,23 @@ public:
 	};
 
 private:
+	SPPointer<SPV8ScriptEngine> requireEngine;
 	SPPointer<Persistent<ObjectTemplate>> screenTempl;
 	SPPointer<Persistent<ObjectTemplate>> componentTempl;
+	SPPointer<Persistent<ObjectTemplate>> windowTempl;
 	SPPointer<Persistent<ObjectTemplate>> textBoxTempl;
-
-	static void ScreenGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
-	static void ScreenSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
-	static void GetScreenProperty(Local<String> property, const PropertyCallbackInfo<Value>& info);
-	static void SetScreenProperty(Local<String> property, Local<Value> value, const PropertyCallbackInfo<Value>& info);
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
+	Handle<ObjectTemplate> GetComponentTemplate();
+	Handle<ObjectTemplate> GetWindowTemplate();
+	Handle<ObjectTemplate> GetTextBoxTemplate();
 
+private:
+	static bool HasProperty(SPString propertyName, Handle<Object> obj);
+	static Handle<Value> GetProperty(SPString propertyName, Handle<Object> obj);
 
+public:
 	typedef list<SScriptCommand> CommandList;
 	typedef CommandList::iterator CommandIterator;
 	typedef pair<int,int> Region;
@@ -62,5 +65,7 @@ public:
 	bool Load();
 	bool Reload();
 	bool Unload();
+
+	
 };
 

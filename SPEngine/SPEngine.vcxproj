@@ -147,6 +147,7 @@
     <ClInclude Include="SPPixelShader.h" />
     <ClInclude Include="SPPixelShaderCore.h" />
     <ClInclude Include="SPPointer.h" />
+    <ClInclude Include="SPRandomHelper.h" />
     <ClInclude Include="SPRectangle.h" />
     <ClInclude Include="SPShaderManager.h" />
     <ClInclude Include="SPSoundFile.h" />
@@ -161,7 +162,6 @@
     <ClInclude Include="SPTextureManager.h" />
     <ClInclude Include="SPTextureSprite.h" />
     <ClInclude Include="SPUpdatableTexture.h" />
-    <ClInclude Include="SPV8Function.h" />
     <ClInclude Include="SPV8ScriptEngine.h" />
     <ClInclude Include="SPVideo.h" />
     <ClInclude Include="SPVideoManager.h" />
@@ -236,6 +236,7 @@
     <ClCompile Include="SPParticleSystemTexture.cpp" />
     <ClCompile Include="SPPixelShader.cpp" />
     <ClCompile Include="SPPixelShaderCore.cpp" />
+    <ClCompile Include="SPRandomHelper.cpp" />
     <ClCompile Include="SPRectangle.cpp" />
     <ClCompile Include="SPShaderManager.cpp" />
     <ClCompile Include="SPSoundFile.cpp" />
@@ -246,7 +247,6 @@
     <ClCompile Include="SPTextSprite.cpp" />
     <ClCompile Include="SPTextureManager.cpp" />
     <ClCompile Include="SPTextureSprite.cpp" />
-    <ClCompile Include="SPV8Function.cpp" />
     <ClCompile Include="SPV8ScriptEngine.cpp" />
     <ClCompile Include="SPVideoManager.cpp" />
     <ClCompile Include="SPVideoTexture.cpp" />

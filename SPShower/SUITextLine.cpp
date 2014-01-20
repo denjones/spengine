@@ -18,6 +18,8 @@ SUITextLine::~SUITextLine(void)
 
 void SUITextLine::Push( SUIText text )
 {
+	modificationLock.Lock();
+
 	//
 	// Get Text Size
 	//
@@ -79,6 +81,8 @@ void SUITextLine::Push( SUIText text )
 			}
 		}
 	}
+
+	modificationLock.Unlock();
 }
 
 float SUITextLine::TestPush( SUIText text )
@@ -117,4 +121,14 @@ float SUITextLine::TestPush( SUIText text )
 D3DXVECTOR2 SUITextLine::CurrentPosition()
 {
 	return currentPosition;
+}
+
+void SUITextLine::Lock()
+{
+	modificationLock.Lock();
+}
+
+void SUITextLine::Unlock()
+{
+	modificationLock.Unlock();
 }

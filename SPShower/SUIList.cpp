@@ -4,7 +4,7 @@
 #pragma warning(disable:4018)
 #include "SUIManager.h"
 
-SUIList::SUIList(void)
+SUIList::SUIList(SUIScreen* screen) : SUIComponent(screen)
 {
 	maxItemNum = 255;
 	scrollPosition = 0;
@@ -41,7 +41,7 @@ float SUIList::GetScrollPosition()
 
 bool SUIList::Update( float timeDelta )
 {
-	SUIComponentComposite::Update(timeDelta);
+	SUIComponent::Update(timeDelta);
 
 	// Keep list in size.
 	while(children.size() > maxItemNum)
@@ -70,7 +70,7 @@ bool SUIList::Draw( float timeDelta )
 	}
 
 	// iter must be assigned after deletion.
-	SPComposite::ChildIterator iter = children.begin();
+	SUIComponent::ChildIterator iter = children.begin();
 
 	// Calculate max length.
 	while(iter != children.end())
@@ -166,7 +166,7 @@ bool SUIList::Draw( float timeDelta )
 			if (type == Vertacal)
 			{
 				currentPos = realPos.y + (*iter)->GetHeight();
-				SPComposite::ChildIterator nextIter = iter;
+				SUIComponent::ChildIterator nextIter = iter;
 				nextIter++;
 
 				if (currentPos > GetHeight() ||
@@ -179,7 +179,7 @@ bool SUIList::Draw( float timeDelta )
 			else
 			{
 				currentPos = realPos.x + (*iter)->GetWidth();
-				SPComposite::ChildIterator nextIter = iter;
+				SUIComponent::ChildIterator nextIter = iter;
 				nextIter++;
 
 				if (currentPos > GetWidth() ||
@@ -258,7 +258,7 @@ bool SUIList::Scroll( int delta )
 
 bool SUIList::ClearChild()
 {
-	SPComposite::ChildIterator iter = children.begin();
+	SUIComponent::ChildIterator iter = children.begin();
 
 	// Calculate max length.
 	while(iter != children.end())
@@ -310,7 +310,7 @@ bool SUIList::HandleEvent( SUIEventPtr e )
 
 	if (!isEventHandled)
 	{
-		return SUIComponentComposite::HandleEvent(e);
+		return SUIComponent::HandleEvent(e);
 	}
 
 	return true;

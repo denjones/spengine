@@ -1,7 +1,6 @@
 #pragma once
 #include "SUIComponent.h"
 #include "SPStringMap.h"
-#include "SUIComponentComposite.h"
 #include "SUIScreen.h"
 #include "SUIEvent.h"
 
@@ -14,9 +13,10 @@ class SUIManager :
 	typedef list<SUIScreenPtr> ScreenStack;
 	typedef ScreenStack::reverse_iterator ScreenStackIterator;
 	typedef list<SUIEventPtr> EventQueue;
+	typedef map<SUIScreen*, SUIScreenPtr> PersistentScreenMap;
 
-	SUIScreenPtr topScreen;
 	ScreenMap screenMap;
+	PersistentScreenMap persistentScreenMap;
 	ScreenStack dispalyStack;
 	EventQueue eventQueue;
 	float elapsedMouseDownTime[3];
@@ -34,11 +34,15 @@ public:
 	SUIManager(void);
 	virtual ~SUIManager(void);
 
+	void SetPersistentScreen(SUIScreenPtr screen);
+	SUIScreenPtr GetPersistentScreen(SUIScreen* screenPtr);
+
 	SUIScreenPtr GetScreen(SPString name);
 	bool AddScreen(SUIScreenPtr newComponent);
 	bool CreateScreen(SPString name, SUIScreenPtr newComponent);
 	SUIScreenPtr GetCurrentScreen();
 	bool FocusScreen(SPString name);
+	bool FocusScreen(SUIScreenPtr screen);
 	bool SwitchToScreen(SPString name, SUITransformationPtr trans);
 	bool IsScreenValid(SPString name);
 

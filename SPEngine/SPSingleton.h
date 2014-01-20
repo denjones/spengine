@@ -45,10 +45,19 @@ namespace SPEngine
 		/// @{
 		static void CreateSingleton()
 		{
+			if (!singletonLock)
+			{
+				singletonLock = new CCritSec();
+			}
+
+			singletonLock->Lock();
+
 			if (!singleton)
 			{
 				singleton = new T();
 			}
+
+			singletonLock->Unlock();
 
 			assert(singleton);			
 		}
@@ -68,14 +77,10 @@ namespace SPEngine
 		/// @return T&
 		static T& GetSingleton()
 		{
-			singletonLock->Lock();
-
 			if (!singleton)
 			{
 				CreateSingleton();
 			}
-
-			singletonLock->Unlock();
 
 			assert(singleton);
 			return (*singleton);
@@ -93,7 +98,7 @@ namespace SPEngine
 	template<typename T> 
 	SPPointer<T> SPSingleton<T>::singleton = NULL;
 	template<typename T> 
-	SPPointer<CCritSec> SPSingleton<T>::singletonLock = new CCritSec();
+	SPPointer<CCritSec> SPSingleton<T>::singletonLock = NULL;
 }
 
 

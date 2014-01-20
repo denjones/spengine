@@ -15,6 +15,10 @@
 
 SPGameShow::~SPGameShow(void)
 {
+	if (SPV8ScriptEngine::GetSingletonPtr())
+	{
+		SPV8ScriptEngine::GetSingleton().StopThread();
+	}
 }
 
 bool SPGameShow::Load()

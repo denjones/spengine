@@ -3,6 +3,7 @@
 #include "SPFile.h"
 #include "SPFileManager.h"
 #include "SPStringHelper.h"
+#include "SPRandomHelper.h"
 
 namespace SPEngine
 {
@@ -52,6 +53,9 @@ namespace SPEngine
 		// Global Function
 		AddFunction(L"using", Import);
 		AddFunction(L"include", Include);
+		AddFunction(L"sleep", SleepFunc);
+		AddFunction(L"setTimeout", SetTimeOut);
+		AddFunction(L"clearTimeout", ClearTimeOut);
 
 		StartThread();
 
@@ -253,51 +257,17 @@ namespace SPEngine
 
 	void SPV8ScriptEngine::LogMessage( Handle<Message> &msg )
 	{
-		SPLogHelper::WriteLog(L"[SPScript] Error: " + StringToSPString(msg->Get()));
-		SPLogHelper::WriteLog(L"[SPScript] in \"" + StringToSPString(msg->GetScriptResourceName()->ToString()) +
-			L"\", line " + SPStringHelper::ToWString(msg->GetLineNumber()) + 
-			L", col " + SPStringHelper::ToWString(msg->GetEndColumn()));
-			//L"\nCall Stack: \n" + StringToSPString(msg->GetStackTrace()));
+		if (!msg.IsEmpty())
+		{
+			SPLogHelper::WriteLog(L"[SPScript] Error: " + StringToSPString(msg->Get()));
+			SPLogHelper::WriteLog(L"[SPScript] in \"" + StringToSPString(msg->GetScriptResourceName()->ToString()) +
+				L"\", line " + SPStringHelper::ToWString(msg->GetLineNumber()) + 
+				L", col " + SPStringHelper::ToWString(msg->GetEndColumn()));
+		}
 	}
 
 	bool SPV8ScriptEngine::Update( float timeElapsed )
 	{
-		timingScriptToRunLock.Lock();
-
-		int currentTimeMs = timeGetTime();
-
-		for(TimeingScriptMap::iterator iter = timingScriptToRun.begin(); iter != timingScriptToRun.end(); iter++)
-		{
-			Locker lock(isolate);
-			Isolate::Scope isolateScope(isolate);		
-			HandleScope handleScope(isolate);
-			Handle<Context> realContext = GetContext();
-			Context::Scope contextScope(realContext);
-
-			if (iter->first >= currentTimeMs)
-			{
-				for(ScriptList::iterator innerIter = iter->second.begin(); innerIter != iter->second.end(); innerIter++)
-				{
-					if ((*innerIter)->type == ScriptFile)
-					{
-						Handle<Value> result = EvalFile((*innerIter)->value, true);
-					}
-					else
-					{
-						Handle<Value> result = Eval((*innerIter)->value, true);
-					}
-				}
-
-				iter = timingScriptToRun.erase(iter);
-			}
-			else
-			{
-				break;
-			}
-		}
-
-		timingScriptToRunLock.Unlock();
-
 		return true;
 	}
 
@@ -312,9 +282,9 @@ namespace SPEngine
 
 		while(!engine->IsStopping())
 		{
-			if (!engine->RunNextScript())
+			if (!engine->RunTimeOutFunc() && !engine->RunNextScript())
 			{
-				Sleep(16);
+				Sleep(1);
 			}
 		}
 
@@ -336,9 +306,18 @@ namespace SPEngine
 			isStopping = true;
 			stoppingLock.Unlock();
 
+			int totalSleep = 0;
+			bool isTerminating = false;
+
 			while(isThreadRunning)
 			{
 				Sleep(16);
+				totalSleep += 16;
+				if (totalSleep > 100 && !isTerminating)
+				{
+					V8::TerminateExecution(isolate);
+					isTerminating = true;
+				}
 			}
 		}
 	}
@@ -437,15 +416,40 @@ namespace SPEngine
 		}	
 	}
 
-	void SPV8ScriptEngine::AddTimingScript( ScriptToRunPtr script, int timeoutMS )
+	Handle<Number> SPV8ScriptEngine::SetTimeOutFunction( Handle<Function> func, int timeoutMS )
 	{
 		timingScriptToRunLock.Lock();
 		int runTime = timeGetTime() + timeoutMS;
-		if (timingScriptToRun.find(runTime) == timingScriptToRun.end())
+		if (timeOutFunctionToRun.find(runTime) == timeOutFunctionToRun.end())
 		{
-			timingScriptToRun[runTime] = ScriptList();
+			timeOutFunctionToRun[runTime] = FunctionList();
 		}
-		timingScriptToRun[runTime].push_back(script);
+
+		SPPointer<Persistent<Function>> persistentFunction = new Persistent<Function>(isolate, func);
+		int timeOutId = SPRandomHelper::NextInt(1000000);
+		while(timeOutMap.find(timeOutId) != timeOutMap.end())
+		{
+			timeOutId = SPRandomHelper::NextInt(1000000);
+		}
+		timeOutMap[timeOutId] = persistentFunction;
+		timeOutFunctionToRun[runTime].push_back(timeOutId);
+		timingScriptToRunLock.Unlock();
+
+		return Number::New(timeOutId);
+	}
+
+	void SPV8ScriptEngine::ClearTimeOutFunction( Handle<Number> id )
+	{
+		timingScriptToRunLock.Lock();
+
+		int timeOutId = id->Int32Value();
+		TimeOutMap::iterator theIter = timeOutMap.find(timeOutId);
+
+		if (theIter != timeOutMap.end())
+		{
+			timeOutMap.erase(theIter);
+		}
+
 		timingScriptToRunLock.Unlock();
 	}
 
@@ -472,7 +476,8 @@ namespace SPEngine
 		HandleScope handleScope(isolate);
 		Handle<Context> context = isolate->GetCurrentContext();
 
-		if (args.Length() == 0) {
+		if (args.Length() == 0) 
+		{
 			isolate->ThrowException(Exception::TypeError(SPV8ScriptEngine::SPStringToString(L"Null Argument")));
 			return;
 		}
@@ -483,12 +488,14 @@ namespace SPEngine
 		Handle<Object> loadedModules = Handle<Object>::Cast(context->Global()->GetHiddenValue(
 			SPV8ScriptEngine::SPStringToString(L"_loadedModules")));
 
-		if (loadedModules.IsEmpty()) {
+		if (loadedModules.IsEmpty())
+		{
 			loadedModules = Object::New();
 			context->Global()->SetHiddenValue(SPV8ScriptEngine::SPStringToString(L"_loadedModules"), loadedModules);
 		}
 
-		if (loadedModules->HasOwnProperty(moduleName)) {
+		if (loadedModules->HasOwnProperty(moduleName)) 
+		{
 			args.GetReturnValue().Set(loadedModules->Get(moduleName));
 			return;
 		}
@@ -504,15 +511,125 @@ namespace SPEngine
 		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
 		HandleScope handleScope(isolate);
 
-		if (args.Length() == 0) {
+		if (args.Length() == 0) 
+		{
 			isolate->ThrowException(Exception::TypeError(SPV8ScriptEngine::SPStringToString(L"Null Argument")));
 			return;
 		}
 
 		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
+	}
+
+	void SPV8ScriptEngine::SleepFunc( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		HandleScope handleScope(isolate);
+
+		int timeSpan = 0;
+
+		if (args.Length() > 0) 
+		{
+			Handle<Integer> timeSpanObj = Handle<Integer>::Cast(args[0]);
+			if (timeSpanObj.IsEmpty())
+			{
+				return;
+			}
+
+			timeSpan = timeSpanObj->Int32Value();
+		}
+
+		if (timeSpan >= 0 && !SPV8ScriptEngine::GetSingleton().IsStopping())
+		{
+			Unlocker unlocker(isolate);
+			Sleep(timeSpan);
+			Locker locker(isolate);
+		}
 
 		return;
 	}
 
+	void SPV8ScriptEngine::SetTimeOut( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		HandleScope handleScope(isolate);
+
+		if (args.Length() < 2) 
+		{
+			isolate->ThrowException(Exception::TypeError(SPV8ScriptEngine::SPStringToString(L"Null Argument")));
+			return;
+		}
+
+		Handle<Function> func = Handle<Function>::Cast(args[0]);
+		int timeMs = args[1]->Int32Value();
+
+		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton().SetTimeOutFunction(func, timeMs));
+	}
+
+	void SPV8ScriptEngine::ClearTimeOut( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		HandleScope handleScope(isolate);
+
+		if (args.Length() < 1) 
+		{
+			isolate->ThrowException(Exception::TypeError(SPV8ScriptEngine::SPStringToString(L"Null Argument")));
+			return;
+		}
+
+		SPV8ScriptEngine::GetSingleton().ClearTimeOutFunction(args[0]->ToNumber());
+	}
+
+	bool SPV8ScriptEngine::RunTimeOutFunc()
+	{
+		int currentTimeMs = timeGetTime();
+
+		TimeOutFunctionMap::iterator iter = timeOutFunctionToRun.begin();
+		list<SPPointer<Persistent<Function>>> functionToRun;
+
+		while(iter != timeOutFunctionToRun.end())
+		{
+			if (iter->first <= currentTimeMs)
+			{
+				for (FunctionList::iterator innerIter = iter->second.begin(); innerIter != iter->second.end(); innerIter++)
+				{
+					TimeOutMap::iterator theIter = timeOutMap.find(*innerIter);
+
+					if (theIter != timeOutMap.end())
+					{
+						functionToRun.push_back(theIter->second);
+						timeOutMap.erase(timeOutMap.find(*innerIter));
+					}
+				}
+
+				iter = timeOutFunctionToRun.erase(iter);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (functionToRun.size() == 0)
+		{
+			return false;
+		}
+
+		Locker lock(isolate);
+		Isolate::Scope isolateScope(isolate);		
+		HandleScope handleScope(isolate);
+		Handle<Context> realContext = GetContext();
+		Context::Scope contextScope(realContext);
+
+		list<SPPointer<Persistent<Function>>>::iterator functionIter = functionToRun.begin();
+
+		while(functionIter != functionToRun.end())
+		{
+			Handle<Function> func = Handle<Function>::New(isolate, **functionIter);
+			func->Call(func, 0, NULL);
+			functionIter++;
+		}
+
+		return true;
+	}
 
 }

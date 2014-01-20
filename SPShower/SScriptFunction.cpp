@@ -240,7 +240,7 @@ bool SScriptFunction::SetComponentProperties(SUIComponentPtr component, Variable
 
 		if (positionMode == L"CengerRight")
 		{
-			component->SetBackgroundPositionMode(SUIProperties::CengerRight);
+			component->SetBackgroundPositionMode(SUIProperties::CenterRight);
 		}
 
 		if (positionMode == L"CenterAll")

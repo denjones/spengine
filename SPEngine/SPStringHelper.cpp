@@ -375,6 +375,16 @@ namespace SPEngine
 		return str;
 	}
 
+	bool SPStringHelper::EqualsIgnoreCase( string str1, string str2 )
+	{
+		return _stricmp(str1.c_str(), str2.c_str()) == 0;
+	}
+
+	bool SPStringHelper::EqualsIgnoreCase( wstring str1, wstring str2 )
+	{
+		return _wcsicmp(str1.c_str(), str2.c_str()) == 0;
+	}
+
 }
 
 

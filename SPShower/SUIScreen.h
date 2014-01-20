@@ -13,6 +13,9 @@ typedef SPPointer<SUIScreen> SUIScreenPtr;
 
 class SUIScreen : public SPBaseScreen
 {
+	// V8 Object
+	SPPointer<Persistent<Object>> v8Obj;
+
 	SPTexturePtr screenTexture;
 	SUITransformationPtr transformation;
 	SUIScreenPtr targetScreen;
@@ -20,8 +23,10 @@ class SUIScreen : public SPBaseScreen
 
 	typedef SPWStringMap<SUIComponentPtr> ComponentMap;
 	typedef SPWStringMapIterator<SUIComponentPtr> ComponentIterator; 
+	typedef map<SUIComponent*, SUIComponentPtr> PersistentComponentMap;
 
 	ComponentMap componentMap;
+	PersistentComponentMap persistentComponentMap;
 	SPString name;
 
 	SUIComponentPtr topComponent;
@@ -29,14 +34,20 @@ class SUIScreen : public SPBaseScreen
 	SUITextBoxPtr currentTextBox;
 	SUIPictureBoxPtr currentPictureBox;	
 
+	CCritSec modificationLock;
+
 public:
 	SPString GetName();
 	bool SetName(SPString setName);
+
+	Handle<Object> GetV8Obj();
 
 public:
 	SUIScreen(void);
 	virtual ~SUIScreen(void);
 
+	void SetPersistentComponent( SUIComponentPtr pointer );
+	SUIComponentPtr GetPersistentComponent( SUIComponent* component );
 	SPTexturePtr GetRenderTarget();
 	SUIComponentPtr GetComponent(SPString name);
 	bool AddComponent(SUIComponentPtr newComponent);
@@ -47,6 +58,7 @@ public:
 	SUIScreenPtr GetTargetScreen();
 	bool SetTransformation(SUITransformationPtr setTrans);
 	bool SetBackgroundColor(D3DCOLOR setColor);
+	D3DCOLOR GetBackgroundColor();
 	bool SetCurrentComponent(SUIComponentPtr setComponent);
 	bool SetCurrentTextBox(SUITextBoxPtr setTextBox);
 	bool SetCurrentPictureBox(SUIPictureBoxPtr setPictureBox);
@@ -55,6 +67,8 @@ public:
 	SUIPictureBoxPtr GetCurrentPictureBox();
 
 	bool SetPopUp(bool setPopUp);
+
+	void Focus();
 
 	bool HandleEvent(SUIEventPtr e);
 

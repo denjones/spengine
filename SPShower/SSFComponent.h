@@ -25,7 +25,7 @@ public:
 
 			if (!component)
 			{
-				component = new SUIComponentComposite();
+				component = new SUIComponent(SUIManager::GetSingleton().GetCurrentScreen().get());
 				component->SetName(name);
 
 				SUIManager::GetSingleton().GetCurrentScreen()->AddComponent(component);

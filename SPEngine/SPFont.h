@@ -29,6 +29,7 @@ namespace SPEngine
 		bool	italic;
 		int		miplevel;
 		SPString	name;
+		bool	unloaded;
 		/// @}
 
 		LPD3DXFONT font;	///< Inner D3DXFont.

@@ -28,7 +28,7 @@ public:
 
 			if (!pictureBox)
 			{
-				pictureBox = new SUIPictureBox();
+				pictureBox = new SUIPictureBox(SUIManager::GetSingleton().GetCurrentScreen().get());
 				pictureBox->SetName(name);
 				
 				SUIManager::GetSingleton().GetCurrentScreen()->AddComponent(pictureBox);

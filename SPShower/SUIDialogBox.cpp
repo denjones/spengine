@@ -4,7 +4,7 @@
 #pragma warning(disable:4244)
 #pragma warning(disable:4129)
 
-SUIDialogBox::SUIDialogBox(void)
+SUIDialogBox::SUIDialogBox(SUIScreen* screen) : SUITextBox(screen)
 {
 	elapsedLastAddTime = 0;
 	displaySpeed = 10;
@@ -304,7 +304,7 @@ bool SUIDialogBox::ForceAddText( SUIText text )
 
 bool SUIDialogBox::Skip()
 {
-	SUIComponentComposite::Skip();
+	SUIComponent::Skip();
 
 	// Forward to line change or end of text.
 	while(textsToPush.size() > 0)

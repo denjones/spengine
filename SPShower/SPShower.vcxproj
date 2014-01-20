@@ -165,6 +165,7 @@
     <None Include="effect\effect_zigzag.fxa" />
     <None Include="effect\effect_zigzag.fxo" />
     <None Include="expat.dll" />
+    <None Include="first.js" />
     <None Include="first.ks" />
     <None Include="font\FZMWFont.ttf" />
     <None Include="init.js" />
@@ -335,10 +336,8 @@
     <ClInclude Include="SSFWindowText.h" />
     <ClInclude Include="SUIAnimation.h" />
     <ClInclude Include="SUIAnimationManager.h" />
-    <ClInclude Include="SUIBlankComponent.h" />
     <ClInclude Include="SUIComponent.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="SUIComponentComposite.h" />
     <ClInclude Include="SUIEffectManager.h" />
     <ClInclude Include="SUIEvent.h" />
     <ClInclude Include="SUIEventHandler.h" />
@@ -365,8 +364,12 @@
     <ClInclude Include="SUITransformationManager.h" />
     <ClInclude Include="SUITransition.h" />
     <ClInclude Include="SUIVideoManager.h" />
+    <ClInclude Include="SV8Component.h" />
     <ClInclude Include="SV8Function.h" />
+    <ClInclude Include="SV8Screen.h" />
     <ClInclude Include="SV8ScriptManager.h" />
+    <ClInclude Include="SV8TextBox.h" />
+    <ClInclude Include="SV8Window.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="SSFWaitDialog.h" />
   </ItemGroup>
@@ -380,13 +383,11 @@
     <ClCompile Include="SScriptManager.cpp" />
     <ClCompile Include="SUIAnimation.cpp" />
     <ClCompile Include="SUIAnimationManager.cpp" />
-    <ClCompile Include="SUIBlankComponent.cpp" />
     <ClCompile Include="SUIComponent.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SUIComponentComposite.cpp" />
     <ClCompile Include="SUIEffectManager.cpp" />
     <ClCompile Include="SUIEvent.cpp" />
     <ClCompile Include="SUIEventHandleScript.cpp" />
@@ -412,8 +413,14 @@
     <ClCompile Include="SUITransformationManager.cpp" />
     <ClCompile Include="SUITransition.cpp" />
     <ClCompile Include="SUIVideoManager.cpp" />
+    <ClCompile Include="SV8Component.cpp" />
+    <ClCompile Include="SV8CreateComponent.cpp" />
     <ClCompile Include="SV8Function.cpp" />
+    <ClCompile Include="SV8Screen.cpp" />
     <ClCompile Include="SV8ScriptManager.cpp" />
+    <ClCompile Include="SV8CreateScreen.cpp" />
+    <ClCompile Include="SV8TextBox.cpp" />
+    <ClCompile Include="SV8Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPShower.rc" />

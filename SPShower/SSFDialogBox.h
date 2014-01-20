@@ -30,7 +30,7 @@ public:
 
 			if (!dialogBox)
 			{
-				dialogBox = new SUIDialogBox();
+				dialogBox = new SUIDialogBox(SUIManager::GetSingleton().GetCurrentScreen().get());
 				dialogBox->SetName(name);
 
 				SUIManager::GetSingleton().GetCurrentScreen()->AddComponent(dialogBox);

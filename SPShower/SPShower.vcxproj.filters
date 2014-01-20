@@ -74,6 +74,12 @@
     <Filter Include="Resource Files\Blend">
       <UniqueIdentifier>{6e2bacee-2995-4ec7-a133-6914af660073}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\SScript\SV8Function">
+      <UniqueIdentifier>{df23114d-dd0d-4f15-ba9d-cf1dcad3f35f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SScript\SV8Template">
+      <UniqueIdentifier>{12c61b98-3789-4192-b4ae-6db6b9bacd89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -611,6 +617,7 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="init.js" />
+    <None Include="first.js" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -628,16 +635,10 @@
     <ClInclude Include="SUIManager.h">
       <Filter>Source\SGUI</Filter>
     </ClInclude>
-    <ClInclude Include="SUIBlankComponent.h">
-      <Filter>Source\SGUI\SUIComponent</Filter>
-    </ClInclude>
     <ClInclude Include="SUITransition.h">
       <Filter>Source\SGUI\SUITransition</Filter>
     </ClInclude>
     <ClInclude Include="SUIComponent.h">
-      <Filter>Source\SGUI\SUIComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="SUIComponentComposite.h">
       <Filter>Source\SGUI\SUIComponent</Filter>
     </ClInclude>
     <ClInclude Include="SUIProperties.h">
@@ -865,6 +866,18 @@
     <ClInclude Include="SV8Function.h">
       <Filter>Source\SScript</Filter>
     </ClInclude>
+    <ClInclude Include="SV8Component.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Screen.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Window.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TextBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -879,16 +892,10 @@
     <ClCompile Include="SUIManager.cpp">
       <Filter>Source\SGUI</Filter>
     </ClCompile>
-    <ClCompile Include="SUIBlankComponent.cpp">
-      <Filter>Source\SGUI\SUIComponent</Filter>
-    </ClCompile>
     <ClCompile Include="SUITransition.cpp">
       <Filter>Source\SGUI\SUITransition</Filter>
     </ClCompile>
     <ClCompile Include="SUIComponent.cpp">
-      <Filter>Source\SGUI\SUIComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="SUIComponentComposite.cpp">
       <Filter>Source\SGUI\SUIComponent</Filter>
     </ClCompile>
     <ClCompile Include="SUIProperties.cpp">
@@ -986,6 +993,24 @@
     </ClCompile>
     <ClCompile Include="SV8Function.cpp">
       <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Screen.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Component.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8CreateComponent.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8CreateScreen.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Window.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TextBox.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

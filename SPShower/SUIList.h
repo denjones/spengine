@@ -1,7 +1,7 @@
 #pragma once
-#include "SUIComponentComposite.h"
+#include "SUIComponent.h"
 
-class SUIList : public SUIComponentComposite
+class SUIList : public SUIComponent
 {
 public:
 	enum ListType
@@ -20,7 +20,7 @@ protected:
 	int maxLength;
 
 public:
-	SUIList(void);
+	SUIList(SUIScreen* screen);
 	virtual ~SUIList(void);
 
 	bool Update(float timeDelta);
