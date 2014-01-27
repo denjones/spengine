@@ -6,6 +6,7 @@
 #include "SV8Component.h"
 #include "SV8Window.h"
 #include "SV8TextBox.h"
+#include "SV8DialogBox.h"
 
 
 SV8ScriptManager::SV8ScriptManager(void)
@@ -27,6 +28,18 @@ SV8ScriptManager::~SV8ScriptManager(void)
 	{
 		componentTempl->ClearAndLeak();
 		componentTempl = NULL;
+	}
+
+	if (textBoxTempl)
+	{
+		textBoxTempl->ClearAndLeak();
+		textBoxTempl = NULL;
+	}
+
+	if (dialogBoxTempl)
+	{
+		dialogBoxTempl->ClearAndLeak();
+		dialogBoxTempl = NULL;
 	}
 
 	if (windowTempl)
@@ -67,6 +80,8 @@ bool SV8ScriptManager::Initialize()
 		SV8Window::GetTemplate());
 	textBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
 		SV8TextBox::GetTemplate());
+	dialogBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8DialogBox::GetTemplate());
 
 	//
 	// Set Global Window Object
@@ -91,8 +106,6 @@ bool SV8ScriptManager::Initialize()
 	// Init Script
 	//
 
-	SPV8ScriptEngine::GetSingleton().RunScriptFromFile(L"init.js");
-
 	return true;
 }
 
@@ -103,12 +116,13 @@ bool SV8ScriptManager::Update( float timeDelta )
 
 bool SV8ScriptManager::Load()
 {
+	SPV8ScriptEngine::GetSingleton().RunScriptFromFile(L"init.js");
 	return true;
 }
 
 bool SV8ScriptManager::Reload()
 {
-	return Load();
+	return true;
 }
 
 bool SV8ScriptManager::Unload()
@@ -144,5 +158,10 @@ Handle<ObjectTemplate> SV8ScriptManager::GetWindowTemplate()
 Handle<ObjectTemplate> SV8ScriptManager::GetTextBoxTemplate()
 {
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*textBoxTempl));
+}
+
+Handle<ObjectTemplate> SV8ScriptManager::GetDialogBoxTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*dialogBoxTempl));
 }
 

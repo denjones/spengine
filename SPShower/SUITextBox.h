@@ -54,6 +54,7 @@ protected:
 	D3DXVECTOR2		currentPosition;
 	SUITextBlock	lines;
 	bool			isAutoHeight;
+	bool			isAnonymousFont;
 
 public:
 	bool IsAutoHeight();
@@ -82,7 +83,10 @@ public:
 
 	SRectangle GetTextRect();
 
-	bool SetDefaultFont(SPFontPtr setFont);
+	bool SetDefaultFont(SPFontPtr setFont, bool isAnonymous = false);
+	SPFontPtr GetDefaultFont();
+
+	bool IsAnonymousFont();
 
 	bool SetDefaultColor(D3DCOLOR setColor);
 	D3DCOLOR GetDefaultColor();
@@ -90,10 +94,12 @@ public:
 	bool SetPunctuations(SPString setPun);
 
 	bool SetDefaultBackEffect(SUIEffectPtr setEffect);
+	SUIEffectPtr GetDefaultBackEffect();
 
 	bool SetDefaultFrontEffect(SUIEffectPtr setEffect);
+	SUIEffectPtr GetDefaultFrontEffect();
 
-	SPFontPtr GetDefaultFont();
+	
 
 	D3DXMATRIX TransformMatrixText();
 	D3DXVECTOR3 PositionText();
@@ -116,6 +122,8 @@ public:
 
 	virtual bool Update(float timeDelta);
 	virtual bool Draw(float timeDelta);
+	virtual bool Unload();
+	virtual bool Reload();
 
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();

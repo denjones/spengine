@@ -878,6 +878,9 @@
     <ClInclude Include="SV8TextBox.h">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
+    <ClInclude Include="SV8DialogBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -1010,6 +1013,9 @@
       <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
     <ClCompile Include="SV8TextBox.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8DialogBox.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
   </ItemGroup>

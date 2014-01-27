@@ -9,9 +9,6 @@ namespace SV8TextBox
 	void TextGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void TextSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
-	void FrontEffectGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
-	void FrontEffectSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
-
 	void LineSpaceGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void LineSpaceSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
@@ -35,6 +32,15 @@ namespace SV8TextBox
 
 	void AutoHeightGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void AutoHeightSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
+	void TextEffectFrontGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void TextEffectFrontSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
+	void TextEffectBackGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void TextEffectBackSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
+	void FontGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void FontSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
 	void AddText( const FunctionCallbackInfo<Value>& args );
 }

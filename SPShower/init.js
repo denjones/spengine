@@ -19,9 +19,9 @@ var newCom = screen.createComponent({
 });
 
 var textBox = screen.createComponent({
-    type: 'textBox',
+    type: 'dialogBox',
     id: 'textBox',
-    backgroundColor: 0xffaaaaaa,
+    backgroundColor: 0x00ffffff,
     width: 400,
     height: 200,
     x: 100,
@@ -30,9 +30,30 @@ var textBox = screen.createComponent({
     paddingRight: 10,
     paddingLeft: 10,
     paddingBottom: 10,
-    color: 0xaaff2233,
+    color: 0xffffffff,
     letterSpace: 1,
-    autoHeight: true
+    autoHeight: true,
+    font: {
+        size: 50,
+        weight: 500,
+        font: '微软雅黑'
+    },
+    textEffectFront: {
+        type: 'TextShadow',
+	    texture: 'data/images/dialog_text.png',
+	    level: 0,
+        quality: 0,
+	    opacity: 1,
+        control: 'play'
+    },
+    textEffectBack: {
+        type: 'TextShadow',
+        texture: 'data/images/dialog_shadow.png',
+        level: 2,
+        quality: 10,
+        opacity: 1,
+        control: 'play'
+    }
 });
 
 screen.root.appendChild(screen.getComponentById('testCom'));

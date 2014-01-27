@@ -20,12 +20,14 @@ private:
 	SPPointer<Persistent<ObjectTemplate>> componentTempl;
 	SPPointer<Persistent<ObjectTemplate>> windowTempl;
 	SPPointer<Persistent<ObjectTemplate>> textBoxTempl;
+	SPPointer<Persistent<ObjectTemplate>> dialogBoxTempl;
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
 	Handle<ObjectTemplate> GetComponentTemplate();
 	Handle<ObjectTemplate> GetWindowTemplate();
 	Handle<ObjectTemplate> GetTextBoxTemplate();
+	Handle<ObjectTemplate> GetDialogBoxTemplate();
 
 private:
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);

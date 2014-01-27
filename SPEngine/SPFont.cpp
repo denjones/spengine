@@ -115,6 +115,11 @@ namespace SPEngine
 
 	bool SPFont::Reload()
 	{
+		if (!unloaded)
+		{
+			return true;
+		}
+
 		return Load(height, width, weight, 
 			miplevel, italic, DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, 
 			10, DEFAULT_PITCH | FF_DONTCARE, name.c_str());

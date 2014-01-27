@@ -124,6 +124,21 @@ bool SUIScreen::Unload()
 	return true;
 }
 
+bool SUIScreen::Reload()
+{
+	ComponentIterator iter(&componentMap);
+
+	for (iter.First(); !iter.IsDone(); iter.Next())
+	{
+		if (iter.CurrentItem())
+		{
+			iter.CurrentItem()->Reload();
+		}		
+	}
+
+	return true;
+}
+
 bool SUIScreen::Update( float timeDelta )
 {
 	if (transformation && targetScreen)
@@ -570,3 +585,5 @@ void SUIScreen::Focus()
 {
 	SUIManager::GetSingleton().FocusScreen(SUIManager::GetSingleton().GetPersistentScreen(this));
 }
+
+
