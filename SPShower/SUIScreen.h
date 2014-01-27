@@ -75,6 +75,7 @@ public:
 	bool Initialize();
 	bool Load();
 	bool Unload();
+	bool Reload();
 	bool Update(float timeDelta);
 	bool Draw(float timeDelta);
 	bool DrawOffScreen(float timeDelta);

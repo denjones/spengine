@@ -2,6 +2,8 @@
 #include "SV8TextBox.h"
 #include "SV8Component.h"
 #include "SUITextBox.h"
+#include "SV8Function.h"
+#include "SUIEffectManager.h"
 
 Handle<ObjectTemplate> SV8TextBox::GetTemplate()
 {
@@ -16,6 +18,9 @@ Handle<ObjectTemplate> SV8TextBox::GetTemplate()
 	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"paddingLeft"), PaddingLeftGetter, PaddingLeftSetter);
 	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"color"), ColorGetter, ColorSetter);
 	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"autoHeight"), AutoHeightGetter, AutoHeightSetter);
+	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"textEffectFront"), TextEffectFrontGetter, TextEffectFrontSetter);
+	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"textEffectBack"), TextEffectBackGetter, TextEffectBackSetter);
+	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"font"), FontGetter, FontSetter);
 
 	// Methods
 
@@ -335,5 +340,215 @@ void SV8TextBox::AddText( const FunctionCallbackInfo<Value>& args )
 		{
 			isolate->ThrowException(SPV8ScriptEngine::SPStringToString(L"Game Exited."));
 		}	
+	}
+}
+
+void SV8TextBox::TextEffectFrontGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	// Nothing
+}
+
+void SV8TextBox::TextEffectFrontSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUITextBox* textBox = (SUITextBox*)field->Value();
+
+	if (value == Undefined(isolate))
+	{
+		textBox->SetDefaultFrontEffect(NULL);
+		return;
+	}
+
+	Handle<Object> argObj = Handle<Object>::Cast(value);
+	SUIEffectPtr effect = textBox->GetDefaultFrontEffect();
+	effect = SV8Function::GetEffectFromObj(argObj, effect);
+
+	if (!effect)
+	{
+		isolate->ThrowException(SPV8ScriptEngine::SPStringToString(L"Effect Undefined."));
+		return;
+	}
+	else
+	{
+		effect->Update(0.01);
+	}
+
+	textBox->SetDefaultFrontEffect(effect);
+}
+
+void SV8TextBox::TextEffectBackGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	// Nothing
+}
+
+void SV8TextBox::TextEffectBackSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUITextBox* textBox = (SUITextBox*)field->Value();
+
+	if (value == Undefined(isolate))
+	{
+		textBox->SetDefaultBackEffect(NULL);
+		return;
+	}
+
+	Handle<Object> argObj = Handle<Object>::Cast(value);
+	SUIEffectPtr effect = textBox->GetDefaultBackEffect();
+	effect = SV8Function::GetEffectFromObj(argObj, effect);
+
+	if (!effect)
+	{
+		isolate->ThrowException(SPV8ScriptEngine::SPStringToString(L"Effect Undefined."));
+		return;
+	}
+	else
+	{
+		effect->Update(0.01);
+	}
+
+	textBox->SetDefaultBackEffect(effect);
+}
+
+void SV8TextBox::FontGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	HandleScope handleScope(isolate);
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUITextBox* textBox = (SUITextBox*)field->Value();
+
+	SPFontPtr font = textBox->GetDefaultFont();
+
+	int		size = font->GetHeight();
+	int		weight = font->GetWeight();
+	bool	italic = font->GetItalic();
+	SPString fontName = font->GetFontName();
+
+	Handle<Object> obj = Object::New();
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"font"), SPV8ScriptEngine::SPStringToString(fontName));
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"weight"), Integer::New(weight));
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"italic"), Boolean::New(isolate, italic));
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"size"), Number::New(isolate, size));
+
+	info.GetReturnValue().Set(obj);
+}
+
+void SV8TextBox::FontSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUITextBox* textBox = (SUITextBox*)field->Value();
+
+	if (value->IsNull() || value->IsUndefined())
+	{
+		textBox->SetDefaultFont(SPFontManager::GetSingleton().GetFont(L"text_box_default"));
+		return;
+	}
+
+	if (value->IsString())
+	{
+		SPString name = SPV8ScriptEngine::StringToSPString(value->ToString());
+
+		SPFontPtr font = SPFontManager::GetSingleton().GetFont(name);
+
+		textBox->SetDefaultFont(font);
+	}
+	else
+	{
+		Handle<Object> argObj = Handle<Object>::Cast(value);
+
+		SPFontPtr font = textBox->GetDefaultFont();
+
+		int		size = font->GetHeight();
+		int		weight = font->GetWeight();
+		bool	italic = font->GetItalic();
+		SPString fontName = font->GetFontName();
+
+		if (SV8Function::HasProperty(L"size", argObj))
+		{
+			size = SV8Function::GetProperty(L"size", argObj)->NumberValue();
+		}
+
+		if (SV8Function::HasProperty(L"font", argObj))
+		{
+			fontName = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"font", argObj)->ToString());
+		}
+
+		if (SV8Function::HasProperty(L"weight", argObj))
+		{
+			Handle<Value> weightVal = SV8Function::GetProperty(L"weight", argObj);
+
+			if (weightVal->IsString())
+			{
+				SPString weightType = SPV8ScriptEngine::StringToSPString(weightVal->ToString());
+
+				if (SPStringHelper::EqualsIgnoreCase(weightType, L"DontCare"))
+				{
+					weight = FW_DONTCARE;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Thin"))
+				{
+					weight = FW_THIN;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"ExtraLight") || 
+					SPStringHelper::EqualsIgnoreCase(weightType, L"UltraLight"))
+				{
+					weight = FW_EXTRALIGHT;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Light"))
+				{
+					weight = FW_LIGHT;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Normal") || 
+					SPStringHelper::EqualsIgnoreCase(weightType, L"Regular"))
+				{
+					weight = FW_NORMAL;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Medium"))
+				{
+					weight = FW_MEDIUM;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"SemiBold") || 
+					SPStringHelper::EqualsIgnoreCase(weightType, L"DemiBold"))
+				{
+					weight = FW_SEMIBOLD;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Bold"))
+				{
+					weight = FW_BOLD;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"ExtraBold") ||
+					SPStringHelper::EqualsIgnoreCase(weightType, L"UltraBold"))
+				{
+					weight = FW_EXTRABOLD;
+				}
+				else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Heavy") ||
+					SPStringHelper::EqualsIgnoreCase(weightType, L"Black"))
+				{
+					weight = FW_HEAVY;
+				}
+			}
+			else
+			{
+				weight = weightVal->NumberValue();
+			}
+		}
+
+		if (SV8Function::HasProperty(L"italic", argObj))
+		{
+			Handle<Value> italicVal = SV8Function::GetProperty(L"weight", argObj);
+			italic = italicVal->BooleanValue();
+		}
+
+		font = new SPFont(size, 0, weight, 10, italic, fontName);
+
+		textBox->SetDefaultFont(font, true);
 	}
 }

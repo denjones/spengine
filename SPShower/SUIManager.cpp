@@ -76,6 +76,21 @@ bool SUIManager::Unload()
 	return true;
 }
 
+bool SUIManager::Reload()
+{
+	ScreenIterator iter(&screenMap);
+
+	for (iter.First(); !iter.IsDone(); iter.Next())
+	{
+		if (iter.CurrentItem())
+		{
+			iter.CurrentItem()->Reload();
+		}		
+	}
+
+	return true;
+}
+
 bool SUIManager::Update( float timeDelta )
 {
 	GenerateEvent(timeDelta);
@@ -525,4 +540,6 @@ SUIScreenPtr SUIManager::GetPersistentScreen( SUIScreen* screenPtr )
 
 	return persistentScreenMap[screenPtr];
 }
+
+
 

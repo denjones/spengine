@@ -47,6 +47,9 @@ public:
 
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
+
+	virtual Handle<Object> GetV8Obj();
+
 };
 
 typedef SPPointer<SUIDialogBox> SUIDialogBoxPtr;

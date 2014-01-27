@@ -16,6 +16,7 @@ SUITextBox::SUITextBox(SUIScreen* screen) : SUIComponent(screen)
 	defaultBackEffect = NULL;
 	defaultFont = SPFontManager::GetSingleton().GetFont(L"text_box_default");
 	isAutoHeight = false;
+	isAnonymousFont = false;
 	
 	if (!defaultFont)
 	{
@@ -192,7 +193,9 @@ float SUITextBox::GetLineSpace()
 
 bool SUITextBox::SetLineSpace( float setSpace )
 {
+	modificationLock.Lock();
 	lineSpace = setSpace;
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -204,7 +207,9 @@ SUIPadding SUITextBox::GetPadding()
 
 bool SUITextBox::SetPadding( SUIPadding setPadding )
 {
+	modificationLock.Lock();
 	padding = setPadding;
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -215,7 +220,9 @@ float SUITextBox::GetPaddingTop()
 
 void SUITextBox::SetPaddingTop( float setTop )
 {
+	modificationLock.Lock();
 	padding.top = setTop;
+	modificationLock.Unlock();
 }
 
 float SUITextBox::GetPaddingRight()
@@ -225,7 +232,9 @@ float SUITextBox::GetPaddingRight()
 
 void SUITextBox::SetPaddingRight( float setRight )
 {
+	modificationLock.Lock();
 	padding.right = setRight;
+	modificationLock.Unlock();
 }
 
 float SUITextBox::GetPaddingBottom()
@@ -235,7 +244,9 @@ float SUITextBox::GetPaddingBottom()
 
 void SUITextBox::SetPaddingBottom( float setBottom )
 {
+	modificationLock.Lock();
 	padding.bottom = setBottom;
+	modificationLock.Unlock();
 }
 
 float SUITextBox::GetPaddingLeft()
@@ -245,7 +256,9 @@ float SUITextBox::GetPaddingLeft()
 
 void SUITextBox::SetPaddingLeft( float setLeft )
 {
+	modificationLock.Lock();
 	padding.left = setLeft;
+	modificationLock.Unlock();
 }
 
 float SUITextBox::GetWordSpace()
@@ -255,7 +268,9 @@ float SUITextBox::GetWordSpace()
 
 bool SUITextBox::SetWordSpace( float setSpace )
 {
+	modificationLock.Lock();
 	wordSpace = setSpace;
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -337,15 +352,20 @@ SRectangle SUITextBox::GetTextRect()
 	return rect;
 }
 
-bool SUITextBox::SetDefaultFont( SPFontPtr setFont )
+bool SUITextBox::SetDefaultFont( SPFontPtr setFont, bool isAnonymous)
 {
+	modificationLock.Lock();
 	defaultFont = setFont;
+	isAnonymousFont = isAnonymous;
+	modificationLock.Unlock();
 	return true;
 }
 
 bool SUITextBox::SetDefaultColor( D3DCOLOR setColor )
 {
+	modificationLock.Lock();
 	defaultColor = setColor;
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -356,20 +376,36 @@ D3DCOLOR SUITextBox::GetDefaultColor()
 
 bool SUITextBox::SetPunctuations( SPString setPun )
 {
+	modificationLock.Lock();
 	punctuations = setPun;
+	modificationLock.Unlock();
 	return true;
 }
 
 bool SUITextBox::SetDefaultBackEffect(SUIEffectPtr setEffect)
 {
+	modificationLock.Lock();
 	defaultBackEffect = setEffect;
+	modificationLock.Unlock();
 	return true;
+}
+
+SUIEffectPtr SUITextBox::GetDefaultBackEffect()
+{
+	return defaultBackEffect;
 }
 
 bool SUITextBox::SetDefaultFrontEffect( SUIEffectPtr setEffect )
 {
+	modificationLock.Lock();
 	defaultFrontEffect = setEffect;
+	modificationLock.Unlock();
 	return true;
+}
+
+SUIEffectPtr SUITextBox::GetDefaultFrontEffect()
+{
+	return defaultFrontEffect;
 }
 
 SPEngine::SPFontPtr SUITextBox::GetDefaultFont()
@@ -572,6 +608,31 @@ void SUITextBox::SetAutoHeight( bool on )
 	{
 		RefreshText();
 	}
+}
+
+bool SUITextBox::Unload()
+{
+	if (isAnonymousFont)
+	{
+		defaultFont->Unload();
+	}
+	
+	return SUIComponent::Unload();
+}
+
+bool SUITextBox::Reload()
+{
+	if (isAnonymousFont)
+	{
+		defaultFont->Reload();
+	}
+
+	return SUIComponent::Reload();
+}
+
+bool SUITextBox::IsAnonymousFont()
+{
+	return isAnonymousFont;
 }
 
 

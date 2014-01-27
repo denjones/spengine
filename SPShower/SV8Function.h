@@ -1,4 +1,5 @@
 #pragma once
+#include "SUIEffect.h"
 
 using namespace SPEngine;
 
@@ -31,5 +32,7 @@ public:
 
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);
 	static Handle<Value> GetProperty(SPString propertyName, Handle<Object> obj);
+	static SUIEffectPtr GetEffectFromObj(Handle<Object> obj, SUIEffectPtr original);
+	static SPTexturePtr GetTextureFromObj(Handle<Object> obj);
 };
 
