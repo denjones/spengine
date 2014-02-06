@@ -367,6 +367,7 @@
     <ClInclude Include="SV8Component.h" />
     <ClInclude Include="SV8DialogBox.h" />
     <ClInclude Include="SV8Function.h" />
+    <ClInclude Include="SV8PictureBox.h" />
     <ClInclude Include="SV8Screen.h" />
     <ClInclude Include="SV8ScriptManager.h" />
     <ClInclude Include="SV8TextBox.h" />
@@ -415,9 +416,9 @@
     <ClCompile Include="SUITransition.cpp" />
     <ClCompile Include="SUIVideoManager.cpp" />
     <ClCompile Include="SV8Component.cpp" />
-    <ClCompile Include="SV8CreateComponent.cpp" />
     <ClCompile Include="SV8DialogBox.cpp" />
     <ClCompile Include="SV8Function.cpp" />
+    <ClCompile Include="SV8PictureBox.cpp" />
     <ClCompile Include="SV8Screen.cpp" />
     <ClCompile Include="SV8ScriptManager.cpp" />
     <ClCompile Include="SV8CreateScreen.cpp" />

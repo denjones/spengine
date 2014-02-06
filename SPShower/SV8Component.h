@@ -143,4 +143,6 @@ namespace SV8Component
 	void AppendChild( const FunctionCallbackInfo<Value>& args );
 	void RemoveChild( const FunctionCallbackInfo<Value>& args );
 	void InsertBefore( const FunctionCallbackInfo<Value>& args );
+	void AddAnimation( const FunctionCallbackInfo<Value>& args );
+	void AddEffect( const FunctionCallbackInfo<Value>& args );
 }
