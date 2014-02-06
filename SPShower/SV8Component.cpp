@@ -997,3 +997,13 @@ void SV8Component::InsertBefore( const FunctionCallbackInfo<Value>& args )
 {
 
 }
+
+void SV8Component::AddAnimation( const FunctionCallbackInfo<Value>& args )
+{
+
+}
+
+void SV8Component::AddEffect( const FunctionCallbackInfo<Value>& args )
+{
+
+}

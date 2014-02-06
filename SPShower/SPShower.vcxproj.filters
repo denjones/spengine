@@ -881,6 +881,9 @@
     <ClInclude Include="SV8DialogBox.h">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
+    <ClInclude Include="SV8PictureBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -1003,9 +1006,6 @@
     <ClCompile Include="SV8Component.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
-    <ClCompile Include="SV8CreateComponent.cpp">
-      <Filter>Source\SScript\SV8Function</Filter>
-    </ClCompile>
     <ClCompile Include="SV8CreateScreen.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
@@ -1016,6 +1016,9 @@
       <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
     <ClCompile Include="SV8DialogBox.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8PictureBox.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
   </ItemGroup>

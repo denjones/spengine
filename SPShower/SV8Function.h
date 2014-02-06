@@ -19,6 +19,7 @@ public:
 	//
 
 	static void CreateScreen(const FunctionCallbackInfo<Value>& args);
+	static void RegisterFont(const FunctionCallbackInfo<Value>& args);
 
 	//
 	// SpeShow Command

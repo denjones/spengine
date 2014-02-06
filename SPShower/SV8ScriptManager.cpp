@@ -56,6 +56,7 @@ bool SV8ScriptManager::Initialize()
 	//
 
 	SPV8ScriptEngine::GetSingleton().AddFunction(L"createScreen", SV8Function::CreateScreen);
+	SPV8ScriptEngine::GetSingleton().AddFunction(L"registerFont", SV8Function::RegisterFont);
 
 	//
 	// Enter

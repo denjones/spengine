@@ -18,6 +18,10 @@ var newCom = screen.createComponent({
     y: 0
 });
 
+registerFont({
+    file: 'data/fonts/DFPShaoNvW5-GB.ttf'
+});
+
 var textBox = screen.createComponent({
     type: 'dialogBox',
     id: 'textBox',
@@ -34,9 +38,9 @@ var textBox = screen.createComponent({
     letterSpace: 1,
     autoHeight: true,
     font: {
-        size: 50,
+        size: 20,
         weight: 500,
-        font: '微软雅黑'
+        font: '华康少女文字W5(P)'
     },
     textEffectFront: {
         type: 'TextShadow',
