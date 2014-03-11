@@ -44,14 +44,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\Vorbis;..\Antlr;..\DirectShow;..\KScript;..\SimpleXMLPersistence;..\zlib\include;..\LibV8;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\LibUV\include;..\LibNode\include;..\Vorbis;..\Antlr;..\DirectShow;..\KScript;..\SimpleXMLPersistence;..\zlib\include;..\LibV8;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\Vorbis;..\Antlr;..\DirectShow;..\KScript;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\LibUV\include;..\LibNode\include;..\Vorbis;..\Antlr;..\DirectShow;..\KScript;..\SimpleXMLPersistence;..\zlib\include;..\LibV8;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <ExecutablePath>$(CEGUI)bin;$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
-    <LibraryPath>..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -63,6 +63,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

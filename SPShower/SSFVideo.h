@@ -12,88 +12,88 @@ public:
 
 	bool Function(VariableMap args, bool isRead)
 	{
-		if (IsSet(L"name", args))
-		{
-			SPVideoPtr video;
+		//if (IsSet(L"name", args))
+		//{
+		//	SPVideoPtr video;
 
-			SPString name = args[L"name"].value;
+		//	SPString name = args[L"name"].value;
 
-			video = SUIVideoManager::GetSingleton().GetVideo(name);
+		//	video = SUIVideoManager::GetSingleton().GetVideo(name);
 
-			if (IsSet(L"src", args))
-			{
-				SUIVideoManager::GetSingleton().SetVideoPath(name, args[L"src"].value);
+		//	if (IsSet(L"src", args))
+		//	{
+		//		SUIVideoManager::GetSingleton().SetVideoPath(name, args[L"src"].value);
 
-				SPVideoPtr newViedo = SUIVideoManager::GetSingleton().GetVideo(name);
+		//		SPVideoPtr newViedo = SUIVideoManager::GetSingleton().GetVideo(name);
 
-				if (video != newViedo)
-				{
-					if (video)
-					{
-						video->Stop();
-					}
+		//		if (video != newViedo)
+		//		{
+		//			if (video)
+		//			{
+		//				video->Stop();
+		//			}
 
-					video = newViedo;
-				}			
+		//			video = newViedo;
+		//		}			
 
-				args.erase(L"src");
-			}
+		//		args.erase(L"src");
+		//	}
 
-			if (!video)
-			{
-				return false;
-			}
+		//	if (!video)
+		//	{
+		//		return false;
+		//	}
 
-			if (IsSet(L"loop", args))
-			{
-				video->SetLoopTimes(SPStringHelper::StringToInt(args[L"loop"].value));
+		//	if (IsSet(L"loop", args))
+		//	{
+		//		video->SetLoopTimes(SPStringHelper::StringToInt(args[L"loop"].value));
 
-				args.erase(L"loop");
-			}
+		//		args.erase(L"loop");
+		//	}
 
-			if (IsSet(L"flip", args))
-			{
-				SPString state = args[L"flip"].value;
-				
-				if(state == L"Vertical")
-				{
-					video->SetFlipVertical(true);
-				}
+		//	if (IsSet(L"flip", args))
+		//	{
+		//		SPString state = args[L"flip"].value;
 
-				if (state == L"None")
-				{
-					video->SetFlipVertical(false);
-				}
+		//		if(state == L"Vertical")
+		//		{
+		//			video->SetFlipVertical(true);
+		//		}
 
-				args.erase(L"flip");
-			}
+		//		if (state == L"None")
+		//		{
+		//			video->SetFlipVertical(false);
+		//		}
 
-			if (IsSet(L"control", args))
-			{
-				SPString state = args[L"control"].value;
+		//		args.erase(L"flip");
+		//	}
 
-				if (state == L"Play")
-				{
-					video->Play();
-				}
+		//	if (IsSet(L"control", args))
+		//	{
+		//		SPString state = args[L"control"].value;
 
-				if (state == L"Stop")
-				{
-					video->Stop();
-				}
+		//		if (state == L"Play")
+		//		{
+		//			video->Play();
+		//		}
 
-				if (state == L"Pause")
-				{
-					video->Pause();
-				}
+		//		if (state == L"Stop")
+		//		{
+		//			video->Stop();
+		//		}
 
-				args.erase(L"control");
-			}
+		//		if (state == L"Pause")
+		//		{
+		//			video->Pause();
+		//		}
 
-			args.erase(L"name");
-		}
+		//		args.erase(L"control");
+		//	}
 
-		OutLogUnusedProperties(args);
+		//	args.erase(L"name");
+		//}
+
+		//OutLogUnusedProperties(args);
 
 		return true;
 	}

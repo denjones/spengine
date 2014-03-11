@@ -114,7 +114,7 @@ void SV8Screen::PopUpGetter( Local<String> property, const PropertyCallbackInfo<
 		return;
 	}
 
-	info.GetReturnValue().Set(Boolean::New(isolate, screen->IsPopup()));
+	info.GetReturnValue().Set(screen->IsPopup());
 }
 
 void SV8Screen::PopUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -174,7 +174,7 @@ void SV8Screen::BGColorGetter( Local<String> property, const PropertyCallbackInf
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, screen->GetBackgroundColor()));
+	info.GetReturnValue().Set(Integer::New(screen->GetBackgroundColor()));
 }
 
 void SV8Screen::BGColorSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -231,7 +231,7 @@ void SV8Screen::CreateComponent( const FunctionCallbackInfo<Value>& args )
 		{
 			com = new SUIPictureBox(screen);
 		}
-		else if (SPStringHelper::EqualsIgnoreCase(type, L"list"))
+		else if (SPStringHelper::EqualsIgnoreCase(type, L"scroll"))
 		{
 			com = new SUIList(screen);
 		}

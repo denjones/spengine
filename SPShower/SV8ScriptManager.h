@@ -21,6 +21,8 @@ private:
 	SPPointer<Persistent<ObjectTemplate>> windowTempl;
 	SPPointer<Persistent<ObjectTemplate>> textBoxTempl;
 	SPPointer<Persistent<ObjectTemplate>> dialogBoxTempl;
+	SPPointer<Persistent<ObjectTemplate>> pictureBoxTempl;
+	SPPointer<Persistent<ObjectTemplate>> scrollTempl;
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
@@ -28,6 +30,8 @@ public:
 	Handle<ObjectTemplate> GetWindowTemplate();
 	Handle<ObjectTemplate> GetTextBoxTemplate();
 	Handle<ObjectTemplate> GetDialogBoxTemplate();
+	Handle<ObjectTemplate> GetPictureBoxTemplate();
+	Handle<ObjectTemplate> GetScrollTemplate();
 
 private:
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);
@@ -68,6 +72,6 @@ public:
 	bool Reload();
 	bool Unload();
 
-	
+	static void InitModule(Handle<Object> exports);
 };
 

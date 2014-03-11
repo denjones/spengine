@@ -25,6 +25,7 @@ namespace SPEngine
 		SPString	soundName;
 		float		volume;
 		bool	isMute;
+		int		loopTimes;
 
 	public:
 		SPSoundPtr GetSound();
@@ -33,9 +34,12 @@ namespace SPEngine
 		bool SetVolume(float setVol);
 		float GetVolume();
 		bool SetSoundName();
+		void SetLoopTimes(int time);
+		int GetLoopTimes();
 		SPString GetSoundName();
 		bool IsMute();
 		bool Mute();
+		void SetMute(bool mute);
 
 	public:
 		SPSoundTrack(void);

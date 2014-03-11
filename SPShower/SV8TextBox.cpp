@@ -432,8 +432,8 @@ void SV8TextBox::FontGetter( Local<String> property, const PropertyCallbackInfo<
 	Handle<Object> obj = Object::New();
 	obj->Set(SPV8ScriptEngine::SPStringToString(L"font"), SPV8ScriptEngine::SPStringToString(fontName));
 	obj->Set(SPV8ScriptEngine::SPStringToString(L"weight"), Integer::New(weight));
-	obj->Set(SPV8ScriptEngine::SPStringToString(L"italic"), Boolean::New(isolate, italic));
-	obj->Set(SPV8ScriptEngine::SPStringToString(L"size"), Number::New(isolate, size));
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"italic"), Boolean::New(italic));
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"size"), Number::New(size));
 
 	info.GetReturnValue().Set(obj);
 }

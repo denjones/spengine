@@ -221,6 +221,7 @@ namespace SPEngine
 		}
 
 		SPParticleSystemTexturePtr newTexture = new SPParticleSystemTexture(path);
+		newTexture->CreateRenderTarget(1, 1, newTexture->GetBackgroundColor());
 		updatableTextures.Set(path, newTexture);
 
 		return newTexture;

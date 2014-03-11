@@ -225,9 +225,9 @@ namespace SPEngine
 	// Description: Mutes or unmutes the audio.
 	//-----------------------------------------------------------------------------
 
-	HRESULT	SPVideo::Mute(BOOL bMute)
+	HRESULT	SPVideo::Mute(bool bMute)
 	{
-		return data->SetMute(bMute == TRUE);
+		return data->SetMute(bMute);
 	}
 
 	//-----------------------------------------------------------------------------
@@ -318,6 +318,16 @@ namespace SPEngine
 	bool SPVideo::SetFlipVertical( bool setFlip )
 	{
 		return data->SetFlipVertical(setFlip);
+	}
+
+	bool SPVideo::IsMuted()
+	{
+		return data->IsMuted();
+	}
+
+	long SPVideo::GetVolume()
+	{
+		return data->GetVolume();
 	}
 
 	bool SPVideoEventCallback::OnGraphEvent( long eventCode, LONG_PTR param1, LONG_PTR param2 )

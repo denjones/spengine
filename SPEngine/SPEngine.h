@@ -49,6 +49,7 @@
 #include "SPConfigManager.h"
 #include "SPEffectManager.h"
 #include "SPParticleSystemManager.h"
+#include "SPParticleSystem3D.h"
 /// @}
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,6 +79,7 @@
 #include "SPLogHelper.h"
 #include "SPMessageHelper.h"
 #include "SPFileHelper.h"
+#include "SPRandomHelper.h"
 /// @}
 
 //////////////////////////////////////////////////////////////////////////

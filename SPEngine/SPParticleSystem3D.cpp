@@ -381,6 +381,13 @@ void SPEngine::SPParticleSystem3D::PostRender()
 
 void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 {
+	if (!texturePtr)
+	{
+		return;
+	}
+
+	modificationLock.Lock();
+
 	angle2 += 0.1f;
 	D3DXMATRIX transMatrix;
 	D3DXVECTOR3 rotationCenter(0, -1, 0);
@@ -645,6 +652,8 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 
 		hr = SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
 	}
+
+	modificationLock.Unlock();
 }
 
 bool SPEngine::SPParticleSystem3D::isEmpty()
@@ -681,8 +690,14 @@ void SPEngine::SPParticleSystem3D::RemoveDeadParticles()
 
 void SPEngine::SPParticleSystem3D::Update(float timeDelta)
 {
+	if(isPause)
+	{
+		return;
+	}
+
 	//适应绘制Texture大小
 	if(renderTarget)
+	{
 		if(renderTarget->GetWidth() != renderWidth || renderTarget->GetHeight() != renderHeight)
 		{
 			//originBox.minPoint.x = (originBox.minPoint.x + 1) / 2 * renderWidth / renderTarget->GetWidth() * 2 - 1;
@@ -697,16 +712,19 @@ void SPEngine::SPParticleSystem3D::Update(float timeDelta)
 			renderWidth = renderTarget->GetWidth();
 			renderHeight = renderTarget->GetHeight();
 		}
+	}
 
-	if(isPause)
-		return;
+	
 	bornPerSec = 0;
 	ResetDeadPariticle(timeDelta);
 
 	std::list<ParticleAttribute>::iterator iter;
 	currentAge += timeDelta;
 	if(currentAge > systemAge && systemAge > 0)
+	{
 		Stop();
+	}
+
 	for(iter = particles.begin() ; iter != particles.end(); iter++)
 	{
 		if(iter->isAlive)
@@ -716,9 +734,13 @@ void SPEngine::SPParticleSystem3D::Update(float timeDelta)
 			iter->age += timeDelta;
 			iter->velocity += iter->acceleration * timeDelta;
 			if(iter->age > iter->lifeTime)
+			{
 				iter->isAlive = false;
+			}
 			if(!boundingBox.isPointInside(iter->position))
+			{
 				iter->isAlive = false;
+			}
 			//计算渐出alpha值
 			if(iter->lifeTime - iter->age < fadeOutTime)
 			{
@@ -729,20 +751,22 @@ void SPEngine::SPParticleSystem3D::Update(float timeDelta)
 			}
 			iter->scale += iter->scaleAcce * timeDelta;
 			if(iter->scale < 0)
+			{
 				iter->isAlive = false;
+			}
 		}
 	}
 
-//	if(shootTime <= systemAge)
-		for(int i = 0 ; i < emitRate * timeDelta ; i++)
-		{
-			if(bornPerSec >= emitRate * timeDelta)
-				break;
-			if((int)particles.size() >= maxParticles)
-				break;
-			AddParticle();
-			bornPerSec++;
-		}
+	//	if(shootTime <= systemAge)
+	for(int i = 0 ; i < emitRate * timeDelta ; i++)
+	{
+		if(bornPerSec >= emitRate * timeDelta)
+			break;
+		if((int)particles.size() >= maxParticles)
+			break;
+		AddParticle();
+		bornPerSec++;
+	}
 
 	//RemoveDeadParticles();
 }
@@ -808,18 +832,24 @@ void SPEngine::SPParticleSystem3D::GetRandomVector(
 
 bool SPEngine::SPParticleSystem3D::SetRenderTarget( SPParticleSystemTexture* target )
 {
+	modificationLock.Lock();
 	//Main
 	renderTarget = target;
+	modificationLock.Unlock();
 	return true;
 }
 
 void SPEngine::SPParticleSystem3D::Pause()
 {
+	modificationLock.Lock();
 	isPause = true;
+	modificationLock.Unlock();
 }
 
-void SPEngine::SPParticleSystem3D::SetTheParticleAcceleration(D3DXVECTOR3 accelaration)
+void SPEngine::SPParticleSystem3D::SetAcceleration(D3DXVECTOR3 accelaration)
 {
+	modificationLock.Lock();
+
 	std::list<ParticleAttribute>::iterator iter;
 	for(iter = particles.begin() ; iter != particles.end() ; iter++)
 	{
@@ -829,10 +859,18 @@ void SPEngine::SPParticleSystem3D::SetTheParticleAcceleration(D3DXVECTOR3 accela
 		}
 	}
 	particleAcceleration = accelaration;
+
+	modificationLock.Unlock();
 }
 
-void SPEngine::SPParticleSystem3D::SetTheParticleVelocity(float velocity)
+D3DXVECTOR3 SPEngine::SPParticleSystem3D::GetAcceleration()
 {
+	return particleAcceleration;
+}
+
+void SPEngine::SPParticleSystem3D::SetVelocity(float velocity)
+{
+	modificationLock.Lock();
 	std::list<ParticleAttribute>::iterator iter;
 	for(iter = particles.begin() ; iter != particles.end() ; iter++)
 	{
@@ -844,10 +882,14 @@ void SPEngine::SPParticleSystem3D::SetTheParticleVelocity(float velocity)
 			iter->velocity.z *= Prop;
 		}
 	}
+	particalVelocity = velocity;
+	modificationLock.Unlock();
 }
+
 
 void SPEngine::SPParticleSystem3D::SetTheParticleScale(float scale)
 {
+	modificationLock.Lock();
 	std::list<ParticleAttribute>::iterator iter;
 	for(iter = particles.begin() ; iter != particles.end() ; iter++)
 	{
@@ -856,143 +898,326 @@ void SPEngine::SPParticleSystem3D::SetTheParticleScale(float scale)
 			iter->scale = scale;
 		}
 	}
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetTheParticleScale()
+{
+	return 0;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetTheParticleScaleDelta(float scaleDelta)
 {
+	modificationLock.Lock();
 	scaleDeltas = scaleDelta;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetTheParticleScaleDelta()
+{
+	return 0;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::Play()
 {
+	modificationLock.Lock();
 	isPause = false;
+	modificationLock.Unlock();
 }
 
 void SPEngine::SPParticleSystem3D::Stop()
 {
+	modificationLock.Lock();
 	particles.clear();
 	currentAge = 0;
 	isPause = true;
+	modificationLock.Unlock();
 }
 
 void SPEngine::SPParticleSystem3D::SetTheOriginBox(D3DXVECTOR3 minPoint, D3DXVECTOR3 maxPoint)
 {
+	modificationLock.Lock();
 	originBox.minPoint = minPoint;
 	originBox.maxPoint = maxPoint;
+	modificationLock.Unlock();
 }
 
 void SPEngine::SPParticleSystem3D::SetTheBoundingBox(D3DXVECTOR3 minPoint, D3DXVECTOR3 maxPoint)
 {
+	modificationLock.Lock();
 	boundingBox.minPoint = minPoint;
 	boundingBox.maxPoint = maxPoint;
+	modificationLock.Unlock();
 }
+
+
 
 void SPEngine::SPParticleSystem3D::SetParticleAge(float age)
 {
+	modificationLock.Lock();
 	maxAge = age;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetParticleAge()
+{
+	return maxAge;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetColor(D3DXCOLOR color)
 {
+	modificationLock.Lock();
 	originColor = color;
+	modificationLock.Unlock();
+}
+D3DXCOLOR SPEngine::SPParticleSystem3D::GetColor()
+{
+	return originColor;
 }
 
-void SPEngine::SPParticleSystem3D::SetTheParticleVelocityMin(float velocity)
+
+
+void SPEngine::SPParticleSystem3D::SetVelocityMin(float velocity)
 {
+	modificationLock.Lock();
 	originMinVelocity = velocity;
+	modificationLock.Unlock();
+}
+float SPEngine::SPParticleSystem3D::GetVelocityMin()
+{
+	return originMinVelocity;
 }
 
-void SPEngine::SPParticleSystem3D::SetTheParticleVelocityMax(float velocity)
+
+void SPEngine::SPParticleSystem3D::SetVelocityMax(float velocity)
 {
+	modificationLock.Lock();
 	originMaxVelocity = velocity;
+	modificationLock.Unlock();
+}
+float SPEngine::SPParticleSystem3D::GetVelocityMax()
+{
+	return originMaxVelocity;
 }
 
-void SPEngine::SPParticleSystem3D::SetParticleMoveAngleMin(float angle)
+
+void SPEngine::SPParticleSystem3D::SetShootAngleMin(float angle)
 {
+	modificationLock.Lock();
 	originMinDegree = angle;
+	modificationLock.Unlock();
+}
+float SPEngine::SPParticleSystem3D::GetShootAngleMin()
+{
+	return originMinDegree;
 }
 
-void SPEngine::SPParticleSystem3D::SetParticleMoveAngleMax(float angle)
+
+void SPEngine::SPParticleSystem3D::SetShootAngleMax(float angle)
 {
+	modificationLock.Lock();
 	originMaxDegree = angle;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetShootAngleMax()
+{
+	return originMaxDegree;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetBornRate(float rate)
 {
+	modificationLock.Lock();
 	emitRate = rate;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetBornRate()
+{
+	return emitRate;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetSystemAge(float systemAge)
 {
+	modificationLock.Lock();
 	this->systemAge = systemAge;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetSystemAge()
+{
+	return systemAge;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetTexture(SPTexturePtr textureP)
 {
+	modificationLock.Lock();
 	texturePtr = textureP;
 	Init(textureP,is3D);
+	modificationLock.Unlock();
 }
+SPEngine::SPTexturePtr SPEngine::SPParticleSystem3D::GetTexture()
+{
+	return texturePtr;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetMaxNumOfParticle(int maxNum)
 {
+	modificationLock.Lock();
 	maxParticles = maxNum;
+	modificationLock.Unlock();
 }
+int SPEngine::SPParticleSystem3D::GetMaxNumOfParticle()
+{
+	return maxParticles;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetIs3D(bool if3D)
 {
+	modificationLock.Lock();
 	is3D = if3D;
+	modificationLock.Unlock();
 }
+
 
 void SPEngine::SPParticleSystem3D::SetBeginRotateMinAngle(float angle)
 {
+	modificationLock.Lock();
 	minStartAngle = angle;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetBeginRotateMinAngle()
+{
+	return minStartAngle;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetBeginRotateMaxAngle(float angle)
 {
+	modificationLock.Lock();
 	maxStartAngle = angle;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetBeginRotateMaxAngle()
+{
+	return maxStartAngle;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetRotateSpeedMin(float angle)
 {
+	modificationLock.Lock();
 	degreePerSecondMin = angle;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetRotateSpeedMin()
+{
+	return degreePerSecondMin;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetRotateSpeedMax(float angle)
 {
+	modificationLock.Lock();
 	degreePerSecondMax = angle;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetRotateSpeedMax()
+{
+	return degreePerSecondMax;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetRotateAxis(D3DXVECTOR3 axis)
 {
+	modificationLock.Lock();
 	rotateAxis = axis;
+	modificationLock.Unlock();
 }
+D3DXVECTOR3 SPEngine::SPParticleSystem3D::GetRotateAxis()
+{
+	return rotateAxis;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetIfRotateAboutTheVelocity(bool is)
 {
+	modificationLock.Lock();
 	ifSnowRotateWithV = is;
+	modificationLock.Unlock();
 }
+bool SPEngine::SPParticleSystem3D::GetIfRotateAboutTheVelocity()
+{
+	return ifSnowRotateWithV;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetFadeOutTime(float time)
 {
+	modificationLock.Lock();
 	fadeOutTime = time;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetFadeOutTime()
+{
+	return fadeOutTime;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetParticleMinScale(float minScale)
 {
+	modificationLock.Lock();
 	scaleRange1 = minScale;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetParticleMinScale()
+{
+	return scaleRange1;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetParticleMaxScale(float maxScale)
 {
+	modificationLock.Lock();
 	scaleRange2 = maxScale;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetParticleMaxScale()
+{
+	return scaleRange2;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetParticleScaleDelta(float minAcce, float maxAcce)
 {
+	modificationLock.Lock();
 	scaleAcceMin = minAcce;
 	scaleAcceMax = maxAcce;
+	modificationLock.Unlock();
 }
+float SPEngine::SPParticleSystem3D::GetParticleScaleDeltaMin()
+{
+	return scaleAcceMin;
+}
+float SPEngine::SPParticleSystem3D::GetParticleScaleDeltaMax()
+{
+	return scaleAcceMax;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetBornBoxMinX( int setX )
 {
@@ -1000,6 +1225,12 @@ void SPEngine::SPParticleSystem3D::SetBornBoxMinX( int setX )
 	setMin.x = setX;
 	SetTheOriginBox(setMin, originBox.maxPoint);
 }
+int SPEngine::SPParticleSystem3D::GetBornBoxMinX()
+{
+	return originBox.minPoint.x;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetBornBoxMinY( int setY )
 {
@@ -1007,6 +1238,11 @@ void SPEngine::SPParticleSystem3D::SetBornBoxMinY( int setY )
 	setMin.z = setY;
 	SetTheOriginBox(setMin, originBox.maxPoint);
 }
+int SPEngine::SPParticleSystem3D::GetBornBoxMinY()
+{
+	return originBox.minPoint.y;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetLiveBoxMinX( int setX )
 {
@@ -1014,6 +1250,11 @@ void SPEngine::SPParticleSystem3D::SetLiveBoxMinX( int setX )
 	setMin.x = setX;
 	SetTheBoundingBox(setMin, boundingBox.maxPoint);
 }
+int SPEngine::SPParticleSystem3D::GetLiveBoxMinX()
+{
+	return boundingBox.minPoint.x;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetLiveBoxMinY( int setY )
 {
@@ -1021,6 +1262,11 @@ void SPEngine::SPParticleSystem3D::SetLiveBoxMinY( int setY )
 	setMin.z = setY;
 	SetTheBoundingBox(setMin, boundingBox.maxPoint);
 }
+int SPEngine::SPParticleSystem3D::GetLiveBoxMinY()
+{
+	return boundingBox.minPoint.y;
+}
+
 
 void SPEngine::SPParticleSystem3D::SetBornBoxMaxX( int setX )
 {
@@ -1028,6 +1274,12 @@ void SPEngine::SPParticleSystem3D::SetBornBoxMaxX( int setX )
 	setMax.x = setX;
 	SetTheOriginBox(originBox.minPoint, setMax);
 }
+int SPEngine::SPParticleSystem3D::GetBornBoxMaxX()
+{
+	return originBox.maxPoint.x;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetBornBoxMaxY( int setY )
 {
@@ -1035,6 +1287,12 @@ void SPEngine::SPParticleSystem3D::SetBornBoxMaxY( int setY )
 	setMax.z = -setY;
 	SetTheOriginBox(originBox.minPoint, setMax);
 }
+int SPEngine::SPParticleSystem3D::GetBornBoxMaxY()
+{
+	return originBox.maxPoint.y;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetLiveBoxMaxX( int setX )
 {
@@ -1042,6 +1300,12 @@ void SPEngine::SPParticleSystem3D::SetLiveBoxMaxX( int setX )
 	setMax.x = setX;
 	SetTheBoundingBox(boundingBox.minPoint, setMax);
 }
+int SPEngine::SPParticleSystem3D::GetLiveBoxMaxX()
+{
+	return boundingBox.maxPoint.x;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetLiveBoxMaxY( int setY )
 {
@@ -1049,18 +1313,76 @@ void SPEngine::SPParticleSystem3D::SetLiveBoxMaxY( int setY )
 	setMax.z = setY;
 	SetTheBoundingBox(boundingBox.minPoint, setMax);
 }
+int SPEngine::SPParticleSystem3D::GetLiveBoxMaxY()
+{
+	return boundingBox.maxPoint.y;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetSpecialRotation( bool setOn )
 {
+	modificationLock.Lock();
 	ifSnowRotateWithV = setOn;
+	modificationLock.Unlock();
 }
+bool SPEngine::SPParticleSystem3D::GetSpecialRotation()
+{
+	return ifSnowRotateWithV;
+}
+
+
 
 void SPEngine::SPParticleSystem3D::SetBackgroundColor( D3DCOLOR color )
 {
+	modificationLock.Lock();
 	backgroundColor = color;
+	modificationLock.Unlock();
 }
-
 D3DCOLOR SPEngine::SPParticleSystem3D::GetBackgroundColor()
 {
 	return backgroundColor;
 }
+
+
+bool SPEngine::SPParticleSystem3D::IsPlaying()
+{
+	return !isPause;
+}
+
+bool SPEngine::SPParticleSystem3D::Unload()
+{
+	if(vb)
+	{
+		vb->Release();
+	}
+
+	vb = NULL;
+
+	return true;
+}
+
+bool SPEngine::SPParticleSystem3D::Reload()
+{
+	HRESULT hr = SPDevice::GetSingleton().GetD3DDevice()->CreateVertexBuffer(
+		vbSize * sizeof(NormalTexColorVertex) * 6,
+		D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC,
+		NormalTexColorVertex::FVF,
+		D3DPOOL_DEFAULT,
+		&vb,
+		0);
+
+	if(FAILED(hr))
+	{
+		::MessageBoxA(0, "CreateVertexBuffer() - FAILED", "PSystem", 0);
+		return false;
+	}
+
+	return true;
+}
+
+
+
+
+
+

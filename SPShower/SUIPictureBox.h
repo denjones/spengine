@@ -27,7 +27,7 @@ public:
 		BottomRight,
 		BottomCenter,
 		CenterLeft,
-		CengerRight,
+		CenterRight,
 		CenterAll,
 	};
 
@@ -45,11 +45,18 @@ public:
 
 	bool SetImagePosition(D3DXVECTOR2 setPos);
 	bool SetImagePositionX(int setX);
+	int GetImagePositionX();
 	bool SetImagePositionY(int setY);
+	int GetImagePositionY();
+
 	bool SetBaseImage(SPTexturePtr base);
 	bool SetMixImage(SUIMixImage image);
+
 	bool SetPositionMode(ImagePosition setMode);
+	ImagePosition GetPositionMode();
 	bool SetFillMode(ImageMode setMode);
+	ImageMode GetFillMode();
+
 	bool SetTransformation(SUITransformationPtr setTrans);
 	bool SetPicture(SUIPictureListPtr setPicture);
 	bool SetTransformationTarget(SUIPictureListPtr setTarget);
@@ -69,6 +76,14 @@ public:
 
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
+
+	static SPString FillModeToString(ImageMode mode);
+	static SPString PositionModeToString(ImagePosition mode);
+	static ImageMode StringToFillMode(SPString modeName);
+	static ImagePosition StringToPositionMode(SPString modeName);
+
+	virtual Handle<Object> GetV8Obj();
+
 };
 
 typedef SPPointer<SUIPictureBox> SUIPictureBoxPtr;

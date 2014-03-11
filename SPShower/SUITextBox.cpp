@@ -581,9 +581,7 @@ Handle<Object> SUITextBox::GetV8Obj()
 
 		if(!obj.IsEmpty())
 		{
-			obj->SetInternalField(0, External::New(
-				SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-				this));
+			obj->SetInternalField(0, External::New(this));
 			v8Obj = new Persistent<Object>(isolate, obj);
 		}
 	}

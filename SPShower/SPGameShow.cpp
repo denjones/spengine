@@ -10,6 +10,8 @@
 #include "SScriptHelper.h"
 #include "SUIParticleSystemManager.h"
 #include "SV8ScriptManager.h"
+#include "SUITrackManager.h"
+#include "SUIVideoManager.h"
 
 #pragma warning(disable:4244)
 
@@ -41,18 +43,24 @@ bool SPGameShow::UnloadContent()
 
 bool SPGameShow::Initialize()
 {
+	SUITrackManager::GetSingleton();
+	SUIVideoManager::GetSingleton();
+	SUIParticleSystemManager::GetSingleton();
 	SV8ScriptManager::GetSingleton().Enable();
 	SUIManager::GetSingleton().Enable();	
 	SUIEffectManager::GetSingleton();
 	SUIMixModeManager::GetSingleton();
 	SUITransformationManager::GetSingleton();
-
+	
+	SPComponentManager::GetSingleton().RegisterComponent(L"STrack", SUITrackManager::GetSingletonPtr());
+	SPComponentManager::GetSingleton().RegisterComponent(L"SVideo", SUIVideoManager::GetSingletonPtr());
+	SPComponentManager::GetSingleton().RegisterComponent(L"SParticleSystem", SUIParticleSystemManager::GetSingletonPtr());
 	SPComponentManager::GetSingleton().RegisterComponent(L"SScript", SV8ScriptManager::GetSingletonPtr());
 	SPComponentManager::GetSingleton().RegisterComponent(L"SUI", SUIManager::GetSingletonPtr());		
 	SPComponentManager::GetSingleton().RegisterComponent(L"SEffect", SUIEffectManager::GetSingletonPtr());
 	SPComponentManager::GetSingleton().RegisterComponent(L"SMixMode", SUIMixModeManager::GetSingletonPtr());
 	SPComponentManager::GetSingleton().RegisterComponent(L"STransformation", SUITransformationManager::GetSingletonPtr());
-
+	
 	return true;	
 }
 
@@ -75,7 +83,7 @@ bool SPGameShow::SaveAsFile( SPString path )
 		+ SPFontManager::GetSingleton().SaveAsString()
 		+ SPSoundManager::GetSingleton().SaveAsString()
 		+ SScriptManager::GetSingleton().SaveAsString()
-		+ SUIParticleSystemManager::GetSingleton().SaveAsString()
+		//+ SUIParticleSystemManager::GetSingleton().SaveAsString()
 		+ SUIPictureManager::GetSingleton().SaveAsString()		
 		+ SUIManager::GetSingleton().SaveAsString(),L"SaveData");
 
@@ -136,8 +144,8 @@ bool SPGameShow::LoadFromFile( SPString path )
 
 	result = SPStringHelper::XMLRemoveFirst(result, L"SScriptManager");
 
-	SUIParticleSystemManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SUIParticleSys"));
+	//SUIParticleSystemManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SUIParticleSys"));
 
 	result = SPStringHelper::XMLRemoveFirst(result, L"SUIParticleSys");
 

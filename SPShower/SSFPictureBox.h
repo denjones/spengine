@@ -132,9 +132,9 @@ public:
 					pictureBox->SetPositionMode(SUIPictureBox::CenterLeft);
 				}
 
-				if (positionMode == L"CengerRight")
+				if (positionMode == L"CenterRight")
 				{
-					pictureBox->SetPositionMode(SUIPictureBox::CengerRight);
+					pictureBox->SetPositionMode(SUIPictureBox::CenterRight);
 				}
 
 				if (positionMode == L"CenterAll")

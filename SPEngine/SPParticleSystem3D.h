@@ -120,49 +120,126 @@ namespace SPEngine
 
 		bool isEmpty();
 		bool isDead();
+		bool IsPlaying();
 
 		void Pause();
 		void Play();
 		void Stop();
-		void SetTheParticleAcceleration(D3DXVECTOR3 accelaration);
+		bool Unload();
+		bool Reload();
+
+		void SetAcceleration(D3DXVECTOR3 accelaration);
+		D3DXVECTOR3 GetAcceleration();
+
 		void SetSpecialRotation(bool setOn);
-		void SetTheParticleVelocity(float velocity);
-		void SetTheParticleVelocityMin(float velocity);
-		void SetTheParticleVelocityMax(float velocity);
-		void SetParticleMoveAngleMin(float angle);
-		void SetParticleMoveAngleMax(float angle);
+		bool GetSpecialRotation();
+
+		void SetVelocity(float velocity);
+
+		void SetVelocityMin(float velocity);
+		float GetVelocityMin();
+
+		void SetVelocityMax(float velocity);
+		float GetVelocityMax();
+
+		void SetShootAngleMin(float angle);
+		float GetShootAngleMin();
+
+		void SetShootAngleMax(float angle);
+		float GetShootAngleMax();
+
 		void SetTheParticleScale(float scale);
+		float GetTheParticleScale();
+
 		void SetTheParticleScaleDelta(float scaleDelta);
+		float GetTheParticleScaleDelta();
+
 		void SetTheOriginBox(D3DXVECTOR3 minPoint, D3DXVECTOR3 maxPoint);
+		D3DXVECTOR3 GetTheOriginBoxMin();
+		D3DXVECTOR3 GetTheOriginBoxMax();
+
 		void SetTheBoundingBox(D3DXVECTOR3 minPoint, D3DXVECTOR3 maxPoint);
+		D3DXVECTOR3 GetTheBoundingBoxMin();
+		D3DXVECTOR3 GetTheBoundingBoxMax();
+
 		void SetBornBoxMinX(int setX);
+		int GetBornBoxMinX();
+
 		void SetBornBoxMinY(int setY);
+		int GetBornBoxMinY();
+
 		void SetLiveBoxMinX(int setX);
+		int GetLiveBoxMinX();
+
 		void SetLiveBoxMinY(int setY);
+		int GetLiveBoxMinY();
+
 		void SetBornBoxMaxX(int setX);
+		int GetBornBoxMaxX();
+
 		void SetBornBoxMaxY(int setY);
+		int GetBornBoxMaxY();
+
 		void SetLiveBoxMaxX(int setX);
+		int GetLiveBoxMaxX();
+
 		void SetLiveBoxMaxY(int setY);
+		int GetLiveBoxMaxY();
+
 		void SetParticleAge(float age);
+		float GetParticleAge();
+
 		void SetColor(D3DXCOLOR color);
+		D3DXCOLOR GetColor();
+
 		void SetBornRate(float rate);
+		float GetBornRate();
+
 		void SetSystemAge(float systemAge);
+		float GetSystemAge();
+
 		void SetTexture(SPTexturePtr textureP);
+		SPTexturePtr GetTexture();
+
 		void SetMaxNumOfParticle(int maxNum);
+		int GetMaxNumOfParticle();
+
 		void SetIs3D(bool if3D);
+
 		void SetBeginRotateMinAngle(float angle);
+		float GetBeginRotateMinAngle();
+
 		void SetBeginRotateMaxAngle(float angle);
+		float GetBeginRotateMaxAngle();
+
 		void SetRotateSpeedMin(float angle);
+		float GetRotateSpeedMin();
+
 		void SetRotateSpeedMax(float angle);
+		float GetRotateSpeedMax();
+
 		void SetRotateAxis(D3DXVECTOR3 axis);
+		D3DXVECTOR3 GetRotateAxis();
+
 		void SetIfRotateAboutTheVelocity(bool is);
+		bool GetIfRotateAboutTheVelocity();
+
 		void SetFadeOutTime(float time);
+		float GetFadeOutTime();
+
 		void SetParticleMinScale(float minScale);
+		float GetParticleMinScale();
+
 		void SetParticleMaxScale(float maxScale);
+		float GetParticleMaxScale();
+
 		void SetParticleScaleDelta(float minAcce, float maxAcce);
-		void SetIfRotateWithAngle(bool isRotate);
+		float GetParticleScaleDeltaMin();
+		float GetParticleScaleDeltaMax();
+
 		void SetBackgroundColor(D3DCOLOR color);
 		D3DCOLOR GetBackgroundColor();
+
 	protected:
 		void RemoveDeadParticles();
 		void ResetDeadPariticle(float timeDelta);
@@ -182,6 +259,7 @@ namespace SPEngine
 		bool is3D;
 
 		D3DCOLOR originColor;
+		float particalVelocity;
 		float originMinVelocity, originMaxVelocity;
 		float originMinDegree, originMaxDegree;
 		float maxAge;
@@ -223,6 +301,7 @@ namespace SPEngine
 		float scaleAcceMin;
 		float scaleAcceMax;
 
+		CCritSec modificationLock;
 	};
 
 	typedef SPPointer<SPParticleSystem3D> SPParticleSystem3DPtr;

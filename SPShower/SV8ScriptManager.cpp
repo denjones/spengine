@@ -1,3 +1,5 @@
+#define BUILDING_NODE_EXTENSION
+
 #include "StdAfx.h"
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
@@ -7,7 +9,9 @@
 #include "SV8Window.h"
 #include "SV8TextBox.h"
 #include "SV8DialogBox.h"
-
+#include "SV8PictureBox.h"
+#include "SV8Scroll.h"
+#include <node.h>
 
 SV8ScriptManager::SV8ScriptManager(void)
 {
@@ -47,16 +51,33 @@ SV8ScriptManager::~SV8ScriptManager(void)
 		windowTempl->ClearAndLeak();
 		windowTempl = NULL;
 	}	
+
+	if (pictureBoxTempl)
+	{
+		pictureBoxTempl->ClearAndLeak();
+		pictureBoxTempl = NULL;
+	}	
+
+	if (scrollTempl)
+	{
+		scrollTempl->ClearAndLeak();
+		scrollTempl = NULL;
+	}	
 }
 
 bool SV8ScriptManager::Initialize()
 {
+
+
 	//
 	// Init Global Functions
 	//
 
-	SPV8ScriptEngine::GetSingleton().AddFunction(L"createScreen", SV8Function::CreateScreen);
-	SPV8ScriptEngine::GetSingleton().AddFunction(L"registerFont", SV8Function::RegisterFont);
+	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createScreen", SV8Function::CreateScreen);
+	//SPV8ScriptEngine::GetSingleton().AddFunction(L"registerFont", SV8Function::RegisterFont);
+	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createTrack", SV8Function::CreateTrack);
+	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createVideo", SV8Function::CreateVideo);
+	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createParticleSystem", SV8Function::CreateParticleSystem);
 
 	//
 	// Enter
@@ -83,29 +104,34 @@ bool SV8ScriptManager::Initialize()
 		SV8TextBox::GetTemplate());
 	dialogBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
 		SV8DialogBox::GetTemplate());
+	pictureBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8PictureBox::GetTemplate());
+	scrollTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8Scroll::GetTemplate());
 
-	//
-	// Set Global Window Object
-	//
 
-	context->Global()->Set(SPV8ScriptEngine::SPStringToString(L"window"), GetWindowTemplate()->NewInstance());
+	////
+	//// Set Global Window Object
+	////
 
-	//
-	// Create Global Screen Object
-	//
+	//context->Global()->Set(SPV8ScriptEngine::SPStringToString(L"window"), GetWindowTemplate()->NewInstance());
 
-	context->Global()->SetAccessor(SPV8ScriptEngine::SPStringToString(L"screen"),
-		SV8Screen::ScreenGetter);
+	////
+	//// Create Global Screen Object
+	////
 
-	//
-	// Create Global Persistent Object
-	//
+	//context->Global()->SetAccessor(SPV8ScriptEngine::SPStringToString(L"screen"),
+	//	SV8Screen::ScreenGetter);
 
-	context->Global()->Set(SPV8ScriptEngine::SPStringToString(L"global"), Object::New());
+	////
+	//// Create Global Persistent Object
+	////
 
-	//
-	// Init Script
-	//
+	//context->Global()->Set(SPV8ScriptEngine::SPStringToString(L"global"), Object::New());
+
+	////
+	//// Init Script
+	////
 
 	return true;
 }
@@ -166,3 +192,41 @@ Handle<ObjectTemplate> SV8ScriptManager::GetDialogBoxTemplate()
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*dialogBoxTempl));
 }
 
+Handle<ObjectTemplate> SV8ScriptManager::GetPictureBoxTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*pictureBoxTempl));
+}
+
+Handle<ObjectTemplate> SV8ScriptManager::GetScrollTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*scrollTempl));
+}
+
+void SV8ScriptManager::InitModule( Handle<Object> exports )
+{
+	//
+	// Init Global Functions
+	//
+
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"createScreen"), FunctionTemplate::New(SV8Function::CreateScreen)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"registerFont"), FunctionTemplate::New(SV8Function::RegisterFont)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"createTrack"), FunctionTemplate::New(SV8Function::CreateTrack)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"createVideo"), FunctionTemplate::New(SV8Function::CreateVideo)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"createParticleSystem"), FunctionTemplate::New(SV8Function::CreateParticleSystem)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"include"), FunctionTemplate::New(SPV8ScriptEngine::Include)->GetFunction());
+
+	//
+	// Set Global Window Object
+	//
+
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"window"), SV8ScriptManager::GetSingleton().GetWindowTemplate()->NewInstance());
+
+	//
+	// Create Global Screen Object
+	//
+
+	exports->SetAccessor(SPV8ScriptEngine::SPStringToString(L"screen"),
+		SV8Screen::ScreenGetter);
+}
+
+NODE_MODULE_CONTEXT_AWARE_BUILTIN(speshow, SV8ScriptManager::InitModule)

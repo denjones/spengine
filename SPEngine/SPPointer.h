@@ -264,6 +264,10 @@ namespace SPEngine
 		T *get() const {
 			return pointer;
 		}
+
+		T *GetHandle() const {
+			return pointer;
+		}
 		/// @}
 
 		virtual ~SPPointer(void)

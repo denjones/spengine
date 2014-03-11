@@ -1,12 +1,13 @@
 #include "StdAfx.h"
 #include "SUIPictureBox.h"
+#include "SV8ScriptManager.h"
 
 #pragma warning(disable : 4244)
 
 SUIPictureBox::SUIPictureBox(SUIScreen* screen) : SUIComponent(screen)
 {
 	imagePos = D3DXVECTOR2(0,0);
-	fillMode = ResizeBox;
+	fillMode = Positioning;
 	positionMode = Normal;
 	picture = new SUIPictureList();
 }
@@ -18,8 +19,9 @@ SUIPictureBox::~SUIPictureBox(void)
 
 bool SUIPictureBox::SetMixImage(SUIMixImage image)
 {
+	modificationLock.Lock();
 	picture->SetMixImage(image);
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -57,15 +59,17 @@ bool SUIPictureBox::Draw( float timeDelta )
 
 bool SUIPictureBox::SetBaseImage( SPTexturePtr base )
 {
+	modificationLock.Lock();
 	picture->SetBaseImage(base);
-
+	modificationLock.Unlock();
 	return true;
 }
 
 bool SUIPictureBox::SetImagePosition( D3DXVECTOR2 setPos )
 {
+	modificationLock.Lock();
 	imagePos = setPos;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -124,7 +128,7 @@ SRectangle SUIPictureBox::GetTexRect()
 			rect.Y = (boxHeight - imageHeight) / 2;
 			break;
 
-		case CengerRight:
+		case CenterRight:
 			rect.X = boxWidth - imageWidth;
 			rect.Y = (boxHeight - imageHeight) / 2;
 			break;
@@ -222,15 +226,17 @@ bool SUIPictureBox::PreDraw()
 
 bool SUIPictureBox::SetPositionMode( ImagePosition setMode )
 {
+	modificationLock.Lock();
 	positionMode = setMode;
-
+	modificationLock.Unlock();
 	return true;
 }
 
 bool SUIPictureBox::SetFillMode( ImageMode setMode )
 {
+	modificationLock.Lock();
 	fillMode = setMode;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -275,8 +281,9 @@ bool SUIPictureBox::Update( float timeDelta )
 
 bool SUIPictureBox::SetPicture( SUIPictureListPtr setPicture )
 {
+	modificationLock.Lock();
 	picture = setPicture;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -332,15 +339,17 @@ SPString SUIPictureBox::SaveAsString()
 
 bool SUIPictureBox::SetImagePositionX( int setX )
 {
+	modificationLock.Lock();
 	imagePos.x = setX;
-
+	modificationLock.Unlock();
 	return true;
 }
 
 bool SUIPictureBox::SetImagePositionY( int setY )
 {
+	modificationLock.Lock();
 	imagePos.y = setY;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -405,4 +414,201 @@ SPEngine::SPRectangle SUIPictureBox::ImageSrcRect()
 	}
 
 	return picture->GetTarget()->SourceRectangle();
+}
+
+SPString SUIPictureBox::FillModeToString( ImageMode mode )
+{
+	if(mode == Positioning)
+	{
+		return L"position";
+	}
+	else if (mode == Fill)
+	{
+		return L"fill";
+	}
+	else if (mode == FitWidth)
+	{
+		return L"fitWidth";
+	}
+	else if (mode == FitHeight)
+	{
+		return L"fitHeight";
+	}
+	else if (mode == FitMin)
+	{
+		return L"fitMin";
+	}
+	else if (mode == FitMax)
+	{
+		return L"fitMax";
+	}
+	else if (mode == ResizeBox)
+	{
+		return L"resize";
+	}
+
+	return L"undefined";
+}
+
+SPString SUIPictureBox::PositionModeToString( ImagePosition mode )
+{
+	if(mode == Normal)
+	{
+		return L"normal";
+	}
+	else if (mode == TopLeft)
+	{
+		return L"topLeft";
+	}
+	else if (mode == TopRight)
+	{
+		return L"topRight";
+	}
+	else if (mode == BottomLeft)
+	{
+		return L"bottomLeft";
+	}
+	else if (mode == BottomRight)
+	{
+		return L"bottomRight";
+	}
+	else if (mode == BottomCenter)
+	{
+		return L"bottomCenter";
+	}
+	else if (mode == CenterLeft)
+	{
+		return L"centerLeft";
+	}
+	else if (mode == CenterRight)
+	{
+		return L"centerRight";
+	}
+	else if (mode == CenterAll)
+	{
+		return L"centerAll";
+	}
+
+	return L"undefined";
+}
+
+SUIPictureBox::ImageMode SUIPictureBox::StringToFillMode( SPString modeName )
+{
+	if(SPStringHelper::EqualsIgnoreCase(modeName, L"Position"))
+	{
+		return Positioning;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"Fill"))
+	{
+		return Fill;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"FitWidth"))
+	{
+		return FitWidth;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"FitHeight"))
+	{
+		return FitHeight;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"FitMin"))
+	{
+		return FitMin;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"FitMax"))
+	{
+		return FitMax;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"Resize"))
+	{
+		return ResizeBox;
+	}
+
+	SPLogHelper::WriteLog(L"[SpeShow] Invalid Image Mode: " + modeName + L". Defaulting to 'Position'.");
+
+	return Positioning;
+}
+
+SUIPictureBox::ImagePosition SUIPictureBox::StringToPositionMode( SPString modeName )
+{
+	if(modeName ==  L"Normal")
+	{
+		return Normal;
+	}
+	else if (modeName == L"TopLeft")
+	{
+		return TopLeft;
+	}
+	else if (modeName == L"TopRight")
+	{
+		return TopRight;
+	}
+	else if (modeName == L"BottomLeft")
+	{
+		return BottomLeft;
+	}
+	else if (modeName == L"BottomRight")
+	{
+		return BottomRight;
+	}
+	else if (modeName == L"BottomCenter")
+	{
+		return BottomCenter;
+	}
+	else if (modeName == L"CenterLeft")
+	{
+		return CenterLeft;
+	}
+	else if (modeName == L"CenterRight")
+	{
+		return CenterRight;
+	}
+	else if (modeName == L"CenterAll")
+	{
+		return CenterAll;
+	}
+
+	SPLogHelper::WriteLog(L"[SpeShow] Invalid Image Position: " + modeName + L". Defaulting to 'Normal'.");
+
+	return Normal;
+}
+
+int SUIPictureBox::GetImagePositionX()
+{
+	return imagePos.x;
+}
+
+int SUIPictureBox::GetImagePositionY()
+{
+	return imagePos.y;
+}
+
+SUIPictureBox::ImagePosition SUIPictureBox::GetPositionMode()
+{
+	return positionMode;
+}
+
+SUIPictureBox::ImageMode SUIPictureBox::GetFillMode()
+{
+	return fillMode;
+}
+
+Handle<Object> SUIPictureBox::GetV8Obj()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+
+	if (!v8Obj)
+	{
+		Local<Object> obj = Handle<Object>();
+
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetPictureBoxTemplate();
+		obj = handleTempl->NewInstance();
+
+		if(!obj.IsEmpty())
+		{
+			obj->SetInternalField(0, External::New(this));
+			v8Obj = new Persistent<Object>(isolate, obj);
+		}
+	}
+
+	return Handle<Object>::New(isolate, *v8Obj);
 }

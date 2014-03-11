@@ -1,6 +1,9 @@
 #include "StdAfx.h"
 #include "SV8Function.h"
 #include "SUIEffectManager.h"
+#include "SUIVideoManager.h"
+#include "SUIParticleSystemManager.h"
+#include "SUITrackManager.h"
 
 SV8Function::SV8Function(void)
 {
@@ -140,30 +143,75 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 		return tex;
 	}
+	else if (SV8Function::HasProperty(L"video", argObj))
+	{
+		Handle<Value> videoArg = SV8Function::GetProperty(L"video", argObj);
+
+		if (videoArg->IsString())
+		{
+			return SPTextureManager::GetSingleton().GetVideo(
+				SPV8ScriptEngine::StringToSPString(videoArg->ToString()));
+		}
+		else if(videoArg->IsObject())
+		{
+			Handle<Object> videoObj = videoArg->ToObject();
+
+			if (videoObj->InternalFieldCount() != 1)
+			{
+				videoObj = SUIVideoManager::GetSingleton().CreateVideo(videoObj);
+			}
+			
+			Handle<External> field = Handle<External>::Cast(videoObj->GetInternalField(0));
+			SUIVideoHandle handle = (SUIVideoHandle)field->Value();
+			if (handle == NULL)
+			{
+				return NULL;
+			}
+
+			return SUIVideoManager::GetSingleton().GetVideoTexture(handle);
+		}
+	}
+	else if (SV8Function::HasProperty(L"particleSystem", argObj))
+	{
+
+		Handle<Value> psArg = SV8Function::GetProperty(L"particleSystem", argObj);
+
+		if (psArg->IsString())
+		{
+			return SPTextureManager::GetSingleton().GetParticleSystem(
+				SPV8ScriptEngine::StringToSPString(psArg->ToString()));
+		}
+		else if(psArg->IsObject())
+		{
+			Handle<Object> psObj = psArg->ToObject();
+
+			if (psObj->InternalFieldCount() != 1)
+			{
+				psObj = SUIVideoManager::GetSingleton().CreateVideo(psObj);
+			}
+
+			Handle<External> field = Handle<External>::Cast(psObj->GetInternalField(0));
+			SUIParticleSystemHandle handle = (SUIParticleSystemHandle)field->Value();
+			if (handle == NULL)
+			{
+				return NULL;
+			}
+
+			return SUIParticleSystemManager::GetSingleton().GetParticleSystemTexture(handle);
+		}
+	}
 
 	return NULL;
 }
 
-void SV8Function::RegisterFont( const FunctionCallbackInfo<Value>& args )
-{
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
-	HandleScope handleScope(isolate);
 
-	if(args.Length() == 0)
-	{
-		isolate->ThrowException(Exception::TypeError(
-			SPV8ScriptEngine::SPStringToString(L"Invalid Argument")));
-		return;
-	}
 
-	Handle<Object> argObj = Handle<Object>::Cast(args[0]);
 
-	if (HasProperty(L"file", argObj))
-	{
-		SPString fileName = SPV8ScriptEngine::StringToSPString(GetProperty(L"file", argObj)->ToString());
-		SPFontManager::GetSingleton().AddExtendedFont(fileName);
-	}
-}
+
+
+
+
+
 
 
 

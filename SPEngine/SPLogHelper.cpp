@@ -142,4 +142,9 @@ namespace SPEngine
 		}
 	}
 
+	bool SPLogHelper::IsDebug()
+	{
+		return isDebug;
+	}
+
 }

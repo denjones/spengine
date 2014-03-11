@@ -5,6 +5,8 @@
 #include "SPStringHelper.h"
 #include "SPRandomHelper.h"
 
+
+
 namespace SPEngine
 {
 	SPV8ScriptEngine::SPV8ScriptEngine(void)
@@ -12,6 +14,8 @@ namespace SPEngine
 		isolate = NULL;
 		isThreadRunning = false;
 		isStopping = false;
+		pAsync = new uv_async_t();
+		((uv_async_t*)pAsync)->data = (void*)&scriptToRun;
 	}
 
 	SPV8ScriptEngine::~SPV8ScriptEngine(void)
@@ -25,6 +29,12 @@ namespace SPEngine
 		{
 			isolate->Dispose();
 			isolate = NULL;
+		}
+
+		if(pAsync)
+		{
+			delete pAsync;
+			pAsync = NULL;
 		}
 	}
 
@@ -276,9 +286,65 @@ namespace SPEngine
 		return true;
 	}
 
+	void EvalCallback( uv_async_t *handle, int status)
+	{
+		list<ScriptToRunPtr>* scriptList = (list<ScriptToRunPtr>*)handle->data;
+
+		HandleScope handleScope(SPV8ScriptEngine::GetSingleton().GetIsolate());
+		Handle<Context> realContext = SPV8ScriptEngine::GetSingleton().GetIsolate()->GetCurrentContext();
+		Context::Scope contextScope(realContext);
+
+		if (scriptList->size() != 0)
+		{
+			ScriptToRunPtr script = scriptList->front();
+
+			if (script->type == ScriptFile)
+			{
+				Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(script->value, true);
+			}
+			else
+			{
+				Handle<Value> result = SPV8ScriptEngine::GetSingleton().Eval(script->value, true);
+			}
+
+			scriptList->pop_front();
+		}
+	}
+
 	DWORD WINAPI SPV8ScriptEngine::ScriptRunningThread( void* context )
 	{
 		SPV8ScriptEngine* engine = (SPV8ScriptEngine*)context;
+
+		if (SPLogHelper::IsDebug())
+		{
+			AllocConsole(); 
+			freopen("CONIN$", "r+t", stdin); // Redirect STDIN
+			freopen("CONOUT$", "w+t", stdout); // Redirect STDOUT
+			SetConsoleTitle(L"Console"); 
+		}
+
+		// Initialize uv async obj
+
+		uv_async_init(uv_default_loop(), (uv_async_t*)engine->GetAsync(), EvalCallback);
+
+		wchar_t BufferFileName[MAX_PATH];
+		GetModuleFileName(NULL, BufferFileName, MAX_PATH);
+
+		string name = SPStringHelper::WStringToUTF8String(SPString(BufferFileName));
+
+		engine->GetIsolate()->Enter();
+
+		char** args = new char*[1];
+		args[0] = new char[name.length()];
+
+		for (int i = 0; i < name.length(); i++)
+		{
+			args[0][i] = name[i];
+		}
+
+		node::Start(1, args);
+
+		engine->GetIsolate()->Exit();
 
 		while(!engine->IsStopping())
 		{
@@ -344,6 +410,8 @@ namespace SPEngine
 		scriptToRun.push_back(new ScriptToRun(ScriptString, scriptStr));
 		scriptToRunLock.Unlock();
 
+		uv_async_send((uv_async_t*)pAsync);
+
 		return;
 	}
 
@@ -352,6 +420,8 @@ namespace SPEngine
 		scriptToRunLock.Lock();
 		scriptToRun.push_back(new ScriptToRun(ScriptFile, path));
 		scriptToRunLock.Unlock();
+
+		uv_async_send((uv_async_t*)pAsync);
 
 		return;
 	}
@@ -460,7 +530,7 @@ namespace SPEngine
 		HandleScope handleScope(isolate);
 		Handle<Context> context = GetContext();
 		Context::Scope contextScope(context);
-		Handle<FunctionTemplate> funcTmpl = FunctionTemplate::New(isolate, function);
+		Handle<FunctionTemplate> funcTmpl = FunctionTemplate::New(function);
 
 		context->Global()->Set(SPV8ScriptEngine::SPStringToString(funcName), funcTmpl->GetFunction());
 	}
@@ -630,6 +700,41 @@ namespace SPEngine
 		}
 
 		return true;
+	}
+
+	void SPV8ScriptEngine::EvalFunc( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+
+		if(args.Length() < 1)
+		{
+			isolate->ThrowException(Exception::TypeError(
+				SPV8ScriptEngine::SPStringToString(L"Invalid Argument")));
+			return;
+		}
+
+		SPString scriptStr = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
+		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton().Eval(scriptStr, true));
+	}
+
+	void SPV8ScriptEngine::EvalFileFunc( const FunctionCallbackInfo<Value>& args )
+	{
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+
+		if(args.Length() < 1)
+		{
+			isolate->ThrowException(Exception::TypeError(
+				SPV8ScriptEngine::SPStringToString(L"Invalid Argument")));
+			return;
+		}
+
+		SPString path = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
+		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton().EvalFile(path, true));
+	}
+
+	void* SPV8ScriptEngine::GetAsync()
+	{
+		return pAsync;
 	}
 
 }

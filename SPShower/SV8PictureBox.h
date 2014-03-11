@@ -6,16 +6,18 @@ namespace SV8PictureBox
 {
 	Handle<ObjectTemplate> GetTemplate();
 
-	void BasePicture(Local<String> property, const PropertyCallbackInfo<Value>& info);
-	void SpeedSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+	void FillModeGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void FillModeSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
-	void NextLineImageGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
-	void NextLineImageSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+	void PositionModeGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void PositionModeSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
-	void NextPageImageGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
-	void NextPageImageSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+	void PositionXGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void PositionXSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
-	void SetPicture( const FunctionCallbackInfo<Value>& args );
-	void SetVideo( const FunctionCallbackInfo<Value>& args );
-	void SetParticleSystem( const FunctionCallbackInfo<Value>& args );
+	void PositionYGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void PositionYSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
+	void SetBaseImage( const FunctionCallbackInfo<Value>& args );
+	//void MixImage( const FunctionCallbackInfo<Value>& args );
 }
