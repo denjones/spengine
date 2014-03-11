@@ -1,18 +1,20 @@
 var callback = function () {
     newCom.x += 10;
     textBox.addText('哈');
+    scroll.scrollBy(10);
     if (newCom.x < 1000) {
         clearTimeout(callbackHandle);
         callbackHandle = setTimeout(callback, 16);
     } else {
-        window.width = 1280;
-        window.height = 720;
-        window.title = JSON.stringify(global);
+        ss.window.resize(1280, 720);
+        ss.window.title = JSON.stringify(track);
+        track.stop();
+        particleSystem.pause();
     }
 };
 
 var callback2 = function () {
-    screen.backgroundColor = screen.backgroundColor - 1;
+    ss.screen.backgroundColor = ss.screen.backgroundColor - 1;
     clearTimeout(callbackHandle2);
     callbackHandle2 = setTimeout(callback2, 10);
 };

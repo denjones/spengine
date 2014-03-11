@@ -2,6 +2,7 @@
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
 #include "SV8Component.h"
+#include "SV8Function.h"
 
 Handle<ObjectTemplate> SV8Component::GetTemplate()
 {
@@ -71,7 +72,7 @@ void SV8Component::ComponentGetter(Local<String> property, const PropertyCallbac
 	if(!obj.IsEmpty() && SUIManager::GetSingletonPtr())
 	{
 		obj->SetInternalField(0, External::New(
-			SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+			//SPV8ScriptEngine::GetSingleton().GetIsolate(), 
 			SUIManager::GetSingleton().GetCurrentScreen()));
 		info.GetReturnValue().Set(obj);
 	}
@@ -150,7 +151,7 @@ void SV8Component::IdSetter( Local<String> property, Local<Value> value, const P
 
 	SUIScreen* screen = component->GetScreen();
 	SUIComponentPtr componentPtr = screen->GetPersistentComponent(component);
-	if (componentPtr);
+	if (componentPtr)
 	{
 		screen->RemoveComponent(componentPtr->GetName());
 		componentPtr->SetName(SPV8ScriptEngine::StringToSPString(value->ToString()));
@@ -170,7 +171,7 @@ void SV8Component::DisplayGetter( Local<String> property, const PropertyCallback
 		return;
 	}
 
-	info.GetReturnValue().Set(Boolean::New(isolate, component->IsDisplay()));
+	info.GetReturnValue().Set(component->IsDisplay());
 }
 
 void SV8Component::DisplaySetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -207,7 +208,7 @@ void SV8Component::AbsoluteGetter( Local<String> property, const PropertyCallbac
 		return;
 	}
 
-	info.GetReturnValue().Set(Boolean::New(isolate, component->IsAbsoluteRender()));
+	info.GetReturnValue().Set(component->IsAbsoluteRender());
 }
 
 void SV8Component::AbsoluteSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -267,7 +268,7 @@ void SV8Component::WidthGetter( Local<String> property, const PropertyCallbackIn
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, component->GetWidth()));
+	info.GetReturnValue().Set(Integer::New(component->GetWidth()));
 }
 
 void SV8Component::WidthSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -297,7 +298,7 @@ void SV8Component::HeightGetter( Local<String> property, const PropertyCallbackI
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, component->GetHeight()));
+	info.GetReturnValue().Set(Integer::New(component->GetHeight()));
 }
 
 void SV8Component::HeightSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -387,7 +388,7 @@ void SV8Component::OpacityGetter( Local<String> property, const PropertyCallback
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, component->GetTransparency()));
+	info.GetReturnValue().Set(Integer::New(component->GetTransparency()));
 }
 
 void SV8Component::OpacitySetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -529,8 +530,26 @@ void SV8Component::BGImageSetter( Local<String> property, Local<Value> value, co
 		return;
 	}
 
-	component->SetBackgroundImage(SPTextureManager::GetSingleton().GetTexture(
-		SPV8ScriptEngine::StringToSPString(value->ToString())));
+	if (value->IsNull() || value->IsUndefined())
+	{
+		component->SetBackgroundImage(NULL);
+		return;
+	}
+
+	SPTexturePtr tex = NULL;
+
+	if (value->IsString())
+	{
+		SPString name = SPV8ScriptEngine::StringToSPString(value->ToString());
+		tex = SPTextureManager::GetSingleton().GetTexture(name);
+	}
+	else
+	{
+		Handle<Object> argObj = Handle<Object>::Cast(value);
+		tex = SV8Function::GetTextureFromObj(argObj);
+	}
+
+	component->SetBackgroundImage(tex);
 }
 
 void SV8Component::BGColorGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -545,7 +564,7 @@ void SV8Component::BGColorGetter( Local<String> property, const PropertyCallback
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, component->GetBackgroundColor()));
+	info.GetReturnValue().Set(Integer::New(component->GetBackgroundColor()));
 }
 
 void SV8Component::BGColorSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -575,7 +594,7 @@ void SV8Component::BGXGetter( Local<String> property, const PropertyCallbackInfo
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, component->GetBackgroundX()));
+	info.GetReturnValue().Set(component->GetBackgroundX());
 }
 
 void SV8Component::BGXSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -605,7 +624,7 @@ void SV8Component::BGYGetter( Local<String> property, const PropertyCallbackInfo
 		return;
 	}
 
-	info.GetReturnValue().Set(Integer::New(isolate, component->GetBackgroundY()));
+	info.GetReturnValue().Set(component->GetBackgroundY());
 }
 
 void SV8Component::BGYSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )

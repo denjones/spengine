@@ -9,7 +9,6 @@
 #include "SPWindow.h"
 #include "SPEngine.h"
 #include "SPGame.h"
-#include <mmsystem.h>
 #include "SPGameManager.h"
 
 namespace SPEngine

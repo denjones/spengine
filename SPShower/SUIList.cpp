@@ -3,12 +3,13 @@
 #pragma warning(disable:4244)
 #pragma warning(disable:4018)
 #include "SUIManager.h"
+#include "SV8ScriptManager.h"
 
 SUIList::SUIList(SUIScreen* screen) : SUIComponent(screen)
 {
 	maxItemNum = 255;
 	scrollPosition = 0;
-	type = Vertacal;
+	type = Vertical;
 	maxLength = 0;
 }
 
@@ -19,6 +20,8 @@ SUIList::~SUIList(void)
 
 bool SUIList::SetScrollPosition( float setPos )
 {
+	modificationLock.Lock();
+
 	if (setPos < 0)
 	{
 		setPos = 0;
@@ -30,6 +33,8 @@ bool SUIList::SetScrollPosition( float setPos )
 	}
 
 	scrollPosition = setPos;
+
+	modificationLock.Unlock();
 
 	return true;
 }
@@ -77,7 +82,7 @@ bool SUIList::Draw( float timeDelta )
 	{
 		if (*iter)
 		{
-			if (type == Vertacal)
+			if (type == Vertical)
 			{
 				maxLength += (*iter)->GetHeight();
 			}
@@ -96,7 +101,7 @@ bool SUIList::Draw( float timeDelta )
 
 	// Get the target length.
 	int targetLength;
-	if (type == Vertacal)
+	if (type == Vertical)
 	{
 		targetLength = (maxLength - GetHeight()) * scrollPosition;
 	}
@@ -106,7 +111,7 @@ bool SUIList::Draw( float timeDelta )
 	}
 
 	int selfLength;
-	if (type == Vertacal)
+	if (type == Vertical)
 	{
 		selfLength = GetHeight();
 	}
@@ -128,7 +133,7 @@ bool SUIList::Draw( float timeDelta )
 	while(iter != children.end())
 	{
 		int length;
-		if (type == Vertacal)
+		if (type == Vertical)
 		{
 			length = (*iter)->GetHeight();
 		}
@@ -146,7 +151,7 @@ bool SUIList::Draw( float timeDelta )
 			D3DXVECTOR2 originalPos = (*iter)->GetPosition();
 			D3DXVECTOR2 realPos = (*iter)->GetPosition();
 
-			if (type == Vertacal)
+			if (type == Vertical)
 			{
 				realPos.y += currentPos;
 			}
@@ -163,7 +168,7 @@ bool SUIList::Draw( float timeDelta )
 			(*iter)->SetPosition(originalPos);
 
 			// Update current position.
-			if (type == Vertacal)
+			if (type == Vertical)
 			{
 				currentPos = realPos.y + (*iter)->GetHeight();
 				SUIComponent::ChildIterator nextIter = iter;
@@ -193,7 +198,7 @@ bool SUIList::Draw( float timeDelta )
 		else
 		{
 			// Update current length.
-			if (type == Vertacal)
+			if (type == Vertical)
 			{				
 				currentLength += (*iter)->GetHeight();	
 				currentPos = currentLength - targetLength;
@@ -213,8 +218,9 @@ bool SUIList::Draw( float timeDelta )
 
 bool SUIList::SetDirection( ListType setType )
 {
+	modificationLock.Lock();
 	type = setType;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -225,8 +231,9 @@ SUIList::ListType SUIList::GetDirection()
 
 bool SUIList::SetMaxItemNum( int setNum )
 {
+	modificationLock.Lock();
 	maxItemNum = setNum;
-
+	modificationLock.Unlock();
 	return true;
 }
 
@@ -258,6 +265,8 @@ bool SUIList::Scroll( int delta )
 
 bool SUIList::ClearChild()
 {
+	modificationLock.Lock();
+
 	SUIComponent::ChildIterator iter = children.begin();
 
 	// Calculate max length.
@@ -270,6 +279,8 @@ bool SUIList::ClearChild()
 
 		iter = children.erase(iter);
 	}
+
+	modificationLock.Unlock();
 
 	return true;
 }
@@ -314,4 +325,25 @@ bool SUIList::HandleEvent( SUIEventPtr e )
 	}
 
 	return true;
+}
+
+Handle<Object> SUIList::GetV8Obj()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+
+	if (!v8Obj)
+	{
+		Local<Object> obj = Handle<Object>();
+
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetScrollTemplate();
+		obj = handleTempl->NewInstance();
+
+		if(!obj.IsEmpty())
+		{
+			obj->SetInternalField(0, External::New(this));
+			v8Obj = new Persistent<Object>(isolate, obj);
+		}
+	}
+
+	return Handle<Object>::New(isolate, *v8Obj);
 }

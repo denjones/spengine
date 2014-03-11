@@ -8,9 +8,10 @@ namespace SPEngine
 	{
 		isMute = false;
 		volume = 1;
+		loopTimes = 0;
+		soundName = L"";
 		Unload();
 	}
-
 
 	SPSoundTrack::~SPSoundTrack(void)
 	{
@@ -92,6 +93,8 @@ namespace SPEngine
 			sound->SetVolume(volume);
 		}
 
+		sound->SetLoopTimes(loopTimes);
+
 		soundName = setSound->GetPath();
 
 		return true;
@@ -99,9 +102,19 @@ namespace SPEngine
 
 	bool SPSoundTrack::SetSound( SPString setSound )
 	{
-		bool result = SetSound(SPSoundManager::GetSingleton().GetSound(setSound));
-		soundName = setSound;
-		return result;
+		SPSoundPtr sound = SPSoundManager::GetSingleton().GetSound(setSound);
+		if (!sound)
+		{
+			sound = SPSoundManager::GetSingleton().CreateSound(setSound, setSound);
+		}
+
+		if (sound)
+		{
+			soundName = setSound;
+			return SetSound(sound);
+		}
+		
+		return false;
 	}
 
 	bool SPSoundTrack::SetVolume(float setVol)
@@ -135,7 +148,24 @@ namespace SPEngine
 
 	bool SPSoundTrack::Mute()
 	{
-		isMute = !isMute;
+		SetMute(!isMute);	
+
+		return true;
+	}
+
+	SPString SPSoundTrack::GetSoundName()
+	{
+		return soundName;
+	}
+
+	void SPSoundTrack::SetLoopTimes( int time )
+	{
+		loopTimes = time;
+	}
+
+	void SPSoundTrack::SetMute( bool mute )
+	{
+		isMute = mute;
 
 		if (isMute)
 		{
@@ -145,13 +175,11 @@ namespace SPEngine
 		{
 			sound->SetVolume(volume);
 		}
-
-		return true;
 	}
 
-	SPString SPSoundTrack::GetSoundName()
+	int SPSoundTrack::GetLoopTimes()
 	{
-		return soundName;
+		return loopTimes;
 	}
 
 }

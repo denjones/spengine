@@ -19,6 +19,9 @@
 #pragma warning(disable:4018)
 #pragma warning(disable:4244)
 
+// UV
+#include <uv.h>
+
 // Windows Header Files:
 #include <string>
 #include <intsafe.h>

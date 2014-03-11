@@ -863,9 +863,6 @@
     <ClInclude Include="SV8ScriptManager.h">
       <Filter>Source\SScript</Filter>
     </ClInclude>
-    <ClInclude Include="SV8Function.h">
-      <Filter>Source\SScript</Filter>
-    </ClInclude>
     <ClInclude Include="SV8Component.h">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
@@ -882,6 +879,24 @@
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
     <ClInclude Include="SV8PictureBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Scroll.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Track.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SUITrackManager.h">
+      <Filter>Source\SGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Video.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8Function.h">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8ParticleSystem.h">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
   </ItemGroup>
@@ -997,9 +1012,6 @@
     <ClCompile Include="SV8ScriptManager.cpp">
       <Filter>Source\SScript</Filter>
     </ClCompile>
-    <ClCompile Include="SV8Function.cpp">
-      <Filter>Source\SScript</Filter>
-    </ClCompile>
     <ClCompile Include="SV8Screen.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
@@ -1020,6 +1032,36 @@
     </ClCompile>
     <ClCompile Include="SV8PictureBox.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Scroll.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Track.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SUITrackManager.cpp">
+      <Filter>Source\SGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Video.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Function.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8CreateTrack.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8RegisterFont.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8CreateVideo.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8ParticleSystem.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8CreateParticleSystem.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

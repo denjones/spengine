@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include <v8.h>
 #include "SPComponent.h"
 #include "SPSingleton.h"
 #include <list>
 #include "SPPointer.h"
 #include <map>
 #include "SPStringMap.h"
+#include <node.h>
 
 using namespace v8;
 using namespace std;
@@ -73,10 +73,13 @@ namespace SPEngine
 		CCritSec stoppingLock;
 		bool isStopping;
 
+		void* pAsync;
+
 	public:
 		bool IsStopping();
 		Isolate* GetIsolate();
 		Handle<Context> GetContext();
+		void* GetAsync();
 
 		SPV8ScriptEngine(void);
 		virtual ~SPV8ScriptEngine(void);
@@ -103,6 +106,9 @@ namespace SPEngine
 		Handle<Value> Eval(SPString script, bool isInScope = false);
 		Handle<Value> EvalFile(SPString path, bool isInScope = false);
 
+		static void EvalFunc( const FunctionCallbackInfo<Value>& args );
+		static void EvalFileFunc( const FunctionCallbackInfo<Value>& args );
+
 		// Thread Related
 
 		void Enter();
@@ -117,7 +123,7 @@ namespace SPEngine
 		static DWORD WINAPI ScriptRunningThread(void* context);
 		static Handle<String> SPStringToString(SPString str);
 
-	private:
+	public:
 		static void Import(const FunctionCallbackInfo<Value>& args);
 		static void Include(const FunctionCallbackInfo<Value>& args);
 		static void SleepFunc(const FunctionCallbackInfo<Value>& args);

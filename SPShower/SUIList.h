@@ -6,7 +6,7 @@ class SUIList : public SUIComponent
 public:
 	enum ListType
 	{
-		Vertacal,
+		Vertical,
 		Horizontal,
 	};
 
@@ -37,6 +37,9 @@ public:
 
 	virtual bool LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
+
+	virtual Handle<Object> GetV8Obj();
+
 };
 
 typedef SPPointer<SUIList> SUIListPtr;

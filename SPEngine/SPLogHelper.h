@@ -32,5 +32,6 @@ namespace SPEngine
 		static void WriteDebug(wstring log);
 		static void WriteLog(string log);
 		static void WriteLog(wstring log);
+		static bool IsDebug();
 	};
 }

@@ -70,7 +70,7 @@ public:
 
 				if (direction == L"vertical")
 				{
-					list->SetDirection(SUIList::Vertacal);
+					list->SetDirection(SUIList::Vertical);
 				}
 
 				if (direction == L"horizontal")

@@ -1,5 +1,6 @@
 #pragma once
 #include "SUIEffect.h"
+#include "SUIPictureList.h"
 
 using namespace SPEngine;
 
@@ -19,6 +20,9 @@ public:
 	//
 
 	static void CreateScreen(const FunctionCallbackInfo<Value>& args);
+	static void CreateTrack(const FunctionCallbackInfo<Value>& args);
+	static void CreateVideo(const FunctionCallbackInfo<Value>& args);
+	static void CreateParticleSystem(const FunctionCallbackInfo<Value>& args);
 	static void RegisterFont(const FunctionCallbackInfo<Value>& args);
 
 	//

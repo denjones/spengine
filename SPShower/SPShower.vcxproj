@@ -41,14 +41,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;.\dll;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\KScript\Debug;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\KScript\Debug;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibUV\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\LibNode\lib;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
     <EmbedManifest>true</EmbedManifest>
   </PropertyGroup>
@@ -59,14 +59,16 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>true</ShowIncludes>
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <Profile>true</Profile>
-      <AdditionalDependencies>v8.lib;icui18n.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>node.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +81,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
@@ -87,7 +89,7 @@
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>v8.lib;icui18n.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>node.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <OutputManifestFile>
@@ -360,6 +362,7 @@
     <ClInclude Include="SUITextBox.h" />
     <ClInclude Include="SUITextLine.h" />
     <ClInclude Include="SUITextSpan.h" />
+    <ClInclude Include="SUITrackManager.h" />
     <ClInclude Include="SUITransformation.h" />
     <ClInclude Include="SUITransformationManager.h" />
     <ClInclude Include="SUITransition.h" />
@@ -367,10 +370,14 @@
     <ClInclude Include="SV8Component.h" />
     <ClInclude Include="SV8DialogBox.h" />
     <ClInclude Include="SV8Function.h" />
+    <ClInclude Include="SV8ParticleSystem.h" />
     <ClInclude Include="SV8PictureBox.h" />
     <ClInclude Include="SV8Screen.h" />
     <ClInclude Include="SV8ScriptManager.h" />
+    <ClInclude Include="SV8Scroll.h" />
     <ClInclude Include="SV8TextBox.h" />
+    <ClInclude Include="SV8Track.h" />
+    <ClInclude Include="SV8Video.h" />
     <ClInclude Include="SV8Window.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="SSFWaitDialog.h" />
@@ -411,18 +418,27 @@
     <ClCompile Include="SUITextBox.cpp" />
     <ClCompile Include="SUITextLine.cpp" />
     <ClCompile Include="SUITextSpan.cpp" />
+    <ClCompile Include="SUITrackManager.cpp" />
     <ClCompile Include="SUITransformation.cpp" />
     <ClCompile Include="SUITransformationManager.cpp" />
     <ClCompile Include="SUITransition.cpp" />
     <ClCompile Include="SUIVideoManager.cpp" />
     <ClCompile Include="SV8Component.cpp" />
+    <ClCompile Include="SV8CreateParticleSystem.cpp" />
+    <ClCompile Include="SV8CreateTrack.cpp" />
+    <ClCompile Include="SV8CreateVideo.cpp" />
     <ClCompile Include="SV8DialogBox.cpp" />
     <ClCompile Include="SV8Function.cpp" />
+    <ClCompile Include="SV8ParticleSystem.cpp" />
     <ClCompile Include="SV8PictureBox.cpp" />
+    <ClCompile Include="SV8RegisterFont.cpp" />
     <ClCompile Include="SV8Screen.cpp" />
     <ClCompile Include="SV8ScriptManager.cpp" />
     <ClCompile Include="SV8CreateScreen.cpp" />
+    <ClCompile Include="SV8Scroll.cpp" />
     <ClCompile Include="SV8TextBox.cpp" />
+    <ClCompile Include="SV8Track.cpp" />
+    <ClCompile Include="SV8Video.cpp" />
     <ClCompile Include="SV8Window.cpp" />
   </ItemGroup>
   <ItemGroup>
