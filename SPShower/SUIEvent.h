@@ -21,6 +21,8 @@ public:
 		KeyPress,		
 	};
 
+	SPPointer<Persistent<Object>> v8Obj;
+
 public:
 	SUIEvent();
 
@@ -30,7 +32,12 @@ public:
 	int positionY;
 	int movementX;
 	int movementY;
+	int absoluteX;
+	int absoluteY;
+
+	Handle<Object> GetV8Obj();
 };
 
+typedef SUIEvent* SUIEventHandle;
 typedef SPPointer<SUIEvent> SUIEventPtr;
 

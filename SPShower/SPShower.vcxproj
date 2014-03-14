@@ -369,6 +369,7 @@
     <ClInclude Include="SUIVideoManager.h" />
     <ClInclude Include="SV8Component.h" />
     <ClInclude Include="SV8DialogBox.h" />
+    <ClInclude Include="SV8Event.h" />
     <ClInclude Include="SV8Function.h" />
     <ClInclude Include="SV8ParticleSystem.h" />
     <ClInclude Include="SV8PictureBox.h" />
@@ -428,6 +429,7 @@
     <ClCompile Include="SV8CreateTrack.cpp" />
     <ClCompile Include="SV8CreateVideo.cpp" />
     <ClCompile Include="SV8DialogBox.cpp" />
+    <ClCompile Include="SV8Event.cpp" />
     <ClCompile Include="SV8Function.cpp" />
     <ClCompile Include="SV8ParticleSystem.cpp" />
     <ClCompile Include="SV8PictureBox.cpp" />

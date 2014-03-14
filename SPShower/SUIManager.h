@@ -11,14 +11,16 @@ class SUIManager :
 	typedef SPWStringMap<SUIScreenPtr> ScreenMap;
 	typedef SPWStringMapIterator<SUIScreenPtr> ScreenIterator;
 	typedef list<SUIScreenPtr> ScreenStack;
+	typedef SPPointer<ScreenStack> ScreenStackPtr;
 	typedef ScreenStack::reverse_iterator ScreenStackIterator;
 	typedef list<SUIEventPtr> EventQueue;
+	typedef SPPointer<EventQueue> EventQueuePtr;
 	typedef map<SUIScreen*, SUIScreenPtr> PersistentScreenMap;
 
 	ScreenMap screenMap;
 	PersistentScreenMap persistentScreenMap;
-	ScreenStack dispalyStack;
-	EventQueue eventQueue;
+	ScreenStackPtr dispalyStack;
+	EventQueuePtr eventQueue;
 	float elapsedMouseDownTime[3];
 	int elapsedMouseDownMovementX[3];
 	int elapsedMouseDownMovementY[3];
@@ -30,9 +32,17 @@ class SUIManager :
 	int interceptMouseButtonEvent[3];
 	int interceptKeyboardKeyEvent[256];
 
+	void* asyncEvent;
+	CCritSec eventLock;
+
 public:
 	SUIManager(void);
 	virtual ~SUIManager(void);
+
+	ScreenStackPtr GetDisplayStack();
+	EventQueuePtr GetEventQueue();
+	void LockEventQueue();
+	void UnlockEventQueue();
 
 	void SetPersistentScreen(SUIScreenPtr screen);
 	SUIScreenPtr GetPersistentScreen(SUIScreen* screenPtr);
@@ -59,5 +69,7 @@ public:
 
 	SPString SaveAsString();
 	bool LoadFromString(SPString path);
+
+	static void HandleAllEvent( uv_async_t *handle, int status );
 };
 
