@@ -14,12 +14,19 @@ SUIManager::SUIManager(void)
 	ZeroMemory(interceptKeyboardKeyEvent, 256 * sizeof(int));
 	maxClickTime = 0.300f;
 	maxDClickTime = 0.300f;
-	dispalyStack.clear();
+	dispalyStack = new ScreenStack();
+	eventQueue = new EventQueue();
+	asyncEvent = new uv_async_t();
 }
 
 
 SUIManager::~SUIManager(void)
 {
+	if (asyncEvent)
+	{
+		delete asyncEvent;
+		asyncEvent = NULL;
+	}
 }
 
 SUIScreenPtr SUIManager::GetScreen( SPString name )
@@ -43,6 +50,8 @@ bool SUIManager::AddScreen( SUIScreenPtr newScreen )
 
 bool SUIManager::Initialize()
 {
+	uv_async_init(uv_default_loop(), (uv_async_t*)asyncEvent, SUIManager::HandleAllEvent);
+
 	return true;
 }
 
@@ -97,12 +106,12 @@ bool SUIManager::Update( float timeDelta )
 	bool isInputValid = true;
 	bool isVisible = true;
 
-	ScreenStackIterator screen = dispalyStack.rbegin();
-	while(screen != dispalyStack.rend())
+	ScreenStackIterator screen = dispalyStack->rbegin();
+	while(screen != dispalyStack->rend())
 	{
 		if(!(*screen)->UpdateScreen(timeDelta, isInputValid, isVisible))
 		{			
-			screen =  ScreenStackIterator(dispalyStack.erase((++screen).base()));
+			screen =  ScreenStackIterator(dispalyStack->erase((++screen).base()));
 			continue;
 		}
 
@@ -111,12 +120,6 @@ bool SUIManager::Update( float timeDelta )
 		{
 			if (isInputValid)
 			{
-				while (eventQueue.size() > 0)
-				{
-					(*screen)->HandleEvent(eventQueue.front());
-					eventQueue.pop_front();
-				}
-				
 				(*screen)->HandleInput(timeDelta);
 				isInputValid = false;
 			}
@@ -130,13 +133,18 @@ bool SUIManager::Update( float timeDelta )
 		screen++;
 	}
 
+	if (eventQueue->size() > 0)
+	{
+		uv_async_send((uv_async_t*)asyncEvent);
+	}
+
 	return true;
 }
 
 bool SUIManager::Draw( float timeDelta )
 {
-	ScreenStack::iterator screen = dispalyStack.begin();
-	while(screen != dispalyStack.end())
+	ScreenStack::iterator screen = dispalyStack->begin();
+	while(screen != dispalyStack->end())
 	{
 		(*screen)->Draw(timeDelta);
 
@@ -166,9 +174,9 @@ bool SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
 
 SUIScreenPtr SUIManager::GetCurrentScreen()
 {
-	if (dispalyStack.size() > 0)
+	if (dispalyStack->size() > 0)
 	{
-		return dispalyStack.back();
+		return dispalyStack->back();
 	}
 
 	return NULL;
@@ -187,35 +195,35 @@ bool SUIManager::FocusScreen( SPString name )
 
 bool SUIManager::FocusScreen( SUIScreenPtr screen )
 {
-	ScreenStack::iterator iter = find(dispalyStack.begin(), dispalyStack.end(), screen);
-	if (iter != dispalyStack.end())
+	ScreenStack::iterator iter = find(dispalyStack->begin(), dispalyStack->end(), screen);
+	if (iter != dispalyStack->end())
 	{
-		dispalyStack.erase(iter);
+		dispalyStack->erase(iter);
 	}
 
-	dispalyStack.push_back(screen);
+	dispalyStack->push_back(screen);
 
 	return true;
 }
 
 bool SUIManager::SwitchToScreen( SPString name , SUITransformationPtr trans)
 {	
-	if (dispalyStack.size() == 0 || !screenMap.IsSet(name))
+	if (dispalyStack->size() == 0 || !screenMap.IsSet(name))
 	{
 		return false;
 	}
 
-	if (dispalyStack.back() == screenMap[name])
+	if (dispalyStack->back() == screenMap[name])
 	{
 		return true;
 	}
 
-	SUIScreenPtr top = dispalyStack.back();
-	dispalyStack.pop_back();
+	SUIScreenPtr top = dispalyStack->back();
+	dispalyStack->pop_back();
 
 	FocusScreen(name);
 
-	dispalyStack.push_back(top);
+	dispalyStack->push_back(top);
 
 	top->SetTargetScreen(screenMap[name]);
 	top->SetTransformation(trans);
@@ -231,7 +239,9 @@ bool SUIManager::IsScreenValid( SPString name )
 
 bool SUIManager::GenerateEvent(float timeDelta)
 {
-	eventQueue.clear();
+	//eventQueue->clear();
+
+	LockEventQueue();
 
 	SPMousePtr mouse = SPInputManager::GetSingleton().GetMouse();
 	SPKeyboardPtr keyboard = SPInputManager::GetSingleton().GetKeyboard();
@@ -250,12 +260,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 			e->movementX = mouse->GetMovementX();
 			e->movementY = mouse->GetMovementY();
 
-			//SPFontWriter::GetSingleton().Write(NULL, NULL, SPStringHelper::ToWString(e->positionX), D3DXVECTOR2(0, 0), SPColor::Red, 0, 0, NULL );
-			//SPFontWriter::GetSingleton().Write(NULL, NULL, SPStringHelper::ToWString(e->positionY), D3DXVECTOR2(0, 20), SPColor::Red, 0, 0, NULL );
-			//SPFontWriter::GetSingleton().Write(NULL, NULL, SPStringHelper::ToWString(e->movementX), D3DXVECTOR2(0, 40), SPColor::Red, 0, 0, NULL );
-			//SPFontWriter::GetSingleton().Write(NULL, NULL, SPStringHelper::ToWString(e->movementY), D3DXVECTOR2(0, 60), SPColor::Red, 0, 0, NULL );
-
-			eventQueue.push_back(e);
+			eventQueue->push_back(e);
 		}
 
 		// Mouse scroll.
@@ -269,7 +274,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 			e->movementX = mouse->GetMovementX();
 			e->movementY = mouse->GetMovementY();
 
-			eventQueue.push_back(e);
+			eventQueue->push_back(e);
 		}
 		else if (mouse->IsScrolledDown())
 		{
@@ -281,7 +286,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 			e->movementX = mouse->GetMovementX();
 			e->movementY = mouse->GetMovementY();
 
-			eventQueue.push_back(e);
+			eventQueue->push_back(e);
 		}
 
 		// Mouse button.
@@ -315,7 +320,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->movementX = mouse->GetMovementX();
 				e->movementY = mouse->GetMovementY();
 
-				eventQueue.push_back(e);
+				eventQueue->push_back(e);
 
 			}			
 
@@ -339,7 +344,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 						e->movementX = mouse->GetMovementX();
 						e->movementY = mouse->GetMovementY();
 
-						eventQueue.push_back(e);
+						eventQueue->push_back(e);
 					}
 					else
 					{
@@ -355,7 +360,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 					e->movementX = mouse->GetMovementX();
 					e->movementY = mouse->GetMovementY();
 
-					eventQueue.push_back(e);
+					eventQueue->push_back(e);
 				}
 
 				// Reset mouse down time.
@@ -371,7 +376,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->movementX = mouse->GetMovementX();
 				e->movementY = mouse->GetMovementY();
 
-				eventQueue.push_back(e);
+				eventQueue->push_back(e);
 			}
 
 			// Calculate double click time.
@@ -400,7 +405,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->type = SUIEvent::KeyPress;
 				e->button = key;
 
-				eventQueue.push_back(e);
+				eventQueue->push_back(e);
 			}
 
 			if (keyboard->ButtonJustDown(key))
@@ -411,7 +416,7 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->type = SUIEvent::KeyDown;
 				e->button = key;
 
-				eventQueue.push_back(e);
+				eventQueue->push_back(e);
 			}
 
 			if (keyboard->ButtonJustUp(key))
@@ -422,10 +427,12 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->type = SUIEvent::KeyUp;
 				e->button = key;
 
-				eventQueue.push_back(e);
+				eventQueue->push_back(e);
 			}
 		}
 	}	
+
+	UnlockEventQueue();
 
 	return true;
 }
@@ -447,9 +454,9 @@ SPString SUIManager::SaveAsString()
 
 	result += L"<DisplayStack>";
 
-	ScreenStackIterator screenStackIter = dispalyStack.rbegin();
+	ScreenStackIterator screenStackIter = dispalyStack->rbegin();
 
-	while(screenStackIter != dispalyStack.rend())
+	while(screenStackIter != dispalyStack->rend())
 	{
 		result += L"<ScreenName>";
 
@@ -482,11 +489,11 @@ bool SUIManager::LoadFromString( SPString stringStream )
 		SUIScreenPtr screen = new SUIScreen();		
 		screen->SetName(screenNameString);
 		AddScreen(screen);
-		dispalyStack.push_back(screen);
+		dispalyStack->push_back(screen);
 		screen->LoadFromString(screenString);		
 	}
 
-	dispalyStack.clear();
+	dispalyStack->clear();
 
 	SPString displayStackString = SPStringHelper::XMLExcludeFrom(stringStream, L"DisplayStack");
 	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"DisplayStack");
@@ -496,7 +503,7 @@ bool SUIManager::LoadFromString( SPString stringStream )
 		SPString screenNameString = SPStringHelper::XMLExcludeFrom(displayStackString, L"ScreenName");
 		displayStackString = SPStringHelper::XMLRemoveFirst(displayStackString, L"ScreenName");
 
-		dispalyStack.push_front(GetScreen(screenNameString));
+		dispalyStack->push_front(GetScreen(screenNameString));
 	}
 
 	return true;
@@ -539,6 +546,54 @@ SUIScreenPtr SUIManager::GetPersistentScreen( SUIScreen* screenPtr )
 	}
 
 	return persistentScreenMap[screenPtr];
+}
+
+SUIManager::ScreenStackPtr SUIManager::GetDisplayStack()
+{
+	return dispalyStack;
+}
+
+SUIManager::EventQueuePtr SUIManager::GetEventQueue()
+{
+	return eventQueue;
+}
+
+void SUIManager::HandleAllEvent( uv_async_t *handle, int status )
+{
+	ScreenStackPtr dispalyStack = SUIManager::GetSingleton().GetDisplayStack();
+	EventQueuePtr eventQueue = SUIManager::GetSingleton().GetEventQueue();
+
+	SUIManager::GetSingleton().LockEventQueue();
+
+	ScreenStackIterator screen = dispalyStack->rbegin();
+	while(screen != dispalyStack->rend())
+	{
+		if ((*screen)->State() == TransitionOn ||
+			(*screen)->State() == Active)
+		{
+			while (eventQueue->size() > 0)
+			{
+				(*screen)->HandleEvent(eventQueue->front());
+				eventQueue->pop_front();
+			}
+
+			break;
+		}
+
+		screen++;
+	}
+
+	SUIManager::GetSingleton().UnlockEventQueue();
+}
+
+void SUIManager::LockEventQueue()
+{
+	eventLock.Lock();
+}
+
+void SUIManager::UnlockEventQueue()
+{
+	eventLock.Unlock();
 }
 
 

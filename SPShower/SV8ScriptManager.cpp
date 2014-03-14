@@ -12,6 +12,7 @@
 #include "SV8PictureBox.h"
 #include "SV8Scroll.h"
 #include <node.h>
+#include "SV8Event.h"
 
 SV8ScriptManager::SV8ScriptManager(void)
 {
@@ -63,6 +64,12 @@ SV8ScriptManager::~SV8ScriptManager(void)
 		scrollTempl->ClearAndLeak();
 		scrollTempl = NULL;
 	}	
+
+	if (eventTempl)
+	{
+		eventTempl->ClearAndLeak();
+		eventTempl = NULL;
+	}	
 }
 
 bool SV8ScriptManager::Initialize()
@@ -108,7 +115,8 @@ bool SV8ScriptManager::Initialize()
 		SV8PictureBox::GetTemplate());
 	scrollTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
 		SV8Scroll::GetTemplate());
-
+	eventTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
+		SV8Event::GetTemplate());
 
 	////
 	//// Set Global Window Object
@@ -202,6 +210,12 @@ Handle<ObjectTemplate> SV8ScriptManager::GetScrollTemplate()
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*scrollTempl));
 }
 
+
+Handle<ObjectTemplate> SV8ScriptManager::GetEventTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*eventTempl));
+}
+
 void SV8ScriptManager::InitModule( Handle<Object> exports )
 {
 	//
@@ -228,5 +242,6 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 	exports->SetAccessor(SPV8ScriptEngine::SPStringToString(L"screen"),
 		SV8Screen::ScreenGetter);
 }
+
 
 NODE_MODULE_CONTEXT_AWARE_BUILTIN(speshow, SV8ScriptManager::InitModule)

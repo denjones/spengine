@@ -23,6 +23,7 @@ private:
 	SPPointer<Persistent<ObjectTemplate>> dialogBoxTempl;
 	SPPointer<Persistent<ObjectTemplate>> pictureBoxTempl;
 	SPPointer<Persistent<ObjectTemplate>> scrollTempl;
+	SPPointer<Persistent<ObjectTemplate>> eventTempl;
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
@@ -32,6 +33,7 @@ public:
 	Handle<ObjectTemplate> GetDialogBoxTemplate();
 	Handle<ObjectTemplate> GetPictureBoxTemplate();
 	Handle<ObjectTemplate> GetScrollTemplate();
+	Handle<ObjectTemplate> GetEventTemplate();
 
 private:
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);

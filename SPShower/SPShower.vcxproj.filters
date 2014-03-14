@@ -899,6 +899,9 @@
     <ClInclude Include="SV8ParticleSystem.h">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
+    <ClInclude Include="SV8Event.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -1062,6 +1065,9 @@
     </ClCompile>
     <ClCompile Include="SV8CreateParticleSystem.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Event.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
