@@ -2,10 +2,8 @@
 #include "SPGameShow.h"
 #include "SUIManager.h"
 #include "SUIEffectManager.h"
-#include "SScriptManager.h"
 #include "SUIMixModeManager.h"
 #include "SUITransformationManager.h"
-#include <StringHelper.h>
 #include "SUIPictureManager.h"
 #include "SScriptHelper.h"
 #include "SUIParticleSystemManager.h"
@@ -66,162 +64,162 @@ bool SPGameShow::Initialize()
 
 bool SPGameShow::SaveAsFile( SPString path )
 {
-	SPFileHelper::CreatePath(SPFileHelper::GetUpperPath(path));
-
-	HANDLE handle = CreateFile(path.c_str(),
-		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
-
-	if (handle == INVALID_HANDLE_VALUE)
-	{
-		return false;
-	}
-
-	SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	result += SPStringHelper::XMLSurroundWith(
-		SPVideoManager::GetSingleton().SaveAsString()
-		+ SPFontManager::GetSingleton().SaveAsString()
-		+ SPSoundManager::GetSingleton().SaveAsString()
-		+ SScriptManager::GetSingleton().SaveAsString()
-		//+ SUIParticleSystemManager::GetSingleton().SaveAsString()
-		+ SUIPictureManager::GetSingleton().SaveAsString()		
-		+ SUIManager::GetSingleton().SaveAsString(),L"SaveData");
-
-	string shortResult = SPStringHelper::WStringToUTF8String(result);
-
-	DWORD numOfByteWritten;
-
-	WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
-	
-	CloseHandle(handle);
+//	SPFileHelper::CreatePath(SPFileHelper::GetUpperPath(path));
+//
+//	HANDLE handle = CreateFile(path.c_str(),
+//		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
+//
+//	if (handle == INVALID_HANDLE_VALUE)
+//	{
+//		return false;
+//	}
+//
+//	SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+//
+//	result += SPStringHelper::XMLSurroundWith(
+//		SPVideoManager::GetSingleton().SaveAsString()
+//		+ SPFontManager::GetSingleton().SaveAsString()
+//		+ SPSoundManager::GetSingleton().SaveAsString()
+////		+ SScriptManager::GetSingleton().SaveAsString()
+//		//+ SUIParticleSystemManager::GetSingleton().SaveAsString()
+//		+ SUIPictureManager::GetSingleton().SaveAsString()		
+//		+ SUIManager::GetSingleton().SaveAsString(),L"SaveData");
+//
+//	string shortResult = SPStringHelper::WStringToUTF8String(result);
+//
+//	DWORD numOfByteWritten;
+//
+//	WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
+//	
+//	CloseHandle(handle);
 
 	return true;
 }
 
 bool SPGameShow::LoadFromFile( SPString path )
 {
-	HANDLE handle = CreateFile(path.c_str(),
-		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
+	//HANDLE handle = CreateFile(path.c_str(),
+	//	GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
 
-	if (handle == INVALID_HANDLE_VALUE)
-	{
-		return false;
-	}
+	//if (handle == INVALID_HANDLE_VALUE)
+	//{
+	//	return false;
+	//}
 
-	ULARGE_INTEGER fileLength = {0};
-	fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
+	//ULARGE_INTEGER fileLength = {0};
+	//fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
 
-	char* pBuffer = new char[fileLength.QuadPart];
+	//char* pBuffer = new char[fileLength.QuadPart];
 
-	DWORD numOfByteRead;
+	//DWORD numOfByteRead;
 
-	ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
+	//ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
 
-	CloseHandle(handle);
+	//CloseHandle(handle);
 
-	SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
+	//SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
 
-	delete [] pBuffer;
-	pBuffer = NULL;
+	//delete [] pBuffer;
+	//pBuffer = NULL;
 
-	SPVideoManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SPVideoManager"));
+	//SPVideoManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SPVideoManager"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SPVideoManager");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SPVideoManager");
 
-	SPFontManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SPFontManager"));
+	//SPFontManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SPFontManager"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SPFontManager");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SPFontManager");
 
-	SPSoundManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SPSoundManager"));
+	//SPSoundManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SPSoundManager"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SPSoundManager");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SPSoundManager");
 
-	SScriptManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SScriptManager"));
+	//SScriptManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SScriptManager"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SScriptManager");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SScriptManager");
 
-	//SUIParticleSystemManager::GetSingleton().LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SUIParticleSys"));
+	////SUIParticleSystemManager::GetSingleton().LoadFromString(
+	////	SPStringHelper::XMLExcludeFrom(result, L"SUIParticleSys"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SUIParticleSys");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIParticleSys");
 
-	SUIPictureManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SUIPictureManager"));
+	//SUIPictureManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SUIPictureManager"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SUIPictureManager");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIPictureManager");
 
-	SUIManager::GetSingleton().LoadFromString(
-		SPStringHelper::XMLExcludeFrom(result, L"SUIManager"));
+	//SUIManager::GetSingleton().LoadFromString(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SUIManager"));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SUIManager");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIManager");
 
 	return true;
 }
 
 bool SPGameShow::SaveSystemData()
 {
-	SPString path = L"system.dat";
+	//SPString path = L"system.dat";
 
-	HANDLE handle = CreateFile(path.c_str(),
-		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
+	//HANDLE handle = CreateFile(path.c_str(),
+	//	GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
 
-	SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	//SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-	result += SPStringHelper::XMLSurroundWith(	SScriptHelper::VariablesToString(
-		SScriptManager::GetSingleton().GetSystemVariables()), L"SysData");
+	//result += SPStringHelper::XMLSurroundWith(	SScriptHelper::VariablesToString(
+	//	SScriptManager::GetSingleton().GetSystemVariables()), L"SysData");
 
-	result += SScriptManager::GetSingleton().ReadCommandsToString() ;
+	//result += SScriptManager::GetSingleton().ReadCommandsToString() ;
 
-	string shortResult = SPStringHelper::WStringToUTF8String(result);
+	//string shortResult = SPStringHelper::WStringToUTF8String(result);
 
-	DWORD numOfByteWritten;
+	//DWORD numOfByteWritten;
 
-	WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
+	//WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
 
-	CloseHandle(handle);
+	//CloseHandle(handle);
 
 	return true;
 }
 
 bool SPGameShow::LoadSystemData()
 {
-	SPString path = L"system.dat";
+	//SPString path = L"system.dat";
 
-	HANDLE handle = CreateFile(path.c_str(),
-		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
+	//HANDLE handle = CreateFile(path.c_str(),
+	//	GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
 
-	if (!handle)
-	{
-		return false;
-	}
+	//if (!handle)
+	//{
+	//	return false;
+	//}
 
-	ULARGE_INTEGER fileLength = {0};
-	fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
+	//ULARGE_INTEGER fileLength = {0};
+	//fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
 
-	char* pBuffer = new char[fileLength.QuadPart];
+	//char* pBuffer = new char[fileLength.QuadPart];
 
-	DWORD numOfByteRead;
+	//DWORD numOfByteRead;
 
-	ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
+	//ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
 
-	CloseHandle(handle);
+	//CloseHandle(handle);
 
-	SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
+	//SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
 
-	SScriptManager::GetSingleton().SetSystemVariables(
-		SScriptHelper::StringToVariables(
-		SPStringHelper::XMLExcludeFrom(result, L"SysData")));
+	//SScriptManager::GetSingleton().SetSystemVariables(
+	//	SScriptHelper::StringToVariables(
+	//	SPStringHelper::XMLExcludeFrom(result, L"SysData")));
 
-	result = SPStringHelper::XMLRemoveFirst(result, L"SysData");
+	//result = SPStringHelper::XMLRemoveFirst(result, L"SysData");
 
-	SScriptManager::GetSingleton().ReadCommandsFromString(result);
+	//SScriptManager::GetSingleton().ReadCommandsFromString(result);
 
-	delete [] pBuffer;
-	pBuffer = NULL;
+	//delete [] pBuffer;
+	//pBuffer = NULL;
 
 	return true;
 }

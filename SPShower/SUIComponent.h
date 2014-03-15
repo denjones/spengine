@@ -32,52 +32,77 @@ protected:
 	/// @name Event Handlers
 	/// @{
 public:
-	SUIEventHandlerPtr onMouseLeftClick;
-	SUIEventHandlerPtr onMouseLeftDClick;
-	SUIEventHandlerPtr onMouseLeftDown;
-	SUIEventHandlerPtr onMouseLeftUp;
 
-	SUIEventHandlerPtr onMouseRightClick;
-	SUIEventHandlerPtr onMouseRightDClick;
-	SUIEventHandlerPtr onMouseRightDown;
-	SUIEventHandlerPtr onMouseRightUp;
-
-	SUIEventHandlerPtr onMouseMiddleClick;
-	SUIEventHandlerPtr onMouseMiddleDClick;
-	SUIEventHandlerPtr onMouseMiddleDown;
-	SUIEventHandlerPtr onMouseMiddleUp;
-
-	SUIEventHandlerPtr onMouseScrollUp;
-	SUIEventHandlerPtr onMouseScrollDown;
-
-	SUIEventHandlerPtr catchMouseLeftClick;
-	SUIEventHandlerPtr catchMouseLeftDClick;
-	SUIEventHandlerPtr catchMouseLeftDown;
-	SUIEventHandlerPtr catchMouseLeftUp;
-
-	SUIEventHandlerPtr catchMouseRightClick;
-	SUIEventHandlerPtr catchMouseRightDClick;
-	SUIEventHandlerPtr catchMouseRightDown;
-	SUIEventHandlerPtr catchMouseRightUp;
-
-	SUIEventHandlerPtr catchMouseMiddleClick;
-	SUIEventHandlerPtr catchMouseMiddleDClick;
-	SUIEventHandlerPtr catchMouseMiddleDown;
-	SUIEventHandlerPtr catchMouseMiddleUp;
-
-	SUIEventHandlerPtr catchMouseScrollUp;
-	SUIEventHandlerPtr catchMouseScrollDown;
-
+	SUIEventHandlerPtr onMouseClick;
+	SUIEventHandlerPtr onMouseDClick;
+	SUIEventHandlerPtr onMouseDown;
+	SUIEventHandlerPtr onMouseUp;
+	SUIEventHandlerPtr onMouseScroll;
 	SUIEventHandlerPtr onMouse;
 	SUIEventHandlerPtr onMouseIn;
 	SUIEventHandlerPtr onMouseOut;
+	SUIEventHandlerPtr onKeyPress;
+	SUIEventHandlerPtr onKeyDown;
+	SUIEventHandlerPtr onKeyUp;
 
-	SUIEventHandlerPtr onFocus;
-	SUIEventHandlerPtr onBlur;
+	SUIEventHandlerPtr catchMouseClick;
+	SUIEventHandlerPtr catchMouseDClick;
+	SUIEventHandlerPtr catchMouseDown;
+	SUIEventHandlerPtr catchMouseUp;
+	SUIEventHandlerPtr catchMouseScroll;
+	SUIEventHandlerPtr catchMouse;
+	SUIEventHandlerPtr catchMouseIn;
+	SUIEventHandlerPtr catchMouseOut;
+	SUIEventHandlerPtr catchKeyPress;
+	SUIEventHandlerPtr catchKeyDown;
+	SUIEventHandlerPtr catchKeyUp;
 
-	SUIEventHandlerPtr onKeyPress[256];
-	SUIEventHandlerPtr onKeyDown[256];
-	SUIEventHandlerPtr onKeyUp[256];
+	//SUIEventHandlerPtr onMouseLeftClick;
+	//SUIEventHandlerPtr onMouseLeftDClick;
+	//SUIEventHandlerPtr onMouseLeftDown;
+	//SUIEventHandlerPtr onMouseLeftUp;
+
+	//SUIEventHandlerPtr onMouseRightClick;
+	//SUIEventHandlerPtr onMouseRightDClick;
+	//SUIEventHandlerPtr onMouseRightDown;
+	//SUIEventHandlerPtr onMouseRightUp;
+
+	//SUIEventHandlerPtr onMouseMiddleClick;
+	//SUIEventHandlerPtr onMouseMiddleDClick;
+	//SUIEventHandlerPtr onMouseMiddleDown;
+	//SUIEventHandlerPtr onMouseMiddleUp;
+
+	//SUIEventHandlerPtr onMouseScrollUp;
+	//SUIEventHandlerPtr onMouseScrollDown;
+
+	//SUIEventHandlerPtr catchMouseLeftClick;
+	//SUIEventHandlerPtr catchMouseLeftDClick;
+	//SUIEventHandlerPtr catchMouseLeftDown;
+	//SUIEventHandlerPtr catchMouseLeftUp;
+
+	//SUIEventHandlerPtr catchMouseRightClick;
+	//SUIEventHandlerPtr catchMouseRightDClick;
+	//SUIEventHandlerPtr catchMouseRightDown;
+	//SUIEventHandlerPtr catchMouseRightUp;
+
+	//SUIEventHandlerPtr catchMouseMiddleClick;
+	//SUIEventHandlerPtr catchMouseMiddleDClick;
+	//SUIEventHandlerPtr catchMouseMiddleDown;
+	//SUIEventHandlerPtr catchMouseMiddleUp;
+
+	//SUIEventHandlerPtr catchMouseScrollUp;
+	//SUIEventHandlerPtr catchMouseScrollDown;
+
+	//SUIEventHandlerPtr onMouse;
+	//SUIEventHandlerPtr onMouseIn;
+	//SUIEventHandlerPtr onMouseOut;
+
+	//SUIEventHandlerPtr onFocus;
+	//SUIEventHandlerPtr onBlur;
+
+	//SUIEventHandlerPtr onKeyPress[256];
+	//SUIEventHandlerPtr onKeyDown[256];
+	//SUIEventHandlerPtr onKeyUp[256];
 
 	/// @}
 
@@ -93,7 +118,6 @@ protected:
 	SPTexturePtr		childTarget;
 	EffectQueue			effects;
 	SUIComponentPtr		father;
-	VariableMap			propertiesMap;
 	bool				isAbsoluteRender;
 	SPPointer<Persistent<Object>> v8Obj;
 	/// @}	
@@ -170,7 +194,6 @@ public:
 	bool SetBackgroundPositionMode(SUIProperties::BackgroundPosition setMode);	
 
 	SRectangle GetBackgroundRect();
-	bool SetProperties(VariableMap args);
 	/// @}
 
 	/// @name AbsoluteRender
@@ -266,7 +289,7 @@ public:
 protected:
 	bool UpdateAnimation(float timeDelta);
 	bool UpdateEffect(float timeDelta);
-	SPString PropertiesToString();
+	//SPString PropertiesToString();
 	
 };
 

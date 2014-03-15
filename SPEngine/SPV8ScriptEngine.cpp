@@ -45,7 +45,15 @@ namespace SPEngine
 
 	Handle<Context> SPV8ScriptEngine::GetContext()
 	{
-		return Handle<Context>::New(isolate, *persistentContext);
+		//return Handle<Context>::New(isolate, *persistentContext);
+
+		Handle<Context> context = isolate->GetCurrentContext();
+		if (context.IsEmpty())
+		{
+			context = Context::New(isolate);
+			context->Enter();
+		}
+		return context;
 	}
 
 	bool SPV8ScriptEngine::Initialize()
@@ -58,14 +66,14 @@ namespace SPEngine
 
 		// Create a new context.
 		// Make context persistent.
-		persistentContext = new Persistent<Context>(isolate, Context::New(isolate));
+		//persistentContext = new Persistent<Context>(isolate, Context::New(isolate));
 
 		// Global Function
-		AddFunction(L"using", Import);
-		AddFunction(L"include", Include);
-		AddFunction(L"sleep", SleepFunc);
-		AddFunction(L"setTimeout", SetTimeOut);
-		AddFunction(L"clearTimeout", ClearTimeOut);
+		//AddFunction(L"using", Import);
+		//AddFunction(L"include", Include);
+		//AddFunction(L"sleep", SleepFunc);
+		//AddFunction(L"setTimeout", SetTimeOut);
+		//AddFunction(L"clearTimeout", ClearTimeOut);
 
 		StartThread();
 
@@ -317,9 +325,11 @@ namespace SPEngine
 
 		if (SPLogHelper::IsDebug())
 		{
-			AllocConsole(); 
-			freopen("CONIN$", "r+t", stdin); // Redirect STDIN
-			freopen("CONOUT$", "w+t", stdout); // Redirect STDOUT
+			//AllocConsole();
+			HWND hWnd = GetConsoleWindow();
+			ShowWindow( hWnd, SW_SHOW );
+			//freopen("CONIN$", "r+t", stdin); // Redirect STDIN
+			//freopen("CONOUT$", "w+t", stdout); // Redirect STDOUT
 			SetConsoleTitle(L"Console"); 
 		}
 

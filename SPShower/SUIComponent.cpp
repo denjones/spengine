@@ -700,53 +700,6 @@ bool SUIComponent::Unhide()
 	return true;
 }
 
-bool SUIComponent::SetProperties( VariableMap args )
-{
-	modificationLock.Lock();
-	for(VariableMap::iterator iter = args.begin();
-		iter != args.end(); iter++)
-	{
-		propertiesMap[iter->first] = iter->second;
-	}
-	modificationLock.Unlock();
-
-	return true;
-}
-
-SPString SUIComponent::PropertiesToString()
-{
-	SPString result = L"";
-
-	VariableMap::iterator iter = propertiesMap.begin();
-
-	while(iter != propertiesMap.end())
-	{
-		if (iter->first.size() < 5 
-			|| iter->first.find(L"delta") == SPString::npos)
-		{
-			result += L"<P>";
-
-			result += L"<N>";
-			result += iter->first;
-			result += L"</N>";
-
-			result += L"<T>";
-			result += SPStringHelper::ToWString((int)iter->second.type);
-			result += L"</T>";
-
-			result += L"<V>";
-			result += iter->second.value;
-			result += L"</V>";
-
-			result += L"</P>";
-		}
-		
-		iter++;
-	}
-
-	return result;
-}
-
 bool SUIComponent::SaveAsImage( SPString path )
 {
 	if (!childTarget)
@@ -1323,285 +1276,61 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 {
 	if (!e)
 	{
-		return true;
+		return false;
 	}
 
 	if (e->type == SUIEvent::None)
 	{
-		return true;
-	}
-
-	if(!isDisplay || !properties.transparency)
-	{
 		return false;
 	}
 
-	bool isEventHandled = false;
+	if(!isDisplay)// || !properties.transparency)
+	{
+		return true;
+	}
+
 	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
 	bool lastInRect =  properties.rectangle.IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
 
 	if (e->type == SUIEvent::MouseMove)
 	{
+		// Catch Movement
+
 		if ((!inRect || !SPInputManager::GetSingleton().GetMouse()->IsWithinWindow()) 
 			&& lastInRect)
 		{
-			if (onMouseOut)
+			if (catchMouseOut)
 			{
-				onMouseOut->Function(e);
+				if(!catchMouseOut->Function(e))
+				{
+					return false;
+				}
 			}
-
-			//isEventHandled = true;
 		}
 		else if (inRect	&& lastInRect)
 		{
-			if (onMouse)
+			if (catchMouse)
 			{
-				onMouse->Function(e);
+				if(!catchMouse->Function(e))
+				{
+					return false;
+				}
 			}
-
-			//isEventHandled = true;
 		}
 		else if (inRect && !lastInRect)
 		{
-			if (onMouseIn)
+			if (catchMouseIn)
 			{
-				onMouseIn->Function(e);
-			}
-
-			//isEventHandled = true;
-		}
-
-	}
-	else
-	{
-		isEventHandled = false;
-
-		if (e->type == SUIEvent::KeyDown)
-		{
-			if (onKeyDown[e->button])
-			{
-				isEventHandled = true;
-				onKeyDown[e->button]->Function(e);
+				if(!onMouseIn->Function(e))
+				{
+					return false;
+				}
 			}
 		}
 
-		if (e->type == SUIEvent::KeyPress)
-		{
-			if (onKeyPress[e->button])
-			{
-				isEventHandled = true;
-				onKeyPress[e->button]->Function(e);
-			}
-		}
+		// For Children
 
-		if (e->type == SUIEvent::KeyUp)
-		{
-			if (onKeyUp[e->button])
-			{
-				isEventHandled = true;
-				onKeyUp[e->button]->Function(e);
-			}
-		}
-
-		if (e->type == SUIEvent::MouseClick)
-		{
-			if (e->button == 0 && catchMouseLeftClick)
-			{
-				isEventHandled = true;
-				catchMouseLeftClick->Function(e);
-			}
-
-			if (e->button == 2 && catchMouseMiddleClick)
-			{
-				isEventHandled = true;
-				catchMouseMiddleClick->Function(e);
-			}
-
-			if (e->button == 1 && catchMouseRightClick)
-			{
-				isEventHandled = true;
-				catchMouseRightClick->Function(e);
-			}
-		}
-
-		if (e->type == SUIEvent::MouseDClick)
-		{
-			if (e->button == 0 && catchMouseLeftDClick)
-			{
-				isEventHandled = true;
-				catchMouseLeftDClick->Function(e);
-			}
-
-			if (e->button == 2 && catchMouseMiddleDClick)
-			{
-				isEventHandled = true;
-				catchMouseMiddleDClick->Function(e);
-			}
-
-			if (e->button == 1 && catchMouseRightDClick)
-			{
-				isEventHandled = true;
-				catchMouseRightDClick->Function(e);
-			}
-		}
-
-		if (e->type == SUIEvent::MouseDown)
-		{
-			if (e->button == 0 && catchMouseLeftDown)
-			{
-				isEventHandled = true;
-				catchMouseLeftDown->Function(e);
-			}
-
-			if (e->button == 2 && catchMouseMiddleDown)
-			{
-				isEventHandled = true;
-				catchMouseMiddleDown->Function(e);
-			}
-
-			if (e->button == 1 && catchMouseRightDown)
-			{
-				isEventHandled = true;
-				catchMouseRightDown->Function(e);
-			}
-		}
-
-		if (e->type == SUIEvent::MouseUp)
-		{
-			if (e->button == 0 && catchMouseLeftUp)
-			{
-				isEventHandled = true;
-				catchMouseLeftUp->Function(e);
-			}
-
-			if (e->button == 2 && catchMouseMiddleUp)
-			{
-				isEventHandled = true;
-				catchMouseMiddleUp->Function(e);
-			}
-
-			if (e->button == 1 && catchMouseRightUp)
-			{
-				isEventHandled = true;
-				catchMouseRightUp->Function(e);
-			}
-		}
-
-		if (e->type == SUIEvent::MouseScrollUp)
-		{
-			if (catchMouseScrollUp)
-			{
-				isEventHandled = true;
-				catchMouseScrollUp->Function(e);
-			}
-		}
-
-		if (e->type == SUIEvent::MouseScrollDown)
-		{
-			if (catchMouseScrollDown)
-			{
-				isEventHandled = true;
-				catchMouseScrollDown->Function(e);
-			}
-		}
-
-		if (!isEventHandled && inRect)
-		{			
-			isEventHandled = true;
-
-			if (e->type == SUIEvent::MouseClick)
-			{
-				if (e->button == 0 && onMouseLeftClick)
-				{
-					onMouseLeftClick->Function(e);
-				}
-
-				if (e->button == 2 && onMouseMiddleClick)
-				{
-					onMouseMiddleClick->Function(e);
-				}
-
-				if (e->button == 1 && onMouseRightClick)
-				{
-					onMouseRightClick->Function(e);
-				}
-			}
-
-			if (e->type == SUIEvent::MouseDClick)
-			{
-				if (e->button == 0 && onMouseLeftDClick)
-				{
-					onMouseLeftDClick->Function(e);
-				}
-
-				if (e->button == 2 && onMouseMiddleDClick)
-				{
-					onMouseMiddleDClick->Function(e);
-				}
-
-				if (e->button == 1 && onMouseRightDClick)
-				{
-					onMouseRightDClick->Function(e);
-				}
-			}
-
-			if (e->type == SUIEvent::MouseDown)
-			{
-				if (e->button == 0 && onMouseLeftDown)
-				{
-					onMouseLeftDown->Function(e);
-				}
-
-				if (e->button == 2 && onMouseMiddleDown)
-				{
-					onMouseMiddleDown->Function(e);
-				}
-
-				if (e->button == 1 && onMouseRightDown)
-				{
-					onMouseRightDown->Function(e);
-				}
-			}
-
-			if (e->type == SUIEvent::MouseUp)
-			{
-				if (e->button == 0 && onMouseLeftUp)
-				{
-					onMouseLeftUp->Function(e);
-				}
-
-				if (e->button == 2 && onMouseMiddleUp)
-				{
-					onMouseMiddleUp->Function(e);
-				}
-
-				if (e->button == 1 && onMouseRightUp)
-				{
-					onMouseRightUp->Function(e);
-				}
-			}
-
-			if (e->type == SUIEvent::MouseScrollUp)
-			{
-				if (onMouseScrollUp)
-				{
-					onMouseScrollUp->Function(e);
-				}
-			}
-
-			if (e->type == SUIEvent::MouseScrollDown)
-			{
-				if (onMouseScrollDown)
-				{
-					onMouseScrollDown->Function(e);
-				}
-			}
-		}		
-	}
-
-	if (isEventHandled || e->type == SUIEvent::MouseMove)
-	{
 		e->positionX -= properties.rectangle.X;
 		e->positionY -= properties.rectangle.Y;
 
@@ -1611,9 +1340,9 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 		{
 			if (*iter)
 			{
-				if((*iter)->HandleEvent(e))
+				if(!(*iter)->HandleEvent(e))
 				{
-					break;
+					return false;
 				}
 			}
 			iter++;
@@ -1621,9 +1350,255 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 
 		e->positionX += properties.rectangle.X;
 		e->positionY += properties.rectangle.Y;
-	}	
 
-	return isEventHandled;
+		// On Event
+
+		if ((!inRect || !SPInputManager::GetSingleton().GetMouse()->IsWithinWindow()) 
+			&& lastInRect)
+		{
+			if (onMouseOut)
+			{
+				if(!onMouseOut->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if (inRect	&& lastInRect)
+		{
+			if (onMouse)
+			{
+				if(!onMouse->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if (inRect && !lastInRect)
+		{
+			if (onMouseIn)
+			{
+				if(!onMouseIn->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+	}
+	else
+	{
+		if (e->type == SUIEvent::KeyDown)
+		{
+			if (catchKeyDown)
+			{
+				if(!catchKeyDown->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if (e->type == SUIEvent::KeyPress)
+		{
+			if (catchKeyPress)
+			{
+				if(!catchKeyPress->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if(e->type == SUIEvent::KeyUp)
+		{
+			if (catchKeyUp)
+			{
+				if(!catchKeyUp->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if (inRect)
+		{
+			if (e->type == SUIEvent::MouseClick)
+			{
+				if (catchMouseClick)
+				{
+					if(!catchMouseClick->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseDClick)
+			{
+				if (catchMouseDClick)
+				{
+					if(!catchMouseDClick->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseDown)
+			{
+				if (catchMouseDown)
+				{
+					if(!catchMouseDown->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseUp)
+			{
+				if (catchMouseUp)
+				{
+					if(!catchMouseUp->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseScrollUp)
+			{
+				if (catchMouseScroll)
+				{
+					if(!catchMouseScroll->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseScrollDown)
+			{
+				if (catchMouseScroll)
+				{
+					if(!catchMouseScroll->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+		}
+		
+		e->positionX -= properties.rectangle.X;
+		e->positionY -= properties.rectangle.Y;
+
+		Children::reverse_iterator iter = children.rbegin();
+
+		while(iter != children.rend())
+		{
+			if (*iter)
+			{
+				if(!(*iter)->HandleEvent(e))
+				{
+					return false;
+				}
+			}
+			iter++;
+		}
+
+		e->positionX += properties.rectangle.X;
+		e->positionY += properties.rectangle.Y;
+
+		// On Event
+
+		if (e->type == SUIEvent::KeyDown)
+		{
+			if (onKeyDown)
+			{
+				if(!onKeyDown->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if (e->type == SUIEvent::KeyPress)
+		{
+			if (onKeyPress)
+			{
+				if(!onKeyPress->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if(e->type == SUIEvent::KeyUp)
+		{
+			if (onKeyUp)
+			{
+				if(!onKeyUp->Function(e))
+				{
+					return false;
+				}
+			}
+		}
+		else if (inRect)
+		{			
+			if (e->type == SUIEvent::MouseClick)
+			{
+				if (onMouseClick)
+				{
+					if(!onMouseClick->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseDClick)
+			{
+				if (onMouseDClick)
+				{
+					if(!onMouseDClick->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseDown)
+			{
+				if (onMouseDown)
+				{
+					if(!onMouseDown->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseUp)
+			{
+				if (onMouseUp)
+				{
+					if(!onMouseUp->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseScrollUp)
+			{
+				if (onMouseScroll)
+				{
+					if(!onMouseScroll->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+			else if (e->type == SUIEvent::MouseScrollDown)
+			{
+				if (onMouseScroll)
+				{
+					if(!onMouseScroll->Function(e))
+					{
+						return false;
+					}
+				}
+			}
+		}		
+	}
+
+	return true;
 }
 
 bool SUIComponent::Skip()
@@ -1669,9 +1644,11 @@ bool SUIComponent::LoadFromString( SPString stringStream )
 
 SPString SUIComponent::SaveAsString()
 {
-	SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(), L"SUICC");
+	//SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(), L"SUICC");
 
-	return result;
+	//return result;
+
+	return L"";
 }
 
 SUIScreen* SUIComponent::GetScreen()

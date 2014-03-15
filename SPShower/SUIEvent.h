@@ -34,6 +34,7 @@ public:
 	int movementY;
 	int absoluteX;
 	int absoluteY;
+	bool returnValue;
 
 	Handle<Object> GetV8Obj();
 };

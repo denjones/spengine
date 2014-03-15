@@ -15,6 +15,7 @@ Handle<ObjectTemplate> SV8Event::GetTemplate()
 	templEvent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"y"), YGetter, YSetter);
 	templEvent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"movementX"), MovementXGetter, MovementXSetter);
 	templEvent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"movementY"), MovementYGetter, MovementYSetter);
+	templEvent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"returnValue"), ReturnValueGetter, ReturnValueSetter);
 
 	return templEvent;
 }
@@ -227,4 +228,34 @@ void SV8Event::MovementYSetter( Local<String> property, Local<Value> value, cons
 	}
 
 	handle->movementY = value->Int32Value();
+}
+
+void SV8Event::ReturnValueGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIEventHandle handle = (SUIEventHandle)field->Value();
+	if (handle == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	info.GetReturnValue().Set(handle->returnValue);
+}
+
+void SV8Event::ReturnValueSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIEventHandle handle = (SUIEventHandle)field->Value();
+	if (handle == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	handle->returnValue = value->BooleanValue();
 }

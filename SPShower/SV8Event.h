@@ -26,4 +26,7 @@ namespace SV8Event
 
 	void MovementYGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void MovementYSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
+	void ReturnValueGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void ReturnValueSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 }

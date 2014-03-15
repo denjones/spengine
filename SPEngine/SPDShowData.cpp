@@ -29,7 +29,7 @@ namespace SPEngine
 		m_pSource(NULL),
 		m_seekCaps(0),
 		m_bMute(FALSE),
-		m_lVolume(MAX_VOLUME),
+		m_fVolume(1),
 		m_bControlling(false),
 		m_bFilpVertical(false)
 	{}
@@ -601,8 +601,17 @@ namespace SPEngine
 				//
 				// Restore previous volume setting
 				//
+				if (m_fVolume > 1)
+				{
+					m_fVolume = 1;
+				}
+				else if (m_fVolume < 0)
+				{
+					m_fVolume = 0;
+				}
 
-				hr = m_pAudio->put_Volume(m_lVolume);
+				long volume = MIN_VOLUME + m_fVolume * (MAX_VOLUME - MIN_VOLUME);
+				hr = m_pAudio->put_Volume(volume);
 			}
 		}
 

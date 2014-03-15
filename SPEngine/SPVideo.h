@@ -80,10 +80,10 @@ namespace SPEngine
 		HRESULT GetCurrentPosition(LONGLONG *pTimeNow);
 
 		// Audio
-		HRESULT	Mute(bool bMute);
+		bool	Mute(bool bMute);
 		bool	IsMuted();
-		HRESULT	SetVolume(long lVolume);
-		long	GetVolume();
+		bool	SetVolume(float fVolume);
+		float	GetVolume();
 
 		float	GetPlayingPosition();
 		bool	IsPlaying();

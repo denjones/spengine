@@ -18,6 +18,7 @@ SV8ScriptManager::SV8ScriptManager(void)
 {
 	SPV8ScriptEngine::GetSingleton();
 	requireEngine = SPV8ScriptEngine::GetSingletonPtr();
+	isScriptRunning = false;
 }
 
 
@@ -146,12 +147,19 @@ bool SV8ScriptManager::Initialize()
 
 bool SV8ScriptManager::Update( float timeDelta )
 {
+	if(!isScriptRunning) 
+	{
+		isScriptRunning = true;
+
+		SPV8ScriptEngine::GetSingleton().RunScriptFromFile(L"init.js");
+	}
+	
 	return true;
 }
 
 bool SV8ScriptManager::Load()
 {
-	SPV8ScriptEngine::GetSingleton().RunScriptFromFile(L"init.js");
+	
 	return true;
 }
 

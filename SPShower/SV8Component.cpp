@@ -3,6 +3,7 @@
 #include "SUIManager.h"
 #include "SV8Component.h"
 #include "SV8Function.h"
+#include "SUIV8FunctionEventHandler.h"
 
 Handle<ObjectTemplate> SV8Component::GetTemplate()
 {
@@ -58,6 +59,11 @@ Handle<ObjectTemplate> SV8Component::GetTemplate()
 		FunctionTemplate::New(AppendChild)->GetFunction());
 	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"removeChild"), 
 		FunctionTemplate::New(RemoveChild)->GetFunction());
+
+	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"addAnimation"), 
+		FunctionTemplate::New(AddAnimation)->GetFunction());
+	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"addEffect"), 
+		FunctionTemplate::New(AddEffect)->GetFunction());
 
 	return templComponent;
 }
@@ -708,222 +714,662 @@ void SV8Component::BGPositionModeSetter( Local<String> property, Local<Value> va
 
 void SV8Component::OnClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseClick))->GetFunction());
 }
 
 void SV8Component::OnClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnDClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseDClick))->GetFunction());
 }
 
 void SV8Component::OnDClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseDClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnMouseUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseUp))->GetFunction());
 }
 
 void SV8Component::OnMouseUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnMouseDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseDown))->GetFunction());
 }
 
 void SV8Component::OnMouseDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnMouseScrollGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseScroll))->GetFunction());
 }
 
 void SV8Component::OnMouseScrollSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseScroll = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnMouseOverGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouse))->GetFunction());
 }
 
 void SV8Component::OnMouseOverSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouse = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnMouseInGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseIn))->GetFunction());
 }
 
 void SV8Component::OnMouseInSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseIn = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnMouseOutGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseOut))->GetFunction());
 }
 
 void SV8Component::OnMouseOutSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onMouseOut = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnKeyPressGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyPress))->GetFunction());
 }
 
 void SV8Component::OnKeyPressSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onKeyPress = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnKeyUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyUp))->GetFunction());
 }
 
 void SV8Component::OnKeyUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onKeyUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::OnKeyDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyDown))->GetFunction());
 }
 
 void SV8Component::OnKeyDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->onKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseClick))->GetFunction());
 }
 
 void SV8Component::CatchClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchDClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseDClick))->GetFunction());
 }
 
 void SV8Component::CatchDClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseDClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchMouseUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseUp))->GetFunction());
 }
 
 void SV8Component::CatchMouseUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchMouseDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseDown))->GetFunction());
 }
 
 void SV8Component::CatchMouseDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchMouseScrollGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseScroll))->GetFunction());
 }
 
 void SV8Component::CatchMouseScrollSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseScroll = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchMouseOverGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouse))->GetFunction());
 }
 
 void SV8Component::CatchMouseOverSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouse = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchMouseInGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseIn))->GetFunction());
 }
 
 void SV8Component::CatchMouseInSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseIn = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchMouseOutGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseOut))->GetFunction());
 }
 
 void SV8Component::CatchMouseOutSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchMouseOut = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchKeyPressGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyPress))->GetFunction());
 }
 
 void SV8Component::CatchKeyPressSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchKeyPress = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchKeyUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyUp))->GetFunction());
 }
 
 void SV8Component::CatchKeyUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchKeyUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::CatchKeyDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyDown))->GetFunction());
 }
 
 void SV8Component::CatchKeyDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	component->catchKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
 void SV8Component::AppendChild( const FunctionCallbackInfo<Value>& args )
@@ -1019,10 +1465,261 @@ void SV8Component::InsertBefore( const FunctionCallbackInfo<Value>& args )
 
 void SV8Component::AddAnimation( const FunctionCallbackInfo<Value>& args )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	if (args.Length() == 0)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Null Argument.")));
+		return;
+	}
+
+	SUIAnimationPtr animation = new SUIAnimation();
+
+	animation->SetStartPoint(component->GetTargetProperties());	
+
+	Handle<Object> argObj = args[0]->ToObject();
+
+	if (SV8Function::HasProperty(L"time", argObj))
+	{
+		float time = SV8Function::GetProperty(L"time", argObj)->NumberValue();
+		animation->SetTime(time);
+	}
+
+	SUIProperties endPoint = component->GetTargetProperties();
+
+	//component->SetProperties(args);
+
+	if (SV8Function::HasProperty(L"layer", argObj))
+	{
+		endPoint.layer = SV8Function::GetProperty(L"layer", argObj)->NumberValue();
+	}
+
+	if (SV8Function::HasProperty(L"width", argObj))
+	{
+		int width = SV8Function::GetProperty(L"width", argObj)->Int32Value();
+		endPoint.rectangle.Width = width;
+	}
+
+	if (SV8Function::HasProperty(L"height", argObj))
+	{
+		int height = SV8Function::GetProperty(L"height", argObj)->Int32Value();
+		endPoint.rectangle.Height = height;
+	}
+
+	if (SV8Function::HasProperty(L"x", argObj))
+	{
+		int x = SV8Function::GetProperty(L"x", argObj)->Int32Value();
+		endPoint.rectangle.X = x;
+	}		
+
+	if (SV8Function::HasProperty(L"xDelta", argObj))
+	{
+		int x =  SV8Function::GetProperty(L"xDelta", argObj)->Int32Value();
+		endPoint.rectangle.X += x;
+	}	
+
+	if (SV8Function::HasProperty(L"y", argObj))
+	{
+		int y =  SV8Function::GetProperty(L"y", argObj)->Int32Value();
+		endPoint.rectangle.Y = y;
+	}
+
+	if (SV8Function::HasProperty(L"yDelta", argObj))
+	{
+		int y = SV8Function::GetProperty(L"yDelta", argObj)->Int32Value();
+		endPoint.rectangle.Y += y;
+	}
+
+	if (SV8Function::HasProperty(L"rotation", argObj))
+	{
+		float rotation = SV8Function::GetProperty(L"rotation", argObj)->NumberValue();
+		endPoint.rotation = rotation;
+	}
+
+	if (SV8Function::HasProperty(L"rotationDelta", argObj))
+	{
+		float rotation = SV8Function::GetProperty(L"rotationDelta", argObj)->NumberValue();
+		endPoint.rotation += rotation;
+	}
+
+	if (SV8Function::HasProperty(L"rotationCenterX", argObj))
+	{
+		float x =  SV8Function::GetProperty(L"rotationCenterX", argObj)->NumberValue();
+		endPoint.rotationCenter.x = x;
+	}
+
+	if (SV8Function::HasProperty(L"rotationCenterXDelta", argObj))
+	{
+		float x = SV8Function::GetProperty(L"rotationCenterXDelta", argObj)->NumberValue();
+		endPoint.rotationCenter.x += x;
+	}
+
+	if (SV8Function::HasProperty(L"rotationCenterY", argObj))
+	{
+		float y = SV8Function::GetProperty(L"rotationCenterY", argObj)->NumberValue();
+		endPoint.rotationCenter.y = y;
+	}
+
+	if (SV8Function::HasProperty(L"rotationCenterYDelta", argObj))
+	{
+		float y = SV8Function::GetProperty(L"rotationCenterYDelta", argObj)->NumberValue();
+		endPoint.rotationCenter.y += y;
+	}
+
+	if (SV8Function::HasProperty(L"backgroundImage", argObj))
+	{
+		endPoint.backgroundImage = SV8Function::GetTextureFromObj(SV8Function::GetProperty(L"backgroundImage", argObj)->ToObject());
+	}
+
+	if (SV8Function::HasProperty(L"backgroundColor", argObj))
+	{
+		endPoint.backgroundColor = SV8Function::GetProperty(L"backgroundColor", argObj)->Int32Value();
+	}
+
+	if (SV8Function::HasProperty(L"backgroundX", argObj))
+	{
+		endPoint.backgroundX = SV8Function::GetProperty(L"backgroundX", argObj)->Int32Value();
+	}
+
+	if (SV8Function::HasProperty(L"backgroundXDelta", argObj))
+	{
+		endPoint.backgroundX += SV8Function::GetProperty(L"backgroundXDelta", argObj)->Int32Value();
+	}
+
+	if (SV8Function::HasProperty(L"backgroundY", argObj))
+	{
+		endPoint.backgroundY = SV8Function::GetProperty(L"backgroundY", argObj)->Int32Value();
+	}
+
+	if (SV8Function::HasProperty(L"backgroundYDelta", argObj))
+	{
+		endPoint.backgroundY += SV8Function::GetProperty(L"backgroundYDelta", argObj)->Int32Value();
+	}
+
+	if (SV8Function::HasProperty(L"transparency", argObj))
+	{
+		endPoint.transparency = SV8Function::GetProperty(L"transparency", argObj)->NumberValue();
+	}
+
+	if (SV8Function::HasProperty(L"transparencyDelta", argObj))
+	{
+		endPoint.transparency +=  SV8Function::GetProperty(L"transparencyDelta", argObj)->NumberValue();
+	}
+
+	if (SV8Function::HasProperty(L"canSkip", argObj))
+	{
+		animation->SetCanSkip(SV8Function::GetProperty(L"transparencyDelta", argObj)->BooleanValue());
+	}
+
+	if (SV8Function::HasProperty(L"replay", argObj))
+	{
+		SPString style = SPV8ScriptEngine::StringToSPString(
+			SV8Function::GetProperty(L"transparencyDelta", argObj)->ToString());
+
+		if (SPStringHelper::EqualsIgnoreCase(style, L"SlowIn") || 
+			SPStringHelper::EqualsIgnoreCase(style, L"FastOut"))
+		{
+			animation->SetType(SUITransition::SlowIn);
+		}
+		else if (SPStringHelper::EqualsIgnoreCase(style, L"SlowOut") || 
+			SPStringHelper::EqualsIgnoreCase(style, L"FastIn"))
+		{
+			animation->SetType(SUITransition::SlowOut);
+		}
+		else if (SPStringHelper::EqualsIgnoreCase(style, L"SlowInOut"))
+		{
+			animation->SetType(SUITransition::SlowInOut);
+		}
+		else if (SPStringHelper::EqualsIgnoreCase(style, L"FastInOut"))
+		{
+			animation->SetType(SUITransition::FastInOut);
+		}
+		else
+		{
+			animation->SetType(SUITransition::Normal);
+		}
+	}
+
+	animation->SetEndPoint(endPoint);
+
+	if (SV8Function::HasProperty(L"addMode", argObj))
+	{
+		SPString style = SPV8ScriptEngine::StringToSPString(
+			SV8Function::GetProperty(L"transparencyDelta", argObj)->ToString());
+
+		if (SPStringHelper::EqualsIgnoreCase(style, L"Merge"))
+		{
+			component->MergerAnimation(animation);
+		}
+		else if (SPStringHelper::EqualsIgnoreCase(style, L"Skip"))
+		{
+			component->Skip();
+			component->AddAnimation(animation);
+		}
+		else
+		{
+			component->AddAnimation(animation);
+		}
+	}
+	else
+	{
+		// style == L"Normal"
+		component->AddAnimation(animation);
+	}
+
+	component->PlayAnimation();
 }
 
 void SV8Component::AddEffect( const FunctionCallbackInfo<Value>& args )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
 
+	if (args.Length() == 0)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Null Argument.")));
+		return;
+	}
+
+	Handle<Object> argObj = args[0]->ToObject();
+	SPEffectPtr effect = new SPEffect();
+	effect = SV8Function::GetEffectFromObj(argObj, effect);
+
+	if (SV8Function::HasProperty(L"addMode", argObj))
+	{
+		SPString style = SPV8ScriptEngine::StringToSPString(
+			SV8Function::GetProperty(L"addMode", argObj)->ToString());
+
+		if (SPStringHelper::EqualsIgnoreCase(style, L"Skip"))
+		{
+			component->Skip();
+			component->AddEffect(effect);
+		}
+		else
+		{
+			component->AddEffect(effect);
+		}
+	}
+	else
+	{
+		// style == L"Normal"
+		component->AddEffect(effect);
+	}
 }

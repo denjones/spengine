@@ -63,7 +63,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
-      <ShowIncludes>true</ShowIncludes>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -182,7 +182,6 @@
     <ClInclude Include="SPParticleSystem3D.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SPScreenManager.h" />
-    <ClInclude Include="SPScriptManager.h" />
     <ClInclude Include="SPSound.h" />
     <ClInclude Include="SPSoundManager.h" />
     <ClInclude Include="SPEngine.h" />
@@ -264,7 +263,6 @@
     <ClCompile Include="SPMouse.cpp" />
     <ClCompile Include="SPParticleSystem3D.cpp" />
     <ClCompile Include="SPScreenManager.cpp" />
-    <ClCompile Include="SPScriptManager.cpp" />
     <ClCompile Include="SPSound.cpp" />
     <ClCompile Include="SPSoundManager.cpp" />
     <ClCompile Include="SPGame.cpp" />
@@ -290,14 +288,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DirectShow\DirectShow.vcxproj">
       <Project>{e63ad8c5-3fff-4be7-8798-3f87d3e1e8fb}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\KScript\KScript.vcxproj">
-      <Project>{cf8c946e-f346-467e-bf72-116e26cabc01}</Project>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\SimpleXMLPersistence\SimpleXMLPersistence.vcxproj">
       <Project>{d2fe6f40-ad61-424b-994b-4d7993551961}</Project>

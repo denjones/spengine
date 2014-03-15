@@ -641,7 +641,7 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 	PostRender();
 
 	// End rendering off screen.
-	if(renderTarget && renderTarget->IsRenderTarget())
+	if(renderTarget && renderTarget->IsRenderTarget() && renderToSurface)
 	{
 		hr = renderToSurface->EndScene(0);
 

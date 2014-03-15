@@ -41,8 +41,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;.\dll;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\KScript\Debug;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibUV\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\DirectShow;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibUV\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -59,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ShowIncludes>true</ShowIncludes>
+      <ShowIncludes>false</ShowIncludes>
       <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -290,52 +290,9 @@
   <ItemGroup>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SScriptHelper.h" />
-    <ClInclude Include="SSFAddAnimation.h" />
-    <ClInclude Include="SSFAddText.h" />
-    <ClInclude Include="SSFAnimation.h" />
-    <ClInclude Include="SSFClearText.h" />
-    <ClInclude Include="SSFComponent.h" />
-    <ClInclude Include="SSFCursor.h" />
-    <ClInclude Include="SSFDialogBox.h" />
-    <ClInclude Include="SSFDisplay.h" />
-    <ClInclude Include="SSFEffect.h" />
-    <ClInclude Include="SSFExecute.h" />
-    <ClInclude Include="SSFExit.h" />
-    <ClInclude Include="SSFFirst.h" />
-    <ClInclude Include="SSFFont.h" />
-    <ClInclude Include="SSFFps.h" />
-    <ClInclude Include="SSFGoTo.h" />
-    <ClInclude Include="SSFList.h" />
-    <ClInclude Include="SSFLoadGameData.h" />
-    <ClInclude Include="SSFMixPicture.h" />
-    <ClInclude Include="SSFNext.h" />
-    <ClInclude Include="SSFParticleSystem.h" />
-    <ClInclude Include="SSFPicture.h" />
-    <ClInclude Include="SSFPictureBox.h" />
-    <ClInclude Include="SSFRegisterFont.h" />
-    <ClInclude Include="SSFSaveGameData.h" />
-    <ClInclude Include="SSFSavePicture.h" />
-    <ClInclude Include="SSFScreen.h" />
     <ClInclude Include="SPGameShow.h" />
     <ClInclude Include="SPShower.h" />
     <ClInclude Include="SRectangle.h" />
-    <ClInclude Include="SScriptCommand.h" />
-    <ClInclude Include="SScriptFunction.h" />
-    <ClInclude Include="SScriptManager.h" />
-    <ClInclude Include="SSFScript.h" />
-    <ClInclude Include="SSFSkip.h" />
-    <ClInclude Include="SSFSound.h" />
-    <ClInclude Include="SSFSwitchPicture.h" />
-    <ClInclude Include="SSFSwitchScreen.h" />
-    <ClInclude Include="SSFTag.h" />
-    <ClInclude Include="SSFTextBox.h" />
-    <ClInclude Include="SSFTrack.h" />
-    <ClInclude Include="SSFVar.h" />
-    <ClInclude Include="SSFVideo.h" />
-    <ClInclude Include="SSFWait.h" />
-    <ClInclude Include="SSFWaitClick.h" />
-    <ClInclude Include="SSFWaitTime.h" />
-    <ClInclude Include="SSFWindowText.h" />
     <ClInclude Include="SUIAnimation.h" />
     <ClInclude Include="SUIAnimationManager.h" />
     <ClInclude Include="SUIComponent.h" />
@@ -357,7 +314,6 @@
     <ClInclude Include="SUIEffect.h" />
     <ClInclude Include="SUIManager.h" />
     <ClInclude Include="SUIScreen.h" />
-    <ClInclude Include="SUIEventHandleScript.h" />
     <ClInclude Include="SUIText.h" />
     <ClInclude Include="SUITextBox.h" />
     <ClInclude Include="SUITextLine.h" />
@@ -366,6 +322,7 @@
     <ClInclude Include="SUITransformation.h" />
     <ClInclude Include="SUITransformationManager.h" />
     <ClInclude Include="SUITransition.h" />
+    <ClInclude Include="SUIV8FunctionEventHandler.h" />
     <ClInclude Include="SUIVideoManager.h" />
     <ClInclude Include="SV8Component.h" />
     <ClInclude Include="SV8DialogBox.h" />
@@ -381,16 +338,12 @@
     <ClInclude Include="SV8Video.h" />
     <ClInclude Include="SV8Window.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="SSFWaitDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPGameShow.cpp" />
     <ClCompile Include="SPShower.cpp" />
     <ClCompile Include="SRectangle.cpp" />
-    <ClCompile Include="SScriptCommand.cpp" />
-    <ClCompile Include="SScriptFunction.cpp" />
     <ClCompile Include="SScriptHelper.cpp" />
-    <ClCompile Include="SScriptManager.cpp" />
     <ClCompile Include="SUIAnimation.cpp" />
     <ClCompile Include="SUIAnimationManager.cpp" />
     <ClCompile Include="SUIComponent.cpp" />
@@ -400,7 +353,6 @@
     </ClCompile>
     <ClCompile Include="SUIEffectManager.cpp" />
     <ClCompile Include="SUIEvent.cpp" />
-    <ClCompile Include="SUIEventHandleScript.cpp" />
     <ClCompile Include="SUIGenerator.cpp" />
     <ClCompile Include="SUIList.cpp" />
     <ClCompile Include="SUIDialogBox.cpp" />
@@ -423,6 +375,7 @@
     <ClCompile Include="SUITransformation.cpp" />
     <ClCompile Include="SUITransformationManager.cpp" />
     <ClCompile Include="SUITransition.cpp" />
+    <ClCompile Include="SUIV8FunctionEventHandler.cpp" />
     <ClCompile Include="SUIVideoManager.cpp" />
     <ClCompile Include="SV8Component.cpp" />
     <ClCompile Include="SV8CreateParticleSystem.cpp" />
@@ -449,9 +402,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DirectShow\DirectShow.vcxproj">
       <Project>{e63ad8c5-3fff-4be7-8798-3f87d3e1e8fb}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\KScript\KScript.vcxproj">
-      <Project>{cf8c946e-f346-467e-bf72-116e26cabc01}</Project>
     </ProjectReference>
     <ProjectReference Include="..\SimpleXMLPersistence\SimpleXMLPersistence.vcxproj">
       <Project>{d2fe6f40-ad61-424b-994b-4d7993551961}</Project>

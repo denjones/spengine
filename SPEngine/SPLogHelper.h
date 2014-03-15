@@ -28,6 +28,8 @@ namespace SPEngine
 	public:
 		static void TurnOnLogging();
 		static void TurnOffLogging();
+		static void TurnOnDebug();
+		static void TurnOffDebug();
 		static void WriteDebug(string log);
 		static void WriteDebug(wstring log);
 		static void WriteLog(string log);

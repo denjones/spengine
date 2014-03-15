@@ -6,7 +6,7 @@ protected:
 	virtual ~SScriptHelper(void);
 
 public:
-	static SPString VariablesToString(VariableMap variables);
-	static VariableMap StringToVariables(SPString stringStream);
+	//static SPString VariablesToString(VariableMap variables);
+	//static VariableMap StringToVariables(SPString stringStream);
 };
 

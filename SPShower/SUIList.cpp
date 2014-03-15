@@ -249,9 +249,11 @@ bool SUIList::LoadFromString( SPString stringStream )
 
 SPString SUIList::SaveAsString()
 {
-	SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUIL");
+	//SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUIL");
 
-	return result;
+	//return result;
+
+	return L"";
 }
 
 bool SUIList::Scroll( int delta )
@@ -287,44 +289,46 @@ bool SUIList::ClearChild()
 
 bool SUIList::HandleEvent( SUIEventPtr e )
 {
-	if (!e)
-	{
-		return true;
-	}
+	//if (!e)
+	//{
+	//	return true;
+	//}
 
-	if (e->type == SUIEvent::None)
-	{
-		return true;
-	}
+	//if (e->type == SUIEvent::None)
+	//{
+	//	return true;
+	//}
 
-	if(!isDisplay)
-	{
-		return false;
-	}
+	//if(!isDisplay)
+	//{
+	//	return false;
+	//}
 
-	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
-	bool isEventHandled = false;
+	//bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
+	//bool isEventHandled = false;
 
-	if (inRect && e->type == SUIEvent::MouseScrollUp 
-		&& scrollPosition == 0 && onMouseScrollUpMin)
-	{
-		onMouseScrollUpMin->Function(e);
-		isEventHandled = true;
-	}
+	//if (inRect && e->type == SUIEvent::MouseScrollUp 
+	//	&& scrollPosition == 0 && onMouseScrollUpMin)
+	//{
+	//	onMouseScrollUpMin->Function(e);
+	//	isEventHandled = true;
+	//}
 
-	if (inRect && e->type == SUIEvent::MouseScrollDown 
-		&& scrollPosition == 1 && onMouseScrollDownMax)
-	{
-		onMouseScrollDownMax->Function(e);
-		isEventHandled = true;
-	}
+	//if (inRect && e->type == SUIEvent::MouseScrollDown 
+	//	&& scrollPosition == 1 && onMouseScrollDownMax)
+	//{
+	//	onMouseScrollDownMax->Function(e);
+	//	isEventHandled = true;
+	//}
 
-	if (!isEventHandled)
-	{
-		return SUIComponent::HandleEvent(e);
-	}
+	//if (!isEventHandled)
+	//{
+	//	return SUIComponent::HandleEvent(e);
+	//}
 
-	return true;
+	//return true;
+
+	return SUIComponent::HandleEvent(e);
 }
 
 Handle<Object> SUIList::GetV8Obj()

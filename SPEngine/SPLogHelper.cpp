@@ -14,8 +14,8 @@
 using namespace std;
 namespace SPEngine
 {
-	bool SPLogHelper::isLoggingOn = true;
-	bool SPLogHelper::isDebug = true;
+	bool SPLogHelper::isLoggingOn = false;
+	bool SPLogHelper::isDebug = false;
 	CCritSec SPLogHelper::logLock;
 
 	SPLogHelper::SPLogHelper(void)
@@ -145,6 +145,16 @@ namespace SPEngine
 	bool SPLogHelper::IsDebug()
 	{
 		return isDebug;
+	}
+
+	void SPLogHelper::TurnOnDebug()
+	{
+		isDebug = true;
+	}
+
+	void SPLogHelper::TurnOffDebug()
+	{
+		isDebug = false;
 	}
 
 }

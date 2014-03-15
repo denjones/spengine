@@ -225,7 +225,7 @@ namespace SPEngine
 	// Description: Mutes or unmutes the audio.
 	//-----------------------------------------------------------------------------
 
-	HRESULT	SPVideo::Mute(bool bMute)
+	bool SPVideo::Mute(bool bMute)
 	{
 		return data->SetMute(bMute);
 	}
@@ -235,9 +235,9 @@ namespace SPEngine
 	// Description: Sets the volume. 
 	//-----------------------------------------------------------------------------
 
-	HRESULT	SPVideo::SetVolume(long lVolume)
+	bool SPVideo::SetVolume(float fVolume)
 	{
-		return data->SetVolume(lVolume);
+		return data->SetVolume(fVolume);
 	}
 
 	// Graph building
@@ -325,7 +325,7 @@ namespace SPEngine
 		return data->IsMuted();
 	}
 
-	long SPVideo::GetVolume()
+	float SPVideo::GetVolume()
 	{
 		return data->GetVolume();
 	}

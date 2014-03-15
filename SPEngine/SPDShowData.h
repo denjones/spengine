@@ -53,7 +53,7 @@ namespace SPEngine
 
 		// Audio
 		//BOOL            m_bAudioStream; ///< Is there an audio stream?
-		long			m_lVolume;		///< Current volume (unless muted)
+		float			m_fVolume;		///< Current volume (unless muted)
 		bool			m_bMute;		///< Volume muted?		
 		bool			m_bControlling;
 		bool			m_bFilpVertical;
@@ -71,10 +71,10 @@ namespace SPEngine
 		float GetPlayingPosition();
 
 		DWORD GetSeekCap(){return m_seekCaps;}
-		HRESULT SetMute(bool isMute){m_bMute = isMute; return UpdateVolume();}
+		bool SetMute(bool isMute){m_bMute = isMute; return SUCCEEDED(UpdateVolume());}
 		bool IsMuted(){return m_bMute;}
-		HRESULT SetVolume(long setVolume){m_lVolume = setVolume; return UpdateVolume();}
-		long GetVolume(){return m_lVolume;}
+		bool SetVolume(float setVolume){m_fVolume = setVolume; return SUCCEEDED(UpdateVolume());}
+		float GetVolume(){return m_fVolume;}
 
 		bool Load(SPString fileName);
 		bool Unload();

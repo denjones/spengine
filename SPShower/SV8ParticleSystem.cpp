@@ -27,7 +27,7 @@ Handle<ObjectTemplate> SV8ParticleSystem::GetTemplate()
 	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"shootRate"), ShootRateGetter, ShootRateSetter);
 	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"shootAngleMin"), ShootAngleMinGetter, ShootAngleMinSetter);
 	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"shootAngleMax"), ShootAngleMaxGetter, ShootAngleMaxSetter);
-	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"countMin"), CountMinGetter, CountMinSetter);
+	
 	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"countMax"), CountMaxGetter, CountMaxSetter);
 	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"accelerationX"), AccelerationXGetter, AccelerationXSetter);
 	templParticleSystem->SetAccessor(SPV8ScriptEngine::SPStringToString(L"accelerationY"), AccelerationYGetter, AccelerationYSetter);
@@ -609,15 +609,6 @@ void SV8ParticleSystem::ShootAngleMaxSetter( Local<String> property, Local<Value
 	handle->SetShootAngleMax(value->NumberValue());
 }
 
-void SV8ParticleSystem::CountMinGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
-{
-	
-}
-
-void SV8ParticleSystem::CountMinSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
-{
-
-}
 
 void SV8ParticleSystem::CountMaxGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {

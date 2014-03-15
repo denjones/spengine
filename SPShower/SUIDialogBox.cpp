@@ -309,22 +309,24 @@ bool SUIDialogBox::LoadFromString( SPString stringStream )
 
 SPString SUIDialogBox::SaveAsString()
 {
-	SPString currentContent = GetContent();
+	//SPString currentContent = GetContent();
 
-	SUITextList::iterator tIter = textsToPush.begin();
+	//SUITextList::iterator tIter = textsToPush.begin();
 
-	while (tIter != textsToPush.end())
-	{
-		currentContent += tIter->text;
+	//while (tIter != textsToPush.end())
+	//{
+	//	currentContent += tIter->text;
 
-		tIter++;
-	}
+	//	tIter++;
+	//}
 
-	propertiesMap[L"content"] = KSValue(currentContent, 70);
+	//propertiesMap[L"content"] = KSValue(currentContent, 70);
 
-	SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUIDB");
+	//SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUIDB");
 
-	return result;
+	//return result;
+
+	return L"";
 }
 
 bool SUIDialogBox::ForceClear()

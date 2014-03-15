@@ -1,9 +1,6 @@
 #include "StdAfx.h"
 #include "SUIPictureManager.h"
 #include "SScriptHelper.h"
-#include "SScriptFunction.h"
-#include "SSFPicture.h"
-#include "SSFMixPicture.h"
 
 
 SUIPictureManager::SUIPictureManager(void)
@@ -59,41 +56,41 @@ SUIPictureListPtr SUIPictureManager::GetCurrentPicture()
 
 bool SUIPictureManager::LoadFromString( SPString stringStream )
 {
-	SPString picturesString = SPStringHelper::XMLExcludeFrom(stringStream, L"Pictures");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Pictures");
-	
-	while(picturesString.size() > 0)
-	{
-		SPString pictureString = SPStringHelper::XMLExcludeFrom(picturesString, L"SUIPL");
-		picturesString = SPStringHelper::XMLRemoveFirst(picturesString, L"SUIPL");
+	//SPString picturesString = SPStringHelper::XMLExcludeFrom(stringStream, L"Pictures");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Pictures");
+	//
+	//while(picturesString.size() > 0)
+	//{
+	//	SPString pictureString = SPStringHelper::XMLExcludeFrom(picturesString, L"SUIPL");
+	//	picturesString = SPStringHelper::XMLRemoveFirst(picturesString, L"SUIPL");
 
-		SPString propertiesString = SPStringHelper::XMLExcludeFrom(pictureString, L"Properties");
-		pictureString = SPStringHelper::XMLRemoveFirst(pictureString, L"Properties");
+	//	SPString propertiesString = SPStringHelper::XMLExcludeFrom(pictureString, L"Properties");
+	//	pictureString = SPStringHelper::XMLRemoveFirst(pictureString, L"Properties");
 
-		VariableMap properties = SScriptHelper::StringToVariables(propertiesString);
+	//	VariableMap properties = SScriptHelper::StringToVariables(propertiesString);
 
-		SScriptFunctionPtr buildPicture =  new SSFPicture();
-		buildPicture->Function(properties, false);
+	//	SScriptFunctionPtr buildPicture =  new SSFPicture();
+	//	buildPicture->Function(properties, false);
 
-		SPString mixImagesString = SPStringHelper::XMLExcludeFrom(pictureString, L"MPS");
-		pictureString = SPStringHelper::XMLRemoveFirst(pictureString, L"MPS");
+	//	SPString mixImagesString = SPStringHelper::XMLExcludeFrom(pictureString, L"MPS");
+	//	pictureString = SPStringHelper::XMLRemoveFirst(pictureString, L"MPS");
 
-		SScriptFunctionPtr mixPicture = new SSFMixPicture();
+	//	SScriptFunctionPtr mixPicture = new SSFMixPicture();
 
-		while(mixImagesString.size() > 0)
-		{
-			SPString mixImageString = SPStringHelper::XMLExcludeFrom(mixImagesString, L"SUIMI");
-			mixImagesString = SPStringHelper::XMLRemoveFirst(mixImagesString, L"SUIMI");
+	//	while(mixImagesString.size() > 0)
+	//	{
+	//		SPString mixImageString = SPStringHelper::XMLExcludeFrom(mixImagesString, L"SUIMI");
+	//		mixImagesString = SPStringHelper::XMLRemoveFirst(mixImagesString, L"SUIMI");
 
-			VariableMap miProperties = SScriptHelper::StringToVariables(mixImageString);
-			mixPicture->Function(miProperties, false);
-		}
-	}
+	//		VariableMap miProperties = SScriptHelper::StringToVariables(mixImageString);
+	//		mixPicture->Function(miProperties, false);
+	//	}
+	//}
 
-	SPString currentPictureString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentPictureName");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentPictureName");
+	//SPString currentPictureString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentPictureName");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentPictureName");
 
-	currentPicture = GetPicture(currentPictureString);
+	//currentPicture = GetPicture(currentPictureString);
 
 	return true;
 }

@@ -78,7 +78,25 @@ var scroll = ss.screen.createComponent({
     backgroundColor: 0x22eeffdd,
     depth: 10,
     width: 1280,
-    height: 720
+    height: 720,
+    onClick: function(e) {
+        console.log(JSON.stringify(e));
+        this.backgroundColor += 0x11; 
+    }
+});
+
+scroll.addEffect({
+    type:'Mask',
+    texture: 'mask/mask_123.png',
+    level:2,
+    time:3,
+    addMode:"Skip"
+});
+
+scroll.addAnimation({
+    xDelta: 200,
+    yDelta: 100,
+    time: 5
 });
 
 var video = ss.createVideo({
