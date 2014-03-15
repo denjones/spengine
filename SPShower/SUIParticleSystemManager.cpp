@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "SUIParticleSystemManager.h"
 #include "SScriptHelper.h"
-#include "SSFParticleSystem.h"
 #include "SV8Function.h"
 #include "SV8ParticleSystem.h"
 

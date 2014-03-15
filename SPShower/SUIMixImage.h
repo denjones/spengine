@@ -12,15 +12,11 @@ public:
 	SPTexturePtr	Image;
 	SUIMixModePtr	MixMode;
 	float			Layer;
-	VariableMap		properties;
 
 public:
 	SUIMixImage(SPTexturePtr setImage, SUIMixModePtr setMixMode, float setLayer);
 	SUIMixImage(void);
 	virtual ~SUIMixImage(void);
-
-	bool SetProperties(VariableMap args);
-	SPString PropertiesToString();
 
 	SPString SaveAsString();
 	bool LoadFromString(SPString stringStream);

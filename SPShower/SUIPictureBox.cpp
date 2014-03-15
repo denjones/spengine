@@ -332,9 +332,11 @@ bool SUIPictureBox::LoadFromString( SPString stringStream )
 
 SPString SUIPictureBox::SaveAsString()
 {
-	SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUIPB");
+	//SPString result = SPStringHelper::XMLSurroundWith(PropertiesToString(),L"SUIPB");
 
-	return result;
+	//return result;
+
+	return L"";
 }
 
 bool SUIPictureBox::SetImagePositionX( int setX )

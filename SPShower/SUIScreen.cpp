@@ -2,12 +2,8 @@
 #include "SUIScreen.h"
 #include "SUIComponent.h"
 #include "SScriptHelper.h"
-#include "SSFComponent.h"
-#include "SSFList.h"
-#include "SSFPictureBox.h"
-#include "SSFTextBox.h"
-#include "SSFDialogBox.h"
 #include "SV8ScriptManager.h"
+#include "SUIManager.h"
 
 #pragma warning (disable:4244)
 
@@ -368,115 +364,115 @@ SPString SUIScreen::SaveAsString()
 
 bool SUIScreen::LoadFromString( SPString stringStream )
 {
-	SPString nameString = SPStringHelper::XMLExcludeFrom(stringStream, L"Name");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Name");
-	SetName(nameString);
+	//SPString nameString = SPStringHelper::XMLExcludeFrom(stringStream, L"Name");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Name");
+	//SetName(nameString);
 
-	SPString componentsString = SPStringHelper::XMLExcludeFrom(stringStream, L"ComponentMap");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"ComponentMap");
-	SPString componentsStringCopy = componentsString;
-	while(componentsString.size() > 0)
-	{		
-		if (componentsString.find(L"<SUICC>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUICC");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUICC");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFComponent().Function(properties, false);
-		}
+	//SPString componentsString = SPStringHelper::XMLExcludeFrom(stringStream, L"ComponentMap");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"ComponentMap");
+	//SPString componentsStringCopy = componentsString;
+	//while(componentsString.size() > 0)
+	//{		
+	//	if (componentsString.find(L"<SUICC>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUICC");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUICC");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFComponent().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUIL>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIL");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIL");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFList().Function(properties, false);
-		}
+	//	if (componentsString.find(L"<SUIL>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIL");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIL");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFList().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUIPB>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIPB");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIPB");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFPictureBox().Function(properties, false);
-		}
+	//	if (componentsString.find(L"<SUIPB>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIPB");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIPB");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFPictureBox().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUITB>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUITB");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUITB");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFTextBox().Function(properties, false);
-		}
+	//	if (componentsString.find(L"<SUITB>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUITB");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUITB");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFTextBox().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUIDB>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIDB");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIDB");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFDialogBox().Function(properties, false);
-		}
-	}
+	//	if (componentsString.find(L"<SUIDB>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIDB");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIDB");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFDialogBox().Function(properties, false);
+	//	}
+	//}
 
-	componentsString = componentsStringCopy;
-	while(componentsString.size() > 0)
-	{		
-		if (componentsString.find(L"<SUICC>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUICC");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUICC");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFComponent().Function(properties, false);
-		}
+	//componentsString = componentsStringCopy;
+	//while(componentsString.size() > 0)
+	//{		
+	//	if (componentsString.find(L"<SUICC>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUICC");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUICC");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFComponent().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUIL>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIL");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIL");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFList().Function(properties, false);
-		}
+	//	if (componentsString.find(L"<SUIL>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIL");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIL");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFList().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUIPB>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIPB");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIPB");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFPictureBox().Function(properties, false);
-		}
+	//	if (componentsString.find(L"<SUIPB>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIPB");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIPB");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFPictureBox().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUITB>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUITB");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUITB");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFTextBox().Function(properties, false);
-		}
+	//	if (componentsString.find(L"<SUITB>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUITB");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUITB");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFTextBox().Function(properties, false);
+	//	}
 
-		if (componentsString.find(L"<SUIDB>") == 0)
-		{
-			SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIDB");
-			componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIDB");
-			VariableMap properties = SScriptHelper::StringToVariables(componentString);
-			SSFDialogBox().Function(properties, false);
-		}
-	}
+	//	if (componentsString.find(L"<SUIDB>") == 0)
+	//	{
+	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIDB");
+	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIDB");
+	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
+	//		SSFDialogBox().Function(properties, false);
+	//	}
+	//}
 
-	SPString topNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"TopComponentName");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"TopComponentName");
-	topComponent = GetComponent(topNameString);
+	//SPString topNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"TopComponentName");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"TopComponentName");
+	//topComponent = GetComponent(topNameString);
 
-	SPString currentNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentComponentName");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"TopComponentName");
-	currentComponent = GetComponent(currentNameString);
+	//SPString currentNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentComponentName");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"TopComponentName");
+	//currentComponent = GetComponent(currentNameString);
 
-	SPString currentTextBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentTextBoxName");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentTextBoxName");
-	currentTextBox = GetComponent(currentTextBoxNameString);
+	//SPString currentTextBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentTextBoxName");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentTextBoxName");
+	//currentTextBox = GetComponent(currentTextBoxNameString);
 
-	SPString currentPictureBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentPictureBoxName");
-	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentPictureBoxName");
-	currentPictureBox = GetComponent(currentPictureBoxNameString);
+	//SPString currentPictureBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentPictureBoxName");
+	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentPictureBoxName");
+	//currentPictureBox = GetComponent(currentPictureBoxNameString);
 
 	return true;
 }

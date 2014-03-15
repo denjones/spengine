@@ -1,7 +1,5 @@
 #include "StdAfx.h"
 #include "SUIPictureList.h"
-#include "SScriptFunction.h"
-#include "SSFPicture.h"
 #include "SScriptHelper.h"
 
 
@@ -190,35 +188,27 @@ bool SUIPictureList::LoadFromString( SPString stringStream )
 
 SPString SUIPictureList::SaveAsString()
 {
-	SPString result;
+	//SPString result;
 
-	result += SPStringHelper::XMLSurroundWith(SScriptHelper::VariablesToString(properties), L"Properties");
+	//result += SPStringHelper::XMLSurroundWith(SScriptHelper::VariablesToString(properties), L"Properties");
 
-	result += L"<MPS>";
+	//result += L"<MPS>";
 
-	ImageIterator iter = mixImages.begin();
+	//ImageIterator iter = mixImages.begin();
 
-	while(iter != mixImages.end())
-	{
-		result += iter->SaveAsString();
+	//while(iter != mixImages.end())
+	//{
+	//	result += iter->SaveAsString();
 
-		iter++;
-	}
+	//	iter++;
+	//}
 
-	result += L"</MPS>";
+	//result += L"</MPS>";
 
-	result = SPStringHelper::XMLSurroundWith(result, L"SUIPL");
+	//result = SPStringHelper::XMLSurroundWith(result, L"SUIPL");
 
-	return result;
+	//return result;
+
+	return L"";
 }
 
-bool SUIPictureList::SetProperties( VariableMap args )
-{
-	for(VariableMap::iterator iter = args.begin();
-		iter != args.end(); iter++)
-	{
-		properties[iter->first] = iter->second;
-	}
-
-	return true;
-}

@@ -7,7 +7,7 @@ class SUITransformationManager :
 	public SPComponent,
 	public SPSingleton<SUITransformationManager>
 {
-	SPWStringMap<KString> transformationFileNames;
+	SPWStringMap<SPString> transformationFileNames;
 
 public:
 	SUITransformationManager(void);

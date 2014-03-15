@@ -259,6 +259,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 			e->positionY = mouse->GetPositionY();
 			e->movementX = mouse->GetMovementX();
 			e->movementY = mouse->GetMovementY();
+			e->absoluteX = mouse->GetPositionX();
+			e->absoluteY = mouse->GetPositionY();
 
 			eventQueue->push_back(e);
 		}
@@ -273,6 +275,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 			e->positionY = mouse->GetPositionY();
 			e->movementX = mouse->GetMovementX();
 			e->movementY = mouse->GetMovementY();
+			e->absoluteX = mouse->GetPositionX();
+			e->absoluteY = mouse->GetPositionY();
 
 			eventQueue->push_back(e);
 		}
@@ -285,6 +289,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 			e->positionY = mouse->GetPositionY();
 			e->movementX = mouse->GetMovementX();
 			e->movementY = mouse->GetMovementY();
+			e->absoluteX = mouse->GetPositionX();
+			e->absoluteY = mouse->GetPositionY();
 
 			eventQueue->push_back(e);
 		}
@@ -319,6 +325,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->positionY = mouse->GetPositionY();
 				e->movementX = mouse->GetMovementX();
 				e->movementY = mouse->GetMovementY();
+				e->absoluteX = mouse->GetPositionX();
+				e->absoluteY = mouse->GetPositionY();
 
 				eventQueue->push_back(e);
 
@@ -343,6 +351,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 						e->positionY = mouse->GetPositionY();
 						e->movementX = mouse->GetMovementX();
 						e->movementY = mouse->GetMovementY();
+						e->absoluteX = mouse->GetPositionX();
+						e->absoluteY = mouse->GetPositionY();
 
 						eventQueue->push_back(e);
 					}
@@ -359,6 +369,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 					e->positionY = mouse->GetPositionY();
 					e->movementX = mouse->GetMovementX();
 					e->movementY = mouse->GetMovementY();
+					e->absoluteX = mouse->GetPositionX();
+					e->absoluteY = mouse->GetPositionY();
 
 					eventQueue->push_back(e);
 				}
@@ -375,6 +387,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 				e->positionY = mouse->GetPositionY();
 				e->movementX = mouse->GetMovementX();
 				e->movementY = mouse->GetMovementY();
+				e->absoluteX = mouse->GetPositionX();
+				e->absoluteY = mouse->GetPositionY();
 
 				eventQueue->push_back(e);
 			}

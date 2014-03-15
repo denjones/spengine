@@ -14,7 +14,6 @@ class SUIPictureList :
 	SPTexturePtr baseImage;
 	SPTexturePtr target;
 	SPString	name;
-	VariableMap properties;
 
 public:
 	SUIPictureList(void);
@@ -36,8 +35,6 @@ public:
 
 	SPString SaveAsString();
 	bool LoadFromString(SPString stringStream);
-
-	bool SetProperties(VariableMap args);
 };
 
 typedef SPPointer<SUIPictureList> SUIPictureListPtr;

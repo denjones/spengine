@@ -69,6 +69,37 @@ SUIEffectPtr SV8Function::GetEffectFromObj( Handle<Object> argObj, SUIEffectPtr 
 		{
 			effect->SetTime(val->NumberValue());
 		}
+		else if (name == L"canSkip")
+		{
+			effect->SetCanSkip(val->BooleanValue());
+		}
+		else if (name == L"replay")
+		{
+			SPString style = SPV8ScriptEngine::StringToSPString(val->ToString());
+
+			if (SPStringHelper::EqualsIgnoreCase(style, L"SlowIn") || 
+				SPStringHelper::EqualsIgnoreCase(style, L"FastOut"))
+			{
+				effect->SetType(SUITransition::SlowIn);
+			}
+			else if (SPStringHelper::EqualsIgnoreCase(style, L"SlowOut") || 
+				SPStringHelper::EqualsIgnoreCase(style, L"FastIn"))
+			{
+				effect->SetType(SUITransition::SlowOut);
+			}
+			else if (SPStringHelper::EqualsIgnoreCase(style, L"SlowInOut"))
+			{
+				effect->SetType(SUITransition::SlowInOut);
+			}
+			else if (SPStringHelper::EqualsIgnoreCase(style, L"FastInOut"))
+			{
+				effect->SetType(SUITransition::FastInOut);
+			}
+			else
+			{
+				effect->SetType(SUITransition::Normal);
+			}
+		}
 		else if (name == L"control")
 		{
 			SPString valString = SPV8ScriptEngine::StringToSPString(val->ToString());

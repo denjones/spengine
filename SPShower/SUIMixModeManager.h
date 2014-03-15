@@ -7,7 +7,7 @@ class SUIMixModeManager :
 	public SPComponent,
 	public SPSingleton<SUIMixModeManager>
 {
-	SPWStringMap<KString> mixModeFileNames;
+	SPWStringMap<SPString> mixModeFileNames;
 
 public:
 	SUIMixModeManager(void);

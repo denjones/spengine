@@ -301,9 +301,6 @@
     <ClInclude Include="SPSound.h">
       <Filter>Source\SPSound</Filter>
     </ClInclude>
-    <ClInclude Include="SPScriptManager.h">
-      <Filter>Source\SPScript</Filter>
-    </ClInclude>
     <ClInclude Include="SPFileSourceFilter.h">
       <Filter>Source\SPVideo\Filter</Filter>
     </ClInclude>
@@ -548,9 +545,6 @@
     </ClCompile>
     <ClCompile Include="SPSound.cpp">
       <Filter>Source\SPSound</Filter>
-    </ClCompile>
-    <ClCompile Include="SPScriptManager.cpp">
-      <Filter>Source\SPScript</Filter>
     </ClCompile>
     <ClCompile Include="SPFileSourceFilter.cpp">
       <Filter>Source\SPVideo\Filter</Filter>

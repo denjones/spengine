@@ -50,9 +50,6 @@
     <Filter Include="Source\SScript">
       <UniqueIdentifier>{4ad475f8-5eb2-405a-abb9-ce2404c66e82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\SScript\SScriptFunction">
-      <UniqueIdentifier>{36e6b059-cbe3-45bb-92f0-05c278198670}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\SGUI\SUIMixMode">
       <UniqueIdentifier>{f157952b-71c4-4918-903c-a70fc95c8397}</UniqueIdentifier>
     </Filter>
@@ -680,32 +677,8 @@
     <ClInclude Include="SUIScreen.h">
       <Filter>Source\SGUI</Filter>
     </ClInclude>
-    <ClInclude Include="SScriptManager.h">
-      <Filter>Source\SScript</Filter>
-    </ClInclude>
-    <ClInclude Include="SScriptCommand.h">
-      <Filter>Source\SScript</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFPicture.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFPictureBox.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFScreen.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SScriptFunction.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
     <ClInclude Include="SUIPictureManager.h">
       <Filter>Source\SGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFComponent.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFMixPicture.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
     </ClInclude>
     <ClInclude Include="SUIMixModeManager.h">
       <Filter>Source\SGUI\SUIMixMode</Filter>
@@ -713,65 +686,11 @@
     <ClInclude Include="SUIMixMode.h">
       <Filter>Source\SGUI\SUIMixMode</Filter>
     </ClInclude>
-    <ClInclude Include="SSFWaitClick.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFSwitchPicture.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
     <ClInclude Include="SUITransformationManager.h">
       <Filter>Source\SGUI\SUITransition\SUITransformation</Filter>
     </ClInclude>
-    <ClInclude Include="SSFTextBox.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFFont.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFAddText.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFClearText.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFAnimation.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFAddAnimation.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFSwitchScreen.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFWaitTime.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFEffect.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFSound.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
     <ClInclude Include="SUITextBox.h">
       <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFRegisterFont.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFExit.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFScript.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFTag.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFGoTo.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFVideo.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
     </ClInclude>
     <ClInclude Include="SUIVideoManager.h">
       <Filter>Source\SGUI</Filter>
@@ -782,71 +701,14 @@
     <ClInclude Include="SUIEvent.h">
       <Filter>Source\SGUI\SUIEvent</Filter>
     </ClInclude>
-    <ClInclude Include="SUIEventHandleScript.h">
-      <Filter>Source\SGUI\SUIEvent</Filter>
-    </ClInclude>
     <ClInclude Include="SUIList.h">
       <Filter>Source\SGUI\SUIComponent\SUIList</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFList.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFTrack.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
     </ClInclude>
     <ClInclude Include="SUIDialogBox.h">
       <Filter>Source\SGUI\SUIComponent\SUIText</Filter>
     </ClInclude>
-    <ClInclude Include="SSFDialogBox.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFNext.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFWaitDialog.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFSaveGameData.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFSavePicture.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFLoadGameData.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
     <ClInclude Include="SScriptHelper.h">
       <Filter>Source\SScript</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFVar.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFWindowText.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFDisplay.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFWait.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFFirst.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFCursor.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFFps.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFExecute.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFSkip.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="SSFParticleSystem.h">
-      <Filter>Source\SScript\SScriptFunction</Filter>
     </ClInclude>
     <ClInclude Include="SUIParticleSystemManager.h">
       <Filter>Source\SGUI</Filter>
@@ -901,6 +763,9 @@
     </ClInclude>
     <ClInclude Include="SV8Event.h">
       <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SUIV8FunctionEventHandler.h">
+      <Filter>Source\SGUI\SUIEvent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -961,15 +826,6 @@
     <ClCompile Include="SUIScreen.cpp">
       <Filter>Source\SGUI</Filter>
     </ClCompile>
-    <ClCompile Include="SScriptManager.cpp">
-      <Filter>Source\SScript</Filter>
-    </ClCompile>
-    <ClCompile Include="SScriptCommand.cpp">
-      <Filter>Source\SScript</Filter>
-    </ClCompile>
-    <ClCompile Include="SScriptFunction.cpp">
-      <Filter>Source\SScript\SScriptFunction</Filter>
-    </ClCompile>
     <ClCompile Include="SUIPictureManager.cpp">
       <Filter>Source\SGUI</Filter>
     </ClCompile>
@@ -987,9 +843,6 @@
     </ClCompile>
     <ClCompile Include="SUIVideoManager.cpp">
       <Filter>Source\SGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="SUIEventHandleScript.cpp">
-      <Filter>Source\SGUI\SUIEvent</Filter>
     </ClCompile>
     <ClCompile Include="SUIEvent.cpp">
       <Filter>Source\SGUI\SUIEvent</Filter>
@@ -1068,6 +921,9 @@
     </ClCompile>
     <ClCompile Include="SV8Event.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SUIV8FunctionEventHandler.cpp">
+      <Filter>Source\SGUI\SUIEvent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

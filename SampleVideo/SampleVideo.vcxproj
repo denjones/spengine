@@ -127,9 +127,6 @@
     <ProjectReference Include="..\DirectShow\DirectShow.vcxproj">
       <Project>{e63ad8c5-3fff-4be7-8798-3f87d3e1e8fb}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\KScript\KScript.vcxproj">
-      <Project>{cf8c946e-f346-467e-bf72-116e26cabc01}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\SimpleXMLPersistence\SimpleXMLPersistence.vcxproj">
       <Project>{d2fe6f40-ad61-424b-994b-4d7993551961}</Project>
     </ProjectReference>
