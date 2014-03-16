@@ -266,29 +266,15 @@ bool SUIManager::GenerateEvent(float timeDelta)
 		}
 
 		// Mouse scroll.
-		if (mouse->IsScrolledUp())
+		if (mouse->ScrolledPos() != 0)
 		{
 			SUIEventPtr e = new SUIEvent();
 
-			e->type = SUIEvent::MouseScrollUp;
+			e->type = SUIEvent::MouseScroll;
 			e->positionX = mouse->GetPositionX();
 			e->positionY = mouse->GetPositionY();
-			e->movementX = mouse->GetMovementX();
-			e->movementY = mouse->GetMovementY();
-			e->absoluteX = mouse->GetPositionX();
-			e->absoluteY = mouse->GetPositionY();
-
-			eventQueue->push_back(e);
-		}
-		else if (mouse->IsScrolledDown())
-		{
-			SUIEventPtr e = new SUIEvent();
-
-			e->type = SUIEvent::MouseScrollDown;
-			e->positionX = mouse->GetPositionX();
-			e->positionY = mouse->GetPositionY();
-			e->movementX = mouse->GetMovementX();
-			e->movementY = mouse->GetMovementY();
+			e->movementX = 0;
+			e->movementY = mouse->ScrolledPos();
 			e->absoluteX = mouse->GetPositionX();
 			e->absoluteY = mouse->GetPositionY();
 
