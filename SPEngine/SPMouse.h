@@ -63,6 +63,7 @@ namespace SPEngine
 
 		bool IsScrolledUp() { return (wheelPos > 0); }
 		bool IsScrolledDown() { return (wheelPos < 0); }	
+		int ScrolledPos() { return wheelPos; }
 
 		int GetMovementX();
 		int GetMovementY();

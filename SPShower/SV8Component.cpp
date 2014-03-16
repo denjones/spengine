@@ -724,7 +724,10 @@ void SV8Component::OnClickGetter( Local<String> property, const PropertyCallback
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseClick))->GetFunction());
+	if (component->onMouseClick)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseClick))->GetFunction());
+	}
 }
 
 void SV8Component::OnClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -754,7 +757,10 @@ void SV8Component::OnDClickGetter( Local<String> property, const PropertyCallbac
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseDClick))->GetFunction());
+	if (component->onMouseDClick)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseDClick))->GetFunction());
+	}
 }
 
 void SV8Component::OnDClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -784,7 +790,10 @@ void SV8Component::OnMouseUpGetter( Local<String> property, const PropertyCallba
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseUp))->GetFunction());
+	if (component->onMouseUp)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseUp))->GetFunction());
+	}
 }
 
 void SV8Component::OnMouseUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -814,7 +823,10 @@ void SV8Component::OnMouseDownGetter( Local<String> property, const PropertyCall
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseDown))->GetFunction());
+	if (component->onMouseDown)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseDown))->GetFunction());
+	}
 }
 
 void SV8Component::OnMouseDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -844,7 +856,10 @@ void SV8Component::OnMouseScrollGetter( Local<String> property, const PropertyCa
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseScroll))->GetFunction());
+	if (component->onMouseScroll)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseScroll))->GetFunction());
+	}
 }
 
 void SV8Component::OnMouseScrollSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -874,7 +889,10 @@ void SV8Component::OnMouseOverGetter( Local<String> property, const PropertyCall
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouse))->GetFunction());
+	if (component->onMouse)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouse))->GetFunction());
+	}
 }
 
 void SV8Component::OnMouseOverSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -904,7 +922,10 @@ void SV8Component::OnMouseInGetter( Local<String> property, const PropertyCallba
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseIn))->GetFunction());
+	if (component->onMouseIn)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseIn))->GetFunction());
+	}
 }
 
 void SV8Component::OnMouseInSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -934,7 +955,10 @@ void SV8Component::OnMouseOutGetter( Local<String> property, const PropertyCallb
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseOut))->GetFunction());
+	if (component->onMouseOut)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onMouseOut))->GetFunction());
+	}
 }
 
 void SV8Component::OnMouseOutSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -964,7 +988,10 @@ void SV8Component::OnKeyPressGetter( Local<String> property, const PropertyCallb
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyPress))->GetFunction());
+	if (component->onKeyPress)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyPress))->GetFunction());
+	}
 }
 
 void SV8Component::OnKeyPressSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -994,7 +1021,10 @@ void SV8Component::OnKeyUpGetter( Local<String> property, const PropertyCallback
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyUp))->GetFunction());
+	if (component->onKeyUp)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyUp))->GetFunction());
+	}
 }
 
 void SV8Component::OnKeyUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1024,7 +1054,10 @@ void SV8Component::OnKeyDownGetter( Local<String> property, const PropertyCallba
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyDown))->GetFunction());
+	if (component->onKeyDown)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->onKeyDown))->GetFunction());
+	}
 }
 
 void SV8Component::OnKeyDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1054,7 +1087,10 @@ void SV8Component::CatchClickGetter( Local<String> property, const PropertyCallb
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseClick))->GetFunction());
+	if (component->catchMouseClick)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseClick))->GetFunction());
+	}
 }
 
 void SV8Component::CatchClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1084,7 +1120,10 @@ void SV8Component::CatchDClickGetter( Local<String> property, const PropertyCall
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseDClick))->GetFunction());
+	if (component->catchMouseDClick)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseDClick))->GetFunction());
+	}
 }
 
 void SV8Component::CatchDClickSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1114,7 +1153,10 @@ void SV8Component::CatchMouseUpGetter( Local<String> property, const PropertyCal
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseUp))->GetFunction());
+	if (component->catchMouseUp)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseUp))->GetFunction());
+	}
 }
 
 void SV8Component::CatchMouseUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1144,7 +1186,10 @@ void SV8Component::CatchMouseDownGetter( Local<String> property, const PropertyC
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseDown))->GetFunction());
+	if (component->catchMouseDown)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseDown))->GetFunction());
+	}
 }
 
 void SV8Component::CatchMouseDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1174,7 +1219,10 @@ void SV8Component::CatchMouseScrollGetter( Local<String> property, const Propert
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseScroll))->GetFunction());
+	if (component->catchMouseScroll)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseScroll))->GetFunction());
+	}
 }
 
 void SV8Component::CatchMouseScrollSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1204,7 +1252,10 @@ void SV8Component::CatchMouseOverGetter( Local<String> property, const PropertyC
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouse))->GetFunction());
+	if (component->catchMouse)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouse))->GetFunction());
+	}
 }
 
 void SV8Component::CatchMouseOverSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1234,7 +1285,10 @@ void SV8Component::CatchMouseInGetter( Local<String> property, const PropertyCal
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseIn))->GetFunction());
+	if (component->catchMouseIn)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseIn))->GetFunction());
+	}
 }
 
 void SV8Component::CatchMouseInSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1264,7 +1318,10 @@ void SV8Component::CatchMouseOutGetter( Local<String> property, const PropertyCa
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseOut))->GetFunction());
+	if (component->catchMouseOut)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchMouseOut))->GetFunction());
+	}
 }
 
 void SV8Component::CatchMouseOutSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1294,7 +1351,10 @@ void SV8Component::CatchKeyPressGetter( Local<String> property, const PropertyCa
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyPress))->GetFunction());
+	if (component->catchKeyPress)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyPress))->GetFunction());
+	}
 }
 
 void SV8Component::CatchKeyPressSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1324,7 +1384,10 @@ void SV8Component::CatchKeyUpGetter( Local<String> property, const PropertyCallb
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyUp))->GetFunction());
+	if (component->catchKeyUp)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyUp))->GetFunction());
+	}
 }
 
 void SV8Component::CatchKeyUpSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -1354,7 +1417,10 @@ void SV8Component::CatchKeyDownGetter( Local<String> property, const PropertyCal
 		return;
 	}
 
-	info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyDown))->GetFunction());
+	if (component->catchKeyDown)
+	{
+		info.GetReturnValue().Set(((SUIV8FunctionEventHandlerPtr)(component->catchKeyDown))->GetFunction());
+	}
 }
 
 void SV8Component::CatchKeyDownSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )

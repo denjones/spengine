@@ -1459,17 +1459,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 					}
 				}
 			}
-			else if (e->type == SUIEvent::MouseScrollUp)
-			{
-				if (catchMouseScroll)
-				{
-					if(!catchMouseScroll->Function(e))
-					{
-						return false;
-					}
-				}
-			}
-			else if (e->type == SUIEvent::MouseScrollDown)
+			else if (e->type == SUIEvent::MouseScroll)
 			{
 				if (catchMouseScroll)
 				{
@@ -1575,17 +1565,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 					}
 				}
 			}
-			else if (e->type == SUIEvent::MouseScrollUp)
-			{
-				if (onMouseScroll)
-				{
-					if(!onMouseScroll->Function(e))
-					{
-						return false;
-					}
-				}
-			}
-			else if (e->type == SUIEvent::MouseScrollDown)
+			else if (e->type == SUIEvent::MouseScroll)
 			{
 				if (onMouseScroll)
 				{
