@@ -30,7 +30,7 @@ namespace SPEngine
 			return DIENUM_CONTINUE;
 
 		// Set to the first device found.
-		if(SUCCEEDED(SPDirectInput::GetSingleton().GetDirectInput()->CreateDevice(inst->guidInstance, 
+		if(SUCCEEDED(SPDirectInput::GetSingleton()->GetDirectInput()->CreateDevice(inst->guidInstance, 
 			&device, NULL)))
 		{
 			if(SUCCEEDED(device->SetDataFormat(&c_dfDIJoystick2)))
@@ -57,7 +57,7 @@ namespace SPEngine
 		DIPROPRANGE range;
 		DIDEVCAPS caps;
 
-		SPDirectInput::GetSingleton().GetDirectInput()->EnumDevices(DI8DEVCLASS_GAMECTRL, 
+		SPDirectInput::GetSingleton()->GetDirectInput()->EnumDevices(DI8DEVCLASS_GAMECTRL, 
 			(LPDIENUMDEVICESCALLBACK)SPDirectInput::gJSEnumDeviceCallBack,
 			NULL, DIEDFL_ATTACHEDONLY);
 

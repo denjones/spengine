@@ -68,12 +68,12 @@ bool SUIScreen::Initialize()
 	topProperties.backgroundColor = (DWORD)0x00000000;
 	topProperties.rectangle = 
 		SRectangle(0, 0, 
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight);
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight);
 	topProperties.rotation = 0;
 	topProperties.rotationCenter = D3DXVECTOR2(
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth / 2,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight / 2);
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth / 2,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight / 2);
 	topProperties.transparency = 1;
 	topProperties.backgroundImage = NULL;
 
@@ -173,10 +173,10 @@ bool SUIScreen::Draw( float timeDelta )
 
 	DrawOffScreen(timeDelta);	
 
-	SPSpriteManager::GetSingleton().RenderOnScreen(
+	SPSpriteManager::GetSingleton()->RenderOnScreen(
 		screenTexture, transformation, SRectangle(0,0,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight),
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight),
 		SPColor::White, 0.5, NULL);
 
 	PersistentComponentMap::iterator iter = persistentComponentMap.begin();
@@ -243,9 +243,9 @@ SUIScreenPtr SUIScreen::GetTargetScreen()
 
 bool SUIScreen::DrawOffScreen( float timeDelta )
 {
-	screenTexture = SPTextureManager::GetSingleton().CreateRenderTarget(
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth, 
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight,
+	screenTexture = SPTextureManager::GetSingleton()->CreateRenderTarget(
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth, 
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight,
 		backgroundColor);
 
 	topComponent->SetRenderTarget(screenTexture);
@@ -541,13 +541,13 @@ D3DCOLOR SUIScreen::GetBackgroundColor()
 
 Handle<Object> SUIScreen::GetV8Obj()
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (!v8Obj)
 	{
 		Local<Object> obj = Handle<Object>();
 
-		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetScreenTemplate();
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetScreenTemplate();
 		obj = handleTempl->NewInstance();
 
 		if(!obj.IsEmpty())
@@ -578,7 +578,7 @@ SUIComponentPtr SUIScreen::GetPersistentComponent( SUIComponent* component )
 
 void SUIScreen::Focus()
 {
-	SUIManager::GetSingleton().FocusScreen(SUIManager::GetSingleton().GetPersistentScreen(this));
+	SUIManager::GetSingleton()->FocusScreen(SUIManager::GetSingleton()->GetPersistentScreen(this));
 }
 
 

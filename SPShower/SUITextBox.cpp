@@ -14,13 +14,13 @@ SUITextBox::SUITextBox(SUIScreen* screen) : SUIComponent(screen)
 	punctuations = L"/.,\';][=-)(*&^%$#@!~`\"?><:}{£¿¡·¡¶¡°£º}{|+¡ª¡ª£©£¨*&¡­¡­%£¤#@£¡~¡¿¡¾¡¯£»¡¢¡££¬";
 	defaultColor = SPColor::White;
 	defaultBackEffect = NULL;
-	defaultFont = SPFontManager::GetSingleton().GetFont(L"text_box_default");
+	defaultFont = SPFontManager::GetSingleton()->GetFont(L"text_box_default");
 	isAutoHeight = false;
 	isAnonymousFont = false;
 	
 	if (!defaultFont)
 	{
-		defaultFont = SPFontManager::GetSingleton().CreateFont(L"text_box_default",
+		defaultFont = SPFontManager::GetSingleton()->CreateFont(L"text_box_default",
 			20, 0, FW_NORMAL, 10, false, L"ºÚÌå");
 	}	
 
@@ -276,7 +276,7 @@ bool SUITextBox::SetWordSpace( float setSpace )
 
 bool SUITextBox::Draw( float timeDelta )
 {	
-	SPTexturePtr textTex = SPTextureManager::GetSingleton().
+	SPTexturePtr textTex = SPTextureManager::GetSingleton()->
 		CreateRenderTarget(properties.rectangle.Width,
 		properties.rectangle.Height, properties.backgroundColor);
 
@@ -301,7 +301,7 @@ bool SUITextBox::Draw( float timeDelta )
 
 			if (backEffect)
 			{
-				SPFontWriter::GetSingleton().Write(
+				SPFontWriter::GetSingleton()->Write(
 					(*innerIter)->text.font, backEffect, (*innerIter)->text.text,
 					(*innerIter)->position, 
 					(*innerIter)->text.color, wordSpace, 0.1, textTex );
@@ -314,7 +314,7 @@ bool SUITextBox::Draw( float timeDelta )
 				frontEffect = defaultFrontEffect;			
 			}
 
-			SPFontWriter::GetSingleton().Write(
+			SPFontWriter::GetSingleton()->Write(
 				(*innerIter)->text.font, frontEffect, (*innerIter)->text.text,
 				(*innerIter)->position, 
 				(*innerIter)->text.color, wordSpace, 0, textTex );
@@ -323,16 +323,16 @@ bool SUITextBox::Draw( float timeDelta )
 
 	if (defaultBackEffect)
 	{
-		//SPSpriteManager::GetSingleton().Render(textTex,	defaultBackEffect, 
+		//SPSpriteManager::GetSingleton()->Render(textTex,	defaultBackEffect, 
 		//	PositionTextBG(), Alpha() * SPColor::White, childTarget );
-		SPSpriteManager::GetSingleton().RenderWithMatrix(textTex,
+		SPSpriteManager::GetSingleton()->RenderWithMatrix(textTex,
 			defaultBackEffect, TransformMatrixText(), D3DXVECTOR3(0,0,0), 
 			PositionTextBG(), Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
 
-	//SPSpriteManager::GetSingleton().Render(textTex, NULL,
+	//SPSpriteManager::GetSingleton()->Render(textTex, NULL,
 	//	PositionText(), Alpha() * SPColor::White, childTarget );
-	SPSpriteManager::GetSingleton().RenderWithMatrix(textTex,
+	SPSpriteManager::GetSingleton()->RenderWithMatrix(textTex,
 		NULL, TransformMatrixText(), D3DXVECTOR3(0,0,0), PositionText(), 
 		Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 
@@ -572,13 +572,13 @@ void SUITextBox::RefreshText()
 
 Handle<Object> SUITextBox::GetV8Obj()
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (!v8Obj)
 	{
 		Local<Object> obj = Handle<Object>();
 
-		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetTextBoxTemplate();
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetTextBoxTemplate();
 		obj = handleTempl->NewInstance();
 
 		if(!obj.IsEmpty())

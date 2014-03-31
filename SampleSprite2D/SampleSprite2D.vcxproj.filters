@@ -22,7 +22,6 @@
     <None Include="SampleSprite2D.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="expat.dll" />
     <None Include="sicily.jpg">
       <Filter>Resource Files</Filter>
     </None>

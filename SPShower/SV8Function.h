@@ -24,6 +24,7 @@ public:
 	static void CreateVideo(const FunctionCallbackInfo<Value>& args);
 	static void CreateParticleSystem(const FunctionCallbackInfo<Value>& args);
 	static void RegisterFont(const FunctionCallbackInfo<Value>& args);
+	static void AddCommand(const FunctionCallbackInfo<Value>& args);
 
 	//
 	// SpeShow Command

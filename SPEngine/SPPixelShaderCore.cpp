@@ -31,7 +31,7 @@ namespace SPEngine
 	{
 		name = path;
 
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(path);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
@@ -57,7 +57,7 @@ namespace SPEngine
 
 		delete [] pData;
 		pData = NULL;
-		SPFileManager::GetSingleton().CloseFile(path);
+		SPFileManager::GetSingleton()->CloseFile(path);
 
 		if (errorBuffer)
 		{
@@ -73,7 +73,7 @@ namespace SPEngine
 		}
 
 		// Create pixel shader.
-		hr = SPDevice::GetSingleton().GetD3DDevice()->CreatePixelShader(
+		hr = SPDevice::GetSingleton()->GetD3DDevice()->CreatePixelShader(
 			(DWORD*)shaderBuffer->GetBufferPointer(), &pixelShader);
 
 		if (FAILED(hr))

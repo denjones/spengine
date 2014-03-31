@@ -71,7 +71,7 @@ namespace SPEngine
 		// Ether of them is used.
 
 		// Open texture file.
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(setPath);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(setPath);
 		
 		if (!file)
 		{
@@ -91,7 +91,7 @@ namespace SPEngine
 
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTextureFromFileInMemoryEx(
-			SPDevice::GetSingleton().GetD3DDevice(), 
+			SPDevice::GetSingleton()->GetD3DDevice(), 
 			pData, (UINT)length,
 			D3DX_DEFAULT_NONPOW2,
 			D3DX_DEFAULT_NONPOW2,
@@ -105,7 +105,7 @@ namespace SPEngine
 			&texture);
 
 		// Close texture file.
-		SPFileManager::GetSingleton().CloseFile(setPath);
+		SPFileManager::GetSingleton()->CloseFile(setPath);
 		delete [] pData;
 		pData = NULL;
 		if (FAILED(hr))
@@ -166,7 +166,7 @@ namespace SPEngine
 	{
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTexture(
-			SPDevice::GetSingleton().GetD3DDevice(),
+			SPDevice::GetSingleton()->GetD3DDevice(),
 			setWidth, setHeight,
 			0,	0,
 			D3DFMT_A8R8G8B8,
@@ -204,7 +204,7 @@ namespace SPEngine
 			hr = pRenderSurface->GetDesc( &desc );
 
 			hr = D3DXCreateRenderToSurface(
-				SPDevice::GetSingleton().GetD3DDevice(), 
+				SPDevice::GetSingleton()->GetD3DDevice(), 
 				desc.Width, 
 				desc.Height,
 				desc.Format,
@@ -212,14 +212,14 @@ namespace SPEngine
 				D3DFMT_D24S8,
 				&renderToSurface);
 
-			if (SPGameManager::GetSingleton().GetGame()->IsRendering())
+			if (SPGameManager::GetSingleton()->GetGame()->IsRendering())
 			{
-				SPDevice::GetSingleton().GetD3DDevice()->EndScene();
+				SPDevice::GetSingleton()->GetD3DDevice()->EndScene();
 			}
 
 			hr = renderToSurface->BeginScene(pRenderSurface, NULL);
 
-			SPDevice::GetSingleton().GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, color, 1.0, 0);
+			SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, color, 1.0, 0);
 
 			hr = renderToSurface->EndScene(0);
 
@@ -229,9 +229,9 @@ namespace SPEngine
 			pRenderSurface->Release();
 			pRenderSurface = NULL;
 
-			if (SPGameManager::GetSingleton().GetGame()->IsRendering())
+			if (SPGameManager::GetSingleton()->GetGame()->IsRendering())
 			{
-				SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
+				SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 			}
 
 			return SUCCEEDED(hr);
@@ -263,7 +263,7 @@ namespace SPEngine
 	{
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTexture(
-			SPDevice::GetSingleton().GetD3DDevice(),
+			SPDevice::GetSingleton()->GetD3DDevice(),
 			setWidth, setHeight,
 			1, D3DUSAGE_RENDERTARGET,
 			D3DFMT_A8R8G8B8,

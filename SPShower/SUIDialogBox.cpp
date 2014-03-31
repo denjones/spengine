@@ -243,15 +243,15 @@ bool SUIDialogBox::Draw( float timeDelta )
 
 	if (IsShowNextLineTex() && nextLineTex)
 	{
-		//SPSpriteManager::GetSingleton().Render(nextLineTex, NULL, texPosX, texPosY, Alpha() * SPColor::White, CalDepth(1), childTarget);
-		SPSpriteManager::GetSingleton().RenderWithMatrix(nextLineTex,
+		//SPSpriteManager::GetSingleton()->Render(nextLineTex, NULL, texPosX, texPosY, Alpha() * SPColor::White, CalDepth(1), childTarget);
+		SPSpriteManager::GetSingleton()->RenderWithMatrix(nextLineTex,
 			NULL, TransformMatrixNext(), D3DXVECTOR3(0,0,0), PositionNext(),
 			Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
 	else if (IsShowNextPageTex() && nextPageTex)
 	{
-		//SPSpriteManager::GetSingleton().Render(nextPageTex, NULL, texPosX, texPosY, Alpha() * SPColor::White, CalDepth(1), childTarget);
-		SPSpriteManager::GetSingleton().RenderWithMatrix(nextPageTex,
+		//SPSpriteManager::GetSingleton()->Render(nextPageTex, NULL, texPosX, texPosY, Alpha() * SPColor::White, CalDepth(1), childTarget);
+		SPSpriteManager::GetSingleton()->RenderWithMatrix(nextPageTex,
 			NULL, TransformMatrixNext(), D3DXVECTOR3(0,0,0), PositionNext(), 
 			Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
@@ -487,13 +487,13 @@ D3DXVECTOR3 SUIDialogBox::PositionNext()
 
 Handle<Object> SUIDialogBox::GetV8Obj()
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (!v8Obj)
 	{
 		Local<Object> obj = Handle<Object>();
 
-		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetDialogBoxTemplate();
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetDialogBoxTemplate();
 		obj = handleTempl->NewInstance();
 
 		if(!obj.IsEmpty())

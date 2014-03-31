@@ -27,7 +27,7 @@ namespace SPEngine
 		memset(lastKeyState, 0, sizeof(lastKeyState));
 
 		// Create input device1
-		if(FAILED(SPDirectInput::GetSingleton().GetDirectInput()->CreateDevice(
+		if(FAILED(SPDirectInput::GetSingleton()->GetDirectInput()->CreateDevice(
 			GUID_SysKeyboard, &device, NULL)))
 		{
 			return false;
@@ -55,7 +55,7 @@ namespace SPEngine
 
 		// Set cooperative level
 		if(FAILED(device->SetCooperativeLevel(
-			SPWindow::GetSingleton().GetHWnd(), 
+			SPWindow::GetSingleton()->GetHWnd(), 
 			flags)))
 		{
 			return false;

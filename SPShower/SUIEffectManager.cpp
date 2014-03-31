@@ -56,7 +56,7 @@ bool SUIEffectManager::Load()
 
 	//for (iter.First(); !iter.IsDone(); iter.Next())
 	//{
-	//	SPEffectManager::GetSingleton().GetCore(iter.CurrentItem());
+	//	SPEffectManager::GetSingleton()->GetCore(iter.CurrentItem());
 	//}
 
 	return true;

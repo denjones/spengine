@@ -27,7 +27,7 @@ namespace SPEngine
 	{
 		name = path;
 
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(path);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
@@ -47,13 +47,13 @@ namespace SPEngine
 
 		// Create effect.
 		HRESULT hr = D3DXCreateEffect(
-			SPDevice::GetSingleton().GetD3DDevice(), 
+			SPDevice::GetSingleton()->GetD3DDevice(), 
 			pData, (UINT)length, 0, 0, D3DXSHADER_DEBUG, 0, 
 			&effect, &errorBuffer);
 
 		delete [] pData;
 		pData = NULL;
-		SPFileManager::GetSingleton().CloseFile(path);
+		SPFileManager::GetSingleton()->CloseFile(path);
 
 		if (errorBuffer)
 		{
@@ -69,7 +69,7 @@ namespace SPEngine
 			return false;
 		}
 
-		SPGameManager::GetSingleton().GetGame()->LockDrawingWhileLoading();
+		SPGameManager::GetSingleton()->GetGame()->LockDrawingWhileLoading();
 
 		for (int num = 9; num >= 0; num--)
 		{
@@ -87,7 +87,7 @@ namespace SPEngine
 			}
 		}
 
-		SPGameManager::GetSingleton().GetGame()->UnlockDrawingWhileLoading();
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawingWhileLoading();
 
 		return true;
 	}

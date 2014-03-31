@@ -66,10 +66,11 @@ public:
 	bool Reload();
 	bool Update(float timeDelta);
 	bool Draw(float timeDelta);
+	void HandleAllEvent();
 
 	SPString SaveAsString();
 	bool LoadFromString(SPString path);
 
-	static void HandleAllEvent( uv_async_t *handle, int status );
+	static void HandleAllEventCallback( uv_async_t *handle, int status );
 };
 

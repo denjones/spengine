@@ -127,7 +127,7 @@ namespace SPEngine
 
 	bool SPInputManager::SetCursor( SPString path )
 	{
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(path);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
@@ -156,7 +156,7 @@ namespace SPEngine
 		{ 
 			delete [] pData;
 			pData = NULL;
-			SPFileManager::GetSingleton().CloseFile(path);
+			SPFileManager::GetSingleton()->CloseFile(path);
 			CloseHandle(newFile);
 			DeleteFile(name.c_str());
 			return false;
@@ -169,19 +169,19 @@ namespace SPEngine
 			DWORD err = GetLastError();
 			delete [] pData;
 			pData = NULL;
-			SPFileManager::GetSingleton().CloseFile(path);
+			SPFileManager::GetSingleton()->CloseFile(path);
 			CloseHandle(newFile);
 			DeleteFile(name.c_str());
 			return false;
 		}
 
-		SPWindow::GetSingleton().SetCursor(cursor);
+		SPWindow::GetSingleton()->SetCursor(cursor);
 
 		DeleteFile(name.c_str());
 
 		delete [] pData;
 		pData = NULL;
-		SPFileManager::GetSingleton().CloseFile(path);
+		SPFileManager::GetSingleton()->CloseFile(path);
 		//CloseHandle(newFile);
 
 		return true;

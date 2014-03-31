@@ -2,7 +2,7 @@
 #include "SUIParticleSystemManager.h"
 #include "SScriptHelper.h"
 #include "SV8Function.h"
-#include "SV8ParticleSystem.h"
+#include "SV8TemplParticleSystem.h"
 
 
 SUIParticleSystemManager::SUIParticleSystemManager(void)
@@ -21,7 +21,7 @@ SUIParticleSystemManager::~SUIParticleSystemManager(void)
 
 SPEngine::SPParticleSystemTexturePtr SUIParticleSystemManager::GetParticleSystemTexture( SUIParticleSystemHandle handle )
 {
-	return SPTextureManager::GetSingleton().GetParticleSystem(particleSystemIdManager[handle]);
+	return SPTextureManager::GetSingleton()->GetParticleSystem(particleSystemIdManager[handle]);
 }
 
 Handle<Object> SUIParticleSystemManager::GetParticleSystem( SUIParticleSystemHandle handle )
@@ -39,23 +39,23 @@ Handle<Object> SUIParticleSystemManager::CreateParticleSystem( Handle<Object> ar
 	if (SV8Function::HasProperty(L"id", argObj))
 	{
 		id = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"id", argObj)->ToString());
-		particleSystem = SPParticleSystemManager::GetSingleton().GetParticleSystem(id);
+		particleSystem = SPParticleSystemManager::GetSingleton()->GetParticleSystem(id);
 
 		if (!particleSystem)
 		{
-			SPParticleSystemManager::GetSingleton().CreateParticleSystem(id);
-			particleSystem =  SPParticleSystemManager::GetSingleton().GetParticleSystem(id);
+			SPParticleSystemManager::GetSingleton()->CreateParticleSystem(id);
+			particleSystem =  SPParticleSystemManager::GetSingleton()->GetParticleSystem(id);
 		}
 	}
 	else
 	{
 		id = SPStringHelper::ToWString(SPRandomHelper::NextInt(100000000));
-		while(SPVideoManager::GetSingleton().GetVideo(id))
+		while(SPVideoManager::GetSingleton()->GetVideo(id))
 		{
 			id = SPStringHelper::ToWString(SPRandomHelper::NextInt(100000000));
 		}
-		SPParticleSystemManager::GetSingleton().CreateParticleSystem(id);
-		particleSystem = SPParticleSystemManager::GetSingleton().GetParticleSystem(id);
+		SPParticleSystemManager::GetSingleton()->CreateParticleSystem(id);
+		particleSystem = SPParticleSystemManager::GetSingleton()->GetParticleSystem(id);
 	}
 
 	SUIParticleSystemHandle handle = particleSystem.GetHandle();
@@ -90,7 +90,7 @@ Handle<Object> SUIParticleSystemManager::CreateParticleSystem( Handle<Object> ar
 
 Handle<ObjectTemplate> SUIParticleSystemManager::GetParticleSystemTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*particleSystemTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*particleSystemTempl));
 }
 
 bool SUIParticleSystemManager::Initialize()
@@ -99,15 +99,15 @@ bool SUIParticleSystemManager::Initialize()
 	// Enter
 	//
 
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	Locker locker(isolate); 
 	Isolate::Scope isolateScope(isolate);
 	HandleScope handleScope(isolate);
-	Handle<Context> context = SPV8ScriptEngine::GetSingleton().GetContext();
+	Handle<Context> context = SPV8ScriptEngine::GetSingleton()->GetContext();
 	Context::Scope contextScope(context);
 
-	particleSystemTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8ParticleSystem::GetTemplate());
+	particleSystemTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplParticleSystem::GetTemplate());
 
 	return true;
 }

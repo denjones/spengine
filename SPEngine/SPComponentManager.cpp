@@ -11,8 +11,8 @@ namespace SPEngine
 
 	SPComponentManager::~SPComponentManager(void)
 	{
-		componentMap.Clear();
-		components.clear();
+		//componentMap.Clear();
+		//components.clear();
 	}
 
 	bool SPComponentManager::Initialize()

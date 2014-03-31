@@ -32,8 +32,8 @@ bool SPCamera::Initialize()
 
 	viewAngle = D3DX_PI  * 0.5f;
 	aspectRation = 
-		(float)SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth /
-		(float)SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth /
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 	frontPlaneDistance = 0.2f;
 	backPlaneDistance = 10.0f;
 
@@ -41,8 +41,8 @@ bool SPCamera::Initialize()
 	SetPosition(D3DXVECTOR3(0.0f, -1.0f, 0.0f));
 	SetProjection(viewAngle, aspectRation, frontPlaneDistance, backPlaneDistance);
 	SetViewport( 0, 0,
-		SPConfigManager::GetSingleton().GetCurrentConfig().windowWidth,
-		SPConfigManager::GetSingleton().GetCurrentConfig().windowHeight);
+		SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight);
 
 	return true;
 }
@@ -75,7 +75,7 @@ bool SPCamera::SetProjection(
 	D3DXMATRIX proj; 
 	D3DXMatrixPerspectiveFovLH( &proj, 	viewAngle,	
 		aspectRation,	frontPlaneDistance,	backPlaneDistance);
-	SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &proj); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &proj); 
 
 	return true;
 }
@@ -87,7 +87,7 @@ bool SPCamera::SetViewport(
 	int height)
 {
 	D3DVIEWPORT9 vp = {x, y, width, height, 0, 1}; 
-	SPDevice::GetSingleton().GetD3DDevice()->SetViewport(&vp); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetViewport(&vp); 
 
 	return true;
 }
@@ -221,9 +221,9 @@ bool SPCamera::Update(float timeDelta)
 
 bool SPCamera::Draw(float timeDelta)
 {
-	SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
 	
-	SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());	
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());	
 
 	return true;
 }
@@ -231,12 +231,12 @@ bool SPCamera::Draw(float timeDelta)
 bool SPCamera::Load()
 {
 	aspectRation = 
-		(float)SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth /
-		(float)SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth /
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());
 
 	return true;
 }

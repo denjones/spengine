@@ -27,14 +27,14 @@ namespace SPEngine
 
 	bool SPPixelShader::Load( SPString path )
 	{
-		core = SPShaderManager::GetSingleton().GetCore(path);
+		core = SPShaderManager::GetSingleton()->GetCore(path);
 
 		if (!core)
 		{
 			return false;
 		}
 
-		core->GetConstantTable()->SetDefaults(SPDevice::GetSingleton().GetD3DDevice());
+		core->GetConstantTable()->SetDefaults(SPDevice::GetSingleton()->GetD3DDevice());
 
 		return true;
 
@@ -97,7 +97,7 @@ namespace SPEngine
 			return false;
 		}
 
-		SPDevice::GetSingleton().GetD3DDevice()->SetPixelShader(core->GetPixelShader());
+		SPDevice::GetSingleton()->GetD3DDevice()->SetPixelShader(core->GetPixelShader());
 
 		SamplerMap::iterator iter = samplers.begin();
 
@@ -105,8 +105,8 @@ namespace SPEngine
 		{
 			if(iter->second)
 			{
-				SPDevice::GetSingleton().GetD3DDevice()->SetTexture(iter->first, iter->second->GetD3DTexture());			
-				SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(iter->first, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);				
+				SPDevice::GetSingleton()->GetD3DDevice()->SetTexture(iter->first, iter->second->GetD3DTexture());			
+				SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(iter->first, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);				
 			}
 
 			iter++;
@@ -222,7 +222,7 @@ namespace SPEngine
 
 	bool SPPixelShader::SetDefault()
 	{
-		core->GetConstantTable()->SetDefaults(SPDevice::GetSingleton().GetD3DDevice());
+		core->GetConstantTable()->SetDefaults(SPDevice::GetSingleton()->GetD3DDevice());
 
 		return true;
 	}
@@ -241,7 +241,7 @@ namespace SPEngine
 
 			HRESULT hr = S_OK;
 
-			hr = core->GetConstantTable()->SetValue(SPDevice::GetSingleton().GetD3DDevice(), 
+			hr = core->GetConstantTable()->SetValue(SPDevice::GetSingleton()->GetD3DDevice(), 
 				handle, valueIter.CurrentItem()->pData, valueIter.CurrentItem()->length);
 
 			if (FAILED(hr))

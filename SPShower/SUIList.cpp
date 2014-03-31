@@ -52,7 +52,7 @@ bool SUIList::Update( float timeDelta )
 	while(children.size() > maxItemNum)
 	{
 		children.front()->SetFather(NULL);
-		SUIManager::GetSingleton().GetCurrentScreen()->RemoveComponent(children.front()->GetName());
+		SUIManager::GetSingleton()->GetCurrentScreen()->RemoveComponent(children.front()->GetName());
 		children.pop_front();
 	}
 
@@ -70,7 +70,7 @@ bool SUIList::Draw( float timeDelta )
 	while(children.size() > maxItemNum)
 	{
 		children.front()->SetFather(NULL);
-		SUIManager::GetSingleton().GetCurrentScreen()->RemoveComponent(children.front()->GetName());
+		SUIManager::GetSingleton()->GetCurrentScreen()->RemoveComponent(children.front()->GetName());
 		children.pop_front();
 	}
 
@@ -276,7 +276,7 @@ bool SUIList::ClearChild()
 	{
 		if (*iter)
 		{
-			SUIManager::GetSingleton().GetCurrentScreen()->RemoveComponent((*iter)->GetName());
+			SUIManager::GetSingleton()->GetCurrentScreen()->RemoveComponent((*iter)->GetName());
 		}
 
 		iter = children.erase(iter);
@@ -333,13 +333,13 @@ bool SUIList::HandleEvent( SUIEventPtr e )
 
 Handle<Object> SUIList::GetV8Obj()
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (!v8Obj)
 	{
 		Local<Object> obj = Handle<Object>();
 
-		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetScrollTemplate();
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetScrollTemplate();
 		obj = handleTempl->NewInstance();
 
 		if(!obj.IsEmpty())

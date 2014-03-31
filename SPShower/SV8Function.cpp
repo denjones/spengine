@@ -32,7 +32,7 @@ SUIEffectPtr SV8Function::GetEffectFromObj( Handle<Object> argObj, SUIEffectPtr 
 	{
 		SPString type = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"type", argObj)->ToString());
 
-		effect = SUIEffectManager::GetSingleton().GetEffect(type);
+		effect = SUIEffectManager::GetSingleton()->GetEffect(type);
 
 		if (!effect)
 		{
@@ -63,7 +63,7 @@ SUIEffectPtr SV8Function::GetEffectFromObj( Handle<Object> argObj, SUIEffectPtr 
 		else if (name == L"texture")
 		{
 			SPString texName = SPV8ScriptEngine::StringToSPString(val->ToString());
-			effect->SetEffectTexture(SPTextureManager::GetSingleton().GetTexture(texName));
+			effect->SetEffectTexture(SPTextureManager::GetSingleton()->GetTexture(texName));
 		}
 		else if (name == L"time")
 		{
@@ -165,11 +165,11 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 		if (isAnime)
 		{
-			tex = SPTextureManager::GetSingleton().GetAnime(src, row, col, fps);
+			tex = SPTextureManager::GetSingleton()->GetAnime(src, row, col, fps);
 		}
 		else
 		{
-			tex = SPTextureManager::GetSingleton().GetTexture(src);
+			tex = SPTextureManager::GetSingleton()->GetTexture(src);
 		}
 
 		return tex;
@@ -180,7 +180,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 		if (videoArg->IsString())
 		{
-			return SPTextureManager::GetSingleton().GetVideo(
+			return SPTextureManager::GetSingleton()->GetVideo(
 				SPV8ScriptEngine::StringToSPString(videoArg->ToString()));
 		}
 		else if(videoArg->IsObject())
@@ -189,7 +189,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 			if (videoObj->InternalFieldCount() != 1)
 			{
-				videoObj = SUIVideoManager::GetSingleton().CreateVideo(videoObj);
+				videoObj = SUIVideoManager::GetSingleton()->CreateVideo(videoObj);
 			}
 			
 			Handle<External> field = Handle<External>::Cast(videoObj->GetInternalField(0));
@@ -199,7 +199,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 				return NULL;
 			}
 
-			return SUIVideoManager::GetSingleton().GetVideoTexture(handle);
+			return SUIVideoManager::GetSingleton()->GetVideoTexture(handle);
 		}
 	}
 	else if (SV8Function::HasProperty(L"particleSystem", argObj))
@@ -209,7 +209,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 		if (psArg->IsString())
 		{
-			return SPTextureManager::GetSingleton().GetParticleSystem(
+			return SPTextureManager::GetSingleton()->GetParticleSystem(
 				SPV8ScriptEngine::StringToSPString(psArg->ToString()));
 		}
 		else if(psArg->IsObject())
@@ -218,7 +218,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 			if (psObj->InternalFieldCount() != 1)
 			{
-				psObj = SUIVideoManager::GetSingleton().CreateVideo(psObj);
+				psObj = SUIVideoManager::GetSingleton()->CreateVideo(psObj);
 			}
 
 			Handle<External> field = Handle<External>::Cast(psObj->GetInternalField(0));
@@ -228,7 +228,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 				return NULL;
 			}
 
-			return SUIParticleSystemManager::GetSingleton().GetParticleSystemTexture(handle);
+			return SUIParticleSystemManager::GetSingleton()->GetParticleSystemTexture(handle);
 		}
 	}
 

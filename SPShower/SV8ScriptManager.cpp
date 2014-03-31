@@ -4,21 +4,23 @@
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
 #include "SV8Function.h"
-#include "SV8Screen.h"
-#include "SV8Component.h"
-#include "SV8Window.h"
-#include "SV8TextBox.h"
-#include "SV8DialogBox.h"
-#include "SV8PictureBox.h"
-#include "SV8Scroll.h"
+#include "SV8TemplScreen.h"
+#include "SV8TemplComponent.h"
+#include "SV8TemplWindow.h"
+#include "SV8TemplTextBox.h"
+#include "SV8TemplDialogBox.h"
+#include "SV8TemplPictureBox.h"
+#include "SV8TemplScroll.h"
 #include <node.h>
-#include "SV8Event.h"
+#include "SV8TemplEvent.h"
+#include "SV8TemplCommandEvent.h"
 
 SV8ScriptManager::SV8ScriptManager(void)
 {
 	SPV8ScriptEngine::GetSingleton();
-	requireEngine = SPV8ScriptEngine::GetSingletonPtr();
+	requireEngine = SPV8ScriptEngine::GetSingleton();
 	isScriptRunning = false;
+	async = new uv_async_t();
 }
 
 
@@ -71,53 +73,69 @@ SV8ScriptManager::~SV8ScriptManager(void)
 		eventTempl->ClearAndLeak();
 		eventTempl = NULL;
 	}	
+
+	if (commandEventTempl)
+	{
+		commandEventTempl->ClearAndLeak();
+		commandEventTempl = NULL;
+	}
+
+	if (async)
+	{
+		delete async;
+		async = NULL;
+	}
 }
 
 bool SV8ScriptManager::Initialize()
 {
+	// Init uv callback
 
+	uv_async_init(uv_default_loop(), (uv_async_t*)async, HandleCommandCallback);
 
 	//
 	// Init Global Functions
 	//
 
-	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createScreen", SV8Function::CreateScreen);
-	//SPV8ScriptEngine::GetSingleton().AddFunction(L"registerFont", SV8Function::RegisterFont);
-	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createTrack", SV8Function::CreateTrack);
-	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createVideo", SV8Function::CreateVideo);
-	//SPV8ScriptEngine::GetSingleton().AddFunction(L"createParticleSystem", SV8Function::CreateParticleSystem);
+	//SPV8ScriptEngine::GetSingleton()->AddFunction(L"createScreen", SV8Function::CreateScreen);
+	//SPV8ScriptEngine::GetSingleton()->AddFunction(L"registerFont", SV8Function::RegisterFont);
+	//SPV8ScriptEngine::GetSingleton()->AddFunction(L"createTrack", SV8Function::CreateTrack);
+	//SPV8ScriptEngine::GetSingleton()->AddFunction(L"createVideo", SV8Function::CreateVideo);
+	//SPV8ScriptEngine::GetSingleton()->AddFunction(L"createParticleSystem", SV8Function::CreateParticleSystem);
 
 	//
 	// Enter
 	//
 
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();;
 	Locker locker(isolate); 
 	Isolate::Scope isolateScope(isolate);
 	HandleScope handleScope(isolate);
-	Handle<Context> context = SPV8ScriptEngine::GetSingleton().GetContext();
+	Handle<Context> context = SPV8ScriptEngine::GetSingleton()->GetContext();
 	Context::Scope contextScope(context);
 
 	//
 	// Create All Templates
 	//
 
-	screenTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Screen::GetTemplate());
-	componentTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Component::GetTemplate());
-	windowTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Window::GetTemplate());
-	textBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8TextBox::GetTemplate());
-	dialogBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8DialogBox::GetTemplate());
-	pictureBoxTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8PictureBox::GetTemplate());
-	scrollTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Scroll::GetTemplate());
-	eventTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Event::GetTemplate());
+	screenTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplScreen::GetTemplate());
+	componentTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplComponent::GetTemplate());
+	windowTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplWindow::GetTemplate());
+	textBoxTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplTextBox::GetTemplate());
+	dialogBoxTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplDialogBox::GetTemplate());
+	pictureBoxTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplPictureBox::GetTemplate());
+	scrollTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplScroll::GetTemplate());
+	eventTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplEvent::GetTemplate());
+	commandEventTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplCommandEvent::GetTemplate());
 
 	////
 	//// Set Global Window Object
@@ -151,8 +169,10 @@ bool SV8ScriptManager::Update( float timeDelta )
 	{
 		isScriptRunning = true;
 
-		SPV8ScriptEngine::GetSingleton().RunScriptFromFile(L"init.js");
+		SPV8ScriptEngine::GetSingleton()->RunScriptFromFile(L"init.js");
 	}
+
+	uv_async_send((uv_async_t*)async);
 	
 	return true;
 }
@@ -185,43 +205,52 @@ Handle<Value> SV8ScriptManager::GetProperty( SPString propertyName, Handle<Objec
 
 Handle<ObjectTemplate> SV8ScriptManager::GetScreenTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*screenTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*screenTempl));
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetComponentTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*componentTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*componentTempl));
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetWindowTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*windowTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*windowTempl));
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetTextBoxTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*textBoxTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*textBoxTempl));
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetDialogBoxTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*dialogBoxTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*dialogBoxTempl));
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetPictureBoxTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*pictureBoxTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*pictureBoxTempl));
 }
 
 Handle<ObjectTemplate> SV8ScriptManager::GetScrollTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*scrollTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*scrollTempl));
 }
-
 
 Handle<ObjectTemplate> SV8ScriptManager::GetEventTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*eventTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*eventTempl));
+}
+
+Handle<ObjectTemplate> SV8ScriptManager::GetCommandEventTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*commandEventTempl));
+}
+
+void SV8ScriptManager::HandleCommandCallback( uv_async_t *handle, int status )
+{
+	SV8ScriptManager::GetSingleton()->HandleCommands();
 }
 
 void SV8ScriptManager::InitModule( Handle<Object> exports )
@@ -236,19 +265,81 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"createVideo"), FunctionTemplate::New(SV8Function::CreateVideo)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"createParticleSystem"), FunctionTemplate::New(SV8Function::CreateParticleSystem)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"include"), FunctionTemplate::New(SPV8ScriptEngine::Include)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"addCommand"), FunctionTemplate::New(SV8Function::AddCommand)->GetFunction());
 
 	//
 	// Set Global Window Object
 	//
 
-	exports->Set(SPV8ScriptEngine::SPStringToString(L"window"), SV8ScriptManager::GetSingleton().GetWindowTemplate()->NewInstance());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"window"), SV8ScriptManager::GetSingleton()->GetWindowTemplate()->NewInstance());
 
 	//
 	// Create Global Screen Object
 	//
 
 	exports->SetAccessor(SPV8ScriptEngine::SPStringToString(L"screen"),
-		SV8Screen::ScreenGetter);
+		SV8TemplScreen::ScreenGetter);
+}
+
+void SV8ScriptManager::LockCommandQueue()
+{
+	commandLock.Lock();
+}
+
+void SV8ScriptManager::UnlockCommandQueue()
+{
+	commandLock.Unlock();
+}
+
+void SV8ScriptManager::HandleCommands()
+{
+	LockCommandQueue();
+
+	while(commands.size() > 0)
+	{
+		// Accept Function.
+		SV8ScriptCommandPtr command = commands.front();
+		SV8CommandEventPtr event = new SV8CommandEvent();
+
+
+		// Use function.
+		command->Call(event);
+
+		// If the function is not finished.
+		if (event->repeat)
+		{
+			break;
+		}
+
+		// If the function is finished and need to refresh screen.
+		if (event->refresh)
+		{
+			commands.pop_front();
+			if (commands.size() > 0)// && commands.front().order != command.order)
+			{
+				//SetCommandRead(command);
+			}
+			//SetInsertPosBack();
+			break;
+		}
+
+		commands.pop_front();
+		if (commands.size() > 0)// && commands.front().order != command.order)
+		{
+			//SetCommandRead(command);
+		}
+	}
+
+	UnlockCommandQueue();
+}
+
+void SV8ScriptManager::AddCommand( SV8ScriptCommandPtr command )
+{
+	LockCommandQueue();
+
+	commands.push_back(command);
+
+	UnlockCommandQueue();
 }
 
 

@@ -149,8 +149,8 @@ void SPEngine::SPParticleSystem3D::LoadWith2D(
 	BoundingBox tempBox;
 	if(!renderTarget)
 	{
-		renderWidth = SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth;
-		renderHeight = SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;
+		renderWidth = SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
+		renderHeight = SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 	}else
 	{
 		renderWidth = renderTarget->GetWidth();
@@ -228,7 +228,7 @@ bool SPEngine::SPParticleSystem3D::Init(SPTexturePtr texPtr, bool if3D)
 
 	HRESULT hr = 0;
 	
-	hr = SPDevice::GetSingleton().GetD3DDevice()->CreateVertexBuffer(
+	hr = SPDevice::GetSingleton()->GetD3DDevice()->CreateVertexBuffer(
 		vbSize * sizeof(NormalTexColorVertex) * 6,
 		//D3DUSAGE_DYNAMIC | D3DUSAGE_POINTS | D3DUSAGE_WRITEONLY,
 		D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC,
@@ -330,40 +330,40 @@ void SPEngine::SPParticleSystem3D::PreRender()
 	//device->SetRenderState(D3DRS_POINTSCALE_B, SPEngine::fToDw(0));
 	//device->SetRenderState(D3DRS_POINTSCALE_C, SPEngine::fToDw(1));
 	//alpha
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE,   TRUE );
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA); 
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE );
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHAREF,        0x0f ); 
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE,   TRUE );
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE );
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHAREF,        0x0f ); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
 
 	//device->SetTextureStageState(0, D3DTSS_ALPHAOP,D3DTOP_SELECTARG1); 
 	//device->SetTextureStageState(0, D3DTSS_ALPHAARG1,D3DTA_DIFFUSE); 
-	SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
 
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHAREF, 0x10);
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHAREF, 0x10);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-	SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
-	SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 
 
@@ -424,7 +424,7 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 	// Begin rendering off screen.
 	if (renderTarget && renderTarget->IsRenderTarget())
 	{
-		hr = SPDevice::GetSingleton().GetD3DDevice()->EndScene();
+		hr = SPDevice::GetSingleton()->GetD3DDevice()->EndScene();
 
 		hr = renderTarget->GetD3DTexture()->GetSurfaceLevel(0, &pRenderSurface);
 
@@ -432,7 +432,7 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 		hr = pRenderSurface->GetDesc( &desc );
 
 		hr = D3DXCreateRenderToSurface(
-			SPDevice::GetSingleton().GetD3DDevice(), 
+			SPDevice::GetSingleton()->GetD3DDevice(), 
 			desc.Width, 
 			desc.Height,
 			desc.Format,
@@ -459,21 +459,21 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 		D3DXMatrixPerspectiveFovLH( &projectionMatrix, D3DX_PI  * 0.5f,	
 			(float)renderTarget->GetWidth() / (float)renderTarget->GetHeight(),	0.2f, 10.0f);		
 
-		SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_VIEW, &viewMatrix); 
-		SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &projectionMatrix); 
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_VIEW, &viewMatrix); 
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &projectionMatrix); 
 
 		hr = renderToSurface->BeginScene(pRenderSurface, NULL);	
 
-		SPDevice::GetSingleton().GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, backgroundColor, 1.0, 0);
+		SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, backgroundColor, 1.0, 0);
 	}
 
 
 	PreRender();
 	
 
-	SPDevice::GetSingleton().GetD3DDevice()->SetTexture(0, texturePtr->GetD3DTexture());
-	SPDevice::GetSingleton().GetD3DDevice()->SetFVF(NormalTexColorVertex::FVF);
-	SPDevice::GetSingleton().GetD3DDevice()->SetStreamSource(0, vb, 0, sizeof(NormalTexColorVertex));
+	SPDevice::GetSingleton()->GetD3DDevice()->SetTexture(0, texturePtr->GetD3DTexture());
+	SPDevice::GetSingleton()->GetD3DDevice()->SetFVF(NormalTexColorVertex::FVF);
+	SPDevice::GetSingleton()->GetD3DDevice()->SetStreamSource(0, vb, 0, sizeof(NormalTexColorVertex));
 
 	if(vbOffset > vbSize)
 		vbOffset = 0;
@@ -595,7 +595,7 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 				//device->SetTransform(D3DTS_WORLD2, &transMatrix);
 				//device->SetTransform(D3DTS_WORLD1, &p);
 
-				SPDevice::GetSingleton().GetD3DDevice()->DrawPrimitive(
+				SPDevice::GetSingleton()->GetD3DDevice()->DrawPrimitive(
 					//D3DPT_POINTLIST,
 					D3DPT_TRIANGLELIST,
 					vbOffset * 6 ,
@@ -622,10 +622,10 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 	vb->Unlock();
 	if(numParticlesInBatch)
 	{
-		//SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_WORLD2, &transMatrix);
-		//SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_WORLD1, &p);
+		//SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_WORLD2, &transMatrix);
+		//SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_WORLD1, &p);
 
-		SPDevice::GetSingleton().GetD3DDevice()->DrawPrimitive(
+		SPDevice::GetSingleton()->GetD3DDevice()->DrawPrimitive(
 			//D3DPT_POINTLIST,
 			D3DPT_TRIANGLELIST,
 			vbOffset * 6 ,
@@ -650,7 +650,7 @@ void SPEngine::SPParticleSystem3D::Draw(float timeDelta)
 		pRenderSurface = NULL;
 		renderToSurface = NULL;
 
-		hr = SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
+		hr = SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 	}
 
 	modificationLock.Unlock();
@@ -1364,7 +1364,7 @@ bool SPEngine::SPParticleSystem3D::Unload()
 
 bool SPEngine::SPParticleSystem3D::Reload()
 {
-	HRESULT hr = SPDevice::GetSingleton().GetD3DDevice()->CreateVertexBuffer(
+	HRESULT hr = SPDevice::GetSingleton()->GetD3DDevice()->CreateVertexBuffer(
 		vbSize * sizeof(NormalTexColorVertex) * 6,
 		D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC,
 		NormalTexColorVertex::FVF,

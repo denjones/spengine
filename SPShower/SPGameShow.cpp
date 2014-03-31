@@ -15,17 +15,17 @@
 
 SPGameShow::~SPGameShow(void)
 {
-	if (SPV8ScriptEngine::GetSingletonPtr())
-	{
-		SPV8ScriptEngine::GetSingleton().StopThread();
-	}
+	//if (SPV8ScriptEngine::GetSingleton())
+	//{
+	//	SPV8ScriptEngine::GetSingleton()->StopThread();
+	//}
 }
 
 bool SPGameShow::Load()
 {
-	//SPScreenManager::GetSingleton().CreateScreen(L"shower", new SScreen());
-	//SPScreenManager::GetSingleton().Register(L"shower");
-	loading = SPTextureManager::GetSingleton().GetAnime(L"data/images/loading.png", 2, 4, 20);
+	//SPScreenManager::GetSingleton()->CreateScreen(L"shower", new SScreen());
+	//SPScreenManager::GetSingleton()->Register(L"shower");
+	loading = SPTextureManager::GetSingleton()->GetAnime(L"data/images/loading.png", 2, 4, 20);
 
 	LoadSystemData();
 
@@ -40,24 +40,19 @@ bool SPGameShow::UnloadContent()
 }
 
 bool SPGameShow::Initialize()
-{
-	SUITrackManager::GetSingleton();
-	SUIVideoManager::GetSingleton();
-	SUIParticleSystemManager::GetSingleton();
-	SV8ScriptManager::GetSingleton().Enable();
-	SUIManager::GetSingleton().Enable();	
-	SUIEffectManager::GetSingleton();
-	SUIMixModeManager::GetSingleton();
-	SUITransformationManager::GetSingleton();
+{	
 	
-	SPComponentManager::GetSingleton().RegisterComponent(L"STrack", SUITrackManager::GetSingletonPtr());
-	SPComponentManager::GetSingleton().RegisterComponent(L"SVideo", SUIVideoManager::GetSingletonPtr());
-	SPComponentManager::GetSingleton().RegisterComponent(L"SParticleSystem", SUIParticleSystemManager::GetSingletonPtr());
-	SPComponentManager::GetSingleton().RegisterComponent(L"SScript", SV8ScriptManager::GetSingletonPtr());
-	SPComponentManager::GetSingleton().RegisterComponent(L"SUI", SUIManager::GetSingletonPtr());		
-	SPComponentManager::GetSingleton().RegisterComponent(L"SEffect", SUIEffectManager::GetSingletonPtr());
-	SPComponentManager::GetSingleton().RegisterComponent(L"SMixMode", SUIMixModeManager::GetSingletonPtr());
-	SPComponentManager::GetSingleton().RegisterComponent(L"STransformation", SUITransformationManager::GetSingletonPtr());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"STrack", SUITrackManager::GetSingleton());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"SVideo", SUIVideoManager::GetSingleton());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"SParticleSystem", SUIParticleSystemManager::GetSingleton());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"SUI", SUIManager::GetSingleton());		
+	SPComponentManager::GetSingleton()->RegisterComponent(L"SEffect", SUIEffectManager::GetSingleton());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"SMixMode", SUIMixModeManager::GetSingleton());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"STransformation", SUITransformationManager::GetSingleton());
+	SPComponentManager::GetSingleton()->RegisterComponent(L"SScript", SV8ScriptManager::GetSingleton());
+
+	SV8ScriptManager::GetSingleton()->Enable();
+	SUIManager::GetSingleton()->Enable();
 	
 	return true;	
 }
@@ -77,13 +72,13 @@ bool SPGameShow::SaveAsFile( SPString path )
 //	SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 //
 //	result += SPStringHelper::XMLSurroundWith(
-//		SPVideoManager::GetSingleton().SaveAsString()
-//		+ SPFontManager::GetSingleton().SaveAsString()
-//		+ SPSoundManager::GetSingleton().SaveAsString()
-////		+ SScriptManager::GetSingleton().SaveAsString()
-//		//+ SUIParticleSystemManager::GetSingleton().SaveAsString()
-//		+ SUIPictureManager::GetSingleton().SaveAsString()		
-//		+ SUIManager::GetSingleton().SaveAsString(),L"SaveData");
+//		SPVideoManager::GetSingleton()->SaveAsString()
+//		+ SPFontManager::GetSingleton()->SaveAsString()
+//		+ SPSoundManager::GetSingleton()->SaveAsString()
+////		+ SScriptManager::GetSingleton()->SaveAsString()
+//		//+ SUIParticleSystemManager::GetSingleton()->SaveAsString()
+//		+ SUIPictureManager::GetSingleton()->SaveAsString()		
+//		+ SUIManager::GetSingleton()->SaveAsString(),L"SaveData");
 //
 //	string shortResult = SPStringHelper::WStringToUTF8String(result);
 //
@@ -122,37 +117,37 @@ bool SPGameShow::LoadFromFile( SPString path )
 	//delete [] pBuffer;
 	//pBuffer = NULL;
 
-	//SPVideoManager::GetSingleton().LoadFromString(
+	//SPVideoManager::GetSingleton()->LoadFromString(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SPVideoManager"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SPVideoManager");
 
-	//SPFontManager::GetSingleton().LoadFromString(
+	//SPFontManager::GetSingleton()->LoadFromString(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SPFontManager"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SPFontManager");
 
-	//SPSoundManager::GetSingleton().LoadFromString(
+	//SPSoundManager::GetSingleton()->LoadFromString(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SPSoundManager"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SPSoundManager");
 
-	//SScriptManager::GetSingleton().LoadFromString(
+	//SScriptManager::GetSingleton()->LoadFromString(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SScriptManager"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SScriptManager");
 
-	////SUIParticleSystemManager::GetSingleton().LoadFromString(
+	////SUIParticleSystemManager::GetSingleton()->LoadFromString(
 	////	SPStringHelper::XMLExcludeFrom(result, L"SUIParticleSys"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIParticleSys");
 
-	//SUIPictureManager::GetSingleton().LoadFromString(
+	//SUIPictureManager::GetSingleton()->LoadFromString(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SUIPictureManager"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIPictureManager");
 
-	//SUIManager::GetSingleton().LoadFromString(
+	//SUIManager::GetSingleton()->LoadFromString(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SUIManager"));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIManager");
@@ -170,9 +165,9 @@ bool SPGameShow::SaveSystemData()
 	//SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
 	//result += SPStringHelper::XMLSurroundWith(	SScriptHelper::VariablesToString(
-	//	SScriptManager::GetSingleton().GetSystemVariables()), L"SysData");
+	//	SScriptManager::GetSingleton()->GetSystemVariables()), L"SysData");
 
-	//result += SScriptManager::GetSingleton().ReadCommandsToString() ;
+	//result += SScriptManager::GetSingleton()->ReadCommandsToString() ;
 
 	//string shortResult = SPStringHelper::WStringToUTF8String(result);
 
@@ -210,13 +205,13 @@ bool SPGameShow::LoadSystemData()
 
 	//SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
 
-	//SScriptManager::GetSingleton().SetSystemVariables(
+	//SScriptManager::GetSingleton()->SetSystemVariables(
 	//	SScriptHelper::StringToVariables(
 	//	SPStringHelper::XMLExcludeFrom(result, L"SysData")));
 
 	//result = SPStringHelper::XMLRemoveFirst(result, L"SysData");
 
-	//SScriptManager::GetSingleton().ReadCommandsFromString(result);
+	//SScriptManager::GetSingleton()->ReadCommandsFromString(result);
 
 	//delete [] pBuffer;
 	//pBuffer = NULL;
@@ -226,22 +221,22 @@ bool SPGameShow::LoadSystemData()
 
 bool SPGameShow::DrawWhileLoading( float timeDelta )
 {
-	SPSpriteManager::GetSingleton().RenderOnScreen(SPTextureManager::GetSingleton().GetBlankWhiteTexture(), NULL,
-		SPRectangle(0,0,SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
+	SPSpriteManager::GetSingleton()->RenderOnScreen(SPTextureManager::GetSingleton()->GetBlankWhiteTexture(), NULL,
+		SPRectangle(0,0,SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
 
-	SPSpriteManager::GetSingleton().Render(loading, NULL, 
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth - loading->GetWidth() - 20,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight- loading->GetHeight() - 20, SPColor::White, 0, NULL);
+	SPSpriteManager::GetSingleton()->Render(loading, NULL, 
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth - loading->GetWidth() - 20,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight- loading->GetHeight() - 20, SPColor::White, 0, NULL);
 
 	return SPGame::DrawWhileLoading(timeDelta);
 }
 
 bool SPGameShow::Draw( float timeDelta )
 {
-	SPSpriteManager::GetSingleton().RenderOnScreen(SPTextureManager::GetSingleton().GetBlankWhiteTexture(), NULL,
-		SPRectangle(0,0,SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth,
-		SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
+	SPSpriteManager::GetSingleton()->RenderOnScreen(SPTextureManager::GetSingleton()->GetBlankWhiteTexture(), NULL,
+		SPRectangle(0,0,SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
 
 	return SPGame::Draw(timeDelta);
 }

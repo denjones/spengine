@@ -12,8 +12,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR    lpCmdLine,
                      int       nCmdShow)
 {
-	SPGameFactory<SampleGame>::GetSingleton().Produce(hInstance);
-	SPGameManager::GetSingleton().Start();
+	SPGameFactory<SampleGame>::GetSingleton()->Produce(hInstance);
+	SPGameManager::GetSingleton()->Start();
 
 	return 0;
 }

@@ -46,27 +46,27 @@ namespace SPEngine
 	bool SPSpriteManager3D::PreDraw()
 	{
 		// Sample state.
-		SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-		SPDevice::GetSingleton().GetD3DDevice()->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
 
 		// Alpha render.
 		// Disable lighting.
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE,   TRUE );
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA);
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA); 
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE );
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHAREF,        0x0f ); 
-		SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE,   TRUE );
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA); 
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE );
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHAREF,        0x0f ); 
+		SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
 
 		// Set blend.
-		SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-		SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-		SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 
-		SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-		SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-		SPDevice::GetSingleton().GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
 
 		return true;
 	}
@@ -91,7 +91,7 @@ namespace SPEngine
 		// Create vertex buffer.
 		IDirect3DVertexBuffer9* Quad = 0;		
 
-		SPDevice::GetSingleton().GetD3DDevice()->CreateVertexBuffer(
+		SPDevice::GetSingleton()->GetD3DDevice()->CreateVertexBuffer(
 			6 * sizeof(NormalTexColorVertex), 
 			D3DUSAGE_WRITEONLY,
 			NormalTexColorVertex::FVF,
@@ -102,9 +102,9 @@ namespace SPEngine
 		// Calculate half the texture width and height of the float form.
 		float halfWidth, halfHeight;
 		halfWidth = (float)(sprite.texture->GetWidth()) / 
-			SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;
+			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 		halfHeight = (float)(sprite.texture->GetHeight()) / 
-			SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;
+			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 
 		// Set vertex buffer.
 		NormalTexColorVertex *v;
@@ -122,10 +122,10 @@ namespace SPEngine
 		Quad->Unlock();
 		
 		// Draw.
-		SPDevice::GetSingleton().GetD3DDevice()->SetTransform(D3DTS_WORLD, &sprite.transformMatrix);
-		SPDevice::GetSingleton().GetD3DDevice()->SetTexture(0, sprite.texture->GetD3DTexture());
-		SPDevice::GetSingleton().GetD3DDevice()->SetStreamSource(0, Quad, 0, sizeof(NormalTexColorVertex));
-		SPDevice::GetSingleton().GetD3DDevice()->SetFVF(NormalTexColorVertex::FVF);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_WORLD, &sprite.transformMatrix);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetTexture(0, sprite.texture->GetD3DTexture());
+		SPDevice::GetSingleton()->GetD3DDevice()->SetStreamSource(0, Quad, 0, sizeof(NormalTexColorVertex));
+		SPDevice::GetSingleton()->GetD3DDevice()->SetFVF(NormalTexColorVertex::FVF);
 
 		if (sprite.effect)
 		{
@@ -135,10 +135,10 @@ namespace SPEngine
 		}
 		else
 		{
-			SPDevice::GetSingleton().GetD3DDevice()->SetPixelShader(NULL);
+			SPDevice::GetSingleton()->GetD3DDevice()->SetPixelShader(NULL);
 		}
 
-		SPDevice::GetSingleton().GetD3DDevice()->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
+		SPDevice::GetSingleton()->GetD3DDevice()->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
 
 		// Release vertex buffer.
 		if(Quad)
@@ -258,11 +258,11 @@ namespace SPEngine
 		D3DXVECTOR3		translation)
 	{
 		translation.x = translation.x / 
-			SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight * 2.0f;
+			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight * 2.0f;
 		translation.y = translation.y / 
-			SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight * 2.0f;
+			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight * 2.0f;
 		translation.z = translation.z / 
-			SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight * 2.0f;
+			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight * 2.0f;
 
 		AddSprite3D(setTexture, ps, scalingCenter,
 				scalingRotation, scaling, rotationCenter,

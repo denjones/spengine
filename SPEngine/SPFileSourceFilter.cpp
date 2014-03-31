@@ -24,7 +24,7 @@ namespace SPEngine
 		wstring wName = lpszFileName;
 		SPString name = SPString(wName.begin(), wName.end());
 
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(name);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(name);
 
 		if (!file)
 		{
@@ -38,7 +38,7 @@ namespace SPEngine
 		{
 			//CloseHandle(hFile);
 			SPLogHelper::WriteLog("[DShow] WARNING: Failed to create buffer!");
-			SPFileManager::GetSingleton().CloseFile(name);
+			SPFileManager::GetSingleton()->CloseFile(name);
 			return FALSE;
 		}
 
@@ -49,7 +49,7 @@ namespace SPEngine
 			delete [] pbMem;
 			pbMem = NULL;
 			SPLogHelper::WriteLog("[DShow] WARNING: Failed to read file!");
-			SPFileManager::GetSingleton().CloseFile(name);
+			SPFileManager::GetSingleton()->CloseFile(name);
 			return FALSE;
 		}
 
@@ -59,7 +59,7 @@ namespace SPEngine
 
 		// Close the file
 
-		SPFileManager::GetSingleton().CloseFile(name);
+		SPFileManager::GetSingleton()->CloseFile(name);
 
 		return TRUE;
 	}

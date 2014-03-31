@@ -766,10 +766,10 @@ SPEngine::SPTexturePtr SUIComponent::SaveAsTexture()
 		return NULL;
 	}
 
-	SPTexturePtr tex = SPTextureManager::GetSingleton().CreateRenderTarget(
+	SPTexturePtr tex = SPTextureManager::GetSingleton()->CreateRenderTarget(
 		childTarget->GetWidth(), childTarget->GetHeight(), properties.backgroundColor);
 
-	SPSpriteManager::GetSingleton().Render(childTarget, NULL, 0, 0, tex);
+	SPSpriteManager::GetSingleton()->Render(childTarget, NULL, 0, 0, tex);
 
 	return tex;
 }
@@ -1099,13 +1099,13 @@ SUIProperties::BackgroundMode SUIComponent::GetBackgroundMode()
 
 Handle<Object> SUIComponent::GetV8Obj()
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (!v8Obj)
 	{
 		Local<Object> obj = Handle<Object>();
 
-		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetComponentTemplate();
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetComponentTemplate();
 		obj = handleTempl->NewInstance();
 
 		if(!obj.IsEmpty())
@@ -1143,7 +1143,7 @@ bool SUIComponent::PreDraw()
 	// Create render target to be rendered by children.
 	if (!isAbsoluteRender)
 	{
-		childTarget = SPTextureManager::GetSingleton().
+		childTarget = SPTextureManager::GetSingleton()->
 			CreateRenderTarget(GetWidth(), GetHeight(), properties.backgroundColor);
 	}
 	else
@@ -1159,23 +1159,23 @@ bool SUIComponent::PreDraw()
 	destRect.Y = 0;
 
 	// Render background color and image.
-	SPTexturePtr backgroundColorTex = SPTextureManager::GetSingleton().GetBlankWhiteTexture();	
+	SPTexturePtr backgroundColorTex = SPTextureManager::GetSingleton()->GetBlankWhiteTexture();	
 
-	//SPSpriteManager::GetSingleton().RenderOnScreen(backgroundColorTex,
+	//SPSpriteManager::GetSingleton()->RenderOnScreen(backgroundColorTex,
 	//	NULL, destRect, properties.backgroundColor, 1, childTarget);
 	float alpha = Alpha();
 	D3DCOLOR realColor = alpha * (D3DXCOLOR)properties.backgroundColor;
 
-	SPSpriteManager::GetSingleton().RenderWithMatrix(backgroundColorTex,
+	SPSpriteManager::GetSingleton()->RenderWithMatrix(backgroundColorTex,
 		isAbsoluteRender ? GetCurrentEffect() : NULL, TransformMatrixColor(), 
 		D3DXVECTOR3(0,0,0), PositionColor(), realColor, childTarget);
 
 	if (properties.backgroundImage)
 	{
 		D3DXVECTOR3 positionBG = PositionBG();
-		//SPSpriteManager::GetSingleton().RenderOnScreen(properties.backgroundImage,
+		//SPSpriteManager::GetSingleton()->RenderOnScreen(properties.backgroundImage,
 		//	NULL, GetBackgroundRect(), SPColor::White, 1, childTarget);
-		SPSpriteManager::GetSingleton().RenderWithMatrix(properties.backgroundImage,
+		SPSpriteManager::GetSingleton()->RenderWithMatrix(properties.backgroundImage,
 			isAbsoluteRender?GetCurrentEffect():NULL, TransformMatrixBG(),
 			BackgroundSrcRect().CRect(), D3DXVECTOR3(0,0,0), positionBG, 
 			alpha * (D3DXCOLOR)SPColor::White, childTarget);
@@ -1239,7 +1239,7 @@ bool SUIComponent::PostDraw()
 
 	if (childTarget && !isAbsoluteRender)
 	{
-		SPSpriteManager::GetSingleton().RenderWithRotation(
+		SPSpriteManager::GetSingleton()->RenderWithRotation(
 			childTarget, 
 			GetCurrentEffect(), 
 			D3DXVECTOR3(GetPosition().x, GetPosition().y, Depth()),
@@ -1297,7 +1297,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 	{
 		// Catch Movement
 
-		if ((!inRect || !SPInputManager::GetSingleton().GetMouse()->IsWithinWindow()) 
+		if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
 			&& lastInRect)
 		{
 			if (catchMouseOut)
@@ -1353,7 +1353,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 
 		// On Event
 
-		if ((!inRect || !SPInputManager::GetSingleton().GetMouse()->IsWithinWindow()) 
+		if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
 			&& lastInRect)
 		{
 			if (onMouseOut)

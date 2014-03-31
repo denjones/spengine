@@ -42,7 +42,7 @@ D3DMATERIAL9 SPMaterialManager::InitializeMaterial( D3DXCOLOR ambient,
 
 bool SPMaterialManager::SetMaterial( D3DMATERIAL9 mtrl )
 {
-	SPDevice::GetSingleton().GetD3DDevice()->SetMaterial(&mtrl); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetMaterial(&mtrl); 
 	return true;
 }
 

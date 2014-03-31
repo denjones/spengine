@@ -54,31 +54,31 @@ bool FPSDisplayer::Draw( float timeElapsed )
 	{
 	case LeftTop:
 		position = D3DXVECTOR2(0, 0);
-		SPFontWriter::GetSingleton().Write(font, NULL, text, position, SPColor::Yellow, 0, 0, NULL);
+		SPFontWriter::GetSingleton()->Write(font, NULL, text, position, SPColor::Yellow, 0, 0, NULL);
 		break;
 
 	case LeftBottom:
 		position = D3DXVECTOR2(0,
-			(float)SPConfigManager::GetSingleton().GetCurrentConfig().
+			(float)SPConfigManager::GetSingleton()->GetCurrentConfig().
 			workingHeight - font->GetHeight());
-		SPFontWriter::GetSingleton().Write(font, NULL, text, position, SPColor::Yellow, 0, 0, NULL);
+		SPFontWriter::GetSingleton()->Write(font, NULL, text, position, SPColor::Yellow, 0, 0, NULL);
 		break;
 
 	case RightTop:
 		position = D3DXVECTOR2(
-			(float)SPConfigManager::GetSingleton().GetCurrentConfig().
+			(float)SPConfigManager::GetSingleton()->GetCurrentConfig().
 			workingWidth - size.x, 0);
-		SPFontWriter::GetSingleton().Write(font, NULL, text, SPRectangle((int)position.x, (int)position.y, 
+		SPFontWriter::GetSingleton()->Write(font, NULL, text, SPRectangle((int)position.x, (int)position.y, 
 			(int)size.x, (int)size.y),
 			(TextFormat)(Top|Right),SPColor::Yellow, 0, 0, NULL);
 		break;
 
 	case RightBottom:
-		position = D3DXVECTOR2((float)SPConfigManager::GetSingleton().
+		position = D3DXVECTOR2((float)SPConfigManager::GetSingleton()->
 			GetCurrentConfig().workingWidth - size.x,
-			(float)(SPConfigManager::GetSingleton().GetCurrentConfig().
+			(float)(SPConfigManager::GetSingleton()->GetCurrentConfig().
 			workingHeight - font->GetHeight()));
-		SPFontWriter::GetSingleton().Write(font, NULL, text, SPRectangle((int)position.x, (int)position.y, 
+		SPFontWriter::GetSingleton()->Write(font, NULL, text, SPRectangle((int)position.x, (int)position.y, 
 			(int)size.x, (int)size.y),
 			(TextFormat)(Top|Right),SPColor::Yellow, 0, 0, NULL);
 		break;
@@ -89,14 +89,14 @@ bool FPSDisplayer::Draw( float timeElapsed )
 
 bool FPSDisplayer::Load()
 {
-	font = SPFontManager::GetSingleton().GetFont(L"yh_20");
+	font = SPFontManager::GetSingleton()->GetFont(L"yh_20");
 
 	return true;
 }
 
 bool FPSDisplayer::Initialize()
 {
-	font = SPFontManager::GetSingleton().CreateFont(L"yh_20", 20, 0, FW_BOLD, 99, false, L"Î¢ÈíÑÅºÚ");
+	font = SPFontManager::GetSingleton()->CreateFont(L"yh_20", 20, 0, FW_BOLD, 99, false, L"Î¢ÈíÑÅºÚ");
 
 	return true;
 }

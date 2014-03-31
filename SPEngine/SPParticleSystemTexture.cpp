@@ -57,7 +57,7 @@ namespace SPEngine
 	void SPParticleSystemTexture::SetParticleSystem( SPString setName )
 	{
 		particleSystemName = setName;
-		SPParticleSystem3DPtr ptr = SPParticleSystemManager::GetSingleton().GetParticleSystem(setName);
+		SPParticleSystem3DPtr ptr = SPParticleSystemManager::GetSingleton()->GetParticleSystem(setName);
 		if (ptr)
 		{
 			particleSystem = ptr;

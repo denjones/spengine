@@ -589,9 +589,6 @@
     <None Include="rt_manif.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="antlr3c.dll">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="avcodec-lav-55.dll">
       <Filter>Resource Files</Filter>
     </None>
@@ -615,6 +612,9 @@
     </None>
     <None Include="init.js" />
     <None Include="first.js" />
+    <None Include="node.dll">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -725,47 +725,56 @@
     <ClInclude Include="SV8ScriptManager.h">
       <Filter>Source\SScript</Filter>
     </ClInclude>
-    <ClInclude Include="SV8Component.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8Screen.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8Window.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8TextBox.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8DialogBox.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8PictureBox.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8Scroll.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8Track.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
     <ClInclude Include="SUITrackManager.h">
       <Filter>Source\SGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8Video.h">
-      <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
     <ClInclude Include="SV8Function.h">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClInclude>
-    <ClInclude Include="SV8ParticleSystem.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
-    <ClInclude Include="SV8Event.h">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClInclude>
     <ClInclude Include="SUIV8FunctionEventHandler.h">
       <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8ScriptCommand.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8CommandEvent.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplWindow.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplVideo.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplTrack.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplTextBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplScroll.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplScreen.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplPictureBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplParticleSystem.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplEvent.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplDialogBox.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplComponent.h">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClInclude>
+    <ClInclude Include="SV8TemplCommandEvent.h">
+      <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -868,38 +877,11 @@
     <ClCompile Include="SV8ScriptManager.cpp">
       <Filter>Source\SScript</Filter>
     </ClCompile>
-    <ClCompile Include="SV8Screen.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8Component.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
     <ClCompile Include="SV8CreateScreen.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
-    <ClCompile Include="SV8Window.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8TextBox.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8DialogBox.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8PictureBox.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8Scroll.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8Track.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
     <ClCompile Include="SUITrackManager.cpp">
       <Filter>Source\SGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="SV8Video.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
     </ClCompile>
     <ClCompile Include="SV8Function.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
@@ -913,17 +895,56 @@
     <ClCompile Include="SV8CreateVideo.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
-    <ClCompile Include="SV8ParticleSystem.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
     <ClCompile Include="SV8CreateParticleSystem.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
-    <ClCompile Include="SV8Event.cpp">
-      <Filter>Source\SScript\SV8Template</Filter>
-    </ClCompile>
     <ClCompile Include="SUIV8FunctionEventHandler.cpp">
       <Filter>Source\SGUI\SUIEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8ScriptCommand.cpp">
+      <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8CommandEvent.cpp">
+      <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplWindow.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplVideo.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplTrack.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplTextBox.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplScroll.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplScreen.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplPictureBox.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplParticleSystem.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplEvent.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplDialogBox.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplComponent.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8TemplCommandEvent.cpp">
+      <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8AddCommand.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

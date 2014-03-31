@@ -100,18 +100,20 @@ namespace SPEngine
 		{
 			// Check if the game thread is exited before quiting.
 			case WM_CLOSE:
-				SPGameManager::GetSingleton().GetGame()->ExitButtonPressed();
-				//SPGameManager::GetSingleton().GetGame()->ExitGameThread();
+				SPGameManager::GetSingleton()->GetGame()->ExitButtonPressed();
+				//SPGameManager::GetSingleton()->GetGame()->ExitGameThread();
 				//PostMessage(hWnd, WM_QUIT, NULL, NULL);
 				break;
 
 			// Custom message post by game thread.
 			case WM_GAMETHREADEXIT:
+				//uv_stop(uv_default_loop());
+				SPGameManager::GetSingleton()->SetGame(NULL);
 				PostMessage(hWnd, WM_QUIT, NULL, NULL);
 				break;
 
 			case WM_MOUSEMOVE:
-				::SetCursor(SPWindow::GetSingleton().GetCursor());
+				::SetCursor(SPWindow::GetSingleton()->GetCursor());
 
 			default:
 				// If the message is none of the above, 

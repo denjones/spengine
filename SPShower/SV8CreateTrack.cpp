@@ -6,7 +6,7 @@
 
 void SV8Function::CreateTrack( const FunctionCallbackInfo<Value>& args )
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (args.Length() == 0)
 	{
@@ -15,5 +15,5 @@ void SV8Function::CreateTrack( const FunctionCallbackInfo<Value>& args )
 		return;
 	}
 
-	args.GetReturnValue().Set(SUITrackManager::GetSingleton().CreateTrack(args[0]->ToObject()));
+	args.GetReturnValue().Set(SUITrackManager::GetSingleton()->CreateTrack(args[0]->ToObject()));
 }

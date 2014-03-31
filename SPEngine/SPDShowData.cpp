@@ -17,7 +17,7 @@
 namespace SPEngine
 {
 	SPDShowData::SPDShowData() :
-		m_hwndVideo(SPWindow::GetSingleton().GetHWnd()),
+		m_hwndVideo(SPWindow::GetSingleton()->GetHWnd()),
 		m_hwndEvent(NULL),
 		m_EventMsg(0),
 		m_pGraph(NULL),
@@ -150,7 +150,7 @@ namespace SPEngine
 		// Add LAV splitter filter
 		// 
 				
-		SPLavFilterFactory::GetSingleton().CreateLAVSplitter(pLAVSplitter);
+		SPLavFilterFactory::GetSingleton()->CreateLAVSplitter(pLAVSplitter);
 
 		if (!pLAVSplitter)
 		{
@@ -170,7 +170,7 @@ namespace SPEngine
 		// Add LAV Video filter
 		// 		
 		
-		SPLavFilterFactory::GetSingleton().CreateLAVVideo(pLAVVideo);
+		SPLavFilterFactory::GetSingleton()->CreateLAVVideo(pLAVVideo);
 
 		if (!pLAVVideo)
 		{
@@ -190,7 +190,7 @@ namespace SPEngine
 		// Add LAV Audio filter
 		// 
 
-		SPLavFilterFactory::GetSingleton().CreateLAVAudio(pLAVAudio);
+		SPLavFilterFactory::GetSingleton()->CreateLAVAudio(pLAVAudio);
 
 		if (!pLAVAudio)
 		{

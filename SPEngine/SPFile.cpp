@@ -22,9 +22,9 @@ namespace SPEngine
 
 	bool SPFile::Open( SPString setPath )
 	{
-		if (SPFilePacker::GetSingleton().IsFileInPack(setPath))
+		if (SPFilePacker::GetSingleton()->IsFileInPack(setPath))
 		{
-			if(!SPFilePacker::GetSingleton().UnpackFileStream(setPath, pData, length))
+			if(!SPFilePacker::GetSingleton()->UnpackFileStream(setPath, pData, length))
 			{				
 				return false;
 			}
@@ -93,7 +93,7 @@ namespace SPEngine
 		}
 		else if (type == FileInMemory)
 		{
-			SPFilePacker::GetSingleton().PackFileStream(path, pData, length);
+			SPFilePacker::GetSingleton()->PackFileStream(path, pData, length);
 			if(pData)
 			{
 				delete pData;

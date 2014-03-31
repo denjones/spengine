@@ -26,6 +26,7 @@ namespace SPEngine
 		windowed = true;
 		vSync = true;
 		deviceType = D3DDEVTYPE_HAL;
+		debug = false;
 
 
 		tag_windowWidth = "WindowWidth";
@@ -38,6 +39,7 @@ namespace SPEngine
 		tag_windowed = "Windowed";
 		tag_vSync = "VSync";
 		tag_deviceType = "DeviceType";
+		tag_debug = "Debug";
 
 		tag_own = "Config";
 
@@ -65,6 +67,7 @@ namespace SPEngine
 		if( pElement->IsA(tag_windowed) )   pElement->Retrieve(windowed);
 		if( pElement->IsA(tag_vSync) )   pElement->Retrieve(vSync);
 		if( pElement->IsA(tag_deviceType) )  pElement->Retrieve(deviceType);
+		if( pElement->IsA(tag_debug) )  pElement->Retrieve(debug);
 	}
 
 	void SPConfig::WriteElement( SXP::IOutStream *pOut, SXP::dict& attribs )
@@ -82,6 +85,7 @@ namespace SPEngine
 		pOut->WriteElement(tag_windowed, windowed);
 		pOut->WriteElement(tag_vSync, vSync);
 		pOut->WriteElement(tag_deviceType, deviceType);
+		pOut->WriteElement(tag_debug, debug);
 
 		pOut->EndObject(tag_own);
 	}
@@ -147,7 +151,7 @@ namespace SPEngine
 
 		while(
 			this->multisampleType > 0 ||
-			D3D_OK != SPDevice::GetSingleton().GetD3DObject()->CheckDeviceMultiSampleType(
+			D3D_OK != SPDevice::GetSingleton()->GetD3DObject()->CheckDeviceMultiSampleType(
 			D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL, 
 			D3DFMT_A8R8G8B8, 
@@ -171,7 +175,7 @@ namespace SPEngine
 
 		// Window related.
 
-		d3dpp.hDeviceWindow = SPWindow::GetSingleton().GetHWnd();
+		d3dpp.hDeviceWindow = SPWindow::GetSingleton()->GetHWnd();
 		d3dpp.Windowed = this->windowed;
 
 		// Other

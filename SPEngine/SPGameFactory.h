@@ -27,25 +27,16 @@ namespace SPEngine
 	template <typename T>
 	class SPGameFactory : public SPSingleton< SPGameFactory <T> >
 	{
-		SPGamePtr currentGame; ///< A pointer to hold the product game.
-
 		/// @brief private constructor and destructor to prevent the class form
 		/// constructing.
 	public:
-		SPGameFactory(void) : currentGame(NULL){}
+		SPGameFactory(void){}
 		virtual ~SPGameFactory(void){};
 
 	public:
-		SPGamePtr Produce(HINSTANCE hInstance)
+		void Produce(HINSTANCE hInstance)
 		{
-			currentGame = new T(hInstance);
-			SPGameManager::GetSingleton().SetGame(currentGame);
-			return currentGame;
-		}
-
-		SPGamePtr GetGame()
-		{
-			return currentGame;
+			SPGameManager::GetSingleton()->SetGame(new T(hInstance));
 		}
 	};
 }

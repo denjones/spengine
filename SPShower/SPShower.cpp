@@ -29,7 +29,7 @@ int _tmain(int argc, wchar_t** argv)
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow( hWnd, SW_HIDE );
 	HINSTANCE hInstance = GetModuleHandle(NULL);
-	SPGameFactory<SPGameShow>::GetSingleton().Produce(hInstance);
+	SPGameFactory<SPGameShow>::GetSingleton()->Produce(hInstance);
 	if (argc > 1)
 	{
 		for(int i = 1; i < argc; i++)
@@ -38,7 +38,7 @@ int _tmain(int argc, wchar_t** argv)
 			
 			if (arg == L"-d")
 			{
-				SPLogHelper::TurnOnDebug();
+				SPConfigManager::GetSingleton()->SetDebug(true);
 			}
 			else if (arg == L"-l")
 			{
@@ -46,7 +46,7 @@ int _tmain(int argc, wchar_t** argv)
 			}
 		}
 	}
-	SPGameManager::GetSingleton().Start();
+	SPGameManager::GetSingleton()->Start();
 
 	return 0;
 }

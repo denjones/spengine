@@ -44,8 +44,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;.\dll;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\KScript\Debug;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\DirectShow;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibUV\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -61,9 +61,9 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>v8.lib;icui18n.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>node.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,7 +84,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="expat.dll" />
     <None Include="ReadMe.txt" />
     <None Include="SampleSprite2D.ico" />
     <None Include="sicily.jpg" />

@@ -3,8 +3,7 @@ var ss = process.binding('speshow');
 
 PI = 3.1415926;
 
-ss.window.width = 800;
-ss.window.height = 600;
+ss.window.resize(800, 600);
 
 ss.createScreen({
     id: 'testScreen',

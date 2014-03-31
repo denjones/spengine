@@ -10,17 +10,18 @@
 #include "SPStringHelper.h"
 #include <direct.h>
 #include <iomanip>
+#include "SPConfigManager.h"
 
 using namespace std;
 namespace SPEngine
 {
 	bool SPLogHelper::isLoggingOn = false;
-	bool SPLogHelper::isDebug = false;
+	bool SPLogHelper::isDebug = SPConfigManager::GetSingleton()->GetCurrentConfig().debug;
 	CCritSec SPLogHelper::logLock;
 
 	SPLogHelper::SPLogHelper(void)
 	{
-		
+
 	}
 
 	SPLogHelper::~SPLogHelper(void)

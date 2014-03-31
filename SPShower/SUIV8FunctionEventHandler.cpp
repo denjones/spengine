@@ -4,8 +4,8 @@
 
 SUIV8FunctionEventHandler::SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, Handle<Object> v8Self)
 {
-	this->v8Func = new Persistent<v8::Function>(SPV8ScriptEngine::GetSingleton().GetIsolate(), v8Func);
-	this->v8Self = new Persistent<Object>(SPV8ScriptEngine::GetSingleton().GetIsolate(), v8Self);
+	this->v8Func = new Persistent<v8::Function>(SPV8ScriptEngine::GetSingleton()->GetIsolate(), v8Func);
+	this->v8Self = new Persistent<Object>(SPV8ScriptEngine::GetSingleton()->GetIsolate(), v8Self);
 }
 
 
@@ -26,7 +26,7 @@ SUIV8FunctionEventHandler::~SUIV8FunctionEventHandler(void)
 
 bool SUIV8FunctionEventHandler::Function( SUIEventPtr e )
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	HandleScope handleScope(isolate);
 	Handle<v8::Function> function = GetFunction();
 	Handle<Object> self = Handle<Object>::New(isolate, (*v8Self));
@@ -45,5 +45,5 @@ bool SUIV8FunctionEventHandler::Function( SUIEventPtr e )
 
 Handle<v8::Function> SUIV8FunctionEventHandler::GetFunction()
 {
-	return Handle<v8::Function>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*v8Func));
+	return Handle<v8::Function>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*v8Func));
 }

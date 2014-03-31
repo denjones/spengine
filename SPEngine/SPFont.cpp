@@ -54,10 +54,10 @@ namespace SPEngine
 		SPString	FontName )
 	{
 		unloaded = true;
-		float rate = SPFontManager::GetSingleton().GetSizeRate();
+		float rate = SPFontManager::GetSingleton()->GetSizeRate();
 
 		if (FAILED(D3DXCreateFont(
-			SPDevice::GetSingleton().GetD3DDevice(),
+			SPDevice::GetSingleton()->GetD3DDevice(),
 			Height * rate , Width * rate, Weight, MipLevels, Italic, 
 			CharSet, OutputPrecision, Quality,
 			PitchAndFamily, FontName.c_str(), &font)))
@@ -127,12 +127,12 @@ namespace SPEngine
 
 	D3DXVECTOR2 SPFont::GetTextSize( wstring text, float spaceRate )
 	{
-		float rate = SPFontManager::GetSingleton().GetSizeRate();
+		float rate = SPFontManager::GetSingleton()->GetSizeRate();
 		RECT rect = {0,0,0,0};
 
 		while(unloaded)
 		{
-			if (SPGameManager::GetSingleton().GetGame()->IsExiting())
+			if (SPGameManager::GetSingleton()->GetGame()->IsExiting())
 			{
 				throw exception("Use Font With Game Exited!");
 			}
@@ -149,7 +149,7 @@ namespace SPEngine
 
 	D3DXVECTOR2 SPFont::GetTextSize( wstring text, DWORD format, float spaceRate )
 	{
-		float rate = SPFontManager::GetSingleton().GetSizeRate();
+		float rate = SPFontManager::GetSingleton()->GetSizeRate();
 		RECT rect = {0,0,0,0};
 
 		while(unloaded)

@@ -8,6 +8,7 @@
 #pragma once
 #include "SPPointer.h"
 #include "SPConfig.h"
+#include "SPComponentManager.h"
 
 using namespace std;
 
@@ -53,6 +54,7 @@ namespace SPEngine
 		CCritSec			exitBtnLock;
 		CCritSec			modificationLock;
 		SPPointer<SPConfig>	configToApply;
+		SPPointer<SPComponentManager> componentManager;
 		/// @}
 
 		float				elapsedLastTimeS;///< The time last Frame
