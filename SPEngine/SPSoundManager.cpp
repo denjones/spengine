@@ -11,7 +11,7 @@ namespace SPEngine
 		sounds.Clear();
 		tracks.Clear();
 		SPXAudio::GetSingleton();
-		xAudio = SPXAudio::GetSingletonPtr();
+		xAudio = SPXAudio::GetSingleton();
 	}
 
 	SPSoundManager::~SPSoundManager(void)
@@ -85,14 +85,14 @@ namespace SPEngine
 	float SPSoundManager::GetVolume()
 	{
 		float volume;
-		SPXAudio::GetSingleton().GetMasterVoice()->GetVolume(&volume);
+		SPXAudio::GetSingleton()->GetMasterVoice()->GetVolume(&volume);
 
 		return volume;
 	}
 
 	void SPSoundManager::SetVolume(float volume)
 	{
-		SPXAudio::GetSingleton().GetMasterVoice()->SetVolume(volume);
+		SPXAudio::GetSingleton()->GetMasterVoice()->SetVolume(volume);
 	}
 
 	bool SPSoundManager::Release( SPString name )

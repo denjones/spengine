@@ -19,13 +19,13 @@ namespace SPEngine
 	///////////////////////////////////////////////////////////////////////
 	template<typename T> class SPSingleton
 	{
-		static SPPointer<T> singleton; ///< Pointer to hold the singleton.
-		static SPPointer<CCritSec> singletonLock;
+		//static SPPointer<T> singleton; ///< Pointer to hold the singleton.
+		static CCritSec singletonLock;
 
 	public:
 		SPSingleton(void)
 		{
-			assert(!singleton);
+			//assert(!singleton);
 			//int offset = (int)(SPPointer<T>)1 - (int)(SPSingleton<T>*)(SPPointer<T>)1;
 			//singleton = (SPPointer<T>)((int)this + offset);
 		}
@@ -45,19 +45,14 @@ namespace SPEngine
 		/// @{
 		static void CreateSingleton()
 		{
-			if (!singletonLock)
-			{
-				singletonLock = new CCritSec();
-			}
-
-			singletonLock->Lock();
+			singletonLock.Lock();
 
 			if (!singleton)
 			{
 				singleton = new T();
 			}
 
-			singletonLock->Unlock();
+			singletonLock.Unlock();
 
 			assert(singleton);			
 		}
@@ -75,30 +70,42 @@ namespace SPEngine
 
 		/// @brief GetSingleton. Get the reference of the inner singleton instance.
 		/// @return T&
-		static T& GetSingleton()
+		static SPPointer<T> GetSingleton()
 		{
-			if (!singleton)
+			static SPPointer<T> singleton = NULL;
+			static SPPointer<CCritSec> singletonLock = new CCritSec();
+
+			if (!singletonLock)
 			{
-				CreateSingleton();
+				return NULL;
 			}
 
+			singletonLock->Lock();
+
+			if (!singleton)
+			{
+				singleton = new T();
+			}
+
+			singletonLock->Unlock();
+
 			assert(singleton);
-			return (*singleton);
+			return singleton;
 		}
 
 		/// @brief GetSingleton. Get the pointer to the inner singleton instance.
 		/// the return value could be null.
 		/// @return T*
-		static SPPointer<T> GetSingletonPtr()
-		{
-			return singleton;
-		}
+		//static SPPointer<T> GetSingleton()
+		//{
+		//	return singleton;
+		//}
 	};
 
-	template<typename T> 
-	SPPointer<T> SPSingleton<T>::singleton = NULL;
-	template<typename T> 
-	SPPointer<CCritSec> SPSingleton<T>::singletonLock = NULL;
+	//template<typename T> 
+	//SPPointer<T> SPSingleton<T>::singleton = NULL;
+	//template<typename T> 
+	//CCritSec SPSingleton<T>::singletonLock;
 }
 
 

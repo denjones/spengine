@@ -97,7 +97,6 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="antlr3c.dll" />
     <None Include="avcodec-lav-55.dll" />
     <None Include="avfilter-lav-3.dll" />
     <None Include="avformat-lav-55.dll" />
@@ -274,6 +273,9 @@
     <None Include="mix\mix_vivid_light.fxo" />
     <None Include="msvcp100.dll" />
     <None Include="msvcr100.dll" />
+    <None Include="node.dll">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </None>
     <None Include="pre.ks" />
     <None Include="ReadMe.txt" />
     <None Include="rt_manif.bin">
@@ -324,19 +326,22 @@
     <ClInclude Include="SUITransition.h" />
     <ClInclude Include="SUIV8FunctionEventHandler.h" />
     <ClInclude Include="SUIVideoManager.h" />
-    <ClInclude Include="SV8Component.h" />
-    <ClInclude Include="SV8DialogBox.h" />
-    <ClInclude Include="SV8Event.h" />
+    <ClInclude Include="SV8CommandEvent.h" />
+    <ClInclude Include="SV8TemplCommandEvent.h" />
+    <ClInclude Include="SV8TemplComponent.h" />
+    <ClInclude Include="SV8TemplDialogBox.h" />
+    <ClInclude Include="SV8TemplEvent.h" />
     <ClInclude Include="SV8Function.h" />
-    <ClInclude Include="SV8ParticleSystem.h" />
-    <ClInclude Include="SV8PictureBox.h" />
-    <ClInclude Include="SV8Screen.h" />
+    <ClInclude Include="SV8TemplParticleSystem.h" />
+    <ClInclude Include="SV8TemplPictureBox.h" />
+    <ClInclude Include="SV8TemplScreen.h" />
+    <ClInclude Include="SV8ScriptCommand.h" />
     <ClInclude Include="SV8ScriptManager.h" />
-    <ClInclude Include="SV8Scroll.h" />
-    <ClInclude Include="SV8TextBox.h" />
-    <ClInclude Include="SV8Track.h" />
-    <ClInclude Include="SV8Video.h" />
-    <ClInclude Include="SV8Window.h" />
+    <ClInclude Include="SV8TemplScroll.h" />
+    <ClInclude Include="SV8TemplTextBox.h" />
+    <ClInclude Include="SV8TemplTrack.h" />
+    <ClInclude Include="SV8TemplVideo.h" />
+    <ClInclude Include="SV8TemplWindow.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -377,24 +382,28 @@
     <ClCompile Include="SUITransition.cpp" />
     <ClCompile Include="SUIV8FunctionEventHandler.cpp" />
     <ClCompile Include="SUIVideoManager.cpp" />
-    <ClCompile Include="SV8Component.cpp" />
+    <ClCompile Include="SV8AddCommand.cpp" />
+    <ClCompile Include="SV8CommandEvent.cpp" />
+    <ClCompile Include="SV8TemplCommandEvent.cpp" />
+    <ClCompile Include="SV8TemplComponent.cpp" />
     <ClCompile Include="SV8CreateParticleSystem.cpp" />
     <ClCompile Include="SV8CreateTrack.cpp" />
     <ClCompile Include="SV8CreateVideo.cpp" />
-    <ClCompile Include="SV8DialogBox.cpp" />
-    <ClCompile Include="SV8Event.cpp" />
+    <ClCompile Include="SV8TemplDialogBox.cpp" />
+    <ClCompile Include="SV8TemplEvent.cpp" />
     <ClCompile Include="SV8Function.cpp" />
-    <ClCompile Include="SV8ParticleSystem.cpp" />
-    <ClCompile Include="SV8PictureBox.cpp" />
+    <ClCompile Include="SV8TemplParticleSystem.cpp" />
+    <ClCompile Include="SV8TemplPictureBox.cpp" />
     <ClCompile Include="SV8RegisterFont.cpp" />
-    <ClCompile Include="SV8Screen.cpp" />
+    <ClCompile Include="SV8TemplScreen.cpp" />
+    <ClCompile Include="SV8ScriptCommand.cpp" />
     <ClCompile Include="SV8ScriptManager.cpp" />
     <ClCompile Include="SV8CreateScreen.cpp" />
-    <ClCompile Include="SV8Scroll.cpp" />
-    <ClCompile Include="SV8TextBox.cpp" />
-    <ClCompile Include="SV8Track.cpp" />
-    <ClCompile Include="SV8Video.cpp" />
-    <ClCompile Include="SV8Window.cpp" />
+    <ClCompile Include="SV8TemplScroll.cpp" />
+    <ClCompile Include="SV8TemplTextBox.cpp" />
+    <ClCompile Include="SV8TemplTrack.cpp" />
+    <ClCompile Include="SV8TemplVideo.cpp" />
+    <ClCompile Include="SV8TemplWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPShower.rc" />

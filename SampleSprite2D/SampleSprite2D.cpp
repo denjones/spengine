@@ -22,19 +22,13 @@
 #define new DEBUG_CLIENTBLOCK
 #endif
 
-int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
+int _tmain(int argc, wchar_t** argv)
 {
-	//
-	// Start memory leaks detection.
-	//
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(435960);
-
-	SPGameFactory<SampleGame>::GetSingleton().Produce(hInstance);
-	SPGameManager::GetSingleton().Start();
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow( hWnd, SW_HIDE );
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	SPGameFactory<SampleGame>::GetSingleton()->Produce(hInstance);
+	SPGameManager::GetSingleton()->Start();
 
 	return 0;
 }

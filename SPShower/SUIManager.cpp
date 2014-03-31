@@ -50,7 +50,7 @@ bool SUIManager::AddScreen( SUIScreenPtr newScreen )
 
 bool SUIManager::Initialize()
 {
-	uv_async_init(uv_default_loop(), (uv_async_t*)asyncEvent, SUIManager::HandleAllEvent);
+	uv_async_init(uv_default_loop(), (uv_async_t*)asyncEvent, SUIManager::HandleAllEventCallback);
 
 	return true;
 }
@@ -243,8 +243,8 @@ bool SUIManager::GenerateEvent(float timeDelta)
 
 	LockEventQueue();
 
-	SPMousePtr mouse = SPInputManager::GetSingleton().GetMouse();
-	SPKeyboardPtr keyboard = SPInputManager::GetSingleton().GetKeyboard();
+	SPMousePtr mouse = SPInputManager::GetSingleton()->GetMouse();
+	SPKeyboardPtr keyboard = SPInputManager::GetSingleton()->GetKeyboard();
 	
 
 	if (mouse)
@@ -558,12 +558,24 @@ SUIManager::EventQueuePtr SUIManager::GetEventQueue()
 	return eventQueue;
 }
 
-void SUIManager::HandleAllEvent( uv_async_t *handle, int status )
+void SUIManager::HandleAllEventCallback( uv_async_t *handle, int status )
 {
-	ScreenStackPtr dispalyStack = SUIManager::GetSingleton().GetDisplayStack();
-	EventQueuePtr eventQueue = SUIManager::GetSingleton().GetEventQueue();
+	SUIManager::GetSingleton()->HandleAllEvent();
+}
 
-	SUIManager::GetSingleton().LockEventQueue();
+void SUIManager::LockEventQueue()
+{
+	eventLock.Lock();
+}
+
+void SUIManager::UnlockEventQueue()
+{
+	eventLock.Unlock();
+}
+
+void SUIManager::HandleAllEvent()
+{
+	LockEventQueue();
 
 	ScreenStackIterator screen = dispalyStack->rbegin();
 	while(screen != dispalyStack->rend())
@@ -583,17 +595,7 @@ void SUIManager::HandleAllEvent( uv_async_t *handle, int status )
 		screen++;
 	}
 
-	SUIManager::GetSingleton().UnlockEventQueue();
-}
-
-void SUIManager::LockEventQueue()
-{
-	eventLock.Lock();
-}
-
-void SUIManager::UnlockEventQueue()
-{
-	eventLock.Unlock();
+	UnlockEventQueue();
 }
 
 

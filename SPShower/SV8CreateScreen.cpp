@@ -5,7 +5,7 @@
 
 void SV8Function::CreateScreen( const FunctionCallbackInfo<Value>& args )
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	HandleScope handleScope(isolate);
 
 	if(args.Length() == 0)
@@ -22,15 +22,15 @@ void SV8Function::CreateScreen( const FunctionCallbackInfo<Value>& args )
 		SUIScreenPtr screen;
 		SPString name = SPV8ScriptEngine::StringToSPString(GetProperty(L"id", argObj)->ToString());
 
-		if (SUIManager::GetSingleton().IsScreenValid(name))
+		if (SUIManager::GetSingleton()->IsScreenValid(name))
 		{
-			screen = SUIManager::GetSingleton().GetScreen(name);
+			screen = SUIManager::GetSingleton()->GetScreen(name);
 		}
 		else
 		{
 			screen = new SUIScreen();
 			screen->SetName(name);
-			SUIManager::GetSingleton().AddScreen(screen);
+			SUIManager::GetSingleton()->AddScreen(screen);
 		}
 
 		if (HasProperty(L"popUp", argObj))
@@ -45,6 +45,6 @@ void SV8Function::CreateScreen( const FunctionCallbackInfo<Value>& args )
 
 		args.GetReturnValue().Set(screen->GetV8Obj());
 
-		//SUIManager::GetSingleton().FocusScreen(name);
+		//SUIManager::GetSingleton()->FocusScreen(name);
 	}
 }

@@ -37,13 +37,13 @@ namespace SPEngine
 	void SPVideoTexture::SetVideo( SPString setName )
 	{
 		videoName = setName;
-		video = SPVideoManager::GetSingleton().GetVideo(setName);
+		video = SPVideoManager::GetSingleton()->GetVideo(setName);
 		video->SetTexture(this);
 	}
 
 	bool SPVideoTexture::Reload()
 	{
-		video = SPVideoManager::GetSingleton().GetVideo(videoName);
+		video = SPVideoManager::GetSingleton()->GetVideo(videoName);
 		video->SetTexture(this);
 
 		return true;

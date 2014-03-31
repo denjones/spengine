@@ -144,8 +144,8 @@ namespace SPEngine
 		/// @}
 
 	public:
-		SPWStringMap(void) { Clear(); }
-		virtual ~SPWStringMap(void) { Clear(); }
+		SPWStringMap(void) { }
+		virtual ~SPWStringMap(void) { }
 	};
 
 	///////////////////////////////////////////////////////////////////////

@@ -50,20 +50,20 @@ bool SUIPictureList::Draw( float timeDelta )
 
 		if (iter->Image)
 		{
-			SPTexturePtr currentTarget = SPTextureManager::GetSingleton().CreateRenderTarget(
+			SPTexturePtr currentTarget = SPTextureManager::GetSingleton()->CreateRenderTarget(
 				baseImage->GetWidth(), baseImage->GetHeight(), 0x00000000);
 
 			if (iter->MixMode)
 			{
-				SPSpriteManager::GetSingleton().RenderOnScreen(iter->Image,
+				SPSpriteManager::GetSingleton()->RenderOnScreen(iter->Image,
 					iter->MixMode, texRect, SPColor::White, 1, currentTarget );
 			}
 			else
 			{
-				SPSpriteManager::GetSingleton().RenderOnScreen(lastTarget,
+				SPSpriteManager::GetSingleton()->RenderOnScreen(lastTarget,
 					NULL, texRect, SPColor::White, 1, currentTarget );
 
-				SPSpriteManager::GetSingleton().RenderOnScreen(iter->Image,
+				SPSpriteManager::GetSingleton()->RenderOnScreen(iter->Image,
 					NULL, texRect, SPColor::White, 0, currentTarget );
 			}			
 

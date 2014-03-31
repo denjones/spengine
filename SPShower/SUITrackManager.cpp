@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "SUITrackManager.h"
 #include "SV8Function.h"
-#include "SV8Track.h"
+#include "SV8TemplTrack.h"
 
 
 SUITrackManager::SUITrackManager(void)
@@ -33,11 +33,11 @@ Handle<Object> SUITrackManager::CreateTrack( Handle<Object> argObj )
 	if (SV8Function::HasProperty(L"id", argObj))
 	{
 		id = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"id", argObj)->ToString());
-		track = SPSoundManager::GetSingleton().GetTrack(id);
+		track = SPSoundManager::GetSingleton()->GetTrack(id);
 
 		if (!track)
 		{
-			track = SPSoundManager::GetSingleton().CreateSoundTrack(id);
+			track = SPSoundManager::GetSingleton()->CreateSoundTrack(id);
 		}
 	}
 	else
@@ -78,22 +78,22 @@ bool SUITrackManager::Initialize()
 	// Enter
 	//
 
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	Locker locker(isolate); 
 	Isolate::Scope isolateScope(isolate);
 	HandleScope handleScope(isolate);
-	Handle<Context> context = SPV8ScriptEngine::GetSingleton().GetContext();
+	Handle<Context> context = SPV8ScriptEngine::GetSingleton()->GetContext();
 	Context::Scope contextScope(context);
 
-	trackTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Track::GetTemplate());
+	trackTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplTrack::GetTemplate());
 
 	return true;
 }
 
 Handle<ObjectTemplate> SUITrackManager::GetTrackTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*trackTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*trackTempl));
 }
 
 

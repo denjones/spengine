@@ -359,7 +359,7 @@ namespace SPEngine
 		// here let's check if we can use dynamic textures
 		D3DCAPS9 caps;
 		ZeroMemory( &caps, sizeof(D3DCAPS9));
-		hr = SPDevice::GetSingleton().GetD3DDevice()->GetDeviceCaps( &caps );
+		hr = SPDevice::GetSingleton()->GetD3DDevice()->GetDeviceCaps( &caps );
 		if( caps.Caps2 & D3DCAPS2_DYNAMICTEXTURES )
 		{
 			m_bUseDynamicTextures = TRUE;
@@ -725,7 +725,7 @@ namespace SPEngine
 
 		if( m_bUseDynamicTextures )
 		{
-			hr = SPDevice::GetSingleton().GetD3DDevice()->CreateTexture(
+			hr = SPDevice::GetSingleton()->GetD3DDevice()->CreateTexture(
 				m_lVidWidth, m_lVidHeight, 1,
 				D3DUSAGE_DYNAMIC, m_texture_format, D3DPOOL_DEFAULT,
 				&m_videoTexture->texture, NULL);
@@ -737,7 +737,7 @@ namespace SPEngine
 		}
 		else			
 		{
-			hr = SPDevice::GetSingleton().GetD3DDevice()->CreateTexture(
+			hr = SPDevice::GetSingleton()->GetD3DDevice()->CreateTexture(
 				m_lVidWidth, m_lVidHeight, 1, 
 				0, m_texture_format, D3DPOOL_DEFAULT, //D3DPOOL_MANAGED
 				&m_videoTexture->texture, NULL);

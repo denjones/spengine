@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "SUIVideoManager.h"
-#include "SV8Video.h"
+#include "SV8TemplVideo.h"
 #include "SV8Function.h"
 
 
@@ -22,7 +22,7 @@ SUIVideoManager::~SUIVideoManager(void)
 //{
 //	if (videoPaths.IsSet(name))
 //	{
-//		return SPVideoManager::GetSingleton().GetVideo(videoPaths[name]);
+//		return SPVideoManager::GetSingleton()->GetVideo(videoPaths[name]);
 //	}
 //
 //	return NULL;
@@ -38,7 +38,7 @@ SUIVideoManager::~SUIVideoManager(void)
 //{
 //	if (videoPaths.IsSet(name))
 //	{
-//		return SPTextureManager::GetSingleton().GetVideo(videoPaths[name]);
+//		return SPTextureManager::GetSingleton()->GetVideo(videoPaths[name]);
 //	}
 //
 //	return NULL;
@@ -46,7 +46,7 @@ SUIVideoManager::~SUIVideoManager(void)
 
 SPEngine::SPVideoTexturePtr SUIVideoManager::GetVideoTexture( SUIVideoHandle handle )
 {
-	return SPTextureManager::GetSingleton().GetVideo(videoIdManager[handle]);
+	return SPTextureManager::GetSingleton()->GetVideo(videoIdManager[handle]);
 }
 
 Handle<Object> SUIVideoManager::GetVideo( SUIVideoHandle handle )
@@ -64,23 +64,23 @@ Handle<Object> SUIVideoManager::CreateVideo( Handle<Object> argObj )
 	if (SV8Function::HasProperty(L"id", argObj))
 	{
 		id = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"id", argObj)->ToString());
-		video = SPVideoManager::GetSingleton().GetVideo(id);
+		video = SPVideoManager::GetSingleton()->GetVideo(id);
 
 		if (!video)
 		{
-			SPVideoManager::GetSingleton().CreateVideo(id);
-			video =  SPVideoManager::GetSingleton().GetVideo(id);
+			SPVideoManager::GetSingleton()->CreateVideo(id);
+			video =  SPVideoManager::GetSingleton()->GetVideo(id);
 		}
 	}
 	else
 	{
 		id = SPStringHelper::ToWString(SPRandomHelper::NextInt(100000000));
-		while(SPVideoManager::GetSingleton().GetVideo(id))
+		while(SPVideoManager::GetSingleton()->GetVideo(id))
 		{
 			id = SPStringHelper::ToWString(SPRandomHelper::NextInt(100000000));
 		}
-		SPVideoManager::GetSingleton().CreateVideo(id);
-		video = SPVideoManager::GetSingleton().GetVideo(id);
+		SPVideoManager::GetSingleton()->CreateVideo(id);
+		video = SPVideoManager::GetSingleton()->GetVideo(id);
 	}
 
 	SUIVideoHandle handle = video.GetHandle();
@@ -113,7 +113,7 @@ Handle<Object> SUIVideoManager::CreateVideo( Handle<Object> argObj )
 
 Handle<ObjectTemplate> SUIVideoManager::GetVideoTemplate()
 {
-	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton().GetIsolate(), (*videoTempl));
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*videoTempl));
 }
 
 bool SUIVideoManager::Initialize()
@@ -122,15 +122,15 @@ bool SUIVideoManager::Initialize()
 	// Enter
 	//
 
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	Locker locker(isolate); 
 	Isolate::Scope isolateScope(isolate);
 	HandleScope handleScope(isolate);
-	Handle<Context> context = SPV8ScriptEngine::GetSingleton().GetContext();
+	Handle<Context> context = SPV8ScriptEngine::GetSingleton()->GetContext();
 	Context::Scope contextScope(context);
 
-	videoTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton().GetIsolate(), 
-		SV8Video::GetTemplate());
+	videoTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton()->GetIsolate(), 
+		SV8TemplVideo::GetTemplate());
 
 	return true;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "SV8ScriptCommand.h"
 
 using namespace SPEngine;
 
@@ -6,12 +7,23 @@ class SV8ScriptManager :
 	public SPComponent,
 	public SPSingleton<SV8ScriptManager>
 {
+
 public:
 	enum SkipMode{
 		SkipRead,
 		SkipAll,
 		SkipAuto,
 	};
+
+private:
+	typedef list<SV8ScriptCommandPtr> CommandList;
+	typedef CommandList::iterator CommandIterator;
+	typedef pair<int,int> Region;
+	typedef SPPointer<Region> RegionPtr;
+	typedef list<RegionPtr> RegionList;
+	typedef RegionList::iterator RegionListIterator;
+	typedef SPPointer<RegionList> RegionListPtr;
+	typedef SPWStringMap<RegionListPtr> ReadCommands;
 
 private:
 	SPPointer<SPV8ScriptEngine> requireEngine;
@@ -23,6 +35,7 @@ private:
 	SPPointer<Persistent<ObjectTemplate>> pictureBoxTempl;
 	SPPointer<Persistent<ObjectTemplate>> scrollTempl;
 	SPPointer<Persistent<ObjectTemplate>> eventTempl;
+	SPPointer<Persistent<ObjectTemplate>> commandEventTempl;
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
@@ -33,6 +46,7 @@ public:
 	Handle<ObjectTemplate> GetPictureBoxTemplate();
 	Handle<ObjectTemplate> GetScrollTemplate();
 	Handle<ObjectTemplate> GetEventTemplate();
+	Handle<ObjectTemplate> GetCommandEventTemplate();
 
 private:
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);
@@ -41,15 +55,21 @@ private:
 public:
 
 	// Skip mode
+	CommandList commands;
 	bool isSkipModeOn;
 	bool isImmediateModeOn;
 	SkipMode skipMode;
 	float autoWaitTimeS;
 	bool isScriptRunning;
+	CCritSec commandLock;
+	void* async;
 
 public:
 	SV8ScriptManager(void);
 	virtual ~SV8ScriptManager(void);
+
+	void LockCommandQueue();
+	void UnlockCommandQueue();
 
 	bool Initialize();
 	bool Update(float timeDelta);
@@ -57,6 +77,10 @@ public:
 	bool Reload();
 	bool Unload();
 
+	void AddCommand(SV8ScriptCommandPtr command);
+	void HandleCommands();
+
+	static void HandleCommandCallback( uv_async_t *handle, int status );
 	static void InitModule(Handle<Object> exports);
 };
 

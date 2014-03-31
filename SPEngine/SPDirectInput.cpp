@@ -27,7 +27,7 @@ namespace SPEngine
 
 	bool SPDirectInput::CreateDirectInput()
 	{
-		if (FAILED(DirectInput8Create(SPWindow::GetSingleton().GetHInstance(), 
+		if (FAILED(DirectInput8Create(SPWindow::GetSingleton()->GetHInstance(), 
 			DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, NULL)))
 		{
 			return false;
@@ -57,12 +57,12 @@ namespace SPEngine
 			return DIENUM_CONTINUE;
 
 		// Set to the first device found.
-		if(SUCCEEDED(SPDirectInput::GetSingleton().GetDirectInput()->CreateDevice(inst->guidInstance, 
+		if(SUCCEEDED(SPDirectInput::GetSingleton()->GetDirectInput()->CreateDevice(inst->guidInstance, 
 			&joy->device, NULL)))
 		{
 			if(SUCCEEDED(joy->device->SetDataFormat(&c_dfDIJoystick2)))
 			{
-				if(SUCCEEDED(joy->device->SetCooperativeLevel(SPWindow::GetSingleton().GetHWnd(),
+				if(SUCCEEDED(joy->device->SetCooperativeLevel(SPWindow::GetSingleton()->GetHWnd(),
 					DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)))
 				{
 					if(SUCCEEDED(joy->device->Acquire()))

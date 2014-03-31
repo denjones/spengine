@@ -51,7 +51,7 @@ namespace SPEngine
 		config.windowHeight = setHeight;
 		config.windowed = !isFullScreen;
 		config.deviceType = deviceType;
-		SPConfigManager::GetSingleton().SetConfig(config);
+		SPConfigManager::GetSingleton()->SetConfig(config);
 		isLockFPS = true;
 		lockedFPS = 60;
 		isExiting = false;
@@ -65,7 +65,7 @@ namespace SPEngine
 
 	SPGame::SPGame(	HINSTANCE setHInstance)
 	{
-		SPConfigManager::GetSingleton().LoadConfig("config.cfg");
+		SPConfigManager::GetSingleton()->LoadConfig("config.cfg");
 		isLockFPS = true;
 		lockedFPS = 60;
 		isExiting = false;
@@ -81,6 +81,10 @@ namespace SPEngine
 	#pragma region Destructor
 	SPGame::~SPGame(void)
 	{		
+		if (SPV8ScriptEngine::GetSingleton())
+		{
+			SPV8ScriptEngine::GetSingleton()->StopThread();
+		}
 		//UnloadContent();
 		//CleanUp();
 	}
@@ -93,10 +97,10 @@ namespace SPEngine
 
 		SPLogHelper::WriteLog("============= Game Starting =============");
 
-		SPConfig config = SPConfigManager::GetSingleton().GetCurrentConfig();
+		SPConfig config = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		// Initialize D3D with default config.
-		if (!SPDevice::GetSingleton().InitializeD3D(config))
+		if (!SPDevice::GetSingleton()->InitializeD3D(config))
 		{
 			SPMessageHelper::Msg("Failed to initialize D3D!");
 			SPLogHelper::WriteLog("[Game] ERROR: Failed to initialize D3D!");
@@ -110,13 +114,13 @@ namespace SPEngine
 	#pragma region Game
 	bool SPGame::Start()
 	{
-		SPConfig config = SPConfigManager::GetSingleton().GetCurrentConfig();
+		SPConfig config = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		//
 		// Initialize window with default config.
 		// 
 
-		if (!SPWindow::GetSingleton().Initialize(
+		if (!SPWindow::GetSingleton()->Initialize(
 			hInstance, config.windowWidth, config.windowHeight, 
 			!config.windowed))
 		{
@@ -132,7 +136,7 @@ namespace SPEngine
 		isGameThreadRunning = CloseHandle(
 			CreateThread(NULL, 0, GameThreadProc, (void*)this, 0, NULL)) == TRUE;
 
-		SPWindow::GetSingleton().EnterMsgLoop();
+		SPWindow::GetSingleton()->EnterMsgLoop();
 
 		return true;
 	}
@@ -165,7 +169,7 @@ namespace SPEngine
 		SPLogHelper::WriteLog("============= Game Exited! =============\n\n");
 
 		//PostQuitMessage(0);
-		BOOL resutl = PostMessage(SPWindow::GetSingleton().GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);
+		BOOL resutl = PostMessage(SPWindow::GetSingleton()->GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);
 
 		return true;
 	}
@@ -208,9 +212,9 @@ namespace SPEngine
 
 			SPLogHelper::WriteLog("============= Game Starts! =============");
 
-			SPWindow::GetSingleton().Update();
-			SPWindow::GetSingleton().Show();
-			SPWindow::GetSingleton().Focus();
+			SPWindow::GetSingleton()->Update();
+			SPWindow::GetSingleton()->Show();
+			SPWindow::GetSingleton()->Focus();
 
 			while (true)
 			{
@@ -283,7 +287,7 @@ namespace SPEngine
 				return false;
 			}
 
-			SPWindow::GetSingleton().UnregisterWindowClass();
+			SPWindow::GetSingleton()->UnregisterWindowClass();
 
 			currentGame->isGameThreadRunning = false;
 
@@ -291,7 +295,7 @@ namespace SPEngine
 
 			SetEvent(currentGame->hGameThreadExited);
 
-			BOOL resutl = PostMessage(SPWindow::GetSingleton().GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);		
+			BOOL resutl = PostMessage(SPWindow::GetSingleton()->GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);		
 		}
 		catch(exception ex)
 		{
@@ -310,7 +314,7 @@ namespace SPEngine
 			return false;
 		}
 
-		SPWindow::GetSingleton().Update(timeDeltaS);
+		SPWindow::GetSingleton()->Update(timeDeltaS);
 
 		bool backgroundLoading = IsBackgroundLoading();
 
@@ -326,14 +330,14 @@ namespace SPEngine
 
 		HRESULT hr = E_FAIL;
 
-		if (SPDevice::GetSingleton().GetD3DDevice())
+		if (SPDevice::GetSingleton()->GetD3DDevice())
 		{
 			// Clear target buffer and z buffer
 			Refresh(0xffffffff);
 
 			isRendering = true;
 
-			SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
+			SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 		
 			if (backgroundLoading)
 			{
@@ -347,11 +351,11 @@ namespace SPEngine
 				return false;
 			}
 
-			SPDevice::GetSingleton().GetD3DDevice()->EndScene();
+			SPDevice::GetSingleton()->GetD3DDevice()->EndScene();
 
 			isRendering = false;
 
-			hr = SPDevice::GetSingleton().GetD3DDevice()->Present(0, 0, 0, 0);
+			hr = SPDevice::GetSingleton()->GetD3DDevice()->Present(0, 0, 0, 0);
 		}
 
 		if (configToApply)
@@ -363,11 +367,11 @@ namespace SPEngine
 		}
 
 		// Get current config.
-		SPConfig currentConfig = SPConfigManager::GetSingleton().GetCurrentConfig();
+		SPConfig currentConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		// Reset full screen if window is just active.
-		if (!SPConfigManager::GetSingleton().GetCurrentConfig().windowed 
-			&& SPWindow::GetSingleton().IsJustActive())
+		if (!SPConfigManager::GetSingleton()->GetCurrentConfig().windowed 
+			&& SPWindow::GetSingleton()->IsJustActive())
 		{
 			if (ResetDevice(currentConfig))
 			{
@@ -383,7 +387,7 @@ namespace SPEngine
 
 			//SPLogHelper::WriteLog("[Game] WARNING: Render Frame Failed!");
 
-			HRESULT dhr = SPDevice::GetSingleton().GetD3DDevice()->TestCooperativeLevel();
+			HRESULT dhr = SPDevice::GetSingleton()->GetD3DDevice()->TestCooperativeLevel();
 
 			if (dhr == D3DERR_DEVICENOTRESET)
 			{
@@ -397,7 +401,7 @@ namespace SPEngine
 				}
 				else
 				{
-					if (SPWindow::GetSingleton().IsActive())
+					if (SPWindow::GetSingleton()->IsActive())
 					{
 						if(ResetDevice(currentConfig))
 						{
@@ -434,7 +438,7 @@ namespace SPEngine
 
 		// Create component manager.
 		SPComponentManager::GetSingleton();
-		SPPointer<SPComponentManager> componentManager = SPComponentManager::GetSingletonPtr();
+		componentManager = SPComponentManager::GetSingleton();
 
 		// Create component singletons.		
 		SPTextureManager::GetSingleton();
@@ -456,48 +460,47 @@ namespace SPEngine
 		SPV8ScriptEngine::GetSingleton();
 
 		// Register components.
-		componentManager->RegisterComponent(L"texture", SPTextureManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"effect", SPEffectManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"video", SPVideoManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"particle", SPParticleSystemManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"camera", SPCamera::GetSingletonPtr());
-		componentManager->RegisterComponent(L"light", SPLightManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"material", SPMaterialManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"input", SPInputManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"screen", SPScreenManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"sound", SPSoundManager::GetSingletonPtr());		
-		componentManager->RegisterComponent(L"shader", SPShaderManager::GetSingletonPtr());
-		componentManager->RegisterComponent(L"font", SPFontManager::GetSingletonPtr());		
-		componentManager->RegisterComponent(L"v8", SPV8ScriptEngine::GetSingletonPtr());	
+		componentManager->RegisterComponent(L"texture", SPTextureManager::GetSingleton());
+		componentManager->RegisterComponent(L"effect", SPEffectManager::GetSingleton());
+		componentManager->RegisterComponent(L"video", SPVideoManager::GetSingleton());
+		componentManager->RegisterComponent(L"particle", SPParticleSystemManager::GetSingleton());
+		componentManager->RegisterComponent(L"camera", SPCamera::GetSingleton());
+		componentManager->RegisterComponent(L"light", SPLightManager::GetSingleton());
+		componentManager->RegisterComponent(L"material", SPMaterialManager::GetSingleton());
+		componentManager->RegisterComponent(L"input", SPInputManager::GetSingleton());
+		componentManager->RegisterComponent(L"screen", SPScreenManager::GetSingleton());
+		componentManager->RegisterComponent(L"sound", SPSoundManager::GetSingleton());		
+		componentManager->RegisterComponent(L"shader", SPShaderManager::GetSingleton());
+		componentManager->RegisterComponent(L"font", SPFontManager::GetSingleton());		
+		componentManager->RegisterComponent(L"v8", SPV8ScriptEngine::GetSingleton());	
 
 		Initialize();
 
-		componentManager->RegisterComponent(L"sprite_3d", SPSpriteManager3D::GetSingletonPtr());
-		componentManager->RegisterComponent(L"font_writer", SPFontWriter::GetSingletonPtr());		
-		componentManager->RegisterComponent(L"sprite", SPSpriteManager::GetSingletonPtr());
+		componentManager->RegisterComponent(L"sprite_3d", SPSpriteManager3D::GetSingleton());
+		componentManager->RegisterComponent(L"font_writer", SPFontWriter::GetSingleton());		
+		componentManager->RegisterComponent(L"sprite", SPSpriteManager::GetSingleton());
 
 		// Register custom components.
-		SPComponentFactory<FPSDisplayer>::GetSingleton().Produce(
-			L"fps", SPComponentManager::GetSingleton());
+		SPComponentFactory<FPSDisplayer>::GetSingleton()->Produce(L"fps");
 
 		// Enable components to be updated and drawn.
-		SPCamera::GetSingleton().Enable();
-		SPVideoManager::GetSingleton().Enable();
-		SPTextureManager::GetSingleton().Enable();
-		SPSpriteManager::GetSingleton().Enable();
-		SPSpriteManager3D::GetSingleton().Enable();
-		SPInputManager::GetSingleton().Enable();
-		SPFontManager::GetSingleton().Enable();
-		SPFontWriter::GetSingleton().Enable();
-		SPSoundManager::GetSingleton().Enable();
-		SPScreenManager::GetSingleton().Enable();
-		SPParticleSystemManager::GetSingleton().Enable();
-		SPV8ScriptEngine::GetSingleton().Enable();
+		SPCamera::GetSingleton()->Enable();
+		SPVideoManager::GetSingleton()->Enable();
+		SPTextureManager::GetSingleton()->Enable();
+		SPSpriteManager::GetSingleton()->Enable();
+		SPSpriteManager3D::GetSingleton()->Enable();
+		SPInputManager::GetSingleton()->Enable();
+		SPFontManager::GetSingleton()->Enable();
+		SPFontWriter::GetSingleton()->Enable();
+		SPSoundManager::GetSingleton()->Enable();
+		SPScreenManager::GetSingleton()->Enable();
+		SPParticleSystemManager::GetSingleton()->Enable();
+		SPV8ScriptEngine::GetSingleton()->Enable();
 
 		// Enable custom component.
-		SPComponentManager::GetSingleton().GetComponent(L"fps")->Enable();
+		SPComponentManager::GetSingleton()->GetComponent(L"fps")->Enable();
 
-		if (!SPComponentManager::GetSingleton().Initialize())
+		if (!SPComponentManager::GetSingleton()->Initialize())
 		{
 			return false;
 		}		
@@ -514,7 +517,7 @@ namespace SPEngine
 	{
 		SPLogHelper::WriteLog("[Game] Loading Game Content ...");
 
-		if (!SPComponentManager::GetSingleton().Load())
+		if (!SPComponentManager::GetSingleton()->Load())
 		{
 			return false;
 		}
@@ -524,7 +527,9 @@ namespace SPEngine
 
 	bool SPGame::UnloadContent()
 	{
-		if(!SPComponentManager::GetSingleton().Unload())
+		SPLogHelper::WriteLog("[Game] Unloading Game Content ...");
+
+		if(!SPComponentManager::GetSingleton()->Unload())
 		{
 			return false;
 		}		
@@ -534,7 +539,7 @@ namespace SPEngine
 
 	bool SPGame::Update(float timeDelta)
 	{
-		if (!SPComponentManager::GetSingleton().Update(timeDelta))
+		if (!SPComponentManager::GetSingleton()->Update(timeDelta))
 		{
 			return false;
 		}
@@ -544,7 +549,7 @@ namespace SPEngine
 
 	bool SPGame::Draw(float timeDelta)
 	{	
-		if (!SPComponentManager::GetSingleton().Draw(timeDelta))
+		if (!SPComponentManager::GetSingleton()->Draw(timeDelta))
 		{
 			return false;
 		}
@@ -554,7 +559,7 @@ namespace SPEngine
 
 	void SPGame::CleanUp()
 	{
-		SPWindow::GetSingleton().UnregisterWindowClass();
+		SPWindow::GetSingleton()->UnregisterWindowClass();
 
 		return;
 	}	
@@ -562,7 +567,7 @@ namespace SPEngine
 
 	bool SPGame::Refresh( D3DCOLOR color )
 	{
-		SPDevice::GetSingleton().GetD3DDevice()->
+		SPDevice::GetSingleton()->GetD3DDevice()->
 			Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, color, 1.0f, 0); 
 
 		return true;
@@ -570,12 +575,12 @@ namespace SPEngine
 
 	int SPGame::GetWidth()
 	{
-		return SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth;
+		return SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
 	}
 
 	int SPGame::GetHeight()
 	{
-		return SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;;
+		return SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;;
 	}
 
 	bool SPGame::ResetDevice( SPConfig config )
@@ -591,7 +596,7 @@ namespace SPEngine
 		}
 
 		SPLogHelper::WriteLog("[Game] Reseting Device ...");
-		if (!SPDevice::GetSingleton().ResetDevice(config))
+		if (!SPDevice::GetSingleton()->ResetDevice(config))
 		{
 			SPLogHelper::WriteLog("[Game] ERROR: Failed to reset d3d device!");
 			return false;
@@ -612,7 +617,7 @@ namespace SPEngine
 
 	bool SPGame::ReloadContent()
 	{
-		if(!SPComponentManager::GetSingleton().Reload())
+		if(!SPComponentManager::GetSingleton()->Reload())
 		{
 			return false;
 		}
@@ -634,19 +639,19 @@ namespace SPEngine
 	{
 		LockDrawingWhileLoading();
 
-		SPConfig oldConfig = SPConfigManager::GetSingleton().GetCurrentConfig();
+		SPConfig oldConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
-		SPConfigManager::GetSingleton().SetConfig(config);			
+		SPConfigManager::GetSingleton()->SetConfig(config);			
 
 		if(!ResetDevice(config))
 		{
-			SPConfigManager::GetSingleton().SetConfig(oldConfig);
+			SPConfigManager::GetSingleton()->SetConfig(oldConfig);
 			UnlockDrawingWhileLoading();
 			//exit(0);
 			return false;
 		}
 
-		SPWindow::GetSingleton().AdjustMainWindow(
+		SPWindow::GetSingleton()->AdjustMainWindow(
 			!config.windowed,
 			config.windowWidth, 
 			config.windowHeight);
@@ -705,22 +710,22 @@ namespace SPEngine
 
 	bool SPGame::UpdateWhileLoading( float timeDelta )
 	{
-		SPFontManager::GetSingleton().Update(timeDelta);
-		SPFontWriter::GetSingleton().Update(timeDelta);			
-		SPSoundManager::GetSingleton().Update(timeDelta);
-		SPVideoManager::GetSingleton().Update(timeDelta);
-		SPTextureManager::GetSingleton().Update(timeDelta);
-		SPSpriteManager::GetSingleton().Update(timeDelta);			
-		SPSpriteManager3D::GetSingleton().Update(timeDelta);
+		SPFontManager::GetSingleton()->Update(timeDelta);
+		SPFontWriter::GetSingleton()->Update(timeDelta);			
+		SPSoundManager::GetSingleton()->Update(timeDelta);
+		SPVideoManager::GetSingleton()->Update(timeDelta);
+		SPTextureManager::GetSingleton()->Update(timeDelta);
+		SPSpriteManager::GetSingleton()->Update(timeDelta);			
+		SPSpriteManager3D::GetSingleton()->Update(timeDelta);
 
 		return true;
 	}
 
 	bool SPGame::DrawWhileLoading( float timeDelta )
 	{
-		SPFontWriter::GetSingleton().Draw(timeDelta);			
-		SPSpriteManager::GetSingleton().Draw(timeDelta);			
-		SPSpriteManager3D::GetSingleton().Draw(timeDelta);
+		SPFontWriter::GetSingleton()->Draw(timeDelta);			
+		SPSpriteManager::GetSingleton()->Draw(timeDelta);			
+		SPSpriteManager3D::GetSingleton()->Draw(timeDelta);
 
 		return true;
 	}
@@ -790,7 +795,7 @@ namespace SPEngine
 	{
 		modificationLock.Lock();
 		configToApply = new SPConfig(config);
-		SPConfigManager::GetSingleton().SetConfig(config);
+		SPConfigManager::GetSingleton()->SetConfig(config);
 		modificationLock.Unlock();
 	}
 

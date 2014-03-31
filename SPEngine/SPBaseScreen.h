@@ -27,7 +27,7 @@ namespace SPEngine
 	///		- virtual bool Draw(float timeDelta);
 	///
 	///	And then use the AddScreen method of SPScreenManager:
-	///		- SPScreenManager::GetSingleton().AddScreen("[screen_name]", new MyScreen())
+	///		- SPScreenManager::GetSingleton()->AddScreen("[screen_name]", new MyScreen())
 	///
 	//////////////////////////////////////////////////////////////////////
 	class SPBaseScreen : 

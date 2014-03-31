@@ -52,5 +52,11 @@ namespace SPEngine
 	{
 		return currentConfig;
 	}
+
+	void SPConfigManager::SetDebug( bool on )
+	{
+		currentConfig.debug = on;
+	}
+
 }
 

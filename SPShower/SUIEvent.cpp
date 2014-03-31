@@ -16,13 +16,13 @@ SUIEvent::SUIEvent():
 
 	Handle<Object> SUIEvent::GetV8Obj()
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 		if (!v8Obj)
 		{
 			Local<Object> obj = Handle<Object>();
 
-			Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetEventTemplate();
+			Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetEventTemplate();
 			obj = handleTempl->NewInstance();
 
 			if(!obj.IsEmpty())

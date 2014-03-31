@@ -40,8 +40,8 @@ namespace SPEngine
 	{		
 		HRESULT hr;
 
-		float sizeRate = SPFontManager::GetSingleton().GetSizeRate();
-		float marginRate = SPFontManager::GetSingleton().GetMarginRate();
+		float sizeRate = SPFontManager::GetSingleton()->GetSizeRate();
+		float marginRate = SPFontManager::GetSingleton()->GetMarginRate();
 
 		// Apply effect.
 		if (effect && effect->GetCore())
@@ -56,7 +56,7 @@ namespace SPEngine
 			effect->SetFloat("width", 100);
 			effect->SetFloat("height", 100);
 			D3DVIEWPORT9 viewPort;
-			SPDevice::GetSingleton().GetD3DDevice()->GetViewport(&viewPort);
+			SPDevice::GetSingleton()->GetD3DDevice()->GetViewport(&viewPort);
 			D3DXMATRIX transfromation;
 			D3DXMatrixOrthoOffCenterLH(&transfromation, 0, viewPort.Width,
 				viewPort.Height, 0, 0, 1);
@@ -88,7 +88,7 @@ namespace SPEngine
 				}
 				else
 				{
-					hr = SPDevice::GetSingleton().GetD3DDevice()->EndScene();
+					hr = SPDevice::GetSingleton()->GetD3DDevice()->EndScene();
 				}
 
 				SPTexturePtr oldTarget = texture;
@@ -98,7 +98,7 @@ namespace SPEngine
 				LPDIRECT3DSURFACE9 innerSurface = NULL;
 				ID3DXRenderToSurface* innerRenderToSurface = NULL;
 
-				oldTarget = SPTextureManager::GetSingleton().
+				oldTarget = SPTextureManager::GetSingleton()->
 					CreateRenderTarget(
 					sizeRate * desRect.Width + 2 * sizeRate * font->GetHeight() * marginRate,
 					sizeRate * desRect.Height + 2 * sizeRate *  font->GetHeight() * marginRate,
@@ -109,7 +109,7 @@ namespace SPEngine
 				D3DSURFACE_DESC desc;
 				hr = innerSurface->GetDesc( &desc );
 				hr = D3DXCreateRenderToSurface(
-					SPDevice::GetSingleton().GetD3DDevice(), 
+					SPDevice::GetSingleton()->GetD3DDevice(), 
 					desc.Width, 
 					desc.Height,
 					desc.Format,
@@ -119,7 +119,7 @@ namespace SPEngine
 
 				// Begin rendering.
 				hr = innerRenderToSurface->BeginScene(innerSurface, NULL);	
-				SPDevice::GetSingleton().GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0, color), 1.0, 0);
+				SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0, color), 1.0, 0);
 
 				// Render with effect pass.	
 				hr = renderer->Begin( D3DXSPRITE_ALPHABLEND	
@@ -202,7 +202,7 @@ namespace SPEngine
 					ID3DXRenderToSurface* innerRenderToSurface = NULL;
 
 					// Create render target and surface.
-					newTarget = SPTextureManager::GetSingleton().CreateRenderTarget(
+					newTarget = SPTextureManager::GetSingleton()->CreateRenderTarget(
 						texture->GetWidth(),
 						texture->GetHeight(),
 						0x00000000);
@@ -212,7 +212,7 @@ namespace SPEngine
 					D3DSURFACE_DESC desc;
 					hr = innerSurface->GetDesc( &desc );
 					hr = D3DXCreateRenderToSurface(
-						SPDevice::GetSingleton().GetD3DDevice(), 
+						SPDevice::GetSingleton()->GetD3DDevice(), 
 						desc.Width, 
 						desc.Height,
 						desc.Format,
@@ -223,9 +223,9 @@ namespace SPEngine
 					// Begin rendering.
 					hr = innerRenderToSurface->BeginScene(innerSurface, NULL);	
 
-					hr = SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
+					hr = SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 
-					SPDevice::GetSingleton().GetD3DDevice()->Clear(1, 0, D3DCLEAR_TARGET, newTarget->GetBackgroundColor(), 1.0f, 0); 
+					SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, 0, D3DCLEAR_TARGET, newTarget->GetBackgroundColor(), 1.0f, 0); 
 
 					// Render with effect pass.	
 					hr = innerRenderer->Begin( D3DXSPRITE_DONOTSAVESTATE );
@@ -234,7 +234,7 @@ namespace SPEngine
 					effect->SetFloat("width", (float)texture->GetWidth());
 					effect->SetFloat("height", (float)texture->GetHeight());
 					D3DVIEWPORT9 viewPort;
-					SPDevice::GetSingleton().GetD3DDevice()->GetViewport(&viewPort);
+					SPDevice::GetSingleton()->GetD3DDevice()->GetViewport(&viewPort);
 					D3DXMATRIX transfromation;
 					D3DXMatrixOrthoOffCenterLH(&transfromation, 0, viewPort.Width,
 						viewPort.Height, 0, 0, 1);
@@ -278,7 +278,7 @@ namespace SPEngine
 				}
 				else
 				{
-					hr = SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
+					hr = SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 				}
 
 				hr = renderer->Begin( D3DXSPRITE_DONOTSAVESTATE );
@@ -318,8 +318,8 @@ namespace SPEngine
 	{
 		HRESULT hr;
 
-		float sizeRate = SPFontManager::GetSingleton().GetSizeRate();
-		float marginRate = SPFontManager::GetSingleton().GetMarginRate();
+		float sizeRate = SPFontManager::GetSingleton()->GetSizeRate();
+		float marginRate = SPFontManager::GetSingleton()->GetMarginRate();
 
 		if (text.size() == 1 || wordSpace == 0)
 		{

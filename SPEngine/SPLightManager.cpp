@@ -96,14 +96,14 @@ D3DLIGHT9 SPLightManager::InitSpotLight(
 
 bool SPLightManager::EnableLighting()
 {
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, true); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, true); 
 
 	return true;
 }
 
 bool SPLightManager::DisableLighting()
 {
-	SPDevice::GetSingleton().GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, false); 
+	SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, false); 
 
 	return true;
 }
@@ -113,7 +113,7 @@ bool SPLightManager::AddLight( int index, D3DLIGHT9 &light )
 	if (!IsLightValid(index))
 	{
 		lights[index] = light;
-		SPDevice::GetSingleton().GetD3DDevice()->SetLight(index, &light);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetLight(index, &light);
 		return true;
 	}
 
@@ -125,7 +125,7 @@ bool SPLightManager::ModifyLight( int index, D3DLIGHT9 &light )
 	if (IsLightValid(index))
 	{
 		lights[index] = light;
-		SPDevice::GetSingleton().GetD3DDevice()->SetLight(index, &light);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetLight(index, &light);
 		return true;
 	}
 
@@ -137,7 +137,7 @@ bool SPLightManager::DeleteLight( int index )
 	if (IsLightValid(index))
 	{
 		lights.erase(index);
-		SPDevice::GetSingleton().GetD3DDevice()->SetLight(index, NULL);
+		SPDevice::GetSingleton()->GetD3DDevice()->SetLight(index, NULL);
 		return true;
 	}
 
@@ -148,7 +148,7 @@ bool SPLightManager::TurnOn( int index )
 {
 	if (IsLightValid(index))
 	{
-		SPDevice::GetSingleton().GetD3DDevice()->LightEnable(index, true);
+		SPDevice::GetSingleton()->GetD3DDevice()->LightEnable(index, true);
 		return true;
 	}
 
@@ -160,7 +160,7 @@ bool SPLightManager::TurnOnAll()
 	hash_map<int, D3DLIGHT9>::iterator iter;
 	for(iter = lights.begin(); iter != lights.end(); iter++)
 	{
-		SPDevice::GetSingleton().GetD3DDevice()->LightEnable(iter->first, true);
+		SPDevice::GetSingleton()->GetD3DDevice()->LightEnable(iter->first, true);
 	}
 
 	return true;
@@ -170,7 +170,7 @@ bool SPLightManager::TurnOff( int index )
 {
 	if (IsLightValid(index))
 	{
-		SPDevice::GetSingleton().GetD3DDevice()->LightEnable(index, false);
+		SPDevice::GetSingleton()->GetD3DDevice()->LightEnable(index, false);
 		return true;
 	}
 
@@ -182,7 +182,7 @@ bool SPLightManager::TurnOffAll()
 	hash_map<int, D3DLIGHT9>::iterator iter;
 	for(iter = lights.begin(); iter != lights.end(); iter++)
 	{
-		SPDevice::GetSingleton().GetD3DDevice()->LightEnable(iter->first, false);
+		SPDevice::GetSingleton()->GetD3DDevice()->LightEnable(iter->first, false);
 	}
 
 	return true;
@@ -192,7 +192,7 @@ bool SPLightManager::Turn( int index )
 {
 	if (IsLightValid(index))
 	{
-		SPDevice::GetSingleton().GetD3DDevice()->LightEnable(index, !IsLightOn(index));
+		SPDevice::GetSingleton()->GetD3DDevice()->LightEnable(index, !IsLightOn(index));
 		return true;
 	}
 
@@ -214,7 +214,7 @@ bool SPLightManager::IsLightOn( int index )
 	if (IsLightValid(index))
 	{
 		BOOL isOn = FALSE;
-		SPDevice::GetSingleton().GetD3DDevice()->GetLightEnable(index, &isOn);
+		SPDevice::GetSingleton()->GetD3DDevice()->GetLightEnable(index, &isOn);
 		if (isOn)
 		{
 			return true;

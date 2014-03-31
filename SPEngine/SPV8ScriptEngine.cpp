@@ -4,6 +4,7 @@
 #include "SPFileManager.h"
 #include "SPStringHelper.h"
 #include "SPRandomHelper.h"
+#include "SPConfigManager.h"
 
 
 
@@ -22,14 +23,17 @@ namespace SPEngine
 	{
 		StopThread();
 
-		persistentContext->ClearAndLeak();
-		persistentContext = NULL;
-
-		if (isolate)
+		if (persistentContext)
 		{
-			isolate->Dispose();
-			isolate = NULL;
-		}
+			persistentContext->ClearAndLeak();
+			persistentContext = NULL;
+		}		
+
+		//if (isolate)
+		//{
+		//	isolate->Dispose();
+		//	isolate = NULL;
+		//}
 
 		if(pAsync)
 		{
@@ -183,7 +187,7 @@ namespace SPEngine
 
 		// Load script file.
 
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(path);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
@@ -200,7 +204,7 @@ namespace SPEngine
 			return escapableHandleScope.Escape<Value>(Undefined(isolate));
 		}
 
-		SPFileManager::GetSingleton().CloseFile(path);
+		SPFileManager::GetSingleton()->CloseFile(path);
 
 		// Create a string containing the JavaScript source code.
 
@@ -298,8 +302,8 @@ namespace SPEngine
 	{
 		list<ScriptToRunPtr>* scriptList = (list<ScriptToRunPtr>*)handle->data;
 
-		HandleScope handleScope(SPV8ScriptEngine::GetSingleton().GetIsolate());
-		Handle<Context> realContext = SPV8ScriptEngine::GetSingleton().GetIsolate()->GetCurrentContext();
+		HandleScope handleScope(SPV8ScriptEngine::GetSingleton()->GetIsolate());
+		Handle<Context> realContext = SPV8ScriptEngine::GetSingleton()->GetIsolate()->GetCurrentContext();
 		Context::Scope contextScope(realContext);
 
 		if (scriptList->size() != 0)
@@ -308,11 +312,11 @@ namespace SPEngine
 
 			if (script->type == ScriptFile)
 			{
-				Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(script->value, true);
+				Handle<Value> result = SPV8ScriptEngine::GetSingleton()->EvalFile(script->value, true);
 			}
 			else
 			{
-				Handle<Value> result = SPV8ScriptEngine::GetSingleton().Eval(script->value, true);
+				Handle<Value> result = SPV8ScriptEngine::GetSingleton()->Eval(script->value, true);
 			}
 
 			scriptList->pop_front();
@@ -323,7 +327,7 @@ namespace SPEngine
 	{
 		SPV8ScriptEngine* engine = (SPV8ScriptEngine*)context;
 
-		if (SPLogHelper::IsDebug())
+		if (SPConfigManager::GetSingleton()->GetCurrentConfig().debug)
 		{
 			//AllocConsole();
 			HWND hWnd = GetConsoleWindow();
@@ -384,17 +388,18 @@ namespace SPEngine
 
 			int totalSleep = 0;
 			bool isTerminating = false;
-
-			while(isThreadRunning)
-			{
-				Sleep(16);
-				totalSleep += 16;
-				if (totalSleep > 100 && !isTerminating)
-				{
-					V8::TerminateExecution(isolate);
-					isTerminating = true;
-				}
-			}
+			V8::TerminateExecution(isolate);
+			//while(isThreadRunning)
+			//{
+			//	Sleep(16);
+			//	totalSleep += 16;
+			//	if (totalSleep > 100 && !isTerminating)
+			//	{
+					//V8::TerminateExecution(isolate);
+					//uv_stop(uv_default_loop());					
+			//		isTerminating = true;
+			//	}
+			//}
 		}
 	}
 
@@ -547,12 +552,12 @@ namespace SPEngine
 
 	Handle<String> SPV8ScriptEngine::SPStringToString( SPString str )
 	{
-		return String::NewFromTwoByte(SPV8ScriptEngine::GetSingleton().GetIsolate(), (uint16_t*)str.c_str());
+		return String::NewFromTwoByte(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (uint16_t*)str.c_str());
 	}
 
 	void SPV8ScriptEngine::Import( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 		HandleScope handleScope(isolate);
 		Handle<Context> context = isolate->GetCurrentContext();
 
@@ -580,7 +585,7 @@ namespace SPEngine
 			return;
 		}
 
-		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
+		Handle<Value> result = SPV8ScriptEngine::GetSingleton()->EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
 
 		loadedModules->Set(moduleName, result);
 		args.GetReturnValue().Set(result);
@@ -588,7 +593,7 @@ namespace SPEngine
 
 	void SPV8ScriptEngine::Include( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 		HandleScope handleScope(isolate);
 
 		if (args.Length() == 0) 
@@ -597,12 +602,12 @@ namespace SPEngine
 			return;
 		}
 
-		Handle<Value> result = SPV8ScriptEngine::GetSingleton().EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
+		Handle<Value> result = SPV8ScriptEngine::GetSingleton()->EvalFile(SPV8ScriptEngine::StringToSPString(args[0]->ToString()), true);
 	}
 
 	void SPV8ScriptEngine::SleepFunc( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 		HandleScope handleScope(isolate);
 
 		int timeSpan = 0;
@@ -618,7 +623,7 @@ namespace SPEngine
 			timeSpan = timeSpanObj->Int32Value();
 		}
 
-		if (timeSpan >= 0 && !SPV8ScriptEngine::GetSingleton().IsStopping())
+		if (timeSpan >= 0 && !SPV8ScriptEngine::GetSingleton()->IsStopping())
 		{
 			Unlocker unlocker(isolate);
 			Sleep(timeSpan);
@@ -630,7 +635,7 @@ namespace SPEngine
 
 	void SPV8ScriptEngine::SetTimeOut( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 		HandleScope handleScope(isolate);
 
 		if (args.Length() < 2) 
@@ -642,12 +647,12 @@ namespace SPEngine
 		Handle<Function> func = Handle<Function>::Cast(args[0]);
 		int timeMs = args[1]->Int32Value();
 
-		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton().SetTimeOutFunction(func, timeMs));
+		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton()->SetTimeOutFunction(func, timeMs));
 	}
 
 	void SPV8ScriptEngine::ClearTimeOut( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 		HandleScope handleScope(isolate);
 
 		if (args.Length() < 1) 
@@ -656,7 +661,7 @@ namespace SPEngine
 			return;
 		}
 
-		SPV8ScriptEngine::GetSingleton().ClearTimeOutFunction(args[0]->ToNumber());
+		SPV8ScriptEngine::GetSingleton()->ClearTimeOutFunction(args[0]->ToNumber());
 	}
 
 	bool SPV8ScriptEngine::RunTimeOutFunc()
@@ -714,7 +719,7 @@ namespace SPEngine
 
 	void SPV8ScriptEngine::EvalFunc( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 		if(args.Length() < 1)
 		{
@@ -724,12 +729,12 @@ namespace SPEngine
 		}
 
 		SPString scriptStr = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
-		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton().Eval(scriptStr, true));
+		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton()->Eval(scriptStr, true));
 	}
 
 	void SPV8ScriptEngine::EvalFileFunc( const FunctionCallbackInfo<Value>& args )
 	{
-		Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+		Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 		if(args.Length() < 1)
 		{
@@ -739,7 +744,7 @@ namespace SPEngine
 		}
 
 		SPString path = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
-		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton().EvalFile(path, true));
+		args.GetReturnValue().Set(SPV8ScriptEngine::GetSingleton()->EvalFile(path, true));
 	}
 
 	void* SPV8ScriptEngine::GetAsync()

@@ -21,7 +21,7 @@ namespace SPEngine
 
 	bool SPEffect::Load( SPString path )
 	{
-		core = SPEffectManager::GetSingleton().GetCore(path);
+		core = SPEffectManager::GetSingleton()->GetCore(path);
 
 		if (!core)
 		{

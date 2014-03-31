@@ -24,6 +24,7 @@ namespace SPEngine
 		SPConfigManager(void);
 		virtual ~SPConfigManager(void);
 
+		void SetDebug(bool on);
 		bool LoadConfig(string path);
 		bool SetConfig(SPConfig &config);
 		SPConfig GetCurrentConfig();

@@ -45,7 +45,7 @@ namespace SPEngine
 		SPFilePtr file;
 		SPString result;
 
-		file = SPFileManager::GetSingleton().OpenFile(path);
+		file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (file)
 		{
@@ -119,7 +119,7 @@ namespace SPEngine
 				}			
 			}
 			
-			SPFileManager::GetSingleton().CloseFile(path);
+			SPFileManager::GetSingleton()->CloseFile(path);
 		}
 
 		return result;

@@ -94,7 +94,7 @@ namespace SPEngine
 		// Ether of them is used.
 
 		// Open texture file.
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(setPath);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(setPath);
 
 		if (!file)
 		{
@@ -114,7 +114,7 @@ namespace SPEngine
 
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTextureFromFileInMemoryEx(
-			SPDevice::GetSingleton().GetD3DDevice(), 
+			SPDevice::GetSingleton()->GetD3DDevice(), 
 			pData, (UINT)length,
 			D3DX_DEFAULT_NONPOW2,
 			D3DX_DEFAULT_NONPOW2,
@@ -128,7 +128,7 @@ namespace SPEngine
 			&texture);
 
 		// Close texture file.
-		SPFileManager::GetSingleton().CloseFile(setPath);
+		SPFileManager::GetSingleton()->CloseFile(setPath);
 		delete [] pData;
 		pData = NULL;
 		if (FAILED(hr))
@@ -143,7 +143,7 @@ namespace SPEngine
 		height = height / row;
 		origin = setOrigin;
 
-		//SpriteManager::GetSingleton().AddAnime(this);
+		//SpriteManager::GetSingleton()->AddAnime(this);
 
 		return true;
 	}

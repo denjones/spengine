@@ -28,7 +28,7 @@ namespace SPEngine
 	/// 
 	/// Usage:
 	///		SPComponet component = SPComponentFactory<SPComponet>.
-	///			Produce(ComponentManager::GetSingletonPtr());
+	///			Produce(ComponentManager::GetSingleton());
 	///
 	//////////////////////////////////////////////////////////////////////
 	template <class T>
@@ -41,10 +41,10 @@ namespace SPEngine
 		virtual ~SPComponentFactory(void){}
 
 		/// @param[in] ComponentManager& manager 
-		SPPointer<T> Produce(SPString name, SPComponentManager& manager)
+		SPPointer<T> Produce(SPString name)
 		{
 			SPPointer<T> newProduct = new T();
-			manager.RegisterComponent(name, newProduct);
+			SPComponentManager::GetSingleton()->RegisterComponent(name, newProduct);
 			products.push_back(newProduct);
 			return newProduct;
 		}

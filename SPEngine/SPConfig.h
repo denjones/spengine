@@ -28,6 +28,7 @@ namespace SPEngine
 		float refreshRate;
 		bool windowed;
 		bool vSync;
+		bool debug;
 		int deviceType;
 	
 		SPConfig(void);
@@ -44,6 +45,7 @@ namespace SPEngine
 		SXP::Tag tag_windowed;
 		SXP::Tag tag_vSync;
 		SXP::Tag tag_deviceType;
+		SXP::Tag tag_debug;
 
 		SXP::Tag tag_own;
 

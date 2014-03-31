@@ -20,7 +20,7 @@ public:
 		}
 
 		// Load texture.
-		texture = SPTextureManager::GetSingleton().GetTexture(L"sicily.jpg");
+		texture = SPTextureManager::GetSingleton()->GetTexture(L"sicily.jpg");
 
 		return true;
 	}
@@ -32,13 +32,13 @@ public:
 		static float angle = 0;
 		angle += timeDelta;
 
-		SPSpriteManager3D::GetSingleton().Render(texture, NULL, D3DXVECTOR3(0, 0, 0), 
+		SPSpriteManager3D::GetSingleton()->Render(texture, NULL, D3DXVECTOR3(0, 0, 0), 
 			D3DXQUATERNION(0, 0, 0, 0),	D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0.2f, 0, 0.2f),
 			D3DXQUATERNION(0, 0, sin(angle / 2), cos(angle / 2)), D3DXVECTOR3(-100, 0, -200));
 
-		//SPSpriteManager3D::GetSingleton().RenderByPosition(texture, NULL, D3DXVECTOR3(0, 0, 0));
+		//SPSpriteManager3D::GetSingleton()->RenderByPosition(texture, NULL, D3DXVECTOR3(0, 0, 0));
 
-		SPSpriteManager3D::GetSingleton().RenderByPositionWithRotateself(texture, NULL,
+		SPSpriteManager3D::GetSingleton()->RenderByPositionWithRotateself(texture, NULL,
 			D3DXVECTOR3(100, 0, 100), D3DXVECTOR3(0.2f, 0, 0.2f),
 			D3DXVECTOR3(0, 0, 1), angle);
 

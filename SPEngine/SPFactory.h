@@ -55,7 +55,7 @@ namespace SPEngine
 	SPPointer<T> SPFactory<T>::Produce()
 	{
 		SPPointer<T> newProduct = new T();
-		SPComponentManager::GetSingleton().RegisterComponent(newProduct);
+		SPComponentManager::GetSingleton()->RegisterComponent(newProduct);
 		products.push_back(newProduct);
 		return newProduct;
 	}

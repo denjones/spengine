@@ -86,7 +86,7 @@ namespace SPEngine
 		// Set up the structure to create the D3DDevice.
 		D3DPRESENT_PARAMETERS d3dpp = config.ToD3DParameters();
 
-		HWND hWnd = SPWindow::GetSingleton().GetHWnd();
+		HWND hWnd = SPWindow::GetSingleton()->GetHWnd();
 
 		ReleaseDevice();
 
@@ -107,7 +107,7 @@ namespace SPEngine
 
 	bool SPDevice::ResetDevice( SPConfig config )
 	{
-		//SPTextureManager::GetSingleton().Unload();
+		//SPTextureManager::GetSingleton()->Unload();
 
 		// Try to reset.
 		if (d3dDevice)

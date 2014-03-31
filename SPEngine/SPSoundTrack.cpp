@@ -102,10 +102,10 @@ namespace SPEngine
 
 	bool SPSoundTrack::SetSound( SPString setSound )
 	{
-		SPSoundPtr sound = SPSoundManager::GetSingleton().GetSound(setSound);
+		SPSoundPtr sound = SPSoundManager::GetSingleton()->GetSound(setSound);
 		if (!sound)
 		{
-			sound = SPSoundManager::GetSingleton().CreateSound(setSound, setSound);
+			sound = SPSoundManager::GetSingleton()->CreateSound(setSound, setSound);
 		}
 
 		if (sound)

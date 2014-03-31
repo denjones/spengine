@@ -36,13 +36,13 @@ namespace SPEngine
 		lastXPos = 0;
 		lastYPos = 0;
 		wheelPos = 0;
-		maxWidth = SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth;
-		maxHeight = SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight;
+		maxWidth = SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
+		maxHeight = SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 		memset(&lastMouseState, 0, sizeof(mouseState));
 		memset(&mouseState, 0, sizeof(mouseState));		
 
 		// Create input device1
-		if(FAILED(SPDirectInput::GetSingleton().GetDirectInput()->CreateDevice(
+		if(FAILED(SPDirectInput::GetSingleton()->GetDirectInput()->CreateDevice(
 			GUID_SysMouse, &device, NULL)))
 		{
 			return false;
@@ -69,7 +69,7 @@ namespace SPEngine
 
 		// Set cooperative level
 		if(FAILED(device->SetCooperativeLevel(
-			SPWindow::GetSingleton().GetHWnd(), 
+			SPWindow::GetSingleton()->GetHWnd(), 
 			flags)))
 		{
 			return false;
@@ -122,18 +122,18 @@ namespace SPEngine
 
 		POINT mousePos;
 		GetCursorPos(&mousePos);
-		ScreenToClient(SPWindow::GetSingleton().GetHWnd(), 
+		ScreenToClient(SPWindow::GetSingleton()->GetHWnd(), 
 			&mousePos);
 
 		// Change the mouse position into relative position.
 
 		RECT winRect;
-		GetClientRect(SPWindow::GetSingleton().GetHWnd(), &winRect);
+		GetClientRect(SPWindow::GetSingleton()->GetHWnd(), &winRect);
 
-		float xRate = (float)SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth / 
-			SPConfigManager::GetSingleton().GetCurrentConfig().windowWidth;
-		float yRate = (float) SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight /
-			SPConfigManager::GetSingleton().GetCurrentConfig().windowHeight ;
+		float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth / 
+			SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth;
+		float yRate = (float) SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight /
+			SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight ;
 
 		lastXPos = xPos;
 		lastYPos = yPos;
@@ -144,7 +144,7 @@ namespace SPEngine
 		}
 		else
 		{
-			xPos = mousePos.x * SPWindow::GetSingleton().GetWidth() 
+			xPos = mousePos.x * SPWindow::GetSingleton()->GetWidth() 
 				/ (winRect.right - winRect.left) * xRate;
 		}
 
@@ -154,7 +154,7 @@ namespace SPEngine
 		}
 		else
 		{
-			yPos = mousePos.y * SPWindow::GetSingleton().GetHeight()
+			yPos = mousePos.y * SPWindow::GetSingleton()->GetHeight()
 				/ (winRect.bottom - winRect.top) * yRate;
 		}		
 
@@ -269,21 +269,21 @@ namespace SPEngine
 	{
 		return !(GetPositionX() < 0 
 			|| GetPositionY() < 0 
-			|| GetPositionX() >= SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth
-			|| GetPositionY() >= SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight);
+			|| GetPositionX() >= SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth
+			|| GetPositionY() >= SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight);
 	}
 
 	int SPMouse::GetMovementX()
 	{
-		//float xRate = (float)SPConfigManager::GetSingleton().GetCurrentConfig().workingWidth / 
-		//	SPConfigManager::GetSingleton().GetCurrentConfig().windowWidth;
+		//float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth / 
+		//	SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth;
 		return xPos - lastXPos;
 	}
 
 	int SPMouse::GetMovementY()
 	{
-		//float yRate = (float) SPConfigManager::GetSingleton().GetCurrentConfig().workingHeight /
-		//	SPConfigManager::GetSingleton().GetCurrentConfig().windowHeight ;
+		//float yRate = (float) SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight /
+		//	SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight ;
 		return yPos - lastYPos; 
 	}
 

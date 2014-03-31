@@ -39,17 +39,17 @@ bool SUIPictureBox::Draw( float timeDelta )
 			transformation->SetTarget(targetPicture->GetTarget());
 		}		
 
-		//SPSpriteManager::GetSingleton().RenderOnScreen(picture->GetTarget(),
+		//SPSpriteManager::GetSingleton()->RenderOnScreen(picture->GetTarget(),
 		//	transformation, texRect, SPColor::White, 1, childTarget );
-		SPSpriteManager::GetSingleton().RenderWithMatrix(picture->GetTarget(),
+		SPSpriteManager::GetSingleton()->RenderWithMatrix(picture->GetTarget(),
 			transformation, TransformMatrixImage(), ImageSrcRect().CRect(),
 			D3DXVECTOR3(0,0,0), PositionImage(), Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
 	else
 	{
-		//SPSpriteManager::GetSingleton().RenderOnScreen(picture->GetTarget(),
+		//SPSpriteManager::GetSingleton()->RenderOnScreen(picture->GetTarget(),
 		//	NULL, texRect, SPColor::White, 1, childTarget );
-		SPSpriteManager::GetSingleton().RenderWithMatrix(picture->GetTarget(),
+		SPSpriteManager::GetSingleton()->RenderWithMatrix(picture->GetTarget(),
 			NULL, TransformMatrixImage(), ImageSrcRect().CRect(),
 			D3DXVECTOR3(0,0,0), PositionImage(), Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
@@ -596,13 +596,13 @@ SUIPictureBox::ImageMode SUIPictureBox::GetFillMode()
 
 Handle<Object> SUIPictureBox::GetV8Obj()
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 
 	if (!v8Obj)
 	{
 		Local<Object> obj = Handle<Object>();
 
-		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton().GetPictureBoxTemplate();
+		Handle<ObjectTemplate> handleTempl = SV8ScriptManager::GetSingleton()->GetPictureBoxTemplate();
 		obj = handleTempl->NewInstance();
 
 		if(!obj.IsEmpty())

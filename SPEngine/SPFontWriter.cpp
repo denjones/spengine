@@ -19,7 +19,7 @@ namespace SPEngine
 {
 	SPFontWriter::SPFontWriter(void)
 	{
-		defaultFont = SPFontManager::GetSingleton().CreateFont(L"default", 20, 0, FW_NORMAL, 10, false, L"default");
+		defaultFont = SPFontManager::GetSingleton()->CreateFont(L"default", 20, 0, FW_NORMAL, 10, false, L"default");
 		renderer = NULL;
 	}
 
@@ -32,7 +32,7 @@ namespace SPEngine
 	{
 		if (!renderer)
 		{
-			if(FAILED(D3DXCreateSprite(SPDevice::GetSingleton().GetD3DDevice(), &renderer)))
+			if(FAILED(D3DXCreateSprite(SPDevice::GetSingleton()->GetD3DDevice(), &renderer)))
 			{
 				SPLogHelper::WriteLog("[Game] WARNING£ºFailed to create SpriteRenderer in SPFontWriter!");
 				return false;
@@ -70,12 +70,12 @@ namespace SPEngine
 
 	bool SPFontWriter::WriteText( SPTextToWrite text )
 	{
-		float sizeRate = SPFontManager::GetSingleton().GetSizeRate();
-		float marginRate = SPFontManager::GetSingleton().GetMarginRate();
+		float sizeRate = SPFontManager::GetSingleton()->GetSizeRate();
+		float marginRate = SPFontManager::GetSingleton()->GetMarginRate();
 
 		HRESULT hr;
 
-		hr = SPDevice::GetSingleton().GetD3DDevice()->EndScene();
+		hr = SPDevice::GetSingleton()->GetD3DDevice()->EndScene();
 
 		ID3DXRenderToSurface* renderToSurface = NULL;
 		LPDIRECT3DSURFACE9 pRenderSurface = NULL;
@@ -85,7 +85,7 @@ namespace SPEngine
 			text.font = defaultFont;
 		}
 
-		SPTexturePtr tex = SPTextureManager::GetSingleton().CreateRenderTarget(
+		SPTexturePtr tex = SPTextureManager::GetSingleton()->CreateRenderTarget(
 			sizeRate * text.desRect.Width + 2 * sizeRate * text.font->GetHeight() * marginRate,
 			sizeRate * text.desRect.Height + 2 * sizeRate *  text.font->GetHeight() * marginRate,
 			SPColorHelper::AlphaColor(0, text.color));
@@ -95,7 +95,7 @@ namespace SPEngine
 		hr = pRenderSurface->GetDesc( &desc );
 
 		hr = D3DXCreateRenderToSurface(
-			SPDevice::GetSingleton().GetD3DDevice(), 
+			SPDevice::GetSingleton()->GetD3DDevice(), 
 			desc.Width, 
 			desc.Height,
 			desc.Format,
@@ -105,7 +105,7 @@ namespace SPEngine
 
 		hr = renderToSurface->BeginScene(pRenderSurface, NULL);
 
-		SPDevice::GetSingleton().GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0,text.color), 1.0, 0);
+		SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0,text.color), 1.0, 0);
 
 		hr = renderer->Begin(D3DXSPRITE_ALPHABLEND);// | D3DXSPRITE_DONOTMODIFY_RENDERSTATE);
 		
@@ -131,7 +131,7 @@ namespace SPEngine
 			LPDIRECT3DSURFACE9 innerSurface = NULL;
 			ID3DXRenderToSurface* innerRenderToSurface = NULL;
 
-			oldTarget = SPTextureManager::GetSingleton().
+			oldTarget = SPTextureManager::GetSingleton()->
 				CreateRenderTarget(tex->GetWidth(),
 				tex->GetHeight(), SPColorHelper::AlphaColor(0,text.color));
 			hr = oldTarget->GetD3DTexture()->GetSurfaceLevel(0, &innerSurface);
@@ -140,7 +140,7 @@ namespace SPEngine
 			D3DSURFACE_DESC desc;
 			hr = innerSurface->GetDesc( &desc );
 			hr = D3DXCreateRenderToSurface(
-				SPDevice::GetSingleton().GetD3DDevice(), 
+				SPDevice::GetSingleton()->GetD3DDevice(), 
 				desc.Width, 
 				desc.Height,
 				desc.Format,
@@ -150,7 +150,7 @@ namespace SPEngine
 
 			// Begin rendering.
 			hr = innerRenderToSurface->BeginScene(innerSurface, NULL);	
-			SPDevice::GetSingleton().GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0,text.color), 1.0, 0);
+			SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0,text.color), 1.0, 0);
 
 			// Render with effect pass.	
 			hr = renderer->Begin( D3DXSPRITE_ALPHABLEND	
@@ -190,7 +190,7 @@ namespace SPEngine
 				if (num != nPass - 1)
 				{
 					// Create render target and surface.
-					newTarget = SPTextureManager::GetSingleton().
+					newTarget = SPTextureManager::GetSingleton()->
 						CreateRenderTarget(tex->GetWidth(),
 						tex->GetHeight(), SPColorHelper::AlphaColor(0, text.color));
 					hr = newTarget->GetD3DTexture()->GetSurfaceLevel(0, &innerSurface);
@@ -199,7 +199,7 @@ namespace SPEngine
 					D3DSURFACE_DESC desc;
 					hr = innerSurface->GetDesc( &desc );
 					hr = D3DXCreateRenderToSurface(
-						SPDevice::GetSingleton().GetD3DDevice(), 
+						SPDevice::GetSingleton()->GetD3DDevice(), 
 						desc.Width, 
 						desc.Height,
 						desc.Format,
@@ -215,7 +215,7 @@ namespace SPEngine
 					hr = renderToSurface->BeginScene(pRenderSurface, NULL);
 				}
 				
-				SPDevice::GetSingleton().GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0,text.color), 1.0, 0);
+				SPDevice::GetSingleton()->GetD3DDevice()->Clear(1, NULL, D3DCLEAR_TARGET, SPColorHelper::AlphaColor(0,text.color), 1.0, 0);
 
 				// Render with effect pass.	
 				hr = renderer->Begin( D3DXSPRITE_ALPHABLEND	
@@ -226,7 +226,7 @@ namespace SPEngine
 				text.pixelShader->SetFloat("width", (float)tex->GetWidth());
 				text.pixelShader->SetFloat("height", (float)tex->GetHeight());
 				D3DVIEWPORT9 viewPort;
-				SPDevice::GetSingleton().GetD3DDevice()->GetViewport(&viewPort);
+				SPDevice::GetSingleton()->GetD3DDevice()->GetViewport(&viewPort);
 				D3DXMATRIX transfromation;
 				D3DXMatrixOrthoOffCenterLH(&transfromation, 0, viewPort.Width,
 					viewPort.Height, 0, 0, 1);
@@ -297,7 +297,7 @@ namespace SPEngine
 		pRenderSurface = NULL;
 		renderToSurface = NULL;
 
-		hr = SPDevice::GetSingleton().GetD3DDevice()->BeginScene();
+		hr = SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 
 		SPRectangle desRect = text.desRect;
 		desRect.X -= text.font->GetHeight() * marginRate;
@@ -305,7 +305,7 @@ namespace SPEngine
 		desRect.Width += 2 * text.font->GetHeight() * marginRate;
 		desRect.Height += 2 * text.font->GetHeight() * marginRate;
 
-		SPSpriteManager::GetSingleton().RenderOnScreen(tex,
+		SPSpriteManager::GetSingleton()->RenderOnScreen(tex,
 			NULL, desRect, SPColor::White, 
 			text.depth, text.target);
 
@@ -329,7 +329,7 @@ namespace SPEngine
 
 		//return true;
 
-		//SPSpriteManager::GetSingleton().AddSprite(new SPTextSprite(
+		//SPSpriteManager::GetSingleton()->AddSprite(new SPTextSprite(
 		//	font, ps, text, count, destRect, format, color, space, depth, target));
 
 		//return true;
@@ -470,8 +470,8 @@ namespace SPEngine
 	bool SPFontWriter::RealWriteText( SPTextToWrite text )
 	{
 		HRESULT hr;
-		float sizeRate = SPFontManager::GetSingleton().GetSizeRate();
-		float marginRate = SPFontManager::GetSingleton().GetMarginRate();
+		float sizeRate = SPFontManager::GetSingleton()->GetSizeRate();
+		float marginRate = SPFontManager::GetSingleton()->GetMarginRate();
 
 		if (text.text.size() == 1 || text.wordSpace == 0)
 		{

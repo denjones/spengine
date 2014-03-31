@@ -136,7 +136,7 @@ bool SPEngine::SPParticleSystem2D::Init(IDirect3DDevice9 *devicePtr, WCHAR* texF
 
 	is3D = if3D;
 	*/
-	particleTexture = SPTextureManager::GetSingleton().GetTexture(texFileName);
+	particleTexture = SPTextureManager::GetSingleton()->GetTexture(texFileName);
 	return true;
 }
 
@@ -239,10 +239,10 @@ void SPEngine::SPParticleSystem2D::Draw(float timeDelta)
 	for(iter = particles.begin() ; iter != particles.end() ; iter++)
 	{
 		SPRectangle rect = SPRectangle(0, 0, particleTexture->GetWidth(), particleTexture->GetHeight());
-		SPSpriteManager::GetSingleton().RenderCentered(particleTexture, NULL, rect, iter->position, 1
+		SPSpriteManager::GetSingleton()->RenderCentered(particleTexture, NULL, rect, iter->position, 1
 			,D3DXVECTOR2(0, 0), iter->rotation, SPColor::White, NULL);
 
-		//SPSpriteManager::GetSingleton().RenderCentered(particleTexture, NULL, iter->position.x, iter->position.y, NULL);
+		//SPSpriteManager::GetSingleton()->RenderCentered(particleTexture, NULL, iter->position.x, iter->position.y, NULL);
 		//if(iter->isAlive)// && v != NULL)
 		//{
 		//	v->position = iter->position;

@@ -396,7 +396,7 @@ namespace SPEngine
 		typeName = path;
 		typeName = typeName.substr(typeName.find_last_of(L".") + 1);
 		transform(typeName.begin(), typeName.end(), typeName.begin(), tolower);
-		xAudio = SPXAudio::GetSingletonPtr();
+		xAudio = SPXAudio::GetSingleton();
 	}
 
 	void SPSound::FadeOut(float second)
@@ -514,8 +514,8 @@ namespace SPEngine
 
 		HRESULT hr;
 
-		if(!SPXAudio::GetSingleton().GetXAudio() 
-			|| FAILED(hr = SPXAudio::GetSingleton().GetXAudio()->CreateSourceVoice(
+		if(!SPXAudio::GetSingleton()->GetXAudio() 
+			|| FAILED(hr = SPXAudio::GetSingleton()->GetXAudio()->CreateSourceVoice(
 			&sourceVoice, (WAVEFORMATEX*)&wfx, 0, 
 			XAUDIO2_DEFAULT_FREQ_RATIO, &callback) ) ) 
 		{

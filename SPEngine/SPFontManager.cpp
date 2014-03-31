@@ -148,7 +148,7 @@ namespace SPEngine
 
 	bool SPFontManager::AddExtendedFont( SPString path )
 	{
-		SPFilePtr file = SPFileManager::GetSingleton().OpenFile(path);
+		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
@@ -156,13 +156,13 @@ namespace SPEngine
 			return false;
 		}
 
-		file = SPFileManager::GetSingleton().OpenFile(path);
+		file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		LONGLONG length = file->GetFileLength();
 		char* pData = new char[length];
 		file->Read(pData, length);
 
-		SPFileManager::GetSingleton().CloseFile(path);
+		SPFileManager::GetSingleton()->CloseFile(path);
 
 		DWORD numOfFont;
 		HANDLE handle = AddFontMemResourceEx(pData, length, NULL, &numOfFont);

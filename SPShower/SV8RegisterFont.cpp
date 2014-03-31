@@ -5,7 +5,7 @@
 
 void SV8Function::RegisterFont( const FunctionCallbackInfo<Value>& args )
 {
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton().GetIsolate();
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	HandleScope handleScope(isolate);
 
 	if(args.Length() == 0)
@@ -20,6 +20,6 @@ void SV8Function::RegisterFont( const FunctionCallbackInfo<Value>& args )
 	if (HasProperty(L"file", argObj))
 	{
 		SPString fileName = SPV8ScriptEngine::StringToSPString(GetProperty(L"file", argObj)->ToString());
-		SPFontManager::GetSingleton().AddExtendedFont(fileName);
+		SPFontManager::GetSingleton()->AddExtendedFont(fileName);
 	}
 }
