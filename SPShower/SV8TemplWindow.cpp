@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "SV8TemplWindow.h"
+#include "SV8ScriptManager.h"
 
 
 
@@ -11,11 +12,15 @@ Handle<ObjectTemplate> SV8TemplWindow::GetTemplate()
 	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"width"), WidthGetter, WidthSetter);
 	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"height"), HeightGetter, HeightSetter);
 	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"fullScreen"), FullScreenGetter, FullScreenSetter);
+	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"cursor"), CursorGetter, CursorSetter);
 
 	// Methods
 
 	templWindow->Set(SPV8ScriptEngine::SPStringToString(L"resize"), 
 		FunctionTemplate::New(Resize)->GetFunction());
+
+	templWindow->Set(SPV8ScriptEngine::SPStringToString(L"fps"), 
+		SV8ScriptManager::GetSingleton()->GetFPSTemplate()->NewInstance());
 
 	return templWindow;
 }
@@ -137,5 +142,25 @@ void SV8TemplWindow::Resize( const FunctionCallbackInfo<Value>& args )
 	}
 
 	SPGameManager::GetSingleton()->GetGame()->ApplyConfigWhenCurrentDrawFinished(newConfig);
+}
+
+void SV8TemplWindow::CursorGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	info.GetReturnValue().Set(SPV8ScriptEngine::SPStringToString(SPInputManager::GetSingleton()->GetCursor()));
+}
+
+void SV8TemplWindow::CursorSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	SPInputManager::GetSingleton()->SetCursor(SPV8ScriptEngine::StringToSPString(value->ToString()));
 }
 

@@ -222,7 +222,7 @@ pip-log.txt
 [Dd]oc/
 [Ss][Pp][Gg][Tt]est1/
 SPShower/data/
-SPShower/script/
+#SPShower/script/
 SPShower/cursor/
 SPShower/font/
 SPShower/log/

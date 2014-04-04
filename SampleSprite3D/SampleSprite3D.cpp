@@ -7,11 +7,11 @@
 #include "SampleGame.h"
 
 
-int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
+int _tmain(int argc, wchar_t** argv)
 {
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow( hWnd, SW_HIDE );
+	HINSTANCE hInstance = GetModuleHandle(NULL);
 	SPGameFactory<SampleGame>::GetSingleton()->Produce(hInstance);
 	SPGameManager::GetSingleton()->Start();
 

@@ -47,7 +47,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\Antlr;..\DirectShow;..\KScript;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\DirectShow;..\LibUV\include;..\LibNode\include;..\LibV8;..\SPEngine;..\SimpleXMLPersistence;.\zlib\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath>..\LibNode\lib;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
     <EmbedManifest>true</EmbedManifest>
@@ -332,6 +332,7 @@
     <ClInclude Include="SV8TemplDialogBox.h" />
     <ClInclude Include="SV8TemplEvent.h" />
     <ClInclude Include="SV8Function.h" />
+    <ClInclude Include="SV8TemplFPS.h" />
     <ClInclude Include="SV8TemplParticleSystem.h" />
     <ClInclude Include="SV8TemplPictureBox.h" />
     <ClInclude Include="SV8TemplScreen.h" />
@@ -392,6 +393,7 @@
     <ClCompile Include="SV8TemplDialogBox.cpp" />
     <ClCompile Include="SV8TemplEvent.cpp" />
     <ClCompile Include="SV8Function.cpp" />
+    <ClCompile Include="SV8TemplFPS.cpp" />
     <ClCompile Include="SV8TemplParticleSystem.cpp" />
     <ClCompile Include="SV8TemplPictureBox.cpp" />
     <ClCompile Include="SV8RegisterFont.cpp" />

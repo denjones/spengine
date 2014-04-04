@@ -43,6 +43,7 @@ namespace SPEngine
 		virtual bool Unload();
 
 		bool SetLocation(FPSLocation setLocation);
+		FPSLocation GetLocation();
 
 	};
 

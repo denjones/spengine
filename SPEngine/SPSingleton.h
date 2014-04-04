@@ -33,12 +33,6 @@ namespace SPEngine
 		~SPSingleton(void)
 		{
 			// Do not release in the destructor of singleton!!
-			//if (singleton)
-			//{
-			//	DestroySingleton();
-			//}
-
-			//assert(!singleton);
 		}
 
 		/// @name Create and Destroy

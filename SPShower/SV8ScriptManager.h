@@ -36,6 +36,7 @@ private:
 	SPPointer<Persistent<ObjectTemplate>> scrollTempl;
 	SPPointer<Persistent<ObjectTemplate>> eventTempl;
 	SPPointer<Persistent<ObjectTemplate>> commandEventTempl;
+	SPPointer<Persistent<ObjectTemplate>> fpsTempl;
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
@@ -47,6 +48,7 @@ public:
 	Handle<ObjectTemplate> GetScrollTemplate();
 	Handle<ObjectTemplate> GetEventTemplate();
 	Handle<ObjectTemplate> GetCommandEventTemplate();
+	Handle<ObjectTemplate> GetFPSTemplate();
 
 private:
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);

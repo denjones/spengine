@@ -21,5 +21,8 @@ namespace SV8TemplWindow
 	void FullScreenGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void FullScreenSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
+	void CursorGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void CursorSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
 	void Resize( const FunctionCallbackInfo<Value>& args );
 }
