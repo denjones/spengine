@@ -2,10 +2,13 @@
 #include "SV8ScriptCommand.h"
 
 
-SV8ScriptCommand::SV8ScriptCommand(Handle<Function> function )
+SV8ScriptCommand::SV8ScriptCommand(Handle<Function> function, int line, int col, SPString file)
 {
 	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
-	v8Function = new Persistent<Function>(isolate, function);
+	this->v8Function = new Persistent<Function>(isolate, function);
+	this->line = line;
+	this->col = col;
+	this->file = file;
 }
 
 
