@@ -114,3 +114,8 @@ bool SPEngine::FPSDisplayer::SetLocation( FPSLocation setLocation )
 
 	return true;
 }
+
+SPEngine::FPSLocation SPEngine::FPSDisplayer::GetLocation()
+{
+	return location;
+}

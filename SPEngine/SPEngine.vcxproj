@@ -49,7 +49,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\LibUV\include;..\LibNode\include;..\Vorbis;..\Antlr;..\DirectShow;..\KScript;..\SimpleXMLPersistence;..\zlib\include;..\LibV8;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\LibUV\include;..\LibNode\include;..\Vorbis;..\DirectShow;..\SimpleXMLPersistence;..\zlib\include;..\LibV8;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <ExecutablePath>$(CEGUI)bin;$(DXSDK_DIR)Utilities\Bin\x86;$(ExecutablePath)</ExecutablePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(DXSDK_DIR)Lib\x64;..\SimpleXMLPersistence;..\zlib;..\LibV8\lib;..\LibNode\lib;$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>

@@ -145,4 +145,5 @@ namespace SV8TemplComponent
 	void InsertBefore( const FunctionCallbackInfo<Value>& args );
 	void AddAnimation( const FunctionCallbackInfo<Value>& args );
 	void AddEffect( const FunctionCallbackInfo<Value>& args );
+	void Skip( const FunctionCallbackInfo<Value>& args );
 }

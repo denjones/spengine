@@ -36,6 +36,7 @@ namespace SPEngine
 		SPKeyboardPtr	keyboard;
 		SPJoystickPtr	joystick;
 		SPMousePtr		mouse;
+		SPString		cursorPath;
 
 	public:
 		/// @name Get input devices
@@ -45,6 +46,7 @@ namespace SPEngine
 		SPMousePtr		GetMouse() { return mouse; }
 		SPXControllerPtr GetXController(int num) { return xControllers[num]; }
 		bool			SetCursor(SPString path);
+		SPString		GetCursor();
 		/// @}
 
 	public:

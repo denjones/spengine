@@ -184,7 +184,15 @@ namespace SPEngine
 		SPFileManager::GetSingleton()->CloseFile(path);
 		//CloseHandle(newFile);
 
+		cursorPath = path;
+
 		return true;
 	}
+
+	SPString SPInputManager::GetCursor()
+	{
+		return cursorPath;
+	}
+
 }
 

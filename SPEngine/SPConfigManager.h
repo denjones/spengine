@@ -8,13 +8,16 @@
 #pragma once
 #include "SPConfig.h"
 #include "SPSingleton.h"
+#include "SPComponent.h"
 
 namespace SPEngine
 {
 	//////////////////////////////////////////////////////////////////////
 	/// @brief ConfigManager class to hold game config.
 	//////////////////////////////////////////////////////////////////////
-	class SPConfigManager : public SPSingleton<SPConfigManager>
+	class SPConfigManager : 
+		public SPComponent,
+		public SPSingleton<SPConfigManager>
 	{
 		string configFile;		///< File path;
 		SPConfig currentConfig; ///< Current config.

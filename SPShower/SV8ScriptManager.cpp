@@ -14,6 +14,7 @@
 #include <node.h>
 #include "SV8TemplEvent.h"
 #include "SV8TemplCommandEvent.h"
+#include "SV8TemplFPS.h"
 
 SV8ScriptManager::SV8ScriptManager(void)
 {
@@ -80,6 +81,12 @@ SV8ScriptManager::~SV8ScriptManager(void)
 		commandEventTempl = NULL;
 	}
 
+	if (fpsTempl)
+	{
+		fpsTempl->ClearAndLeak();
+		fpsTempl = NULL;
+	}
+
 	if (async)
 	{
 		delete async;
@@ -118,6 +125,8 @@ bool SV8ScriptManager::Initialize()
 	// Create All Templates
 	//
 
+	fpsTempl = new Persistent<ObjectTemplate>(isolate, 
+		SV8TemplFPS::GetTemplate());
 	screenTempl = new Persistent<ObjectTemplate>(isolate, 
 		SV8TemplScreen::GetTemplate());
 	componentTempl = new Persistent<ObjectTemplate>(isolate, 
@@ -136,6 +145,7 @@ bool SV8ScriptManager::Initialize()
 		SV8TemplEvent::GetTemplate());
 	commandEventTempl = new Persistent<ObjectTemplate>(isolate, 
 		SV8TemplCommandEvent::GetTemplate());
+	
 
 	////
 	//// Set Global Window Object
@@ -248,6 +258,11 @@ Handle<ObjectTemplate> SV8ScriptManager::GetCommandEventTemplate()
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*commandEventTempl));
 }
 
+Handle<ObjectTemplate> SV8ScriptManager::GetFPSTemplate()
+{
+	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*fpsTempl));
+}
+
 void SV8ScriptManager::HandleCommandCallback( uv_async_t *handle, int status )
 {
 	SV8ScriptManager::GetSingleton()->HandleCommands();
@@ -341,6 +356,5 @@ void SV8ScriptManager::AddCommand( SV8ScriptCommandPtr command )
 
 	UnlockCommandQueue();
 }
-
 
 NODE_MODULE_CONTEXT_AWARE_BUILTIN(speshow, SV8ScriptManager::InitModule)

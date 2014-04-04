@@ -64,6 +64,8 @@ Handle<ObjectTemplate> SV8TemplComponent::GetTemplate()
 		FunctionTemplate::New(AddAnimation)->GetFunction());
 	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"addEffect"), 
 		FunctionTemplate::New(AddEffect)->GetFunction());
+	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"skip"), 
+		FunctionTemplate::New(Skip)->GetFunction());
 
 	return templComponent;
 }
@@ -2101,25 +2103,25 @@ void SV8TemplComponent::AddAnimation( const FunctionCallbackInfo<Value>& args )
 		endPoint.backgroundY += SV8Function::GetProperty(L"backgroundYDelta", argObj)->Int32Value();
 	}
 
-	if (SV8Function::HasProperty(L"transparency", argObj))
+	if (SV8Function::HasProperty(L"opacity", argObj))
 	{
-		endPoint.transparency = SV8Function::GetProperty(L"transparency", argObj)->NumberValue();
+		endPoint.transparency = SV8Function::GetProperty(L"opacity", argObj)->NumberValue();
 	}
 
-	if (SV8Function::HasProperty(L"transparencyDelta", argObj))
+	if (SV8Function::HasProperty(L"opacityDelta", argObj))
 	{
-		endPoint.transparency +=  SV8Function::GetProperty(L"transparencyDelta", argObj)->NumberValue();
+		endPoint.transparency +=  SV8Function::GetProperty(L"opacityDelta", argObj)->NumberValue();
 	}
 
 	if (SV8Function::HasProperty(L"canSkip", argObj))
 	{
-		animation->SetCanSkip(SV8Function::GetProperty(L"transparencyDelta", argObj)->BooleanValue());
+		animation->SetCanSkip(SV8Function::GetProperty(L"canSkip", argObj)->BooleanValue());
 	}
 
 	if (SV8Function::HasProperty(L"replay", argObj))
 	{
 		SPString style = SPV8ScriptEngine::StringToSPString(
-			SV8Function::GetProperty(L"transparencyDelta", argObj)->ToString());
+			SV8Function::GetProperty(L"replay", argObj)->ToString());
 
 		if (SPStringHelper::EqualsIgnoreCase(style, L"SlowIn") || 
 			SPStringHelper::EqualsIgnoreCase(style, L"FastOut"))
@@ -2150,7 +2152,7 @@ void SV8TemplComponent::AddAnimation( const FunctionCallbackInfo<Value>& args )
 	if (SV8Function::HasProperty(L"addMode", argObj))
 	{
 		SPString style = SPV8ScriptEngine::StringToSPString(
-			SV8Function::GetProperty(L"transparencyDelta", argObj)->ToString());
+			SV8Function::GetProperty(L"addMode", argObj)->ToString());
 
 		if (SPStringHelper::EqualsIgnoreCase(style, L"Merge"))
 		{
@@ -2223,4 +2225,24 @@ void SV8TemplComponent::AddEffect( const FunctionCallbackInfo<Value>& args )
 		// style == L"Normal"
 		component->AddEffect(effect);
 	}
+}
+
+void SV8TemplComponent::Skip( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	component->Skip();
 }

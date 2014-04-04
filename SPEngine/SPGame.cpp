@@ -460,6 +460,7 @@ namespace SPEngine
 		SPV8ScriptEngine::GetSingleton();
 
 		// Register components.
+		componentManager->RegisterComponent(L"config", SPConfigManager::GetSingleton());	
 		componentManager->RegisterComponent(L"texture", SPTextureManager::GetSingleton());
 		componentManager->RegisterComponent(L"effect", SPEffectManager::GetSingleton());
 		componentManager->RegisterComponent(L"video", SPVideoManager::GetSingleton());
