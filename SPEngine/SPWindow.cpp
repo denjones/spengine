@@ -134,16 +134,12 @@ namespace SPEngine
 		UpdateWindow(hWnd);
 	}
 
-	bool SPWindow::Update( float timeDelta )
+	void SPWindow::Update( float timeDelta )
 	{
 		isLastActive = isActive;
-
 		HWND topHWnd;
 		topHWnd = GetForegroundWindow();
-
 		isActive = topHWnd == hWnd;
-
-		return true;
 	}
 
 	int	SPWindow::EnterMsgLoop()

@@ -1,11 +1,12 @@
 #pragma once
 #include "SUIEventHandler.h"
+#include "SV8FunctionManager.h"
 
 using namespace v8;
 
 class SUIV8FunctionEventHandler : public SUIEventHandler
 {
-	SPPointer<Persistent<v8::Function>> v8Func;
+	SV8FunctionHandle v8Func;
 	SPPointer<Persistent<Object>> v8Self;
 
 public:
@@ -13,8 +14,8 @@ public:
 	~SUIV8FunctionEventHandler(void);
 
 	virtual bool Function( SUIEventPtr e );
-	Handle<v8::Function> GetFunction();
-
+	Handle<Value> GetFunction();
+	SV8FunctionHandle GetHandle();
 };
 
 typedef SPPointer<SUIV8FunctionEventHandler> SUIV8FunctionEventHandlerPtr;

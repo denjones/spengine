@@ -6,7 +6,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "SPUpdatableTexture.h"
+#include "SPTexture.h"
 
 namespace SPEngine
 {
@@ -15,7 +15,7 @@ namespace SPEngine
 	/// @brief SPAnimatedTexture class to extend SPTexture class, so that 
 	/// it cam produce sprite animation.
 	//////////////////////////////////////////////////////////////////////
-	class SPAnimatedTexture : public SPUpdatableTexture
+	class SPAnimatedTexture : public SPTexture
 	{
 	protected:
 		int		row, column;	///< Number of rows and columns.
@@ -33,9 +33,12 @@ namespace SPEngine
 		SPRectangle SourceRectangle();
 		bool IsToBeRemoved();
 		bool IsPause();
-		bool SetRow(int setRow);
-		bool SetColumn(int setCol);
-		bool SetFPS(float setFPS);
+		void SetRow(int setRow);
+		int GetRow();
+		void SetColumn(int setCol);
+		int GetColumn();
+		void SetFPS(float setFPS);
+		float GetFPS();
 		/// @}
 
 	public:
@@ -68,40 +71,43 @@ namespace SPEngine
 
 		/// @name Load function
 		/// @{
-		bool Load(
+		void Load(
 			SPString path,
 			int setRow,
 			int setColumn, 
 			int setFPS);
-		bool Load(
+		void Load(
 			SPString path,
 			int setRow,
 			int setColumn, 
 			int setFPS, 
 			D3DXVECTOR2 setOrigin);		
-		bool Load(
+		void Load(
 			SPString path,
 			int setRow,
 			int setColumn, 
 			int setFrame,
 			int setFPS, 
 			D3DXVECTOR2 setOrigin);
-		bool Reload();
+		void Reload();
 		/// @}
 
 		/// @name Update and draw
 		/// @{
-		bool Update(float timeElapsed);
-		bool DrawFrame();
+		void Update(float timeElapsed);
+		void DrawFrame();
 		/// @}
 
 		/// @name Action
 		/// @{
-		bool Reset();
-		bool Stop();
-		bool Play();
-		bool Pause();
-		bool Remove();
+		void Reset();
+		void Stop();
+		void Play();
+		void Pause();
+		void Remove();
+
+		virtual SPString GetTextureType();
+
 		/// @}		
 	};
 

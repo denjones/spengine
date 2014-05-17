@@ -2,6 +2,7 @@
 #include "SUIComponent.h"
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
+#include "SUIV8FunctionEventHandler.h"
 
 #pragma warning (disable:4244)
 
@@ -24,11 +25,11 @@ int SUIComponent::GetWidth()
 	return properties.rectangle.Width; 
 }
 
-bool SUIComponent::SetWidth(int setWidth)
+void SUIComponent::SetWidth(int setWidth)
 {
 	if (setWidth < 0)
 	{
-		return false;
+		return;
 	}
 
 	if (animations.size() > 0 && animations.back())
@@ -40,8 +41,6 @@ bool SUIComponent::SetWidth(int setWidth)
 	{
 		properties.rectangle.Width = setWidth;
 	}	
-
-	return true;
 }
 
 int SUIComponent::GetHeight()
@@ -49,11 +48,11 @@ int SUIComponent::GetHeight()
 	return properties.rectangle.Height;
 }
 
-bool SUIComponent::SetHeight(int setHeight)
+void SUIComponent::SetHeight(int setHeight)
 {
 	if (setHeight < 0)
 	{
-		return false;
+		return;
 	}
 
 	if (animations.size() > 0 && animations.back())
@@ -65,8 +64,6 @@ bool SUIComponent::SetHeight(int setHeight)
 	{
 		properties.rectangle.Height = setHeight;
 	}
-
-	return true;
 }
 
 D3DXVECTOR2 SUIComponent::GetPosition() 
@@ -74,7 +71,7 @@ D3DXVECTOR2 SUIComponent::GetPosition()
 	return D3DXVECTOR2(properties.rectangle.X, properties.rectangle.Y); 
 }
 
-bool SUIComponent::SetPosition(D3DXVECTOR2 pos)
+void SUIComponent::SetPosition(D3DXVECTOR2 pos)
 {
 	if (animations.size() > 0 && animations.back())
 	{
@@ -87,8 +84,6 @@ bool SUIComponent::SetPosition(D3DXVECTOR2 pos)
 		properties.rectangle.X = pos.x;
 		properties.rectangle.Y = pos.y;
 	}
-
-	return true;
 }
 
 D3DXVECTOR2 SUIComponent::GetRotationCenter() 
@@ -96,7 +91,7 @@ D3DXVECTOR2 SUIComponent::GetRotationCenter()
 	return properties.rotationCenter;
 }
 
-bool SUIComponent::SetRotationCenter(D3DXVECTOR2 pos)
+void SUIComponent::SetRotationCenter(D3DXVECTOR2 pos)
 {
 	if (animations.size() > 0 && animations.back())
 	{
@@ -109,8 +104,6 @@ bool SUIComponent::SetRotationCenter(D3DXVECTOR2 pos)
 		properties.rotationCenter.x = pos.x;
 		properties.rotationCenter.y = pos.y;
 	}
-
-	return true;
 }
 
 float SUIComponent::GetRotation()
@@ -118,7 +111,7 @@ float SUIComponent::GetRotation()
 	return properties.rotation;
 }
 
-bool SUIComponent::SetRotation( float setRotation )
+void SUIComponent::SetRotation( float setRotation )
 {
 	if (animations.size() > 0 && animations.back())
 	{
@@ -129,8 +122,6 @@ bool SUIComponent::SetRotation( float setRotation )
 	{
 		properties.rotation = setRotation;
 	}	
-
-	return true;
 }
 
 SPEngine::SPTexturePtr SUIComponent::GetBackgroundImage()
@@ -138,7 +129,7 @@ SPEngine::SPTexturePtr SUIComponent::GetBackgroundImage()
 	return properties.backgroundImage;
 }
 
-bool SUIComponent::SetBackgroundImage( SPTexturePtr setImage )
+void SUIComponent::SetBackgroundImage( SPTexturePtr setImage )
 {
 	if (animations.size() > 0 && animations.back())
 	{
@@ -147,8 +138,6 @@ bool SUIComponent::SetBackgroundImage( SPTexturePtr setImage )
 	}
 
 	properties.backgroundImage = setImage;
-
-	return true;
 }
 
 D3DCOLOR SUIComponent::GetBackgroundColor()
@@ -156,7 +145,7 @@ D3DCOLOR SUIComponent::GetBackgroundColor()
 	return properties.backgroundColor;
 }
 
-bool SUIComponent::SetBackgroundColor( D3DCOLOR setColor )
+void SUIComponent::SetBackgroundColor( D3DCOLOR setColor )
 {
 	if (animations.size() > 0 && animations.back())
 	{
@@ -167,8 +156,6 @@ bool SUIComponent::SetBackgroundColor( D3DCOLOR setColor )
 	{
 		properties.backgroundColor = setColor;
 	}
-
-	return true;
 }
 
 
@@ -177,21 +164,20 @@ SPString SUIComponent::GetName()
 	return name;
 }
 
-bool SUIComponent::SetName( SPString setName )
+void SUIComponent::SetName( SPString setName )
 {
 	modificationLock.Lock();
 	name = setName;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::UpdateAnimation( float timeDelta )
+void SUIComponent::UpdateAnimation( float timeDelta )
 {
 	// Update animation position.
 	if (animations.size() > 0)
 	{
-		bool isUpdateCompleted =  !animations.front()->Update(timeDelta);	
+		animations.front()->Update(timeDelta);
+		bool isUpdateCompleted = animations.front()->TransitionPosition() >= 1;	
 		properties = animations.front()->GetCurrentPoint();
 
 		if (isUpdateCompleted)
@@ -207,35 +193,27 @@ bool SUIComponent::UpdateAnimation( float timeDelta )
 			}
 		}
 	}
-
-	return true;
 }
 
-bool SUIComponent::SetRenderTarget( SPTexturePtr setTarget )
+void SUIComponent::SetRenderTarget( SPTexturePtr setTarget )
 {
 	modificationLock.Lock();
 	renderTarget = setTarget;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::AddEffect( SUIEffectPtr setEffect )
+void SUIComponent::AddEffect( SUIEffectPtr setEffect )
 {
 	modificationLock.Lock();
 	effects.push_back(setEffect);
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::AddAnimation( SUIAnimationPtr setAnimation )
+void SUIComponent::AddAnimation( SUIAnimationPtr setAnimation )
 {
 	modificationLock.Lock();
 	animations.push_back(setAnimation);
 	modificationLock.Unlock();
-
-	return true;
 }
 
 float SUIComponent::GetTransparency()
@@ -243,7 +221,7 @@ float SUIComponent::GetTransparency()
 	return properties.transparency;
 }
 
-bool SUIComponent::SetTransparency( float setTrans )
+void SUIComponent::SetTransparency( float setTrans )
 {
 	modificationLock.Lock();
 	if (animations.size() > 0 && animations.back())
@@ -256,11 +234,9 @@ bool SUIComponent::SetTransparency( float setTrans )
 		properties.transparency = setTrans;
 	}	
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::UpdateEffect( float timeDelta )
+void SUIComponent::UpdateEffect( float timeDelta )
 {
 	// Update animation position.
 	if (effects.size() > 0)
@@ -275,8 +251,9 @@ bool SUIComponent::UpdateEffect( float timeDelta )
 		if (effects.size() > 0)
 		{
 			effects.front()->Play();
+			effects.front()->Update(timeDelta);
 
-			bool isUpdateCompleted =  !effects.front()->Update(timeDelta);
+			bool isUpdateCompleted = effects.front()->TransitionPosition() >= 1;
 
 			if (isUpdateCompleted)
 			{
@@ -293,8 +270,6 @@ bool SUIComponent::UpdateEffect( float timeDelta )
 		}
 		
 	}
-
-	return true;
 }
 
 SUIProperties SUIComponent::GetProperties()
@@ -302,14 +277,12 @@ SUIProperties SUIComponent::GetProperties()
 	return properties;
 }
 
-bool SUIComponent::PlayAnimation()
+void SUIComponent::PlayAnimation()
 {
 	if (animations.size() > 0)
 	{
 		animations.front()->Play();
 	}
-
-	return true;	
 }
 
 float SUIComponent::GetLayer()
@@ -317,7 +290,7 @@ float SUIComponent::GetLayer()
 	return properties.layer;
 }
 
-bool SUIComponent::SetLayer( float setLayer )
+void SUIComponent::SetLayer( float setLayer )
 {
 	if(setLayer > MaxLayer)
 	{
@@ -333,27 +306,23 @@ bool SUIComponent::SetLayer( float setLayer )
 	modificationLock.Lock();
 	properties.layer = setLayer;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SetProperties( SUIProperties setProperties )
+void SUIComponent::SetProperties( SUIProperties setProperties )
 {
 	modificationLock.Lock();
 	properties = setProperties;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::AddChild( SUIComponentPtr newChild )
+void SUIComponent::AddChild( SUIComponentPtr newChild )
 {
 	ChildIterator iter = children.begin();
 
 	if (iter == children.end())
 	{
 		children.push_back(newChild);
-		return true;
+		return;
 	}
 
 	ChildIterator iterNext = iter;
@@ -378,17 +347,28 @@ bool SUIComponent::AddChild( SUIComponentPtr newChild )
 
 		children.insert(iterNext, newChild);
 	}
-
-	return true;
 }
 
-bool SUIComponent::RemoveChild( SUIComponentPtr setChild )
+void SUIComponent::InsertBefore( SUIComponentPtr newChild, SUIComponentPtr child )
+{
+	ChildIterator iter = children.begin();
+	while(iter != children.end())
+	{
+		if (*iter == child)
+		{
+			break;
+		}
+		iter++;
+	}
+	children.insert(iter, newChild);
+}
+
+void SUIComponent::RemoveChild( SUIComponentPtr setChild )
 {
 	children.remove(setChild);
-	return true;
 }
 
-bool SUIComponent::PlayEffect()
+void SUIComponent::PlayEffect()
 {
 	if (effects.size() > 0)
 	{
@@ -404,8 +384,6 @@ bool SUIComponent::PlayEffect()
 			effects.front()->Play();
 		}
 	}	
-
-	return true;
 }
 
 SPEngine::SPTexturePtr SUIComponent::GetComponentTexture()
@@ -425,54 +403,44 @@ SUIEffectPtr SUIComponent::GetCurrentEffect()
 	return effects.front();
 }
 
-bool SUIComponent::Render( float timeDelta )
+void SUIComponent::Render( float timeDelta )
 {
 	if (State() == Hidden)
 	{
-		return false;
+		return;
 	}
 
 	PreDraw();
 	Draw(timeDelta);
 	PostDraw();
-
-	return true;
 }
 
-bool SUIComponent::SetPositionX( int setX )
+void SUIComponent::SetPositionX( int setX )
 {
 	modificationLock.Lock();
 	properties.rectangle.X = setX;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SetPositionY( int setY )
+void SUIComponent::SetPositionY( int setY )
 {
 	modificationLock.Lock();
 	properties.rectangle.Y = setY;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SetRotationCenterX( int setX )
+void SUIComponent::SetRotationCenterX( int setX )
 {
 	modificationLock.Lock();
 	properties.rotationCenter.x = setX;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SetRotationCenterY( int setY )
+void SUIComponent::SetRotationCenterY( int setY )
 {
 	modificationLock.Lock();
 	properties.rotationCenter.y = setY;
 	modificationLock.Unlock();
-
-	return true;
 }
 
 SUIProperties SUIComponent::GetTargetProperties()
@@ -485,13 +453,11 @@ SUIProperties SUIComponent::GetTargetProperties()
 	return animations.back()->GetTargetPoint();
 }
 
-bool SUIComponent::SetFather( SUIComponentPtr setFather )
+void SUIComponent::SetFather( SUIComponentPtr setFather )
 {
 	modificationLock.Lock();
 	father = setFather;
 	modificationLock.Unlock();
-
-	return true;
 }
 
 SUIComponentPtr SUIComponent::GetFather()
@@ -635,22 +601,18 @@ SRectangle SUIComponent::GetBackgroundRect()
 	return rect;
 }
 
-bool SUIComponent::SetBackgroundX( int setX )
+void SUIComponent::SetBackgroundX( int setX )
 {
 	modificationLock.Lock();
 	properties.backgroundX = setX;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SetBackgroundY( int setY )
+void SUIComponent::SetBackgroundY( int setY )
 {
 	modificationLock.Lock();
 	properties.backgroundY = setY;
 	modificationLock.Unlock();
-
-	return true;
 }
 
 int SUIComponent::GetBackgroundX()
@@ -663,48 +625,40 @@ int SUIComponent::GetBackgroundY()
 	return properties.backgroundY;
 }
 
-bool SUIComponent::SetBackgroundMode( SUIProperties::BackgroundMode setMode )
+void SUIComponent::SetBackgroundMode( SUIProperties::BackgroundMode setMode )
 {
 	modificationLock.Lock();
 	properties.backgroundMode = setMode;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SetBackgroundPositionMode( SUIProperties::BackgroundPosition setMode )
+void SUIComponent::SetBackgroundPositionMode( SUIProperties::BackgroundPosition setMode )
 {
 	modificationLock.Lock();
 	properties.backgroundPosition = setMode;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::Hide()
+void SUIComponent::Hide()
 {
 	modificationLock.Lock();
 	isDisplay = false;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::Unhide()
+void SUIComponent::Unhide()
 {
 	modificationLock.Lock();
 	isDisplay = true;
 	state = TransitionOn;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::SaveAsImage( SPString path )
+void SUIComponent::SaveAsImage( SPString path )
 {
 	if (!childTarget)
 	{
-		return true;
+		return;
 	}
 
 	D3DXIMAGE_FILEFORMAT format = D3DXIFF_BMP;
@@ -755,8 +709,6 @@ bool SUIComponent::SaveAsImage( SPString path )
 	}
 
 	D3DXSaveTextureToFile(path.c_str(), format, childTarget->GetD3DTexture(), NULL);
-
-	return true;
 }
 
 SPEngine::SPTexturePtr SUIComponent::SaveAsTexture()
@@ -779,11 +731,11 @@ bool SUIComponent::IsDisplay()
 	return isDisplay;
 }
 
-bool SUIComponent::MergerAnimation( SUIAnimationPtr setAnimation )
+void SUIComponent::MergerAnimation( SUIAnimationPtr setAnimation )
 {
 	if (!setAnimation)
 	{
-		return false;
+		return;
 	}
 
 	setAnimation->SetStartPoint(properties);
@@ -792,17 +744,13 @@ bool SUIComponent::MergerAnimation( SUIAnimationPtr setAnimation )
 	animations.clear();
 	animations.push_back(setAnimation);
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIComponent::ClearEffect()
+void SUIComponent::ClearEffect()
 {
 	modificationLock.Lock();
 	effects.clear();
 	modificationLock.Unlock();
-
-	return true;
 }
 
 float SUIComponent::Depth()
@@ -942,13 +890,11 @@ SPTexturePtr SUIComponent::ChildTarget()
 	return childTarget;
 }
 
-bool SUIComponent::SetAbsoluteRender( bool setOn )
+void SUIComponent::SetAbsoluteRender( bool setOn )
 {
 	modificationLock.Lock();
 	isAbsoluteRender = setOn;
 	modificationLock.Unlock();
-
-	return true;
 }
 
 float SUIComponent::Alpha()
@@ -1118,7 +1064,24 @@ Handle<Object> SUIComponent::GetV8Obj()
 	return Handle<Object>::New(isolate, *v8Obj);
 }
 
-bool SUIComponent::Update( float timeDelta )
+
+Handle<Array> SUIComponent::GetV8ChildComponents()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+
+	Handle<Array> array = Array::New();
+
+	ChildIterator iter = children.begin();
+	while(iter != children.end())
+	{
+		array->Set(array->Length(), (*iter)->GetV8Obj());
+		iter++;
+	}
+
+	return array;
+}
+
+void SUIComponent::Update( float timeDelta )
 {
 	SPTransition::Update(timeDelta);
 
@@ -1134,11 +1097,9 @@ bool SUIComponent::Update( float timeDelta )
 
 		iter++;
 	}
-
-	return true;
 }
 
-bool SUIComponent::PreDraw()
+void SUIComponent::PreDraw()
 {
 	// Create render target to be rendered by children.
 	if (!isAbsoluteRender)
@@ -1195,11 +1156,9 @@ bool SUIComponent::PreDraw()
 			iter = children.erase(iter);
 		}
 	}
-
-	return true;
 }
 
-bool SUIComponent::Draw( float timeDelta )
+void SUIComponent::Draw( float timeDelta )
 {
 	// Render children UI component.
 	SUIComponent::ChildIterator iter = children.begin();
@@ -1216,11 +1175,9 @@ bool SUIComponent::Draw( float timeDelta )
 			iter = children.erase(iter);
 		}
 	}
-
-	return true;
 }
 
-bool SUIComponent::PostDraw()
+void SUIComponent::PostDraw()
 {
 	SUIComponent::ChildIterator iter = children.begin();
 
@@ -1250,43 +1207,38 @@ bool SUIComponent::PostDraw()
 	}
 
 	//childTarget = NULL;
-
-	return true;
 }
 
-bool SUIComponent::Load()
+void SUIComponent::Load()
 {
-	return true;
 }
 
-bool SUIComponent::Unload()
+void SUIComponent::Unload()
 {
 	childTarget = NULL;
 	renderTarget = NULL;
-
-	return true;
 }
 
-bool SUIComponent::Reload()
+void SUIComponent::Reload()
 {
-	return Load();
+	Load();
 }
 
-bool SUIComponent::HandleEvent( SUIEventPtr e )
+void SUIComponent::HandleEvent( SUIEventPtr e )
 {
 	if (!e)
 	{
-		return false;
+		return;
 	}
 
-	if (e->type == SUIEvent::None)
+	if (e->type == SUIEvent::None || !e->returnValue)
 	{
-		return false;
+		return;
 	}
 
 	if(!isDisplay)// || !properties.transparency)
 	{
-		return true;
+		return;
 	}
 
 	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
@@ -1304,7 +1256,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!catchMouseOut->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1314,7 +1266,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!catchMouse->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1324,7 +1276,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onMouseIn->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1340,9 +1292,10 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 		{
 			if (*iter)
 			{
-				if(!(*iter)->HandleEvent(e))
+				(*iter)->HandleEvent(e);
+				if (!e->returnValue)
 				{
-					return false;
+					return;
 				}
 			}
 			iter++;
@@ -1360,7 +1313,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onMouseOut->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1370,7 +1323,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onMouse->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1380,7 +1333,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onMouseIn->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1393,7 +1346,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!catchKeyDown->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1403,7 +1356,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!catchKeyPress->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1413,7 +1366,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!catchKeyUp->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1425,7 +1378,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!catchMouseClick->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1435,7 +1388,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!catchMouseDClick->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1445,7 +1398,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!catchMouseDown->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1455,7 +1408,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!catchMouseUp->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1465,7 +1418,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!catchMouseScroll->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1480,9 +1433,10 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 		{
 			if (*iter)
 			{
-				if(!(*iter)->HandleEvent(e))
+				(*iter)->HandleEvent(e);
+				if (!e->returnValue)
 				{
-					return false;
+					return;
 				}
 			}
 			iter++;
@@ -1499,7 +1453,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onKeyDown->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1509,7 +1463,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onKeyPress->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1519,7 +1473,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 			{
 				if(!onKeyUp->Function(e))
 				{
-					return false;
+					return;
 				}
 			}
 		}
@@ -1531,7 +1485,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!onMouseClick->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1541,7 +1495,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!onMouseDClick->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1551,7 +1505,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!onMouseDown->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1561,7 +1515,7 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!onMouseUp->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
@@ -1571,17 +1525,15 @@ bool SUIComponent::HandleEvent( SUIEventPtr e )
 				{
 					if(!onMouseScroll->Function(e))
 					{
-						return false;
+						return;
 					}
 				}
 			}
 		}		
 	}
-
-	return true;
 }
 
-bool SUIComponent::Skip()
+void SUIComponent::Skip()
 {
 	while (animations.size() > 0)
 	{
@@ -1613,13 +1565,10 @@ bool SUIComponent::Skip()
 			effects.pop_front();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIComponent::LoadFromString( SPString stringStream )
+void SUIComponent::LoadFromString( SPString stringStream )
 {
-	return true;
 }
 
 SPString SUIComponent::SaveAsString()
@@ -1635,3 +1584,138 @@ SUIScreen* SUIComponent::GetScreen()
 {
 	return screenBelongsTo;
 }
+
+Handle<Object> SUIComponent::SaveAsObj()
+{
+	Handle<Object> result = SPV8ScriptEngine::CopyObject(GetV8Obj());
+	Handle<Array> childList = Array::New();
+
+	if(onMouseClick)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onClick"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseClick)->GetHandle()));
+	}
+	if(onMouseDClick)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onDClick"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseDClick)->GetHandle()));
+	}
+	if(onMouseDown)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onMouseDown"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseDown)->GetHandle()));
+	}
+	if(onMouseUp)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onMouseUp"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseUp)->GetHandle()));
+	}
+	if(onMouseScroll)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onMouseScroll"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseScroll)->GetHandle()));
+	}
+	if(onMouse)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onMouseOver"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouse)->GetHandle()));
+	}
+	if(onMouseIn)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onMouseIn"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseIn)->GetHandle()));
+	}
+	if(onMouseOut)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onMouseOut"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onMouseOut)->GetHandle()));
+	}
+	if(onKeyPress)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onKeyPress"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onKeyPress)->GetHandle()));
+	}
+	if(onKeyDown)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onKeyDown"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onKeyDown)->GetHandle()));
+	}
+	if(onKeyUp)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"onKeyUp"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)onKeyUp)->GetHandle()));
+	}
+
+	if(catchMouseClick)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchClick"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseClick)->GetHandle()));
+	}
+	if(catchMouseDClick)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchDClick"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseDClick)->GetHandle()));
+	}
+	if(catchMouseDown)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseDown"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseDown)->GetHandle()));
+	}
+	if(catchMouseUp)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseUp"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseUp)->GetHandle()));
+	}
+	if(catchMouseScroll)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseScroll"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseScroll)->GetHandle()));
+	}
+	if(catchMouse)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseOver"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouse)->GetHandle()));
+	}
+	if(catchMouseIn)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseIn"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseIn)->GetHandle()));
+	}
+	if(catchMouseOut)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseOut"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchMouseOut)->GetHandle()));
+	}
+	if(catchKeyPress)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchKeyPress"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchKeyPress)->GetHandle()));
+	}
+	if(catchKeyDown)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchKeyDown"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchKeyDown)->GetHandle()));
+	}
+	if(catchKeyUp)
+	{
+		result->Set(SPV8ScriptEngine::SPStringToString(L"catchKeyUp"), 
+			Integer::New(((SUIV8FunctionEventHandlerPtr)catchKeyUp)->GetHandle()));
+	}
+
+	ChildIterator iter = children.begin();
+	while(iter != children.end())
+	{
+		childList->Set(childList->Length(), (*iter)->SaveAsObj());
+		iter++;
+	}
+	result->Set(SPV8ScriptEngine::SPStringToString(L"childComponents"), childList);
+
+	return result;
+}
+
+void SUIComponent::LoadFromObj( Handle<Object> obj )
+{
+	return;
+}
+
+

@@ -13,7 +13,7 @@ namespace SPEngine
 		effectCores.Clear();
 	}
 
-	bool SPEffectManager::Reload()
+	void SPEffectManager::Reload()
 	{
 		SPWStringMapIterator<SPEffectCorePtr> iter(&effectCores);
 
@@ -21,8 +21,6 @@ namespace SPEngine
 		{
 			iter.CurrentItem()->Reload();
 		}
-
-		return true;
 	}
 
 	SPEffectCorePtr SPEffectManager::CreateCore( SPString name, SPString path )
@@ -46,13 +44,8 @@ namespace SPEngine
 
 		SPEffectCorePtr core = new SPEffectCore();
 
-		if(core->Load(name))
-		{
-			effectCores.Set(name, core);
-			return core;
-		}
-
-		return NULL;
+		core->Load(name);
+		effectCores.Set(name, core);
+		return core;
 	}
-
 }

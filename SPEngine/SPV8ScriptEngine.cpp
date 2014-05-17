@@ -60,7 +60,7 @@ namespace SPEngine
 		return context;
 	}
 
-	bool SPV8ScriptEngine::Initialize()
+	void SPV8ScriptEngine::Initialize()
 	{
 		isolate = Isolate::New();
 
@@ -80,18 +80,14 @@ namespace SPEngine
 		//AddFunction(L"clearTimeout", ClearTimeOut);
 
 		StartThread();
-
-		return true;
 	}
 
-	bool SPV8ScriptEngine::Load()
+	void SPV8ScriptEngine::Load()
 	{
-		return true;
 	}
 
-	bool SPV8ScriptEngine::Unload()
+	void SPV8ScriptEngine::Unload()
 	{
-		return true;
 	}
 
 	Handle<Value> SPV8ScriptEngine::Eval( SPString scriptStr, bool isInScope )
@@ -288,14 +284,12 @@ namespace SPEngine
 		}
 	}
 
-	bool SPV8ScriptEngine::Update( float timeElapsed )
+	void SPV8ScriptEngine::Update( float timeElapsed )
 	{
-		return true;
 	}
 
-	bool SPV8ScriptEngine::Draw( float timeElapsed )
+	void SPV8ScriptEngine::Draw( float timeElapsed )
 	{
-		return true;
 	}
 
 	void EvalCallback( uv_async_t *handle, int status)
@@ -360,13 +354,13 @@ namespace SPEngine
 
 		engine->GetIsolate()->Exit();
 
-		while(!engine->IsStopping())
-		{
-			if (!engine->RunTimeOutFunc() && !engine->RunNextScript())
-			{
-				Sleep(1);
-			}
-		}
+		//while(!engine->IsStopping())
+		//{
+		//	if (!engine->RunTimeOutFunc() && !engine->RunNextScript())
+		//	{
+		//		Sleep(1);
+		//	}
+		//}
 
 		engine->ThreadExited();
 
@@ -456,13 +450,13 @@ namespace SPEngine
 		return result;
 	}
 
-	bool SPV8ScriptEngine::RunNextScript()
+	void SPV8ScriptEngine::RunNextScript()
 	{
 		ScriptToRunPtr scriptToRunObj = NextScriptToRun();
 
 		if (!scriptToRunObj)
 		{
-			return false;
+			return;
 		}
 
 		Locker lock(isolate);
@@ -479,8 +473,6 @@ namespace SPEngine
 		{
 			Handle<Value> result = Eval(scriptToRunObj->value, true);
 		}
-
-		return true;
 	}
 
 	void SPV8ScriptEngine::ThreadEnter()
@@ -664,7 +656,7 @@ namespace SPEngine
 		SPV8ScriptEngine::GetSingleton()->ClearTimeOutFunction(args[0]->ToNumber());
 	}
 
-	bool SPV8ScriptEngine::RunTimeOutFunc()
+	void SPV8ScriptEngine::RunTimeOutFunc()
 	{
 		int currentTimeMs = timeGetTime();
 
@@ -696,7 +688,7 @@ namespace SPEngine
 
 		if (functionToRun.size() == 0)
 		{
-			return false;
+			return;
 		}
 
 		Locker lock(isolate);
@@ -713,8 +705,6 @@ namespace SPEngine
 			func->Call(func, 0, NULL);
 			functionIter++;
 		}
-
-		return true;
 	}
 
 	void SPV8ScriptEngine::EvalFunc( const FunctionCallbackInfo<Value>& args )
@@ -750,6 +740,37 @@ namespace SPEngine
 	void* SPV8ScriptEngine::GetAsync()
 	{
 		return pAsync;
+	}
+
+	Handle<String> SPV8ScriptEngine::ToJson( Handle<Value> object )
+	{
+		EscapableHandleScope scope(SPV8ScriptEngine::GetSingleton()->GetIsolate());
+		Handle<Context> context = Context::GetCurrent();
+		Handle<Object> global = context->Global();
+
+		Handle<Object> JSON = global->Get(String::New("JSON"))->ToObject();
+		Handle<Function> JSON_stringify = Handle<Function>::Cast(JSON->Get(String::New("stringify")));
+		Handle<Value> args[1];
+		args[0] = object;
+
+		return scope.Escape(JSON_stringify->Call(JSON, 1, args))->ToString();
+	}
+
+	Handle<Object> SPV8ScriptEngine::CopyObject( Handle<Object> object )
+	{
+		Handle<Object> obj = Object::New();
+
+		const Local<Array> props = object->GetPropertyNames();
+		const uint32_t length = props->Length();
+		for (uint32_t i = 0; i < length; i++)
+		{
+			const Local<Value> key = props->Get(i);
+			const Local<Value> value = object->Get(key);
+
+			obj->Set(key, value);
+		}
+
+		return obj;
 	}
 
 }

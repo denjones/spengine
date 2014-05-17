@@ -22,7 +22,7 @@ SPCamera::~SPCamera(void)
 {
 }
 
-bool SPCamera::Initialize()
+void SPCamera::Initialize()
 {
 	cameraType = AIRCRAFT;
 	position = D3DXVECTOR3(0, 0, 0);
@@ -43,25 +43,19 @@ bool SPCamera::Initialize()
 	SetViewport( 0, 0,
 		SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth,
 		SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight);
-
-	return true;
 }
 
 void SPCamera::SetCameraType(CameraType setType)
 {
 	cameraType = setType;
-
-	return;
 }
 
 void SPCamera::SetPosition(D3DXVECTOR3 pos)
 {
 	position = pos;
-
-	return;
 }
 
-bool SPCamera::SetProjection(
+void SPCamera::SetProjection(
 	float setViewAngle, 
 	float setAspectRation,
 	float setFront, 
@@ -76,11 +70,9 @@ bool SPCamera::SetProjection(
 	D3DXMatrixPerspectiveFovLH( &proj, 	viewAngle,	
 		aspectRation,	frontPlaneDistance,	backPlaneDistance);
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &proj); 
-
-	return true;
 }
 
-bool SPCamera::SetViewport(
+void SPCamera::SetViewport(
 	int x, 
 	int y, 
 	int width, 
@@ -88,8 +80,6 @@ bool SPCamera::SetViewport(
 {
 	D3DVIEWPORT9 vp = {x, y, width, height, 0, 1}; 
 	SPDevice::GetSingleton()->GetD3DDevice()->SetViewport(&vp); 
-
-	return true;
 }
 
 D3DXVECTOR3 SPCamera::Position()
@@ -214,36 +204,28 @@ void SPCamera::Fly(float units)
 	return;
 } 
 
-bool SPCamera::Update(float timeDelta)
+void SPCamera::Update(float timeDelta)
 { 
-	return true;
 }
 
-bool SPCamera::Draw(float timeDelta)
+void SPCamera::Draw(float timeDelta)
 {
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
-	
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());	
-
-	return true;
 }
 
-bool SPCamera::Load()
+void SPCamera::Load()
 {
 	aspectRation = 
 		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth /
 		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
 
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
-
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());
-
-	return true;
 }
 
-bool SPCamera::Unload()
+void SPCamera::Unload()
 {
-	return true;
 }
 
 D3DXMATRIX SPEngine::SPCamera::ProjectionMatrix()

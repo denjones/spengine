@@ -13,45 +13,38 @@ namespace SPEngine
 	{
 	}
 
-	bool SPParticleSystemTexture::Update( float timeDelta )
+	void SPParticleSystemTexture::Update( float timeDelta )
 	{
-		return false;
 	}
 
-	bool SPParticleSystemTexture::Play()
+	void SPParticleSystemTexture::Play()
 	{
 		if (!particleSystem)
 		{
-			return false;
+			return;
 		}
 
 		particleSystem->Play();
-
-		return true;
 	}
 
-	bool SPParticleSystemTexture::Pause()
+	void SPParticleSystemTexture::Pause()
 	{
 		if (!particleSystem)
 		{
-			return false;
+			return;
 		}
 
 		particleSystem->Pause();
-
-		return true;
 	}
 
-	bool SPParticleSystemTexture::Stop()
+	void SPParticleSystemTexture::Stop()
 	{
 		if (!particleSystem)
 		{
-			return false;
+			return;
 		}
 
 		particleSystem->Stop();
-
-		return true;
 	}
 
 	void SPParticleSystemTexture::SetParticleSystem( SPString setName )
@@ -64,6 +57,16 @@ namespace SPEngine
 			particleSystem->SetRenderTarget(this);
 			backgroundColor = ptr->GetBackgroundColor();
 		}
+	}
+
+	SPString SPParticleSystemTexture::GetTextureType()
+	{
+		return L"ParticleSystemTexture";
+	}
+
+	SPEngine::SPParticleSystem3DPtr SPParticleSystemTexture::GetParticleSystem()
+	{
+		return particleSystem;
 	}
 
 }

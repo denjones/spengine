@@ -19,14 +19,14 @@ namespace SPEngine
 		ID3DXConstantTable* GetConstantTable();
 		IDirect3DPixelShader9* GetPixelShader();
 
-		bool Load(SPString path);
+		void Load(SPString path);
 
 	private:
-		bool Load();
+		void Load();
 
 	public:
-		bool Unload();
-		bool Reload();
+		void Unload();
+		void Reload();
 	};
 
 	typedef SPPointer<SPPixelShaderCore> SPPixelShaderCorePtr;

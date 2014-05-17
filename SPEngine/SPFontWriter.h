@@ -31,18 +31,18 @@ namespace SPEngine
 
 		/// @name Component methods
 		/// @{
-		bool Load();
-		bool Unload();
-		bool Draw(float timeDelta);
-		bool Initialize();
+		void Load();
+		void Unload();
+		void Draw(float timeDelta);
+		void Initialize();
 		/// @}
 
 	protected:
 		/// @name Inner render function.
 		/// @{
-		bool WriteText( SPTextToWrite text );
-		bool RealWriteText(SPTextToWrite text);
-		bool AddTextToWrite(
+		void WriteText( SPTextToWrite text );
+		void RealWriteText(SPTextToWrite text);
+		void AddTextToWrite(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -58,7 +58,7 @@ namespace SPEngine
 	public:
 		/// @name Public write methods
 		/// @{
-		bool Write(
+		void Write(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -67,7 +67,7 @@ namespace SPEngine
 			float		space,
 			float		depth,
 			SPTexturePtr target);
-		bool Write(
+		void Write(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -76,7 +76,7 @@ namespace SPEngine
 			float		space,
 			float		depth,
 			SPTexturePtr target);
-		bool Write(
+		void Write(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -86,7 +86,7 @@ namespace SPEngine
 			float		space,
 			float		depth,
 			SPTexturePtr target);
-		bool Write(
+		void Write(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -98,7 +98,7 @@ namespace SPEngine
 			float		depth,
 			SPTexturePtr target);
 
-		bool WriteCentered(
+		void WriteCentered(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -107,7 +107,7 @@ namespace SPEngine
 			float		space,
 			float		depth,
 			SPTexturePtr target);
-		bool WriteCentered(
+		void WriteCentered(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,
@@ -116,7 +116,7 @@ namespace SPEngine
 			float		space,
 			float		depth,
 			SPTexturePtr target);
-		bool WriteCentered(
+		void WriteCentered(
 			SPFontPtr	font,
 			SPEffectPtr ps,
 			wstring		text,

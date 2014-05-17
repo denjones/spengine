@@ -28,11 +28,8 @@ namespace SPEngine
 		HRESULT CreateLAVVideo(IBaseFilter* &pLAVVideo);
 		HRESULT CreateLAVAudio(IBaseFilter* &pLAVAudio);
 
-		virtual bool Load();
-
-		virtual bool Unload();
-
-		virtual bool Reload();
-
+		virtual void Load();
+		virtual void Unload();
+		virtual void Reload();
 	};
 }

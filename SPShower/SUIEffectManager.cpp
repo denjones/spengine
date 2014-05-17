@@ -15,12 +15,7 @@ SUIEffectManager::~SUIEffectManager(void)
 SUIEffectPtr SUIEffectManager::CreateEffect( SPString path )
 {
 	SUIEffectPtr effect = new SUIEffect();
-
-	if (!effect->Load(path))
-	{
-		return NULL;
-	}
-
+	effect->Load(path);
 	return effect;
 }
 
@@ -39,30 +34,21 @@ SUIEffectPtr SUIEffectManager::GetEffect( SPString name )
 		path = name;
 	}
 
-	if (!effect->Load(path))
-	{
-		return NULL;
-	}
-	
+	effect->Load(path);
 	return effect;
 }
 
-bool SUIEffectManager::Load()
+void SUIEffectManager::Load()
 {
-
-
-
 	//SPWStringMapIterator<SPString> iter(&effectFileNameMap);
 
 	//for (iter.First(); !iter.IsDone(); iter.Next())
 	//{
 	//	SPEffectManager::GetSingleton()->GetCore(iter.CurrentItem());
 	//}
-
-	return true;
 }
 
-bool SUIEffectManager::Initialize()
+void SUIEffectManager::Initialize()
 {
 	effectFileNameMap.Set(L"Mask",			L"effect\\effect_mask.fxo");
 	effectFileNameMap.Set(L"Gauss",			L"effect\\effect_frequency_gauss.fxo");
@@ -80,6 +66,4 @@ bool SUIEffectManager::Initialize()
 	effectFileNameMap.Set(L"TextGlow",		L"effect\\effect_text_glow.fxo");
 	effectFileNameMap.Set(L"TextStroke",	L"effect\\effect_text_stroke.fxo");
 	effectFileNameMap.Set(L"TextShadow",	L"effect\\effect_text_shadow.fxo");
-
-	return true;
 }

@@ -7,7 +7,7 @@
 
 #pragma once
 #include "SPVideo.h"
-#include "SPUpdatableTexture.h"
+#include "SPTexture.h"
 
 using namespace std;
 
@@ -17,7 +17,7 @@ namespace SPEngine
 	/// @brief SPVideoTexture class to extend SPTexture class, so that 
 	/// it can display a video.
 	//////////////////////////////////////////////////////////////////////
-	class SPVideoTexture : public SPUpdatableTexture
+	class SPVideoTexture : public SPTexture
 	{
 		friend class SPVideoRenderer;
 
@@ -27,21 +27,22 @@ namespace SPEngine
 
 	public:
 		void SetVideo(SPString setName);
+		SPVideoPtr GetVideo();
 
 	public:
 		SPVideoTexture(void);
 		SPVideoTexture(SPString setName);
 		virtual ~SPVideoTexture(void);
 
-		bool Update(float timeDelta);
-		bool Unload();
-		bool Reload();
+		void Update(float timeDelta);
+		void Unload();
+		void Reload();
 
-		virtual bool Play();
+		virtual void Play();
+		virtual void Pause();
+		virtual void Stop();
 
-		virtual bool Pause();
-
-		virtual bool Stop();
+		virtual SPString GetTextureType();
 
 	};
 

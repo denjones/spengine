@@ -13,10 +13,9 @@ namespace SPEngine
 	{
 	}
 
-	bool SPVideoManager::CreateVideo( SPString name )
+	void SPVideoManager::CreateVideo( SPString name )
 	{
 		videos.Set(name, new SPVideo(name));
-		return true;
 	}
 
 	SPVideoPtr SPVideoManager::GetVideo( SPString name )
@@ -29,17 +28,15 @@ namespace SPEngine
 		return videos[name];
 	}
 
-	bool SPVideoManager::ReleaseVideo( SPString name )
+	void SPVideoManager::ReleaseVideo( SPString name )
 	{
 		if (videos.IsSet(name))
 		{
 			videos.Remove(name);
 		}
-
-		return true;
 	}
 
-	bool SPVideoManager::Update( float timeDelta )
+	void SPVideoManager::Update( float timeDelta )
 	{
 		SPWStringMapIterator<SPVideoPtr> iter(&videos);
 
@@ -47,21 +44,19 @@ namespace SPEngine
 		{
 			iter.CurrentItem()->UpdateFrame();
 		}
-
-		return true;
 	}
 
-	bool SPVideoManager::Unload()
+	void SPVideoManager::Unload()
 	{
-		return true;
+
 	}
 
-	bool SPVideoManager::Reload()
+	void SPVideoManager::Reload()
 	{
-		return true;
+
 	}
 
-	bool SPVideoManager::LoadFromString( SPString stringStream )
+	void SPVideoManager::LoadFromString( SPString stringStream )
 	{
 		SPString videosString = SPStringHelper::XMLExcludeFrom(stringStream, L"Videos");
 		stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Videos");
@@ -86,8 +81,6 @@ namespace SPEngine
 
 			videos[videoName] = video;
 		}
-
-		return true;
 	}
 
 	SPString SPVideoManager::SaveAsString()

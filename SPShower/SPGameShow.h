@@ -1,8 +1,11 @@
 #pragma once
+#include "ISV8Serializable.h"
 
 using namespace SPEngine;
 
-class SPGameShow : public SPGame
+class SPGameShow : 
+	public SPGame,
+	public ISV8Serializable
 {
 	SPAnimatedTexturePtr loading;
 public:
@@ -21,5 +24,11 @@ public:
 
 	bool SaveSystemData();
 	bool LoadSystemData();
+
+	virtual Handle<Object> SaveAsObj();
+	virtual void LoadFromObj( Handle<Object> obj );
+
+	virtual void OnExit();
+
 };
 

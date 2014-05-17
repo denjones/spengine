@@ -41,27 +41,27 @@ namespace SPEngine
 		SPSpriteManager(void);
 		virtual ~SPSpriteManager(void);
 
-		bool Initialize();
-		bool Load();
-		bool Unload();
-		bool Update(float timeDelta);
-		bool PreDraw();
-		bool Draw(float timeDelta);
-		bool PostDraw();
-		bool DrawSimple(float timeDelta);
-		bool DrawTopological(float timeDelta);
+		void Initialize();
+		void Load();
+		void Unload();
+		void Update(float timeDelta);
+		void PreDraw();
+		void Draw(float timeDelta);
+		void PostDraw();
+		void DrawSimple(float timeDelta);
+		void DrawTopological(float timeDelta);
 		//bool DrawTopologicalWithBlend(float timeDelta);
-		bool TopologicalSort();
+		void TopologicalSort();
 
-		bool AddSprite(SPSpritePtr sprite);
-		bool AddSprite(
+		void AddSprite(SPSpritePtr sprite);
+		void AddSprite(
 			SPTexturePtr	tex,
 			SPEffectPtr pixelShader,
 			D3DXVECTOR3 center,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr	target);
-		bool AddSprite( 
+		void AddSprite( 
 			SPTexturePtr	tex ,
 			SPEffectPtr pixelShader,
 			D3DXMATRIX	transformMatrix, 
@@ -70,7 +70,7 @@ namespace SPEngine
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool AddSprite( 
+		void AddSprite( 
 			SPTexturePtr	tex ,
 			SPEffectPtr pixelShader,
 			D3DXVECTOR2 scalingCenter,
@@ -85,29 +85,29 @@ namespace SPEngine
 			D3DCOLOR	color,
 			SPTexturePtr target);
 
-		bool DrawSprite(SPSpritePtr sprite);
+		void DrawSprite(SPSpritePtr sprite);
 
 		/// @name Render functions
 		/// @{
 		/// @brief Render on screen
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex, 
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -115,25 +115,25 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 center,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -143,7 +143,7 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -151,7 +151,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool Render(
+		void Render(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -164,14 +164,14 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render on screen with rectangle
-		bool RenderOnScreen(
+		void RenderOnScreen(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			SPRectangle destRect,
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderOnScreen(
+		void RenderOnScreen(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			SPRectangle srcRect,
@@ -181,7 +181,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render with transform matrix
-		bool RenderWithMatrix(
+		void RenderWithMatrix(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXMATRIX	transformMatrix,
@@ -189,7 +189,7 @@ namespace SPEngine
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderWithMatrix(
+		void RenderWithMatrix(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXMATRIX	transformMatrix,
@@ -200,7 +200,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render with scaling 
-		bool RenderWithScaling(
+		void RenderWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -208,7 +208,7 @@ namespace SPEngine
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderWithScaling(
+		void RenderWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -217,21 +217,21 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderWithScaling(
+		void RenderWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderWithScaling(
+		void RenderWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DXVECTOR2 scaling,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderWithScaling(
+		void RenderWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -242,7 +242,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render with rotation
-		bool RenderWithRotation(
+		void RenderWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -250,7 +250,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderWithRotation(
+		void RenderWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -259,14 +259,14 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderWithRotation(
+		void RenderWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderWithRotation(
+		void RenderWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -276,7 +276,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render basic
-		bool RenderBasic(
+		void RenderBasic(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 center, 
@@ -289,7 +289,7 @@ namespace SPEngine
 			float		rotation,
 			D3DXVECTOR2 translation,
 			SPTexturePtr target);
-		bool RenderBasic(
+		void RenderBasic(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			RECT		srcRect,
@@ -305,24 +305,24 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex, 
 			SPEffectPtr ps,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -330,25 +330,25 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 center,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -358,7 +358,7 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -366,7 +366,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -377,7 +377,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			SPRectangle srcRect,
@@ -386,7 +386,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCentered(
+		void RenderCentered(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			SPRectangle srcRect,
@@ -398,7 +398,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered with scaling
-		bool RenderCenteredWithScaling(
+		void RenderCenteredWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -406,7 +406,7 @@ namespace SPEngine
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCenteredWithScaling(
+		void RenderCenteredWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -415,21 +415,21 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderCenteredWithScaling(
+		void RenderCenteredWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCenteredWithScaling(
+		void RenderCenteredWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DXVECTOR2 scaling,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCenteredWithScaling(
+		void RenderCenteredWithScaling(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -440,7 +440,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered with rotation
-		bool RenderCenteredWithRotation(
+		void RenderCenteredWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -448,7 +448,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCenteredWithRotation(
+		void RenderCenteredWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			float		x,
@@ -457,14 +457,14 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool RenderCenteredWithRotation(
+		void RenderCenteredWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool RenderCenteredWithRotation(
+		void RenderCenteredWithRotation(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -474,7 +474,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered basic
-		bool RenderCenteredBasic(
+		void RenderCenteredBasic(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			D3DXVECTOR3 center, 
@@ -487,7 +487,7 @@ namespace SPEngine
 			float		rotation,
 			D3DXVECTOR2 translation,
 			SPTexturePtr target);
-		bool RenderCenteredBasic(
+		void RenderCenteredBasic(
 			SPTexturePtr tex,
 			SPEffectPtr ps,
 			RECT		srcRect,
@@ -505,24 +505,24 @@ namespace SPEngine
 
 		/// @name Animated render function.
 		/// @{
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -530,25 +530,25 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 center,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -558,7 +558,7 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -566,7 +566,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARender(
+		void ARender(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -579,7 +579,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render animation on screen with rectangle
-		bool ARenderOnScreen(
+		void ARenderOnScreen(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			SPRectangle destRect,
@@ -588,7 +588,7 @@ namespace SPEngine
 			SPTexturePtr target);	
 
 		/// @brief Render animation with scaling 
-		bool ARenderWithScaling(
+		void ARenderWithScaling(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -596,7 +596,7 @@ namespace SPEngine
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderWithScaling(
+		void ARenderWithScaling(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -605,21 +605,21 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARenderWithScaling(
+		void ARenderWithScaling(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderWithScaling(
+		void ARenderWithScaling(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DXVECTOR2 scaling,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderWithScaling(
+		void ARenderWithScaling(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -630,7 +630,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render animation with rotation
-		bool ARenderWithRotation(
+		void ARenderWithRotation(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -638,7 +638,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderWithRotation(
+		void ARenderWithRotation(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -647,14 +647,14 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARenderWithRotation(
+		void ARenderWithRotation(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderWithRotation(
+		void ARenderWithRotation(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -664,7 +664,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 
-		bool ARenderBasic(
+		void ARenderBasic(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 center, 
@@ -679,24 +679,24 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render animation centered
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
 			float		y,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			float		x,
@@ -704,25 +704,25 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime,
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 center,
 			D3DXVECTOR3 position,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			float		x,
@@ -732,7 +732,7 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -740,7 +740,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -751,7 +751,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -759,7 +759,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCentered(
+		void ARenderCentered(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -770,7 +770,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered with scaling
-		bool ARenderCenteredWithScaling(
+		void ARenderCenteredWithScaling(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			float		x,
@@ -778,7 +778,7 @@ namespace SPEngine
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCenteredWithScaling(
+		void ARenderCenteredWithScaling(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			float		x,
@@ -787,19 +787,19 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARenderCenteredWithScaling(
+		void ARenderCenteredWithScaling(
 			SPAnimatedTexturePtr anime, SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		scale,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCenteredWithScaling(
+		void ARenderCenteredWithScaling(
 			SPAnimatedTexturePtr anime, SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DXVECTOR2 scaling,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCenteredWithScaling(
+		void ARenderCenteredWithScaling(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
@@ -810,7 +810,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered with rotation
-		bool ARenderCenteredWithRotation(
+		void ARenderCenteredWithRotation(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			float		x,
@@ -818,7 +818,7 @@ namespace SPEngine
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCenteredWithRotation(
+		void ARenderCenteredWithRotation(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			float		x,
@@ -827,14 +827,14 @@ namespace SPEngine
 			D3DCOLOR	color,
 			float		depth,
 			SPTexturePtr target);
-		bool ARenderCenteredWithRotation(
+		void ARenderCenteredWithRotation(
 			SPAnimatedTexturePtr anime, 
 			SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			float		rotation,
 			D3DCOLOR	color,
 			SPTexturePtr target);
-		bool ARenderCenteredWithRotation(
+		void ARenderCenteredWithRotation(
 			SPAnimatedTexturePtr anime, SPEffectPtr ps,
 			D3DXVECTOR3 position,
 			D3DXVECTOR2 rotationCenter,
@@ -843,7 +843,7 @@ namespace SPEngine
 			SPTexturePtr target);
 
 		/// @brief Render centered basic
-		bool ARenderCenteredBasic(
+		void ARenderCenteredBasic(
 			SPAnimatedTexturePtr anime, SPEffectPtr ps,
 			D3DXVECTOR3 center, 
 			D3DXVECTOR3 position,

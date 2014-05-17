@@ -54,12 +54,12 @@ namespace SPEngine
 		/// @{
 		void SetCameraType(CameraType setType); 
 		void SetPosition(D3DXVECTOR3 pos);  
-		bool SetProjection(
+		void SetProjection(
 			float setViewAngle, 
 			float setAspectRation,
 			float setFront, 
 			float setBack);
-		bool SetViewport(
+		void SetViewport(
 			int x, 
 			int y, 
 			int width, 
@@ -78,11 +78,11 @@ namespace SPEngine
 
 		/// @name Component Methods
 		/// @{
-		bool Initialize();
-		bool Update(float timeDelta);
-		bool Draw(float timeDelta);
-		bool Load();
-		bool Unload();
+		void Initialize();
+		void Update(float timeDelta);
+		void Draw(float timeDelta);
+		void Load();
+		void Unload();
 		/// @}
 	};
 }

@@ -32,33 +32,33 @@ namespace SPEngine
 		this->height = 0;
 	}
 
-	bool SPAnimatedTexture::Reload()
+	void SPAnimatedTexture::Reload()
 	{
-		return Load(path, row, column, frameCount, (int)(1 / timePerFrame), origin);
+		Load(path, row, column, frameCount, (int)(1 / timePerFrame), origin);
 	}
 
-	bool SPAnimatedTexture::Load(
+	void SPAnimatedTexture::Load(
 		SPString setPath,
 		int setRow,
 		int setColumn, 
 		int setFPS)
 	{
-		return Load( setPath, setRow, setColumn,
+		Load( setPath, setRow, setColumn,
 			setRow * setColumn, setFPS, D3DXVECTOR2(0,0));
 	}
 
-	bool SPAnimatedTexture::Load(
+	void SPAnimatedTexture::Load(
 		SPString setPath,
 		int setRow,
 		int setColumn, 
 		int setFPS, 
 		D3DXVECTOR2 setOrigin)
 	{
-		return Load(setPath, setRow, setColumn,
+		Load(setPath, setRow, setColumn,
 			setRow * setColumn, setFPS, setOrigin);
 	}
 
-	bool SPAnimatedTexture::Load(
+	void SPAnimatedTexture::Load(
 		SPString setPath,
 		int setRow,
 		int setColumn,
@@ -99,7 +99,7 @@ namespace SPEngine
 		if (!file)
 		{
 			SPLogHelper::WriteLog(L"[SPGraphics] WARNING: Failed to open file: " + setPath);
-			return false;
+			return;
 		}
 
 		// Read file data.
@@ -109,7 +109,7 @@ namespace SPEngine
 		if (!file->Read(pData, (DWORD)length))
 		{
 			SPLogHelper::WriteLog(L"[SPGraphics] WARNING: Failed to read file: " + setPath);
-			return false;
+			return;
 		}		
 
 		// Create texture from memory.
@@ -134,7 +134,7 @@ namespace SPEngine
 		if (FAILED(hr))
 		{
 			SPLogHelper::WriteLog(L"[SPGraphics] Warning: Failed to load animated texture: " + path);
-			return false;
+			return;
 		}
 
 		height = i.Height;
@@ -144,8 +144,6 @@ namespace SPEngine
 		origin = setOrigin;
 
 		//SpriteManager::GetSingleton()->AddAnime(this);
-
-		return true;
 	}
 
 	SPAnimatedTexture::~SPAnimatedTexture(void)
@@ -184,16 +182,16 @@ namespace SPEngine
 			setColumn, setFrame, setFPS, D3DXVECTOR2(0,0));
 	}
 
-	bool SPAnimatedTexture::Update( float timeElapsed )
+	void SPAnimatedTexture::Update( float timeElapsed )
 	{
 		if (isToBeRemoved)
 		{
-			return true;
+			return;
 		}
 
 		if (isPaused)
 		{
-			return false;
+			return;
 		}
 
 		totalElapsed += timeElapsed;
@@ -205,13 +203,10 @@ namespace SPEngine
 			frame = frame % frameCount;
 			totalElapsed = 0;
 		}
-
-		return false;
 	}
 
-	bool SPAnimatedTexture::DrawFrame()
+	void SPAnimatedTexture::DrawFrame()
 	{
-		return true;
 	}
 
 	SPRectangle SPAnimatedTexture::SourceRectangle()
@@ -226,11 +221,10 @@ namespace SPEngine
 			width, height);
 	}
 
-	bool SPAnimatedTexture::Remove()
+	void SPAnimatedTexture::Remove()
 	{
 		Stop();
 		isToBeRemoved = true;
-		return true;
 	}
 
 	bool SPAnimatedTexture::IsToBeRemoved()
@@ -243,48 +237,61 @@ namespace SPEngine
 		return isPaused;
 	}
 
-	bool SPAnimatedTexture::Reset()
+	void SPAnimatedTexture::Reset()
 	{
 		frame = 0;
 		totalElapsed = 0.0f;
-		return true;
 	}
 
-	bool SPAnimatedTexture::Stop()
+	void SPAnimatedTexture::Stop()
 	{
 		Pause();
 		Reset();
-		return true;
 	}
 
-	bool SPAnimatedTexture::Play()
+	void SPAnimatedTexture::Play()
 	{
 		isPaused = false;
-		return true;
 	}
 
-	bool SPAnimatedTexture::Pause()
+	void SPAnimatedTexture::Pause()
 	{
 		isPaused = true;
-		return true;
 	}
 
-	bool SPAnimatedTexture::SetRow( int setRow )
+	void SPAnimatedTexture::SetRow( int setRow )
 	{
 		row = setRow;
-		return true;
 	}
 
-	bool SPAnimatedTexture::SetColumn( int setCol )
+	void SPAnimatedTexture::SetColumn( int setCol )
 	{
 		column = setCol;
-		return true;
 	}
 
-	bool SPAnimatedTexture::SetFPS( float setFPS )
+	void SPAnimatedTexture::SetFPS( float setFPS )
 	{
 		timePerFrame = 1.0f / setFPS;
-		return true;
+	}
+
+	SPString SPAnimatedTexture::GetTextureType()
+	{
+		return L"AnimatedTexture";
+	}
+
+	int SPAnimatedTexture::GetRow()
+	{
+		return row;
+	}
+
+	int SPAnimatedTexture::GetColumn()
+	{
+		return column;
+	}
+
+	float SPAnimatedTexture::GetFPS()
+	{
+		return 1.0f / timePerFrame;
 	}
 
 }

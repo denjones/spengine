@@ -43,38 +43,38 @@ public:
 	SUIPictureBox(SUIScreen* screen);
 	virtual ~SUIPictureBox(void);
 
-	bool SetImagePosition(D3DXVECTOR2 setPos);
-	bool SetImagePositionX(int setX);
+	void SetImagePosition(D3DXVECTOR2 setPos);
+	void SetImagePositionX(int setX);
 	int GetImagePositionX();
-	bool SetImagePositionY(int setY);
+	void SetImagePositionY(int setY);
 	int GetImagePositionY();
 
-	bool SetBaseImage(SPTexturePtr base);
-	bool SetMixImage(SUIMixImage image);
+	void SetBaseImage(SPTexturePtr base);
+	void SetMixImage(SUIMixImage image);
 
-	bool SetPositionMode(ImagePosition setMode);
+	void SetPositionMode(ImagePosition setMode);
 	ImagePosition GetPositionMode();
-	bool SetFillMode(ImageMode setMode);
+	void SetFillMode(ImageMode setMode);
 	ImageMode GetFillMode();
 
-	bool SetTransformation(SUITransformationPtr setTrans);
-	bool SetPicture(SUIPictureListPtr setPicture);
-	bool SetTransformationTarget(SUIPictureListPtr setTarget);
+	void SetTransformation(SUITransformationPtr setTrans);
+	void SetPicture(SUIPictureListPtr setPicture);
+	void SetTransformationTarget(SUIPictureListPtr setTarget);
 
-	bool Transform();
+	void Transform();
 	SRectangle GetTexRect();
-	bool PreDraw();
-	bool Draw(float timeDelta);
-	bool Update(float timeDelta);
-	bool Load();
-	bool Unload();
-	bool Reload();
+	void PreDraw();
+	void Draw(float timeDelta);
+	void Update(float timeDelta);
+	void Load();
+	void Unload();
+	void Reload();
 
 	D3DXMATRIX TransformMatrixImage();
 	D3DXVECTOR3 PositionImage();
 	SPRectangle ImageSrcRect();
 
-	virtual bool LoadFromString(SPString stringStream);
+	virtual void LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
 
 	static SPString FillModeToString(ImageMode mode);

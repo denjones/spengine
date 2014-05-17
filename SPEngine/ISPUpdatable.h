@@ -15,7 +15,7 @@ namespace SPEngine
 	class ISPUpdatable
 	{
 	public:
-		virtual bool Update(float timeDelta) = 0;
+		virtual void Update(float timeDelta) = 0;
 	};
 }
 

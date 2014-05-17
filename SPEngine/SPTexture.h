@@ -12,6 +12,7 @@
 #include "SPHandle.h"
 #include "SPPointer.h"
 #include "ISPLoadable.h"
+#include "ISPUpdatable.h"
 
 using namespace std;
 
@@ -27,7 +28,9 @@ namespace SPEngine
 	/// @brief SPTexture class to encapsulate D3DTexture.
 	///
 	//////////////////////////////////////////////////////////////////////
-	class SPTexture : public ISPLoadable
+	class SPTexture : 
+		public ISPLoadable,
+		public ISPUpdatable
 	{
 	protected:
 		LPDIRECT3DTEXTURE9 texture; ///< Inner D3D texture pointer.
@@ -81,10 +84,10 @@ namespace SPEngine
 		/// @{
 		private:
 		/// @brief Load texture for sprite manager.
-		bool Load(SPString path);
+		void Load(SPString path);
 
 		/// @brief Load texture for 3D use.
-		bool Load(
+		void Load(
 			LPDIRECT3DDEVICE9 pDevice,
 			LPCSTR		pSrcFile,
 			UINT		setWidth,
@@ -97,20 +100,27 @@ namespace SPEngine
 			DWORD		MipFilter, 
 			D3DCOLOR	ColorKey);
 
-		bool CreateBlank(int setWidth, int setHeight);
-		bool CreateRenderTarget(int setWidth, int setHeight, D3DXCOLOR setColor);
+		void CreateBlank(int setWidth, int setHeight);
+		void CreateRenderTarget(int setWidth, int setHeight, D3DXCOLOR setColor);
 
 	public:
-		bool Fill(D3DCOLOR color);
+		void Fill(D3DCOLOR color);
 
 		/// @brief Reload texture.
-		bool Load();
+		void Load();
 
 		/// @brief Reload texture after unloaded.
-		virtual bool Reload();
+		virtual void Reload();
 
 		/// @brief Unload texture.
-		bool Unload();
+		void Unload();
+
+		virtual void Update( float timeDelta );
+		virtual void Play();
+		virtual void Pause();
+		virtual void Stop();
+
+		virtual SPString GetTextureType();
 		/// @}
 	};
 

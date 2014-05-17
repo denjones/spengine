@@ -18,15 +18,15 @@ namespace SPEngine
 
 		ID3DXEffect* GetEffect();
 
-		bool Load(SPString path);
+		void Load(SPString path);
 		
 	private:
-		bool Load();
+		void Load();
 
 	public:
-		bool Unload();
-		bool Reload();
-		bool SetTechnique();
+		void Unload();
+		void Reload();
+		void SetTechnique();
 	};
 
 	typedef SPPointer<SPEffectCore> SPEffectCorePtr;

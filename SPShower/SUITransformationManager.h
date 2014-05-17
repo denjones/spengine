@@ -13,7 +13,7 @@ public:
 	SUITransformationManager(void);
 	~SUITransformationManager(void);
 
-	bool Load();
+	void Load();
 	SUITransformationPtr GetTransformation(SPString name);
 	SUITransformationPtr CreateTransformation(SPString path);
 };

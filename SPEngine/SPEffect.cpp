@@ -19,106 +19,89 @@ namespace SPEngine
 	{
 	}
 
-	bool SPEffect::Load( SPString path )
+	void SPEffect::Load( SPString path )
 	{
 		core = SPEffectManager::GetSingleton()->GetCore(path);
 
 		if (!core)
 		{
-			return false;
+			return;
 		}
-
-		return true;
 	}
 
-	bool SPEffect::Load()
+	void SPEffect::Load()
 	{
-		return true;
 	}
 
-	bool SPEffect::Unload()
+	void SPEffect::Unload()
 	{
-		return true;
 	}
 
-	bool SPEffect::SetBool( string index, bool constant )
+	void SPEffect::SetBool( string index, bool constant )
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
-
 
 		values.Set(index, new ValuePair((void*)&constant, sizeof(bool)));
-
-		return true;
 	}
 
-	bool SPEffect::SetInt( string index, int constant )
+	void SPEffect::SetInt( string index, int constant )
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
 
 		values.Set(index, new ValuePair((void*)&constant, sizeof(int)));
-
-		return true;
 	}
 
-	bool SPEffect::SetFloat( string index, float constant )
+	void SPEffect::SetFloat( string index, float constant )
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
 
 		values.Set(index, new ValuePair((void*)&constant, sizeof(float)));
-
-		return true;
 	}
 
-	bool SPEffect::SetVector( string index, D3DXVECTOR4 constant )
+	void SPEffect::SetVector( string index, D3DXVECTOR4 constant )
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
 
 		values.Set(index, new ValuePair((void*)&constant, sizeof(D3DXVECTOR4)));
-
-		return true;
 	}
 
-	bool SPEffect::SetValue( string index, void* pData, DWORD length )
+	void SPEffect::SetValue( string index, void* pData, DWORD length )
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
 
 		values.Set(index, new ValuePair(pData, length));
-
-		return true;
 	}
 
-	bool SPEffect::SetMatrix( string index, D3DXMATRIX constant )
+	void SPEffect::SetMatrix( string index, D3DXMATRIX constant )
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
 
 		values.Set(index, new ValuePair((void*)&constant, sizeof(D3DXMATRIX)));
-
-		return true;
 	}
 
-	bool SPEffect::ApplyEffect()
+	void SPEffect::ApplyEffect()
 	{
 		if (!core)
 		{
-			return false;
+			return;
 		}
 
 		core->SetTechnique();
@@ -141,11 +124,9 @@ namespace SPEngine
 
 			iter++;
 		}		
-
-		return true;
 	}
 
-	bool SPEffect::SetConstants()
+	void SPEffect::SetConstants()
 	{
 		SPStringMapIterator<ValuePairPtr> valueIter(&values);
 		valueIter.First();
@@ -173,8 +154,6 @@ namespace SPEngine
 
 			valueIter.Next();
 		}
-
-		return true;
 	}
 
 	SPEngine::SPEffectCorePtr SPEffect::GetCore()
@@ -187,16 +166,14 @@ namespace SPEngine
 		return textures;
 	}
 
-	bool SPEffect::Reload()
+	void SPEffect::Reload()
 	{
-		return Load(name);
+		Load(name);
 	}
 
-	bool SPEffect::SetTexture( int num, SPTexturePtr tex )
+	void SPEffect::SetTexture( int num, SPTexturePtr tex )
 	{
 		textures[num] = tex;
-
-		return true;
 	}
 
 	SPEffect::ValuePair::ValuePair( void* setData, DWORD setLength )

@@ -54,7 +54,7 @@ namespace SPEngine
 
 		/// @name Update
 		/// @{
-		virtual bool Update(float timeDelta);
+		virtual void Update(float timeDelta);
 
 	protected:
 		bool UpdateTransition(float timeDelta, int direction);

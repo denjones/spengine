@@ -46,8 +46,8 @@ namespace SPEngine
 
 		/// @name Enable for updating
 		/// @{
-		bool Enable();
-		bool Disable();
+		void Enable();
+		void Disable();
 		/// @}
 
 		/// @name Register
@@ -58,14 +58,14 @@ namespace SPEngine
 
 		/// @name Action
 		/// @{
-		virtual bool Initialize();
-		virtual bool Load();
-		virtual bool Unload();
-		virtual bool Reload();
-		virtual bool Update(float timeElapsed);
-		virtual bool PreDraw();
-		virtual bool Draw(float timeElapsed);
-		virtual bool PostDraw();
+		virtual void Initialize();
+		virtual void Load();
+		virtual void Unload();
+		virtual void Reload();
+		virtual void Update(float timeElapsed);
+		virtual void PreDraw();
+		virtual void Draw(float timeElapsed);
+		virtual void PostDraw();
 		/// @}
 	};
 

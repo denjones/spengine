@@ -11,7 +11,7 @@ SUIEvent::SUIEvent():
 	movementY(0),
 	absoluteX(0),
 	absoluteY(0),
-	returnValue(false)
+	returnValue(true)
 {}
 
 	Handle<Object> SUIEvent::GetV8Obj()

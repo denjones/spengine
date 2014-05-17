@@ -46,25 +46,25 @@ namespace SPEngine
 
 		/// @name Component Methods.
 		/// @{
-		bool Initialize();
-		bool Update(float timeDelta);
-		bool Draw(float timeDelta);
-		bool Load();
-		bool Unload();
+		void Initialize();
+		void Update(float timeDelta);
+		void Draw(float timeDelta);
+		void Load();
+		void Unload();
 		/// @}
 
 		/// @name Modification
 		/// @{
-		bool DisableLighting();
-		bool EnableLighting();
-		bool AddLight(int index, D3DLIGHT9 &light);
-		bool DeleteLight(int index);
-		bool ModifyLight(int index, D3DLIGHT9 &light);
-		bool Turn(int index);
-		bool TurnOn(int index);
-		bool TurnOff(int index);
-		bool TurnOnAll();
-		bool TurnOffAll();
+		void DisableLighting();
+		void EnableLighting();
+		void AddLight(int index, D3DLIGHT9 &light);
+		void DeleteLight(int index);
+		void ModifyLight(int index, D3DLIGHT9 &light);
+		void Turn(int index);
+		void TurnOn(int index);
+		void TurnOff(int index);
+		void TurnOnAll();
+		void TurnOffAll();
 		/// @}
 
 		/// @name Properties

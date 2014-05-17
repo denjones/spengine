@@ -15,8 +15,8 @@ namespace SPEngine
 	class ISPLoadable
 	{
 	public:
-		virtual bool Load() = 0;
-		virtual bool Unload() = 0;
-		virtual bool Reload() = 0;
+		virtual void Load() = 0;
+		virtual void Unload() = 0;
+		virtual void Reload() = 0;
 	};
 }

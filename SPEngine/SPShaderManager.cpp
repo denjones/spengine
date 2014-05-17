@@ -28,13 +28,9 @@ namespace SPEngine
 		
 		SPPixelShaderCorePtr core = new SPPixelShaderCore();
 
-		if(core->Load(name))
-		{
-			pixelShaderCores.Set(name, core);
-			return core;
-		}
-
-		return NULL;
+		core->Load(name);
+		pixelShaderCores.Set(name, core);
+		return core;
 	}
 
 	SPPixelShaderCorePtr SPShaderManager::CreateCore( SPString name, SPString path )
@@ -43,7 +39,7 @@ namespace SPEngine
 		return pixelShaderCores[name];
 	}
 
-	bool SPShaderManager::Reload()
+	void SPShaderManager::Reload()
 	{
 		SPWStringMapIterator<SPPixelShaderCorePtr> iter(&pixelShaderCores);
 
@@ -51,8 +47,6 @@ namespace SPEngine
 		{
 			iter.CurrentItem()->Reload();
 		}
-
-		return true;
 	}
 
 

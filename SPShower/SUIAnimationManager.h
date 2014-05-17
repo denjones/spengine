@@ -15,6 +15,6 @@ public:
 	SUIAnimationManager(void);
 	virtual ~SUIAnimationManager(void);
 
-	bool Update(float timeDelta);
+	void Update(float timeDelta);
 };
 

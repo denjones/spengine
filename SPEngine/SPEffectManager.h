@@ -18,7 +18,7 @@ namespace SPEngine
 		SPEffectManager(void);
 		virtual ~SPEffectManager(void);
 
-		bool Reload();
+		void Reload();
 
 		SPEffectCorePtr CreateCore(SPString name, SPString path);
 		SPEffectCorePtr AddCore(SPString name, SPEffectCorePtr effect);

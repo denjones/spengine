@@ -22,73 +22,47 @@ namespace SPEngine
 	{
 	}
 
-	bool SPComponent::Enable()
+	void SPComponent::Enable()
 	{
 		isEnabled = true;
-
-		return true;
 	}
 
-	bool SPComponent::Disable()
+	void SPComponent::Disable()
 	{
 		isEnabled = false;
-
-		return true;
 	}
 
-	//bool SPComponent::Register(ComponentManager& manager)
-	//{
-	//	manager.RegisterComponent(this);
-
-	//	return true;
-	//}
-
-	//bool SPComponent::Unregister(ComponentManager& manager)
-	//{
-	//	manager.UnregisterComponent(this);
-
-	//	return true;
-	//}
-
-	bool SPComponent::Load()
+	void SPComponent::Load()
 	{
 		isLoaded = true;
-
-		return true;
 	}
 
-	bool SPComponent::Unload()
+	void SPComponent::Unload()
 	{
-		return true;
 	}
 
-	bool SPComponent::Update( float timeElapsed )
+	void SPComponent::Update( float timeElapsed )
 	{
-		return true;
 	}
 
-	bool SPComponent::Draw( float timeElapsed )
+	void SPComponent::Draw( float timeElapsed )
 	{
-		return true;
 	}
 
-	bool SPComponent::PreDraw()
+	void SPComponent::PreDraw()
 	{
-		return true;
 	}
 
-	bool SPComponent::PostDraw()
+	void SPComponent::PostDraw()
 	{
-		return true;
 	}
 
-	bool SPComponent::Reload()
+	void SPComponent::Reload()
 	{		
-		return Load();
+		Load();
 	}
 
-	bool SPComponent::Initialize()
+	void SPComponent::Initialize()
 	{
-		return true;
 	}
 }

@@ -136,6 +136,9 @@ namespace SV8TemplComponent
 	void CatchKeyDownGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void CatchKeyDownSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
+	void ChildComponentsGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void ChildComponentsSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
 	//
 	// Methods
 	//

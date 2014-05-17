@@ -77,6 +77,9 @@
     <Filter Include="Source\SScript\SV8Template">
       <UniqueIdentifier>{12c61b98-3789-4192-b4ae-6db6b9bacd89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\SInterface">
+      <UniqueIdentifier>{bed6ed15-a05f-4647-9f7b-236716fa9a7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -779,6 +782,12 @@
     <ClInclude Include="SV8TemplFPS.h">
       <Filter>Source\SScript\SV8Template</Filter>
     </ClInclude>
+    <ClInclude Include="SV8FunctionManager.h">
+      <Filter>Source\SScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ISV8Serializable.h">
+      <Filter>Source\SInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPShower.cpp">
@@ -951,6 +960,18 @@
     </ClCompile>
     <ClCompile Include="SV8TemplFPS.cpp">
       <Filter>Source\SScript\SV8Template</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8Goto.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8AddTag.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8SaveStateAs.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8FunctionManager.cpp">
+      <Filter>Source\SScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

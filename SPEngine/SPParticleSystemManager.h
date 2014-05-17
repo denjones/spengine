@@ -20,18 +20,18 @@ namespace SPEngine
 		SPParticleSystemManager();
 		virtual ~SPParticleSystemManager();
 
-		bool Load();
-		bool Unload();
-		bool Reload();
-		bool Update(float timeElapsed);
-		bool Draw(float timeElapsed);
-		bool Initialize();
+		void Load();
+		void Unload();
+		void Reload();
+		void Update(float timeElapsed);
+		void Draw(float timeElapsed);
+		void Initialize();
 
-		bool AllSystemPause();
+		void AllSystemPause();
 
 		//Particle System Management
-		bool AddParticleSystem(SPString name, SPParticleSystem3DPtr particleSys);
-		bool CreateParticleSystem(SPString name,
+		void AddParticleSystem(SPString name, SPParticleSystem3DPtr particleSys);
+		void CreateParticleSystem(SPString name,
 			BoundingBox2D positionBox = BoundingBox2D(),
 			BoundingBox2D boundBox = BoundingBox2D(),
 			float minVelocity = 0,
@@ -58,7 +58,7 @@ namespace SPEngine
 			float maxScale = 1,
 			float scaleDeltaMin = 0,
 			float scaleDeltaMax = 0);
-		bool DestroyParticleSystem(SPString name);
+		void DestroyParticleSystem(SPString name);
 
 		SPParticleSystem3DPtr GetParticleSystem(SPString name);
 	};

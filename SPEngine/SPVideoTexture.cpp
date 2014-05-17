@@ -22,16 +22,16 @@ namespace SPEngine
 		}		
 	}
 
-	bool SPVideoTexture::Update( float timeDelta )
+	void SPVideoTexture::Update( float timeDelta )
 	{
 		if (!video)
 		{
-			return false;
+			return;
 		}
 
 		//video->UpdateFrame();
 
-		return true;
+		return;
 	}
 
 	void SPVideoTexture::SetVideo( SPString setName )
@@ -41,50 +41,57 @@ namespace SPEngine
 		video->SetTexture(this);
 	}
 
-	bool SPVideoTexture::Reload()
+	void SPVideoTexture::Reload()
 	{
 		video = SPVideoManager::GetSingleton()->GetVideo(videoName);
 		video->SetTexture(this);
-
-		return true;
 	}
 
-	bool SPVideoTexture::Unload()
+	void SPVideoTexture::Unload()
 	{
 		video->SetTexture(NULL);
 		video = NULL;		
-
-		return SPUpdatableTexture::Unload();
+		SPTexture::Unload();
 	}
 
-	bool SPVideoTexture::Play()
+	void SPVideoTexture::Play()
 	{
 		if (!video)
 		{
-			return false;
+			return;
 		}
 
-		return SUCCEEDED(video->Play());
+		video->Play();
 	}
 
-	bool SPVideoTexture::Pause()
+	void SPVideoTexture::Pause()
 	{
 		if (!video)
 		{
-			return false;
+			return;
 		}
 
-		return SUCCEEDED(video->Pause());
+		video->Pause();
 	}
 
-	bool SPVideoTexture::Stop()
+	void SPVideoTexture::Stop()
 	{
 		if (!video)
 		{
-			return false;
+			return;
 		}
 
-		return SUCCEEDED(video->Stop());
+		video->Stop();
+	}
+
+	SPString SPVideoTexture::GetTextureType()
+	{
+		return L"VideoTexture";
+	}
+
+	SPEngine::SPVideoPtr SPVideoTexture::GetVideo()
+	{
+		return video;
 	}
 
 }

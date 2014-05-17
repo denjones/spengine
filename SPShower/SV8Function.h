@@ -25,6 +25,9 @@ public:
 	static void CreateParticleSystem(const FunctionCallbackInfo<Value>& args);
 	static void RegisterFont(const FunctionCallbackInfo<Value>& args);
 	static void AddCommand(const FunctionCallbackInfo<Value>& args);
+	static void AddTag(const FunctionCallbackInfo<Value>& args);
+	static void Goto(const FunctionCallbackInfo<Value>& args);
+	static void SaveStateAs(const FunctionCallbackInfo<Value>& args);
 
 	//
 	// SpeShow Command
@@ -40,5 +43,6 @@ public:
 	static Handle<Value> GetProperty(SPString propertyName, Handle<Object> obj);
 	static SUIEffectPtr GetEffectFromObj(Handle<Object> obj, SUIEffectPtr original);
 	static SPTexturePtr GetTextureFromObj(Handle<Object> obj);
+	static Handle<Value> GetObjFromTexture(SPTexturePtr texture);
 };
 

@@ -13,6 +13,7 @@ Handle<ObjectTemplate> SV8TemplWindow::GetTemplate()
 	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"height"), HeightGetter, HeightSetter);
 	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"fullScreen"), FullScreenGetter, FullScreenSetter);
 	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"cursor"), CursorGetter, CursorSetter);
+	templWindow->SetAccessor(SPV8ScriptEngine::SPStringToString(L"onExit"), OnExitGetter, OnExitSetter);
 
 	// Methods
 
@@ -162,5 +163,25 @@ void SV8TemplWindow::CursorSetter( Local<String> property, Local<Value> value, c
 	}
 
 	SPInputManager::GetSingleton()->SetCursor(SPV8ScriptEngine::StringToSPString(value->ToString()));
+}
+
+void SV8TemplWindow::OnExitGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	info.GetReturnValue().Set(SV8ScriptManager::GetSingleton()->GetOnExitFunc());
+}
+
+void SV8TemplWindow::OnExitSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	SV8ScriptManager::GetSingleton()->SetOnExitFunc(Handle<v8::Function>::Cast(value));
 }
 

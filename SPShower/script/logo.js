@@ -6,32 +6,66 @@
 ////////////////////////////////////////////////////////////////////////////
 
 // 设置Logo画面
-ss.createScreen({
-	id: 'Logo',
-	backgroundColor: 0xff000000
-}).focus();
 
-ss.screen.root.onClick = function(e){
-	if(e.key == 0){
-		stopWaitingClick();
+var logoCom;
+var ssCom;
+
+$(function(e){
+
+	// 创建屏幕
+
+	ss.createScreen({
+		id: 'Logo',
+		backgroundColor: 0xff000000
+	}).focus();
+
+	ss.screen.root.onClick = function(e){
+		if(e.key == 0){
+			stopWaitingClick();
+		}
 	}
-}
 
-///////////////////////////////////////////////////////////////////////////
-// 设置社团Logo
-///////////////////////////////////////////////////////////////////////////
+	// 设置社团Logo
 
-var logoCom = ss.screen.createComponent({
-	name: "logo",
-	backgroundImage: "data/images/logo_sprabbit.png",
-	width: 400,
-	height: 400,
-	x: 440,
-	y: 150,
-	opacity: 0
+	logoCom = ss.screen.createComponent({
+		id: "logo",
+		backgroundImage: "data/images/logo_sprabbit.png",
+		width: 400,
+		height: 400,
+		x: 440,
+		y: 150,
+		opacity: 0
+	});
+
+	ss.screen.root.appendChild(logoCom);
+
+	// 设置引擎Logo
+
+	ssCom = ss.screen.createComponent({
+		id: "sslogo",
+		backgroundImage: "data/images/logo_speshow.jpg",
+		width: 583,
+		height: 194,
+		x: 350,
+		y: 200,
+		opacity: 0
+	});
+
+	ss.screen.root.appendChild(ssCom);
 });
 
-ss.screen.root.appendChild(logoCom);
+////////////////////////////////////////////////////////////////
+
+$tag('动画开始');
+
+// 初始化
+$(function(e){
+	if(e.read){
+		ss.window.title = 'read';
+	}
+	logoCom.opacity = 0;
+	ssCom.opacity = 0;
+});
 
 // Logo出现消失动画
 $(function(e){
@@ -42,7 +76,9 @@ $(function(e){
 	});
 });
 
-$(waitTimeOrClick(3000));
+$(function(e){
+	waitTimeOrClick(3000, e);
+});
 
 $(function(e){
 	logoCom.addAnimation({
@@ -52,26 +88,12 @@ $(function(e){
 	});
 });
 
-$(waitTimeOrClick(1500));
+$(function(e){
+	waitTimeOrClick(1500, e);
+});
 
 $(function(e){logoCom.skip()});
 
-///////////////////////////////////////////////////////////////////////////
-// 设置引擎Logo
-///////////////////////////////////////////////////////////////////////////
-
-var ssCom = ss.screen.createComponent({
-	name: "sslogo",
-	backgroundImage: "data/images/logo_speshow.jpg",
-	width: 583,
-	height: 194,
-	x: 350,
-	y: 200,
-	opacity: 0
-});
-
-ss.screen.root.appendChild(ssCom);
-
 // Logo出现消失动画
 
 $(function(e){
@@ -82,7 +104,9 @@ $(function(e){
 	});
 });
 
-$(waitTimeOrClick(3000));
+$(function(e){
+	waitTimeOrClick(3000, e);
+});
 
 $(function(e){
 	ssCom.addAnimation({
@@ -92,7 +116,18 @@ $(function(e){
 	});
 });
 
-$(waitTimeOrClick(1500));
+$(function(e){
+	waitTimeOrClick(1500, e);
+});
+
+$(function(e){
+	ssCom.skip();
+});
+
+// 跳转
+$(function (e) {
+    ss.goto({file:'script/logo.js', tag:'动画开始'});
+});
 
 $(function(e){
 	ss.include("script/main_menu.js");

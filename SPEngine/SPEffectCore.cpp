@@ -23,7 +23,7 @@ namespace SPEngine
 	{
 	}
 
-	bool SPEffectCore::Load( SPString path )
+	void SPEffectCore::Load( SPString path )
 	{
 		name = path;
 
@@ -32,7 +32,7 @@ namespace SPEngine
 		if (!file)
 		{
 			SPLogHelper::WriteLog(L"[SPEffect] WARNING: Failed to open effect file: " + path);
-			return false;
+			return;
 		}
 
 		ID3DXBuffer* errorBuffer = NULL;
@@ -42,7 +42,7 @@ namespace SPEngine
 		if(!file->Read(pData, (DWORD)length))
 		{
 			SPLogHelper::WriteLog(L"[SPEffect] WARNING: Failed to read effect file: " + path);
-			return false;
+			return;
 		}
 
 		// Create effect.
@@ -66,7 +66,7 @@ namespace SPEngine
 		{
 			SPLogHelper::WriteLog(L"[SPEffect] WARNING: Failed to create effect: " + path);
 
-			return false;
+			return;
 		}
 
 		SPGameManager::GetSingleton()->GetGame()->LockDrawingWhileLoading();
@@ -88,13 +88,10 @@ namespace SPEngine
 		}
 
 		SPGameManager::GetSingleton()->GetGame()->UnlockDrawingWhileLoading();
-
-		return true;
 	}
 
-	bool SPEffectCore::Load()
+	void SPEffectCore::Load()
 	{
-		return true;
 	}
 
 	ID3DXEffect* SPEffectCore::GetEffect()
@@ -102,23 +99,21 @@ namespace SPEngine
 		return effect;
 	}
 
-	bool SPEffectCore::Unload()
+	void SPEffectCore::Unload()
 	{
 		if (effect)
 		{
 			effect->Release();
 			effect = NULL;
 		}
-
-		return true;
 	}
 
-	bool SPEffectCore::Reload()
+	void SPEffectCore::Reload()
 	{
-		return Load(name);
+		Load(name);
 	}
 
-	bool SPEffectCore::SetTechnique()
+	void SPEffectCore::SetTechnique()
 	{
 		D3DXHANDLE handle = effect->GetTechniqueByName(techName.c_str());
 
@@ -128,8 +123,6 @@ namespace SPEngine
 		{
 			hr = effect->SetTechnique(handle);
 		}
-		
-		return true;
 	}
 
 }

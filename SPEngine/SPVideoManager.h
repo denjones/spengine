@@ -28,14 +28,14 @@ namespace SPEngine
 		virtual ~SPVideoManager(void);
 
 		SPVideoPtr GetVideo(SPString name);
-		bool CreateVideo(SPString name);
-		bool ReleaseVideo(SPString name);
+		void CreateVideo(SPString name);
+		void ReleaseVideo(SPString name);
 
-		bool Update(float timeDelta);
-		bool Unload();
-		bool Reload();
+		void Update(float timeDelta);
+		void Unload();
+		void Reload();
 
-		virtual bool LoadFromString(SPString stringStream);
+		virtual void LoadFromString(SPString stringStream);
 		virtual SPString SaveAsString();
 	};
 

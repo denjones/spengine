@@ -141,16 +141,14 @@ namespace SPEngine
 		return true;
 	}
 
-	bool SPGame::Exit()
+	void SPGame::Exit()
 	{
 		exitLock.Lock();
 		isExiting = true;
 		exitLock.Unlock();
-
-		return false;
 	}
 
-	bool SPGame::ExitGameThread()
+	void SPGame::ExitGameThread()
 	{
 		SPLogHelper::WriteLog("============= Game Exiting =============");
 
@@ -170,8 +168,6 @@ namespace SPEngine
 
 		//PostQuitMessage(0);
 		BOOL resutl = PostMessage(SPWindow::GetSingleton()->GetHWnd(), WM_GAMETHREADEXIT, NULL, NULL);
-
-		return true;
 	}
 
 	DWORD WINAPI SPGame::GameThreadProc(PVOID pParam)
@@ -231,7 +227,7 @@ namespace SPEngine
 				if (currentGame->isExitButtonPressed)
 				{
 					currentGame->isExitButtonPressed = false;
-					currentGame->Exit();
+					currentGame->OnExit();
 				}
 
 				if(currentGame->isExiting)
@@ -286,6 +282,8 @@ namespace SPEngine
 				SPLogHelper::WriteLog("[Game] ERROR: Failed To Unload Game Content!");
 				return false;
 			}
+
+			currentGame->componentManager->Clear();
 
 			SPWindow::GetSingleton()->UnregisterWindowClass();
 
@@ -803,6 +801,11 @@ namespace SPEngine
 	bool SPGame::IsExiting()
 	{
 		return isExiting;
+	}
+
+	void SPGame::OnExit()
+	{
+		Exit();
 	}
 
 }

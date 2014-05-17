@@ -2,7 +2,7 @@
 // Demo script of SpeShow Beta 0.11
 //
 // Author: Ken.J
-// Date: 2013-10-06
+// Date: 2014-05-05
 ////////////////////////////////////////////////////////////////////////////
 
 // 获取SpeShow对象
@@ -20,20 +20,26 @@ ss.window.cursor = 'cursor/3.cur';
 // 隐藏帧率
 ss.window.fps.display = false;
 
+ss.window.onExit = function () {
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 // 以下定义相关函数
 ////////////////////////////////////////////////////////////////////////////
 
 // 绑定$为队列函数
 var $ = ss.addCommand;
+var $tag = ss.addTag;
 
 // 阻塞变量
 var _isClick = false;
 var _isTimesUp = false;
+var _waitTimeHandle = null;
 var stopWaitingClick = function () {
     _isClick = true;
 }
-var resetWaiting = function () {
+var _resetWaiting = function () {
     _isClick = false;
     _isTimesUp = false;
 };
@@ -43,44 +49,39 @@ var waitClick = function (e) {
     if (!_isClick) {
         e.repeat = true;
     }
-    resetWaiting();
+    _resetWaiting();
 };
 
-// 定义定等待时间队列函数
-var waitTimeHandle = null;
-var waitTime = function (timeMs) {
-    if (waitTimeHandle) {
-        clearTimeout(waitTimeHandle);
+// 定义等待时间队列函数
+var waitTime = function (timeMs, e) {
+    if (!_waitTimeHandle) {
+        _waitTimeHandle = setTimeout(function () {
+            _isTimesUp = true;
+        }, timeMs);
     }
-    waitTimeHandle = setTimeout(function () {
-        _isTimesUp = true;
-    }, timeMs);
-    return function (e) {
-        if (_isTimesUp) {
-            clearTimeout(waitTimeHandle);
-        } else {
-            e.repeat = true;
-        }
-        resetWaiting();
-    };
+    if (_isTimesUp) {
+        clearTimeout(_waitTimeHandle);
+        _waitTimeHandle = null;
+    } else {
+        e.repeat = true;
+    }
+    _resetWaiting();
 };
 
-// 定义定等待时间或点击队列函数
-var waitTimeOrClick = function (timeMs) {
-    if (waitTimeHandle) {
-        clearTimeout(waitTimeHandle);
+// 定义等待时间或点击队列函数
+var waitTimeOrClick = function (timeMs, e) {
+    if (!_waitTimeHandle) {
+        _waitTimeHandle = setTimeout(function () {
+            _isTimesUp = true;
+        }, timeMs);
     }
-    waitTimeHandle = setTimeout(function () {
-        _isTimesUp = true;
-    }, timeMs);
-    return function (e) {
-        if (_isTimesUp || _isClick) {
-            clearTimeout(waitTimeHandle);
-        } else {
-            e.repeat = true;
-        }
-        resetWaiting();
-    };
+    if (_isTimesUp || _isClick) {
+        clearTimeout(_waitTimeHandle);
+        _waitTimeHandle = null;
+    } else {
+        e.repeat = true;
+    }
+    _resetWaiting();
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -88,7 +89,9 @@ var waitTimeOrClick = function (timeMs) {
 ////////////////////////////////////////////////////////////////////////////
 
 // 跳转
-ss.include('script/logo.js');
+$(function (e) {
+    ss.goto({ file: 'script/logo.js' });
+});
 
 
 

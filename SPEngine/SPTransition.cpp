@@ -64,7 +64,7 @@ namespace SPEngine
 		return false;
 	}
 
-	bool SPTransition::Update( float timeDelta )
+	void SPTransition::Update( float timeDelta )
 	{
 		if (isDisplay &&
 			(state == Hidden ||
@@ -96,8 +96,6 @@ namespace SPEngine
 				state = Hidden;
 			}
 		}
-
-		return true;
 	}
 
 	TransitionState SPTransition::State()

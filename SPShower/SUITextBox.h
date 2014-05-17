@@ -61,13 +61,13 @@ public:
 	void SetAutoHeight(bool on);
 
 	float GetLineSpace();
-	bool SetLineSpace(float setSpace);
+	void SetLineSpace(float setSpace);
 
 	float GetWordSpace();
-	bool SetWordSpace(float setSpace);
+	void SetWordSpace(float setSpace);
 
 	SUIPadding GetPadding();
-	bool SetPadding(SUIPadding setPadding);
+	void SetPadding(SUIPadding setPadding);
 
 	float GetPaddingTop();
 	void SetPaddingTop(float setTop);
@@ -83,20 +83,20 @@ public:
 
 	SRectangle GetTextRect();
 
-	bool SetDefaultFont(SPFontPtr setFont, bool isAnonymous = false);
+	void SetDefaultFont(SPFontPtr setFont, bool isAnonymous = false);
 	SPFontPtr GetDefaultFont();
 
 	bool IsAnonymousFont();
 
-	bool SetDefaultColor(D3DCOLOR setColor);
+	void SetDefaultColor(D3DCOLOR setColor);
 	D3DCOLOR GetDefaultColor();
 
-	bool SetPunctuations(SPString setPun);
+	void SetPunctuations(SPString setPun);
 
-	bool SetDefaultBackEffect(SUIEffectPtr setEffect);
+	void SetDefaultBackEffect(SUIEffectPtr setEffect);
 	SUIEffectPtr GetDefaultBackEffect();
 
-	bool SetDefaultFrontEffect(SUIEffectPtr setEffect);
+	void SetDefaultFrontEffect(SUIEffectPtr setEffect);
 	SUIEffectPtr GetDefaultFrontEffect();
 
 	
@@ -109,23 +109,23 @@ public:
 	SUITextBox(SUIScreen* screen);
 	virtual ~SUITextBox(void);
 
-	void RefreshText();
-	virtual bool AddText(SUIText text);	
-	virtual bool Clear();
-	void NewLine();
-	void AddTextDirectly(SUITextSpanPtr textSpan);
+	virtual void RefreshText();
+	virtual void AddText(SUIText text);	
+	virtual void Clear();
+	virtual void NewLine();
+	//virtual bool AddTextDirectly(SUITextSpanPtr textSpan);
 	D3DXVECTOR2 CurrentPosition();
 	SUITextLinePtr CurrentLine();
 	bool WillExceeded(float length);
 	bool WillCurrentLineExceeded(float addedLength);
 	SPString GetContent();
 
-	virtual bool Update(float timeDelta);
-	virtual bool Draw(float timeDelta);
-	virtual bool Unload();
-	virtual bool Reload();
+	virtual void Update(float timeDelta);
+	virtual void Draw(float timeDelta);
+	virtual void Unload();
+	virtual void Reload();
 
-	virtual bool LoadFromString(SPString stringStream);
+	virtual void LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
 	virtual Handle<Object> GetV8Obj();
 

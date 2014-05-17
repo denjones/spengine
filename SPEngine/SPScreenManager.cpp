@@ -18,7 +18,7 @@ namespace SPEngine
 		screensMap.Clear();
 	}
 
-	bool SPScreenManager::Initialize()
+	void SPScreenManager::Initialize()
 	{
 		SPWStringMapIterator<SPBaseScreenPtr> iter(&screensMap);
 
@@ -28,11 +28,9 @@ namespace SPEngine
 		}
 
 		SPComponent::Initialize();
-
-		return true;
 	}
 
-	bool SPScreenManager::Load()
+	void SPScreenManager::Load()
 	{
 		SPWStringMapIterator<SPBaseScreenPtr> iter(&screensMap);
 
@@ -42,11 +40,9 @@ namespace SPEngine
 		}
 
 		SPComponent::Load();
-
-		return true;
 	}
 
-	bool SPScreenManager::Unload()
+	void SPScreenManager::Unload()
 	{
 		SPWStringMapIterator<SPBaseScreenPtr> iter(&screensMap);
 
@@ -56,11 +52,9 @@ namespace SPEngine
 		}
 
 		SPComponent::Unload();
-
-		return true;
 	}
 
-	bool SPScreenManager::Update( float timeElapsed )
+	void SPScreenManager::Update( float timeElapsed )
 	{
 		bool isInputValid = true;//Game.IsActive;
 		bool isVisible = true;
@@ -86,11 +80,9 @@ namespace SPEngine
 				}
 			}
 		}
-
-		return true;
 	}
 
-	bool SPScreenManager::Draw( float timeElapsed )
+	void SPScreenManager::Draw( float timeElapsed )
 	{
 		if (displayStack.size() > 0)
 		{
@@ -100,15 +92,13 @@ namespace SPEngine
 				(*iter)->Draw(timeElapsed);
 			}
 		}
-
-		return true;
 	}
 
-	bool SPScreenManager::Register(SPString name)
+	void SPScreenManager::Register(SPString name)
 	{
 		if (!screensMap.IsSet(name))
 		{
-			return false;
+			return;
 		}
 
 		if (IsInitialized())
@@ -122,15 +112,13 @@ namespace SPEngine
 		}
 
 		displayStack.push_back(screensMap[name]);
-
-		return true;
 	}
 
-	bool SPScreenManager::Unregister( SPString name )
+	void SPScreenManager::Unregister( SPString name )
 	{
 		if (!screensMap.IsSet(name))
 		{
-			return true;
+			return;
 		}
 
 		SPBaseScreenPtr screen = screensMap[name];
@@ -144,21 +132,15 @@ namespace SPEngine
 				break;
 			}
 		}
-
-		return true;
 	}
 
-	bool SPScreenManager::CreateScreen( SPString name, SPBaseScreenPtr screen )
+	void SPScreenManager::CreateScreen( SPString name, SPBaseScreenPtr screen )
 	{
 		screensMap.Set(name, screen);
-
-		return true;
 	}
 
-	bool SPScreenManager::DestroyScreen( SPString name )
+	void SPScreenManager::DestroyScreen( SPString name )
 	{
 		screensMap.Remove(name);
-
-		return true;
 	}
 }

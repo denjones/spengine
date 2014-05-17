@@ -86,11 +86,11 @@ namespace SPEngine
 
 		// Inheritance
 
-		bool Initialize();
-		bool Load();
-		bool Unload();
-		bool Update( float timeElapsed );
-		bool Draw( float timeElapsed );
+		void Initialize();
+		void Load();
+		void Unload();
+		void Update( float timeElapsed );
+		void Draw( float timeElapsed );
 
 		// Script Related
 
@@ -99,8 +99,8 @@ namespace SPEngine
 		void ClearTimeOutFunction( Handle<Number> id);
 
 		ScriptToRunPtr NextScriptToRun();
-		bool RunNextScript();
-		bool RunTimeOutFunc();
+		void RunNextScript();
+		void RunTimeOutFunc();
 		void RunScript(SPString script);
 		void RunScriptFromFile(SPString path);
 		Handle<Value> Eval(SPString script, bool isInScope = false);
@@ -122,6 +122,8 @@ namespace SPEngine
 		static SPString StringToSPString(Handle<String> str);
 		static DWORD WINAPI ScriptRunningThread(void* context);
 		static Handle<String> SPStringToString(SPString str);
+		static Handle<String> ToJson(Handle<Value> object);
+		static Handle<Object> CopyObject(Handle<Object> object);
 
 	public:
 		static void Import(const FunctionCallbackInfo<Value>& args);

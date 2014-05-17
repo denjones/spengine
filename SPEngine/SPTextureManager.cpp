@@ -43,13 +43,13 @@ namespace SPEngine
 
 	SPEngine::SPAnimatedTexturePtr SPTextureManager::GetAnime( SPString path )
 	{
-		if (updatableTextures.IsSet(path))
+		if (textures.IsSet(path))
 		{
-			return updatableTextures[path];
+			return textures[path];
 		}
 
 		SPAnimatedTexturePtr newTexture = new SPAnimatedTexture();
-		updatableTextures.Set(path, newTexture);
+		textures.Set(path, newTexture);
 
 		return newTexture;
 	}
@@ -60,9 +60,9 @@ namespace SPEngine
 		int setColumn, 
 		int setFPS )
 	{
-		if (updatableTextures.IsSet(path))
+		if (textures.IsSet(path))
 		{
-			SPAnimatedTexturePtr anime = updatableTextures[path];
+			SPAnimatedTexturePtr anime = textures[path];
 
 			anime->SetColumn(setColumn);
 			anime->SetRow(setRow);
@@ -73,28 +73,20 @@ namespace SPEngine
 
 		SPAnimatedTexturePtr newTexture =
 			new SPAnimatedTexture(path, setRow, setColumn, setFPS);
-		updatableTextures.Set(path, newTexture);
+		textures.Set(path, newTexture);
 
 		return newTexture;
 	}
 
-	void SPTextureManager::ReleaseUpdatable( SPString path )
-	{
-		if (textures.IsSet(path))
-		{
-			updatableTextures.Remove(path);
-		}
-	}
-
-	bool SPTextureManager::Update( float timeDelta )
+	void SPTextureManager::Update( float timeDelta )
 	{
 		// Update all animated texture.
-		SPWStringMapIterator<SPTexturePtr> iter(&updatableTextures);
+		SPWStringMapIterator<SPTexturePtr> iter(&textures);
 		for (iter.First(); !iter.IsDone(); iter.Next())
 		{			
 			if (iter.CurrentItem())
 			{
-				SPUpdatableTexturePtr upTex = iter.CurrentItem();
+				SPTexturePtr upTex = iter.CurrentItem();
 				if (upTex)
 				{
 					upTex->Update(timeDelta);
@@ -102,11 +94,9 @@ namespace SPEngine
 			}
 			
 		}
-
-		return true;
 	}
 
-	bool SPTextureManager::Unload()
+	void SPTextureManager::Unload()
 	{
 		// Unload all texture.
 		SPWStringMapIterator<SPTexturePtr> iterTex(&textures);
@@ -117,36 +107,15 @@ namespace SPEngine
 				iterTex.CurrentItem()->Unload();
 			}			
 		}
-
-		// Unload all animated texture.
-		SPWStringMapIterator<SPTexturePtr> iterAnime(&updatableTextures);
-		for (iterAnime.First(); !iterAnime.IsDone(); iterAnime.Next())
-		{
-			if (iterAnime.CurrentItem())
-			{
-				iterAnime.CurrentItem()->Unload();
-			}			
-		}
-
-		return true;
 	}
 
-	bool SPTextureManager::Reload()
+	void SPTextureManager::Reload()
 	{
-		
-
 		// Reload all texture.
 		SPWStringMapIterator<SPTexturePtr> iterTex(&textures);
 		for(iterTex.First(); !iterTex.IsDone(); iterTex.Next())
 		{
 			iterTex.CurrentItem()->Reload();
-		}
-
-		// Reload all animated texture.
-		SPWStringMapIterator<SPTexturePtr> iterAnime(&updatableTextures);
-		for (iterAnime.First(); !iterAnime.IsDone(); iterAnime.Next())
-		{
-			iterAnime.CurrentItem()->Reload();
 		}
 
 		if (textures.IsSet(L"blank_white_tex"))
@@ -155,20 +124,18 @@ namespace SPEngine
 			newTexture->CreateBlank(2, 2);
 			newTexture->Fill(SPColor::White);
 			textures.Set(L"blank_white_tex", newTexture);
-		}		
-
-		return true;
+		}
 	}
 
 	SPEngine::SPVideoTexturePtr SPTextureManager::GetVideo( SPString path )
 	{
-		if (updatableTextures.IsSet(path))
+		if (textures.IsSet(path))
 		{
-			return updatableTextures[path];
+			return textures[path];
 		}
 
 		SPVideoTexturePtr newTexture = new SPVideoTexture(path);
-		updatableTextures.Set(path, newTexture);
+		textures.Set(path, newTexture);
 
 		return newTexture;
 	}
@@ -215,14 +182,14 @@ namespace SPEngine
 
 	SPParticleSystemTexturePtr SPTextureManager::GetParticleSystem( SPString path )
 	{
-		if (updatableTextures.IsSet(path))
+		if (textures.IsSet(path))
 		{
-			return updatableTextures[path];
+			return textures[path];
 		}
 
 		SPParticleSystemTexturePtr newTexture = new SPParticleSystemTexture(path);
 		newTexture->CreateRenderTarget(1, 1, newTexture->GetBackgroundColor());
-		updatableTextures.Set(path, newTexture);
+		textures.Set(path, newTexture);
 
 		return newTexture;
 	}
@@ -231,7 +198,7 @@ namespace SPEngine
 	{
 		SPParticleSystemTexturePtr newTexture = new SPParticleSystemTexture(name);
 		newTexture->CreateRenderTarget(width, height, newTexture->GetBackgroundColor());
-		updatableTextures.Set(name, newTexture);
+		textures.Set(name, newTexture);
 
 		return newTexture;
 	}

@@ -36,13 +36,13 @@ namespace SPEngine
 		FPSDisplayer(void);
 		virtual ~FPSDisplayer(void);
 
-		virtual bool Load();
-		virtual bool Update(float timeElapsed);
-		virtual bool Draw(float timeElapsed);
-		virtual bool Initialize();
-		virtual bool Unload();
+		virtual void Load();
+		virtual void Update(float timeElapsed);
+		virtual void Draw(float timeElapsed);
+		virtual void Initialize();
+		virtual void Unload();
 
-		bool SetLocation(FPSLocation setLocation);
+		void SetLocation(FPSLocation setLocation);
 		FPSLocation GetLocation();
 
 	};

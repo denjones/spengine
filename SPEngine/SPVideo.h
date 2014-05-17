@@ -61,37 +61,37 @@ namespace SPEngine
 		SPVideo(SPString path);
 		virtual ~SPVideo(void);			
 
-		bool OpenFile(SPString sFileName);
-		bool Load();
-		bool Unload();
-		bool Reload();
+		void OpenFile(SPString sFileName);
+		void Load();
+		void Unload();
+		void Reload();
 	
 		// Streaming
-		HRESULT Play();		
-		HRESULT Pause();
-		HRESULT Stop();
-		HRESULT SetLoopTimes(int times);
+		void Play();		
+		void Pause();
+		void Stop();
+		void SetLoopTimes(int times);
 		int GetLeftTime() { return leftTimes; }
 
 		// seeking
-		BOOL	CanSeek();
-		HRESULT SetPosition(REFERENCE_TIME pos);
-		HRESULT GetDuration(LONGLONG *pDuration);
-		HRESULT GetCurrentPosition(LONGLONG *pTimeNow);
+		bool	CanSeek();
+		void SetPosition(REFERENCE_TIME pos);
+		long long GetDuration();
+		long long GetCurrentPosition();
 
 		// Audio
-		bool	Mute(bool bMute);
+		void	Mute(bool bMute);
 		bool	IsMuted();
-		bool	SetVolume(float fVolume);
+		void	SetVolume(float fVolume);
 		float	GetVolume();
 
 		float	GetPlayingPosition();
 		bool	IsPlaying();
-		bool	UpdateFrame();
-		bool	SetTexture(SPVideoTexture* setTex);
-		bool	ResizeTexture();
+		void	UpdateFrame();
+		void	SetTexture(SPVideoTexture* setTex);
+		void	ResizeTexture();
 
-		bool	SetFlipVertical(bool setFlip);
+		void	SetFlipVertical(bool setFlip);
 		bool	IsFilpVertical() { return data->IsFilpVertical(); }
 
 		SPString GetPath() { return videoPath; }

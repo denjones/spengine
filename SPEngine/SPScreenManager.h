@@ -33,18 +33,18 @@ namespace SPEngine
 		SPScreenManager(void);
 		virtual ~SPScreenManager(void);
 
-		bool Load();
-		bool Unload();
-		bool Update(float timeElapsed);
-		bool Draw(float timeElapsed);
-		bool Initialize();
+		void Load();
+		void Unload();
+		void Update(float timeElapsed);
+		void Draw(float timeElapsed);
+		void Initialize();
 
 		/// @name Screen Management.
 		/// @{
-		bool Register(SPString name);
-		bool Unregister(SPString name);
-		bool CreateScreen(SPString name, SPBaseScreenPtr screen);
-		bool DestroyScreen(SPString name);
+		void Register(SPString name);
+		void Unregister(SPString name);
+		void CreateScreen(SPString name, SPBaseScreenPtr screen);
+		void DestroyScreen(SPString name);
 		/// @}
 	};
 }

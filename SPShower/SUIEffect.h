@@ -15,9 +15,9 @@ public:
 	virtual ~SUIEffect(void);
 
 public:
-	bool SetEffectTexture(SPTexturePtr setTex);
-	bool SetLevel(float setLevel);
-	bool Update(float timeDelta);
+	void SetEffectTexture(SPTexturePtr setTex);
+	void SetLevel(float setLevel);
+	void Update(float timeDelta);
 };
 
 typedef SPPointer<SUIEffect> SUIEffectPtr;

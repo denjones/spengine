@@ -37,26 +37,26 @@ namespace SPEngine
 		SPEffect(SPString path);
 		virtual ~SPEffect(void);
 
-		bool Load(SPString path);
+		void Load(SPString path);
 
 	private:
-		bool Load();
+		void Load();
 
 	public:
-		bool Unload();
-		bool Reload();
-		bool SetTexture(int num, SPTexturePtr tex);
-		bool SetBool(string index, bool constant);
-		bool SetInt(string index, int constant);
-		bool SetFloat(string index, float constant);
-		bool SetVector(string index, D3DXVECTOR4 constant);
-		bool SetMatrix( string index, D3DXMATRIX constant );
-		bool SetValue(string index, void* pData, DWORD length);
+		void Unload();
+		void Reload();
+		void SetTexture(int num, SPTexturePtr tex);
+		void SetBool(string index, bool constant);
+		void SetInt(string index, int constant);
+		void SetFloat(string index, float constant);
+		void SetVector(string index, D3DXVECTOR4 constant);
+		void SetMatrix( string index, D3DXMATRIX constant );
+		void SetValue(string index, void* pData, DWORD length);
 
 	public:
-		bool ApplyEffect();
+		void ApplyEffect();
 		SPEffectCorePtr GetCore();
-		bool SetConstants();
+		void SetConstants();
 		SamplerMap GetSampler();
 	};
 

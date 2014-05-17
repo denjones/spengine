@@ -39,23 +39,20 @@ SUIScreenPtr SUIManager::GetScreen( SPString name )
 	return NULL;
 }
 
-bool SUIManager::AddScreen( SUIScreenPtr newScreen )
+void SUIManager::AddScreen( SUIScreenPtr newScreen )
 {
 	screenMap.Set(newScreen->GetName(), newScreen);
 	newScreen->Initialize();
 	newScreen->Load();
 	SetPersistentScreen(newScreen);
-	return true;
 }
 
-bool SUIManager::Initialize()
+void SUIManager::Initialize()
 {
 	uv_async_init(uv_default_loop(), (uv_async_t*)asyncEvent, SUIManager::HandleAllEventCallback);
-
-	return true;
 }
 
-bool SUIManager::Load()
+void SUIManager::Load()
 {
 	ScreenIterator iter(&screenMap);
 
@@ -66,11 +63,9 @@ bool SUIManager::Load()
 			iter.CurrentItem()->Load();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIManager::Unload()
+void SUIManager::Unload()
 {
 	ScreenIterator iter(&screenMap);
 
@@ -81,11 +76,9 @@ bool SUIManager::Unload()
 			iter.CurrentItem()->Unload();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIManager::Reload()
+void SUIManager::Reload()
 {
 	ScreenIterator iter(&screenMap);
 
@@ -96,11 +89,9 @@ bool SUIManager::Reload()
 			iter.CurrentItem()->Reload();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIManager::Update( float timeDelta )
+void SUIManager::Update( float timeDelta )
 {
 	GenerateEvent(timeDelta);
 	bool isInputValid = true;
@@ -109,11 +100,7 @@ bool SUIManager::Update( float timeDelta )
 	ScreenStackIterator screen = dispalyStack->rbegin();
 	while(screen != dispalyStack->rend())
 	{
-		if(!(*screen)->UpdateScreen(timeDelta, isInputValid, isVisible))
-		{			
-			screen =  ScreenStackIterator(dispalyStack->erase((++screen).base()));
-			continue;
-		}
+		(*screen)->UpdateScreen(timeDelta, isInputValid, isVisible);
 
 		if ((*screen)->State() == TransitionOn ||
 			(*screen)->State() == Active)
@@ -137,11 +124,9 @@ bool SUIManager::Update( float timeDelta )
 	{
 		uv_async_send((uv_async_t*)asyncEvent);
 	}
-
-	return true;
 }
 
-bool SUIManager::Draw( float timeDelta )
+void SUIManager::Draw( float timeDelta )
 {
 	ScreenStack::iterator screen = dispalyStack->begin();
 	while(screen != dispalyStack->end())
@@ -150,15 +135,13 @@ bool SUIManager::Draw( float timeDelta )
 
 		screen++;
 	}
-
-	return true;
 }
 
-bool SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
+void SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
 {
 	if (!newScreen)
 	{
-		return false;
+		return;
 	}
 
 	screenMap.Set(name, newScreen);
@@ -168,8 +151,6 @@ bool SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
 	newScreen->Load();
 
 	SetPersistentScreen(newScreen);
-
-	return true;
 }
 
 SUIScreenPtr SUIManager::GetCurrentScreen()
@@ -183,17 +164,17 @@ SUIScreenPtr SUIManager::GetCurrentScreen()
 	
 }
 
-bool SUIManager::FocusScreen( SPString name )
+void SUIManager::FocusScreen( SPString name )
 {
 	if (!screenMap.IsSet(name))
 	{
-		return false;
+		return;
 	}
 
-	return FocusScreen(screenMap[name]);
+	FocusScreen(screenMap[name]);
 }
 
-bool SUIManager::FocusScreen( SUIScreenPtr screen )
+void SUIManager::FocusScreen( SUIScreenPtr screen )
 {
 	ScreenStack::iterator iter = find(dispalyStack->begin(), dispalyStack->end(), screen);
 	if (iter != dispalyStack->end())
@@ -202,20 +183,18 @@ bool SUIManager::FocusScreen( SUIScreenPtr screen )
 	}
 
 	dispalyStack->push_back(screen);
-
-	return true;
 }
 
-bool SUIManager::SwitchToScreen( SPString name , SUITransformationPtr trans)
+void SUIManager::SwitchToScreen( SPString name , SUITransformationPtr trans)
 {	
 	if (dispalyStack->size() == 0 || !screenMap.IsSet(name))
 	{
-		return false;
+		return;
 	}
 
 	if (dispalyStack->back() == screenMap[name])
 	{
-		return true;
+		return;
 	}
 
 	SUIScreenPtr top = dispalyStack->back();
@@ -228,8 +207,6 @@ bool SUIManager::SwitchToScreen( SPString name , SUITransformationPtr trans)
 	top->SetTargetScreen(screenMap[name]);
 	top->SetTransformation(trans);
 	trans->Play();
-
-	return true;
 }
 
 bool SUIManager::IsScreenValid( SPString name )
@@ -237,7 +214,7 @@ bool SUIManager::IsScreenValid( SPString name )
 	return screenMap.IsSet(name);
 }
 
-bool SUIManager::GenerateEvent(float timeDelta)
+void SUIManager::GenerateEvent(float timeDelta)
 {
 	//eventQueue->clear();
 
@@ -433,8 +410,6 @@ bool SUIManager::GenerateEvent(float timeDelta)
 	}	
 
 	UnlockEventQueue();
-
-	return true;
 }
 
 SPString SUIManager::SaveAsString()
@@ -474,7 +449,7 @@ SPString SUIManager::SaveAsString()
 	return result;
 }
 
-bool SUIManager::LoadFromString( SPString stringStream )
+void SUIManager::LoadFromString( SPString stringStream )
 {
 	SPString screensString = SPStringHelper::XMLExcludeFrom(stringStream, L"ScreenList");
 	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"ScreenList");
@@ -505,32 +480,26 @@ bool SUIManager::LoadFromString( SPString stringStream )
 
 		dispalyStack->push_front(GetScreen(screenNameString));
 	}
-
-	return true;
 }
 
-bool SUIManager::InterceptMouseBotton( int button )
+void SUIManager::InterceptMouseBotton( int button )
 {
 	if (button < 0 || button >= 3)
 	{
-		return false;
+		return;
 	}
 
 	interceptMouseButtonEvent[button] = 1;
-
-	return true;
 }
 
-bool SUIManager::InterceptKeyboardKey( int key )
+void SUIManager::InterceptKeyboardKey( int key )
 {
 	if (key < 0 || key >= 256)
 	{
-		return false;
+		return;
 	}
 
 	interceptKeyboardKeyEvent[key] = 1;
-
-	return true;
 }
 
 void SUIManager::SetPersistentScreen( SUIScreenPtr screen )
@@ -596,6 +565,33 @@ void SUIManager::HandleAllEvent()
 	}
 
 	UnlockEventQueue();
+}
+
+Handle<Object> SUIManager::SaveAsObj()
+{
+	Handle<Object> resultObj = Object::New();
+
+	Handle<Object> screenDict = Object::New();
+	ScreenIterator screenIter = ScreenIterator(&screenMap);
+	for (screenIter.First(); !screenIter.IsDone(); screenIter.Next())
+	{
+		screenDict->Set(SPV8ScriptEngine::SPStringToString(screenIter.CurrentIndex()), screenIter.CurrentItem()->SaveAsObj());
+	}
+	resultObj->Set(SPV8ScriptEngine::SPStringToString(L"screens"), screenDict);
+
+	Handle<Array> displayStackArr = Array::New();
+	for (ScreenStackIterator displayIter = dispalyStack->rbegin(); displayIter != dispalyStack->rend(); displayIter++)
+	{
+		displayStackArr->Set(displayStackArr->Length(), SPV8ScriptEngine::SPStringToString((*displayIter)->GetName()));
+	}
+	resultObj->Set(SPV8ScriptEngine::SPStringToString(L"display"), displayStackArr);
+
+	return resultObj;
+}
+
+void SUIManager::LoadFromObj(Handle<Object> obj)
+{
+
 }
 
 

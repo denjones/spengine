@@ -24,5 +24,8 @@ namespace SV8TemplWindow
 	void CursorGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void CursorSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
+	void OnExitGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void OnExitSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
 	void Resize( const FunctionCallbackInfo<Value>& args );
 }

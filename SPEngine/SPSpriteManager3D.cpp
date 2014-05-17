@@ -28,22 +28,19 @@ namespace SPEngine
 		Unload();
 	}
 
-	bool SPSpriteManager3D::Initialize()
+	void SPSpriteManager3D::Initialize()
 	{
-		return true;
 	}
 
-	bool SPSpriteManager3D::Load()
+	void SPSpriteManager3D::Load()
 	{
-		return true;
 	}
 
-	bool SPSpriteManager3D::Unload()
+	void SPSpriteManager3D::Unload()
 	{
-		return true;
 	}
 
-	bool SPSpriteManager3D::PreDraw()
+	void SPSpriteManager3D::PreDraw()
 	{
 		// Sample state.
 		SPDevice::GetSingleton()->GetD3DDevice()->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
@@ -67,26 +64,22 @@ namespace SPEngine
 		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
 		SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::Draw(float timeDelta)
+	void SPSpriteManager3D::Draw(float timeDelta)
 	{
 		foreach(SPSprite3D, sprite, list<SPSprite3D>, sprites)
 		{
 			DrawSprite(sprite);
 		}
 		sprites.clear();
-		return true;
 	}
 
-	bool SPSpriteManager3D::PostDraw()
+	void SPSpriteManager3D::PostDraw()
 	{
-		return true;
 	}
 
-	bool SPSpriteManager3D::DrawSprite(SPSprite3D sprite)
+	void SPSpriteManager3D::DrawSprite(SPSprite3D sprite)
 	{
 		// Create vertex buffer.
 		IDirect3DVertexBuffer9* Quad = 0;		
@@ -146,16 +139,13 @@ namespace SPEngine
 			Quad->Release();
 			Quad = NULL;
 		}
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::Update(float timeDelta)
+	void SPSpriteManager3D::Update(float timeDelta)
 	{
-		return true;
 	}
 
-	bool SPSpriteManager3D::AddSprite3D(SPTexturePtr tex, SPEffectPtr ps)
+	void SPSpriteManager3D::AddSprite3D(SPTexturePtr tex, SPEffectPtr ps)
 	{
 		D3DXMATRIX transformMatrix;
 		D3DXMatrixTransformation(&transformMatrix, 
@@ -165,10 +155,9 @@ namespace SPEngine
 			D3DXVECTOR3(0, 0, 0), SPColor::White, 
 			D3DXVECTOR3(0, 0, 0), D3DXVECTOR2(0, 0));
 		sprites.push_back(sprite);
-		return true;
 	}
 
-	bool SPSpriteManager3D::AddSprite3D(SPTexturePtr tex, SPEffectPtr ps, 
+	void SPSpriteManager3D::AddSprite3D(SPTexturePtr tex, SPEffectPtr ps, 
 		D3DXVECTOR3 scalingCenter, D3DXQUATERNION scalingRotation,
 		D3DXVECTOR3 scaling, D3DXVECTOR3 rotationCenter,
 		D3DXQUATERNION rotation, D3DXVECTOR3 translation)
@@ -187,11 +176,9 @@ namespace SPEngine
 			D3DXVECTOR3(0, 0, 0), D3DXVECTOR2(0, 0));
 	
 		sprites.push_back(sprite);
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::AddSprite3D(
+	void SPSpriteManager3D::AddSprite3D(
 		SPTexturePtr setTexture, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 scalingCenter,
@@ -224,11 +211,9 @@ namespace SPEngine
 			addressFind);
 
 		sprites.push_back(sprite3D);
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::AddSprite3D(
+	void SPSpriteManager3D::AddSprite3D(
 		SPTexturePtr tex, 
 		SPEffectPtr ps, 
 		D3DXMATRIX transformMatrix)
@@ -236,18 +221,14 @@ namespace SPEngine
 		SPSprite3D sprite3D(tex, ps, transformMatrix, D3DXVECTOR3(0, 0, 0),
 			D3DXVECTOR3(0, 0, 0), SPColor::White, 
 			D3DXVECTOR3(0, 0, 0), D3DXVECTOR2(0, 0));
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::Render(SPTexturePtr setTexture, SPEffectPtr ps)
+	void SPSpriteManager3D::Render(SPTexturePtr setTexture, SPEffectPtr ps)
 	{
 		AddSprite3D(setTexture, ps);
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::Render( 
+	void SPSpriteManager3D::Render( 
 		SPTexturePtr	setTexture,
 		SPEffectPtr ps,
 		D3DXVECTOR3		scalingCenter, 
@@ -267,16 +248,14 @@ namespace SPEngine
 		AddSprite3D(setTexture, ps, scalingCenter,
 				scalingRotation, scaling, rotationCenter,
 				rotation, translation);
-
-		return true;
 	}
 
-	bool SPSpriteManager3D::RenderByPosition(
+	void SPSpriteManager3D::RenderByPosition(
 		SPTexturePtr	setTexture,
 		SPEffectPtr ps,
 		D3DXVECTOR3		position)
 	{
-		return Render(
+		Render(
 			setTexture, ps, 
 			D3DXVECTOR3(0, 0, 0), 
 			D3DXQUATERNION(0, 0, 0, 0),
@@ -286,7 +265,7 @@ namespace SPEngine
 			position);
 	}
 
-	bool SPSpriteManager3D::RenderByPositionWithRotateself(
+	void SPSpriteManager3D::RenderByPositionWithRotateself(
 		SPTexturePtr	setTexture,
 		SPEffectPtr ps,
 		D3DXVECTOR3		position,
@@ -302,7 +281,7 @@ namespace SPEngine
 		quaternion.z = rotationAxis.z * s;
 		quaternion.w = w;
 
-		return Render(setTexture, ps,
+		Render(setTexture, ps,
 			D3DXVECTOR3(0, 0, 0),
 			D3DXQUATERNION(0, 0, 0, 0), 
 			D3DXVECTOR3(1, 1, 1), 
@@ -311,13 +290,11 @@ namespace SPEngine
 			position);
 	}
 
-	bool SPSpriteManager3D::RenderWithTranformation(
+	void SPSpriteManager3D::RenderWithTranformation(
 		SPTexturePtr	setTexture,
 		SPEffectPtr ps,
 		D3DXMATRIX		transformMatrix)
 	{
 		AddSprite3D(setTexture, ps, transformMatrix);
-
-		return true;
 	}
 }

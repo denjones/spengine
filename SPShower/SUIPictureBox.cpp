@@ -17,15 +17,14 @@ SUIPictureBox::~SUIPictureBox(void)
 {
 }
 
-bool SUIPictureBox::SetMixImage(SUIMixImage image)
+void SUIPictureBox::SetMixImage(SUIMixImage image)
 {
 	modificationLock.Lock();
 	picture->SetMixImage(image);
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIPictureBox::Draw( float timeDelta )
+void SUIPictureBox::Draw( float timeDelta )
 {
 	SRectangle texRect = GetTexRect();
 
@@ -53,24 +52,20 @@ bool SUIPictureBox::Draw( float timeDelta )
 			NULL, TransformMatrixImage(), ImageSrcRect().CRect(),
 			D3DXVECTOR3(0,0,0), PositionImage(), Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
-
-	return true;
 }
 
-bool SUIPictureBox::SetBaseImage( SPTexturePtr base )
+void SUIPictureBox::SetBaseImage( SPTexturePtr base )
 {
 	modificationLock.Lock();
 	picture->SetBaseImage(base);
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIPictureBox::SetImagePosition( D3DXVECTOR2 setPos )
+void SUIPictureBox::SetImagePosition( D3DXVECTOR2 setPos )
 {
 	modificationLock.Lock();
 	imagePos = setPos;
 	modificationLock.Unlock();
-	return true;
 }
 
 SRectangle SUIPictureBox::GetTexRect()
@@ -217,58 +212,50 @@ SRectangle SUIPictureBox::GetTexRect()
 	return rect;
 } 
 
-bool SUIPictureBox::PreDraw()
+void SUIPictureBox::PreDraw()
 {
 	GetTexRect();
-
-	return SUIComponent::PreDraw();
+	SUIComponent::PreDraw();
 }
 
-bool SUIPictureBox::SetPositionMode( ImagePosition setMode )
+void SUIPictureBox::SetPositionMode( ImagePosition setMode )
 {
 	modificationLock.Lock();
 	positionMode = setMode;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIPictureBox::SetFillMode( ImageMode setMode )
+void SUIPictureBox::SetFillMode( ImageMode setMode )
 {
 	modificationLock.Lock();
 	fillMode = setMode;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIPictureBox::Transform()
+void SUIPictureBox::Transform()
 {
 	if (transformation)
 	{
 		transformation->Play();
 	}
-	
-	return true;
 }
 
-bool SUIPictureBox::SetTransformation( SUITransformationPtr setTrans )
+void SUIPictureBox::SetTransformation( SUITransformationPtr setTrans )
 {
 	transformation = setTrans;
-
-	return true;
 }
 
-bool SUIPictureBox::SetTransformationTarget( SUIPictureListPtr setTarget )
+void SUIPictureBox::SetTransformationTarget( SUIPictureListPtr setTarget )
 {
 	targetPicture = setTarget;
-
-	return true;
 }
 
-bool SUIPictureBox::Update( float timeDelta )
+void SUIPictureBox::Update( float timeDelta )
 {
 	if(transformation)
 	{
-		if(!transformation->Update(timeDelta))
+		transformation->Update(timeDelta);
+		if (transformation->TransitionPosition() >= 1)
 		{
 			picture = targetPicture;
 			transformation = NULL;
@@ -279,20 +266,19 @@ bool SUIPictureBox::Update( float timeDelta )
 	return SUIComponent::Update(timeDelta);
 }
 
-bool SUIPictureBox::SetPicture( SUIPictureListPtr setPicture )
+void SUIPictureBox::SetPicture( SUIPictureListPtr setPicture )
 {
 	modificationLock.Lock();
 	picture = setPicture;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIPictureBox::Reload()
+void SUIPictureBox::Reload()
 {
-	return Load();
+	Load();
 }
 
-bool SUIPictureBox::Load()
+void SUIPictureBox::Load()
 {
 	if (targetPicture)
 	{
@@ -303,11 +289,9 @@ bool SUIPictureBox::Load()
 	{
 		picture->Load();
 	}
-
-	return true;
 }
 
-bool SUIPictureBox::Unload()
+void SUIPictureBox::Unload()
 {
 	renderTarget = NULL;
 	childTarget = NULL;
@@ -321,13 +305,10 @@ bool SUIPictureBox::Unload()
 	{
 		picture->Unload();
 	}
-
-	return true;
 }
 
-bool SUIPictureBox::LoadFromString( SPString stringStream )
+void SUIPictureBox::LoadFromString( SPString stringStream )
 {
-	return true;
 }
 
 SPString SUIPictureBox::SaveAsString()
@@ -339,20 +320,18 @@ SPString SUIPictureBox::SaveAsString()
 	return L"";
 }
 
-bool SUIPictureBox::SetImagePositionX( int setX )
+void SUIPictureBox::SetImagePositionX( int setX )
 {
 	modificationLock.Lock();
 	imagePos.x = setX;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIPictureBox::SetImagePositionY( int setY )
+void SUIPictureBox::SetImagePositionY( int setY )
 {
 	modificationLock.Lock();
 	imagePos.y = setY;
 	modificationLock.Unlock();
-	return true;
 }
 
 D3DXMATRIX SUIPictureBox::TransformMatrixImage()

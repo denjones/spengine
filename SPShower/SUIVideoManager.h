@@ -26,6 +26,6 @@ public:
 	Handle<Object> CreateVideo(Handle<Object> argObj);
 	Handle<ObjectTemplate> GetVideoTemplate();
 
-	virtual bool Initialize();
+	virtual void Initialize();
 };
 

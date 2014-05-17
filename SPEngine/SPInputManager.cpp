@@ -21,7 +21,7 @@ namespace SPEngine
 		Unload();
 	}
 
-	bool SPInputManager::Initialize()
+	void SPInputManager::Initialize()
 	{
 		// Everything took place in the constructor.
 		// Force keyboard and mouse before considering the
@@ -36,11 +36,9 @@ namespace SPEngine
 		{
 			xControllers.push_back(new SPXController(num));
 		}
-
-		return (keyboard && mouse);
 	}
 
-	bool SPInputManager::Load()
+	void SPInputManager::Load()
 	{
 		if (!keyboard)
 		{
@@ -64,11 +62,9 @@ namespace SPEngine
 				xControllers[num] = new SPXController(num);
 			}		
 		}
-
-		return true;
 	}
 
-	bool SPInputManager::Unload()
+	void SPInputManager::Unload()
 	{
 		for (int num = 0; num < 4;num++ )
 		{
@@ -77,11 +73,9 @@ namespace SPEngine
 				xControllers[num] = NULL;
 			}
 		}
-
-		return true;
 	}
 
-	bool SPInputManager::Update( float timeElapsed )
+	void SPInputManager::Update( float timeElapsed )
 	{
 		// Get the device state.
 		if(mouse)
@@ -107,31 +101,26 @@ namespace SPEngine
 			}
 			
 		}
-
-		return true;
 	}
 
-	bool SPInputManager::Draw(float timeElapsed)
+	void SPInputManager::Draw(float timeElapsed)
 	{
-		return true;
 	}	
 
-	bool SPInputManager::SetMaxXController( int max )
+	void SPInputManager::SetMaxXController( int max )
 	{
 		max = min(max, 4);
 
 		numXController = max;
-
-		return true;
 	}
 
-	bool SPInputManager::SetCursor( SPString path )
+	void SPInputManager::SetCursor( SPString path )
 	{
 		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
-			return false;
+			return;
 		}
 
 		LONGLONG length = file->GetFileLength();
@@ -148,7 +137,7 @@ namespace SPEngine
 
 		if (newFile == INVALID_HANDLE_VALUE)
 		{
-			return false;
+			return;
 		}
 
 		DWORD numOfByte;
@@ -159,7 +148,7 @@ namespace SPEngine
 			SPFileManager::GetSingleton()->CloseFile(path);
 			CloseHandle(newFile);
 			DeleteFile(name.c_str());
-			return false;
+			return;
 		}
 
 		CloseHandle(newFile);
@@ -172,7 +161,7 @@ namespace SPEngine
 			SPFileManager::GetSingleton()->CloseFile(path);
 			CloseHandle(newFile);
 			DeleteFile(name.c_str());
-			return false;
+			return;
 		}
 
 		SPWindow::GetSingleton()->SetCursor(cursor);
@@ -185,8 +174,6 @@ namespace SPEngine
 		//CloseHandle(newFile);
 
 		cursorPath = path;
-
-		return true;
 	}
 
 	SPString SPInputManager::GetCursor()

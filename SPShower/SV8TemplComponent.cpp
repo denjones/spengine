@@ -31,6 +31,8 @@ Handle<ObjectTemplate> SV8TemplComponent::GetTemplate()
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"backgroundFillMode"), BGFillModeGetter, BGFillModeSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"backgroundPositionMode"), BGPositionModeGetter, BGPositionModeSetter);
 
+	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"childComponents"), ChildComponentsGetter, ChildComponentsSetter);
+
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"onClick"), OnClickGetter, OnClickSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"onDClick"), OnDClickGetter, OnDClickSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"onMouseUp"), OnMouseUpGetter, OnMouseUpSetter);
@@ -59,6 +61,8 @@ Handle<ObjectTemplate> SV8TemplComponent::GetTemplate()
 		FunctionTemplate::New(AppendChild)->GetFunction());
 	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"removeChild"), 
 		FunctionTemplate::New(RemoveChild)->GetFunction());
+	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"insertBefore"), 
+		FunctionTemplate::New(InsertBefore)->GetFunction());
 
 	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"addAnimation"), 
 		FunctionTemplate::New(AddAnimation)->GetFunction());
@@ -658,7 +662,8 @@ void SV8TemplComponent::BGImageGetter( Local<String> property, const PropertyCal
 
 	if (component->GetBackgroundImage())
 	{
-		info.GetReturnValue().Set(SPV8ScriptEngine::SPStringToString(component->GetBackgroundImage()->GetPath()));
+		SPTexturePtr backgroundTex = component->GetBackgroundImage();
+		info.GetReturnValue().Set(SV8Function::GetObjFromTexture(backgroundTex));
 	}
 	else
 	{
@@ -1855,6 +1860,31 @@ void SV8TemplComponent::CatchKeyDownSetter( Local<String> property, Local<Value>
 	component->catchKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component->GetV8Obj());
 }
 
+void SV8TemplComponent::ChildComponentsGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	info.GetReturnValue().Set(component->GetV8ChildComponents());
+}
+
+void SV8TemplComponent::ChildComponentsSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+
+}
+
 void SV8TemplComponent::AppendChild( const FunctionCallbackInfo<Value>& args )
 {
 	if(!SPV8ScriptEngine::GetSingleton())
@@ -1953,7 +1983,52 @@ void SV8TemplComponent::RemoveChild( const FunctionCallbackInfo<Value>& args )
 
 void SV8TemplComponent::InsertBefore( const FunctionCallbackInfo<Value>& args )
 {
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
 
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	if (args.Length() <= 1)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Null Argument.")));
+		return;
+	}
+
+	Handle<External> fieldNewChild = Handle<External>::Cast(Handle<Object>::Cast(args[0])->GetInternalField(0));
+	SUIComponent* newChild = (SUIComponent*)fieldNewChild->Value();
+	Handle<External> fieldChild = Handle<External>::Cast(Handle<Object>::Cast(args[1])->GetInternalField(0));
+	SUIComponent* child = (SUIComponent*)fieldChild->Value();
+
+	if (child == NULL || newChild == NULL)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Null Argument.")));
+		return;
+	}
+
+	SUIScreen* screenFather = component->GetScreen();
+	SUIScreen* screenChild = newChild->GetScreen();
+
+	if (screenFather != screenChild)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Components are not in the same screen.")));
+		return;
+	}
+
+	component->InsertBefore(screenFather->GetPersistentComponent(newChild), screenFather->GetPersistentComponent(child));
+	newChild->SetFather(screenFather->GetPersistentComponent(component));
 }
 
 void SV8TemplComponent::AddAnimation( const FunctionCallbackInfo<Value>& args )
@@ -2246,3 +2321,4 @@ void SV8TemplComponent::Skip( const FunctionCallbackInfo<Value>& args )
 
 	component->Skip();
 }
+

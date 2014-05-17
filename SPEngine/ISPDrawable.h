@@ -15,6 +15,6 @@ namespace SPEngine
 	class ISPDrawable
 	{
 	public:
-		virtual bool Draw(float timeDelta) = 0;
+		virtual void Draw(float timeDelta) = 0;
 	};
 }

@@ -3,10 +3,12 @@
 #include "SPStringMap.h"
 #include "SUIScreen.h"
 #include "SUIEvent.h"
+#include "ISV8Serializable.h"
 
 class SUIManager :
 	public SPComponent,
-	public SPSingleton<SUIManager>
+	public ISV8Serializable,
+	public SPSingleton<SUIManager>	
 {
 	typedef SPWStringMap<SUIScreenPtr> ScreenMap;
 	typedef SPWStringMapIterator<SUIScreenPtr> ScreenIterator;
@@ -48,28 +50,32 @@ public:
 	SUIScreenPtr GetPersistentScreen(SUIScreen* screenPtr);
 
 	SUIScreenPtr GetScreen(SPString name);
-	bool AddScreen(SUIScreenPtr newComponent);
-	bool CreateScreen(SPString name, SUIScreenPtr newComponent);
+	void AddScreen(SUIScreenPtr newComponent);
+	void CreateScreen(SPString name, SUIScreenPtr newComponent);
 	SUIScreenPtr GetCurrentScreen();
-	bool FocusScreen(SPString name);
-	bool FocusScreen(SUIScreenPtr screen);
-	bool SwitchToScreen(SPString name, SUITransformationPtr trans);
+	void FocusScreen(SPString name);
+	void FocusScreen(SUIScreenPtr screen);
+	void SwitchToScreen(SPString name, SUITransformationPtr trans);
 	bool IsScreenValid(SPString name);
 
-	bool GenerateEvent(float timeDelta);
-	bool InterceptMouseBotton(int button);
-	bool InterceptKeyboardKey(int key);
+	void GenerateEvent(float timeDelta);
+	void InterceptMouseBotton(int button);
+	void InterceptKeyboardKey(int key);
 
-	bool Initialize();
-	bool Load();
-	bool Unload();
-	bool Reload();
-	bool Update(float timeDelta);
-	bool Draw(float timeDelta);
+	void Initialize();
+	void Load();
+	void Unload();
+	void Reload();
+	void Update(float timeDelta);
+	void Draw(float timeDelta);
 	void HandleAllEvent();
 
 	SPString SaveAsString();
-	bool LoadFromString(SPString path);
+	void LoadFromString(SPString path);
+
+	// V8
+	Handle<Object> SaveAsObj();
+	void LoadFromObj(Handle<Object> obj);
 
 	static void HandleAllEventCallback( uv_async_t *handle, int status );
 };

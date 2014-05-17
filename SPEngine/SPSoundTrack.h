@@ -29,27 +29,27 @@ namespace SPEngine
 
 	public:
 		SPSoundPtr GetSound();
-		bool SetSound(SPSoundPtr setSound);
-		bool SetSound(SPString setSound);
-		bool SetVolume(float setVol);
+		void SetSound(SPSoundPtr setSound);
+		void SetSound(SPString setSound);
+		void SetVolume(float setVol);
 		float GetVolume();
-		bool SetSoundName();
+		void SetSoundName();
 		void SetLoopTimes(int time);
 		int GetLoopTimes();
 		SPString GetSoundName();
 		bool IsMute();
-		bool Mute();
+		void Mute();
 		void SetMute(bool mute);
 
 	public:
 		SPSoundTrack(void);
 		virtual ~SPSoundTrack(void);
 
-		bool Unload();
-		bool Pause();
-		bool Play();
-		bool Stop();
-		bool Update(float timeDelta);
+		void Unload();
+		void Pause();
+		void Play();
+		void Stop();
+		void Update(float timeDelta);
 
 	};
 

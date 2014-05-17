@@ -17,10 +17,10 @@ class SUIDialogBox : public SUITextBox
 	bool isHasTextToClear;
 
 public:
-	bool SetSpeed(float setSpeed);
+	void SetSpeed(float setSpeed);
 	float GetSpeed();
-	bool SetNextLineTex(SPTexturePtr setTex);
-	bool SetNextPageTex(SPTexturePtr setTex);
+	void SetNextLineTex(SPTexturePtr setTex);
+	void SetNextPageTex(SPTexturePtr setTex);
 	bool IsDisplaying();
 	bool IsDisplayAllDone();
 
@@ -28,24 +28,24 @@ public:
 	SUIDialogBox(SUIScreen* screen);
 	virtual ~SUIDialogBox(void);
 
-	virtual bool AddText(SUIText text);
-	bool ForceAddText(SUIText text);
-	virtual bool Clear();	
-	bool ForceClear();
-	bool Clean();
-	virtual bool Update(float timeDelta);
-	virtual bool Draw(float timeDelta);
-	bool Next();
-	bool Skip();
+	virtual void AddText(SUIText text);
+	void ForceAddText(SUIText text);
+	virtual void Clear();	
+	void ForceClear();
+	void Clean();
+	virtual void Update(float timeDelta);
+	virtual void Draw(float timeDelta);
+	void Next();
+	void Skip();
 	bool IsShowNextLineTex();
 	bool IsShowNextPageTex();
-	bool MarkTextToAdd();
-	bool MarkTextToClear();
+	void MarkTextToAdd();
+	void MarkTextToClear();
 
 	D3DXMATRIX TransformMatrixNext();
 	D3DXVECTOR3 PositionNext();
 
-	virtual bool LoadFromString(SPString stringStream);
+	virtual void LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
 
 	virtual Handle<Object> GetV8Obj();
