@@ -13,7 +13,7 @@
 #include "SPAnimatedTexture.h"
 #include "SPComponent.h"
 #include "SPStringMap.h"
-#include "SPUpdatableTexture.h"
+#include "SPTexture.h"
 #include "SPVideoTexture.h"
 #include "SPParticleSystemTexture.h"
 
@@ -38,7 +38,6 @@ namespace SPEngine
 		//SPTextureHandleManager textureHandleMgr;	///< Inner handle manager.
 		//SPUpdatableTextureHandleManager updatableTextureHanldeMgr; ///< Inner anime handle manager.
 		SPTextureMap textures;					///< String to handle mapping.
-		SPTextureMap updatableTextures;				///< String to updatable handle mapping.
 			
 	public:
 		SPTextureManager(void);
@@ -61,15 +60,14 @@ namespace SPEngine
 		/// @name Release methods
 		/// @{
 		void ReleaseTexture(SPString path);
-		void ReleaseUpdatable(SPString path);
 		/// @}
 
 		/// @name Component methods
 		/// @{
-		bool Update(float timeDelta);
-		bool Unload();
-		//bool Load();
-		bool Reload();
+		void Update(float timeDelta);
+		void Unload();
+		//void Load();
+		void Reload();
 		/// @}
 	};
 }

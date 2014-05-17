@@ -17,7 +17,7 @@ namespace SPEngine
 		Unload();
 	}
 
-	bool SPParticleSystemManager::Initialize()
+	void SPParticleSystemManager::Initialize()
 	{
 		SPWStringMapIterator<SPParticleSystem3DPtr> iter (&particleSystemMap);
 		for(iter.First(); !iter.IsDone(); iter.Next())
@@ -25,16 +25,14 @@ namespace SPEngine
 			iter.CurrentItem()->Reset();
 		}
 		SPComponent::Initialize();
-		return true;
 	}
 
-	bool SPParticleSystemManager::Load()
+	void SPParticleSystemManager::Load()
 	{
 		SPComponent::Load();
-		return true;
 	}
 
-	bool SPParticleSystemManager::Unload()
+	void SPParticleSystemManager::Unload()
 	{
 		SPComponent::Unload();
 
@@ -45,12 +43,9 @@ namespace SPEngine
 
 			particleSystem->Unload();
 		}
-		return true;
-
-		return true;
 	}
 
-	bool SPParticleSystemManager::Reload()
+	void SPParticleSystemManager::Reload()
 	{
 		SPWStringMapIterator<SPParticleSystem3DPtr> iter (&particleSystemMap);
 		for(iter.First(); !iter.IsDone(); iter.Next())
@@ -59,10 +54,9 @@ namespace SPEngine
 
 			particleSystem->Reload();
 		}
-		return true;
 	}
 
-	bool SPParticleSystemManager::Update(float timeElapsed)
+	void SPParticleSystemManager::Update(float timeElapsed)
 	{
 		SPWStringMapIterator<SPParticleSystem3DPtr> iter (&particleSystemMap);
 		for(iter.First(); !iter.IsDone(); iter.Next())
@@ -71,42 +65,37 @@ namespace SPEngine
 
 			particleSystem->Update(timeElapsed);
 		}
-		return true;
 	}
 
-	bool SPParticleSystemManager::Draw(float timeElapsed)
+	void SPParticleSystemManager::Draw(float timeElapsed)
 	{
 		SPWStringMapIterator<SPParticleSystem3DPtr> iter (&particleSystemMap);
 		for(iter.First(); !iter.IsDone(); iter.Next())
 		{
 			iter.CurrentItem()->Draw(timeElapsed);
 		}
-		return true;
 	}
 
-	bool SPParticleSystemManager::AddParticleSystem(SPString name, SPParticleSystem3DPtr particleSys)
+	void SPParticleSystemManager::AddParticleSystem(SPString name, SPParticleSystem3DPtr particleSys)
 	{
 		particleSystemMap.Set(name, particleSys);
-		return true;
 	}
 
-	bool SPParticleSystemManager::DestroyParticleSystem(SPString name)
+	void SPParticleSystemManager::DestroyParticleSystem(SPString name)
 	{
 		particleSystemMap.Remove(name);
-		return true;
 	}
 
-	bool SPParticleSystemManager::AllSystemPause()
+	void SPParticleSystemManager::AllSystemPause()
 	{
 		SPWStringMapIterator<SPParticleSystem3DPtr> iter (&particleSystemMap);
 		for(iter.First(); !iter.IsDone(); iter.Next())
 		{
 			iter.CurrentItem()->Pause();
 		}
-		return true;
 	}
 
-	bool SPParticleSystemManager::CreateParticleSystem(SPString name,
+	void SPParticleSystemManager::CreateParticleSystem(SPString name,
 		BoundingBox2D positionBox,
 		BoundingBox2D boundBox,
 		float minVelocity,
@@ -142,7 +131,6 @@ namespace SPEngine
 			degreePerSecondMin, degreePerSecondMax, rotateAxis,
 			ifSnowRotate, fadeOutT, minScale, maxScale, scaleDeltaMin, scaleDeltaMax);
 		AddParticleSystem(name, parSys);
-		return true;
 	}
 
 	SPParticleSystem3DPtr SPParticleSystemManager::GetParticleSystem( SPString name )

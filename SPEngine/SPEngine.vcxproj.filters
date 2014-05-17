@@ -268,9 +268,6 @@
     <ClInclude Include="SPVideoTexture.h">
       <Filter>Source\SPVideo</Filter>
     </ClInclude>
-    <ClInclude Include="SPUpdatableTexture.h">
-      <Filter>Source\SPGraphics\SPTexture</Filter>
-    </ClInclude>
     <ClInclude Include="SPMessageHelper.h">
       <Filter>Source\SPHelper</Filter>
     </ClInclude>

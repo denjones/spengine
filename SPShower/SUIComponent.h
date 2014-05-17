@@ -6,6 +6,7 @@
 #include <queue>
 #include "SUIEvent.h"
 #include "SUIEventHandler.h"
+#include "ISV8Serializable.h"
 
 #define  MaxLayer 255
 
@@ -19,7 +20,8 @@ typedef SPPointer<SUIComponent> SUIComponentPtr;
 class SUIComponent : 
 	public SPTransition,
 	public ISPDrawable,
-	public ISPLoadable
+	public ISPLoadable,
+	public ISV8Serializable
 {
 protected:
 	typedef list<SUIAnimationPtr> AnimationQueue;
@@ -56,54 +58,6 @@ public:
 	SUIEventHandlerPtr catchKeyPress;
 	SUIEventHandlerPtr catchKeyDown;
 	SUIEventHandlerPtr catchKeyUp;
-
-	//SUIEventHandlerPtr onMouseLeftClick;
-	//SUIEventHandlerPtr onMouseLeftDClick;
-	//SUIEventHandlerPtr onMouseLeftDown;
-	//SUIEventHandlerPtr onMouseLeftUp;
-
-	//SUIEventHandlerPtr onMouseRightClick;
-	//SUIEventHandlerPtr onMouseRightDClick;
-	//SUIEventHandlerPtr onMouseRightDown;
-	//SUIEventHandlerPtr onMouseRightUp;
-
-	//SUIEventHandlerPtr onMouseMiddleClick;
-	//SUIEventHandlerPtr onMouseMiddleDClick;
-	//SUIEventHandlerPtr onMouseMiddleDown;
-	//SUIEventHandlerPtr onMouseMiddleUp;
-
-	//SUIEventHandlerPtr onMouseScrollUp;
-	//SUIEventHandlerPtr onMouseScrollDown;
-
-	//SUIEventHandlerPtr catchMouseLeftClick;
-	//SUIEventHandlerPtr catchMouseLeftDClick;
-	//SUIEventHandlerPtr catchMouseLeftDown;
-	//SUIEventHandlerPtr catchMouseLeftUp;
-
-	//SUIEventHandlerPtr catchMouseRightClick;
-	//SUIEventHandlerPtr catchMouseRightDClick;
-	//SUIEventHandlerPtr catchMouseRightDown;
-	//SUIEventHandlerPtr catchMouseRightUp;
-
-	//SUIEventHandlerPtr catchMouseMiddleClick;
-	//SUIEventHandlerPtr catchMouseMiddleDClick;
-	//SUIEventHandlerPtr catchMouseMiddleDown;
-	//SUIEventHandlerPtr catchMouseMiddleUp;
-
-	//SUIEventHandlerPtr catchMouseScrollUp;
-	//SUIEventHandlerPtr catchMouseScrollDown;
-
-	//SUIEventHandlerPtr onMouse;
-	//SUIEventHandlerPtr onMouseIn;
-	//SUIEventHandlerPtr onMouseOut;
-
-	//SUIEventHandlerPtr onFocus;
-	//SUIEventHandlerPtr onBlur;
-
-	//SUIEventHandlerPtr onKeyPress[256];
-	//SUIEventHandlerPtr onKeyDown[256];
-	//SUIEventHandlerPtr onKeyUp[256];
-
 	/// @}
 
 protected:
@@ -128,77 +82,77 @@ public:
 	SUIScreen* GetScreen();
 
 	SPString GetName();
-	bool SetName(SPString setName);
+	void SetName(SPString setName);
 
 	SUIProperties GetProperties();
 	SUIProperties GetTargetProperties();
-	bool SetProperties(SUIProperties setProperties);
+	void SetProperties(SUIProperties setProperties);
 	SPTexturePtr GetComponentTexture();
 
 	/// @name Set Effect
 	/// @{
-	bool SetRenderTarget(SPTexturePtr setTarget);
-	bool AddEffect(SUIEffectPtr setEffect);
-	bool ClearEffect();
+	void SetRenderTarget(SPTexturePtr setTarget);
+	void AddEffect(SUIEffectPtr setEffect);
+	void ClearEffect();
 	SUIEffectPtr GetCurrentEffect();
-	bool AddAnimation(SUIAnimationPtr setAnimation);
-	bool MergerAnimation(SUIAnimationPtr setAnimation);
+	void AddAnimation(SUIAnimationPtr setAnimation);
+	void MergerAnimation(SUIAnimationPtr setAnimation);
 	/// @}
 
 	/// @name Set Background
 	/// @{
 	SPTexturePtr GetBackgroundImage();
-	bool SetBackgroundImage(SPTexturePtr setImage);
+	void SetBackgroundImage(SPTexturePtr setImage);
 	D3DCOLOR GetBackgroundColor();
-	bool SetBackgroundColor(D3DCOLOR setColor);
+	void SetBackgroundColor(D3DCOLOR setColor);
 	/// @}
 
 	/// @name Set Box
 	/// @{
 	int GetWidth();	
 	int GetHeight();
-	bool SetWidth(int setWidth);
-	bool SetHeight(int setHeight);
+	void SetWidth(int setWidth);
+	void SetHeight(int setHeight);
 
-	bool SetPosition(D3DXVECTOR2 pos);
+	void SetPosition(D3DXVECTOR2 pos);
 	D3DXVECTOR2 GetPosition();
-	bool SetPositionX(int setX);
-	bool SetPositionY(int setY);
+	void SetPositionX(int setX);
+	void SetPositionY(int setY);
 
 	float GetRotation();
-	bool SetRotation(float setRotation);	
+	void SetRotation(float setRotation);	
 	D3DXVECTOR2 GetRotationCenter();	
-	bool SetRotationCenter(D3DXVECTOR2 pos);
-	bool SetRotationCenterX(int setX);
-	bool SetRotationCenterY(int setY);
+	void SetRotationCenter(D3DXVECTOR2 pos);
+	void SetRotationCenterX(int setX);
+	void SetRotationCenterY(int setY);
 	/// @}
 
 	/// @name Other
 	/// @{
 	float GetTransparency();
-	bool SetTransparency(float setTrans);
+	void SetTransparency(float setTrans);
 
 	float GetLayer();
-	bool SetLayer(float setLayer);
+	void SetLayer(float setLayer);
 
 	int GetBackgroundX();
-	bool SetBackgroundX(int setX);
+	void SetBackgroundX(int setX);
 	
 	int GetBackgroundY();
-	bool SetBackgroundY(int setY);
+	void SetBackgroundY(int setY);
 	
 	SUIProperties::BackgroundMode GetBackgroundMode();
-	bool SetBackgroundMode(SUIProperties::BackgroundMode setMode);
+	void SetBackgroundMode(SUIProperties::BackgroundMode setMode);
 	
 	SUIProperties::BackgroundPosition GetBackgroundPositionMode();
-	bool SetBackgroundPositionMode(SUIProperties::BackgroundPosition setMode);	
+	void SetBackgroundPositionMode(SUIProperties::BackgroundPosition setMode);	
 
 	SRectangle GetBackgroundRect();
 	/// @}
 
 	/// @name AbsoluteRender
 	/// @{
-	bool SetAbsoluteRender(bool setOn);
+	void SetAbsoluteRender(bool setOn);
 
 	// Absolute position cache
 	SPPointer<D3DXVECTOR3> _position;
@@ -248,6 +202,7 @@ public:
 	void ClearAbsoluteCache();
 
 	virtual Handle<Object> GetV8Obj();
+	Handle<Array> GetV8ChildComponents();
 	
 	/// @}
 	
@@ -258,37 +213,43 @@ public:
 	SUIComponent(SUIScreen* screen);
 	virtual ~SUIComponent(void);
 
-	virtual bool Update(float timeDelta);
-	virtual bool PreDraw();
-	virtual bool Draw(float timeDelta);
-	virtual bool PostDraw();
-	virtual bool Load();
-	virtual bool Unload();
-	virtual bool Reload();
-	virtual bool HandleEvent(SUIEventPtr e);
-	virtual bool Render(float timeDelta);
-	virtual bool AddChild(SUIComponentPtr setChild);
-	virtual bool RemoveChild(SUIComponentPtr setChild);
-	virtual bool SetFather(SUIComponentPtr setFather);
+	virtual void Update(float timeDelta);
+	virtual void PreDraw();
+	virtual void Draw(float timeDelta);
+	virtual void PostDraw();
+	virtual void Load();
+	virtual void Unload();
+	virtual void Reload();
+	virtual void HandleEvent(SUIEventPtr e);
+	virtual void Render(float timeDelta);
+	virtual void AddChild(SUIComponentPtr setChild);
+	virtual void InsertBefore(SUIComponentPtr newChild, SUIComponentPtr child);
+	virtual void RemoveChild(SUIComponentPtr setChild);
+	virtual void SetFather(SUIComponentPtr setFather);
 	virtual SUIComponentPtr GetFather();
 
-	bool Hide();
-	bool Unhide();
+	void Hide();
+	void Unhide();
 	bool IsDisplay();
 	bool IsAbsoluteRender();
 	
-	bool PlayAnimation();
-	bool PlayEffect();
-	virtual bool Skip();
+	void PlayAnimation();
+	void PlayEffect();
+	virtual void Skip();
 
-	virtual bool LoadFromString(SPString stringStream);
+	virtual void LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
-	bool SaveAsImage(SPString path);
+	void SaveAsImage(SPString path);
 	SPTexturePtr SaveAsTexture();
 
 protected:
-	bool UpdateAnimation(float timeDelta);
-	bool UpdateEffect(float timeDelta);
+	void UpdateAnimation(float timeDelta);
+	void UpdateEffect(float timeDelta);
+
+public:
+	virtual Handle<Object> SaveAsObj();
+	virtual void LoadFromObj( Handle<Object> obj );
+
 	//SPString PropertiesToString();
 	
 };

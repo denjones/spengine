@@ -22,6 +22,9 @@ SV8ScriptManager::SV8ScriptManager(void)
 	requireEngine = SPV8ScriptEngine::GetSingleton();
 	isScriptRunning = false;
 	async = new uv_async_t();
+	exitAsync = new uv_async_t();
+	gotoFile = L"";
+	gotoTag = L"";
 }
 
 
@@ -92,13 +95,20 @@ SV8ScriptManager::~SV8ScriptManager(void)
 		delete async;
 		async = NULL;
 	}
+
+	if (exitAsync)
+	{
+		delete exitAsync;
+		exitAsync = NULL;
+	}
 }
 
-bool SV8ScriptManager::Initialize()
+void SV8ScriptManager::Initialize()
 {
 	// Init uv callback
 
 	uv_async_init(uv_default_loop(), (uv_async_t*)async, HandleCommandCallback);
+	uv_async_init(uv_default_loop(), (uv_async_t*)exitAsync, OnExit);
 
 	//
 	// Init Global Functions
@@ -114,7 +124,7 @@ bool SV8ScriptManager::Initialize()
 	// Enter
 	//
 
-	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();;
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	Locker locker(isolate); 
 	Isolate::Scope isolateScope(isolate);
 	HandleScope handleScope(isolate);
@@ -169,11 +179,9 @@ bool SV8ScriptManager::Initialize()
 	////
 	//// Init Script
 	////
-
-	return true;
 }
 
-bool SV8ScriptManager::Update( float timeDelta )
+void SV8ScriptManager::Update( float timeDelta )
 {
 	if(!isScriptRunning) 
 	{
@@ -183,24 +191,18 @@ bool SV8ScriptManager::Update( float timeDelta )
 	}
 
 	uv_async_send((uv_async_t*)async);
-	
-	return true;
 }
 
-bool SV8ScriptManager::Load()
+void SV8ScriptManager::Load()
 {
-	
-	return true;
 }
 
-bool SV8ScriptManager::Reload()
+void SV8ScriptManager::Reload()
 {
-	return true;
 }
 
-bool SV8ScriptManager::Unload()
+void SV8ScriptManager::Unload()
 {
-	return true;
 }
 
 bool SV8ScriptManager::HasProperty( SPString propertyName, Handle<Object> obj )
@@ -281,6 +283,9 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"createParticleSystem"), FunctionTemplate::New(SV8Function::CreateParticleSystem)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"include"), FunctionTemplate::New(SPV8ScriptEngine::Include)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"addCommand"), FunctionTemplate::New(SV8Function::AddCommand)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"addTag"), FunctionTemplate::New(SV8Function::AddTag)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"goto"), FunctionTemplate::New(SV8Function::Goto)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"saveStateAs"), FunctionTemplate::New(SV8Function::SaveStateAs)->GetFunction());
 
 	//
 	// Set Global Window Object
@@ -310,15 +315,42 @@ void SV8ScriptManager::HandleCommands()
 {
 	LockCommandQueue();
 
+	if (gotoFile != L"")
+	{
+		commands.clear();
+
+		HandleScope handleScope(SPV8ScriptEngine::GetSingleton()->GetIsolate());
+		SPV8ScriptEngine::GetSingleton()->EvalFile(gotoFile, true);
+
+		if (gotoTag != L"")
+		{
+			while(commands.size() > 0)
+			{
+				SV8ScriptCommandPtr command = commands.front();
+				if (command->tag == gotoTag)
+				{
+					break;
+				}
+				commands.pop_front();
+			}
+		}
+
+		gotoFile = L"";
+		gotoTag = L"";
+	}
+
 	while(commands.size() > 0)
 	{
 		// Accept Function.
 		SV8ScriptCommandPtr command = commands.front();
 		SV8CommandEventPtr event = new SV8CommandEvent();
-
+		event->read = IsCommandRead(command);
 
 		// Use function.
-		command->Call(event);
+		if (!command->IsTag())
+		{
+			command->Call(event);
+		}
 
 		// If the function is not finished.
 		if (event->repeat)
@@ -332,7 +364,7 @@ void SV8ScriptManager::HandleCommands()
 			commands.pop_front();
 			if (commands.size() > 0)// && commands.front().order != command.order)
 			{
-				//SetCommandRead(command);
+				SetCommandRead(command);
 			}
 			//SetInsertPosBack();
 			break;
@@ -341,7 +373,7 @@ void SV8ScriptManager::HandleCommands()
 		commands.pop_front();
 		if (commands.size() > 0)// && commands.front().order != command.order)
 		{
-			//SetCommandRead(command);
+			SetCommandRead(command);
 		}
 	}
 
@@ -355,6 +387,165 @@ void SV8ScriptManager::AddCommand( SV8ScriptCommandPtr command )
 	commands.push_back(command);
 
 	UnlockCommandQueue();
+}
+
+bool SV8ScriptManager::IsCommandRead( SV8ScriptCommandPtr command )
+{
+	if (command->file == L"")
+	{
+		return false;
+	}
+
+	if (!readCommands.IsSet(command->file))
+	{
+		return false;
+	}
+
+	ReadListPtr readOrderList = readCommands.Get(command->file);
+
+	ReadList::iterator iter = readOrderList->begin();
+
+	while(iter != readOrderList->end())
+	{
+		ReadRegionPtr region = (*iter);
+		if (region->startLine <= command->line &&
+			region->startCol <= command->col &&
+			command->line <= region->endLine &&
+			command->col <= region->endCol)
+		{
+			return true;
+		}
+
+		iter++;
+	}
+
+	return false;
+}
+
+void SV8ScriptManager::SetCommandRead( SV8ScriptCommandPtr command )
+{
+	if (currentRegion)
+	{
+		currentRegion->endLine = command->line;
+		currentRegion->endCol = command->col;
+	}
+	else if (!IsCommandRead(command))
+	{
+		ReadRegionPtr region = new ReadRegion();
+		region->startCol = command->col;
+		region->startLine = command->line;
+		region->endCol = command->col;
+		region->endLine = command->line;
+		ReadListPtr readList;
+		if (readCommands.IsSet(command->file))
+		{
+			readList = readCommands.Get(command->file);
+		}
+		else
+		{
+			readList = new ReadList();
+			readCommands.Set(command->file, readList);
+		}
+		readList->push_back(region);
+	}
+}
+
+void SV8ScriptManager::Goto( SPString file, SPString tag )
+{
+	gotoFile = file;
+	gotoTag = tag;
+}
+
+Handle<Object> SV8ScriptManager::SaveAsObj()
+{
+	// Serialize Command List
+
+	Handle<Object> result = Object::New();
+	Handle<Array> commandList = Array::New();
+
+	CommandIterator iter = commands.begin();
+	while(iter != commands.end())
+	{
+		Handle<v8::Function> func = Handle<v8::Function>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), *((*iter)->v8Function));
+		commandList->Set(commandList->Length(), func->ToString());
+		iter++;
+	}
+
+	result->Set(SPV8ScriptEngine::SPStringToString(L"commands"), commandList);
+
+	// Serialize Window Obj
+
+	Handle<Object> windowObj = SPV8ScriptEngine::CopyObject(SV8ScriptManager::GetSingleton()->GetWindowTemplate()->NewInstance());
+	if (onExit)
+	{
+		windowObj->Set(SPV8ScriptEngine::SPStringToString(L"onExit"), GetOnExitFunc()->ToString());
+	}
+	result->Set(SPV8ScriptEngine::SPStringToString(L"window"), windowObj);
+
+	return result;
+}
+
+void SV8ScriptManager::LoadFromObj( Handle<Object> obj )
+{
+	return;
+}
+
+Handle<Object> SV8ScriptManager::SaveReadAsObj()
+{
+	Handle<Object> result = Object::New();
+	SPWStringMapIterator<ReadListPtr> iter(&readCommands);
+	for(iter.First(); !iter.IsDone(); iter.Next())
+	{
+		Handle<Array> readArray = Array::New();
+		ReadListPtr readList = iter.CurrentItem();
+		ReadList::iterator innerIter = readList->begin();
+		while(innerIter != readList->end())
+		{
+			Handle<Object> item = Object::New();
+			item->Set(SPV8ScriptEngine::SPStringToString(L"startLine"), Integer::New((*innerIter)->startLine));
+			item->Set(SPV8ScriptEngine::SPStringToString(L"startCol"), Integer::New((*innerIter)->startLine));
+			item->Set(SPV8ScriptEngine::SPStringToString(L"endLine"), Integer::New((*innerIter)->startLine));
+			item->Set(SPV8ScriptEngine::SPStringToString(L"endCol"), Integer::New((*innerIter)->startLine));
+			readArray->Set(readArray->Length(), item);
+			innerIter++;
+		}
+		result->Set(SPV8ScriptEngine::SPStringToString(iter.CurrentIndex()), readArray);
+	}
+	return result;
+}
+
+void SV8ScriptManager::Exit()
+{
+	uv_async_send((uv_async_t*)exitAsync);
+}
+
+void SV8ScriptManager::OnExit( uv_async_t *handle, int status )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+	Handle<v8::Function> onExit = Handle<v8::Function>::Cast(SV8ScriptManager::GetSingleton()->GetOnExitFunc());
+	Handle<Value> a[1];
+	if (onExit->IsNull() || onExit->Call(isolate->GetCurrentContext()->Global(), 0, a)->BooleanValue())
+	{
+		SPGameManager::GetSingleton()->GetGame()->Exit();
+	}
+}
+
+Handle<v8::Value> SV8ScriptManager::GetOnExitFunc()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	if (onExit)
+	{
+		return Handle<v8::Function>::New(isolate, *onExit);
+	}
+
+	return v8::Null();
+}
+
+void SV8ScriptManager::SetOnExitFunc( Handle<v8::Function> func )
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	onExit = new Persistent<v8::Function>(isolate,func);
 }
 
 NODE_MODULE_CONTEXT_AWARE_BUILTIN(speshow, SV8ScriptManager::InitModule)

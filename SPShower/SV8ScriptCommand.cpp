@@ -9,6 +9,15 @@ SV8ScriptCommand::SV8ScriptCommand(Handle<Function> function, int line, int col,
 	this->line = line;
 	this->col = col;
 	this->file = file;
+	this->tag = L"";
+}
+
+SV8ScriptCommand::SV8ScriptCommand( SPString tag, int line, int col, SPString file )
+{
+	this->line = line;
+	this->col = col;
+	this->file = file;
+	this->tag = tag;
 }
 
 
@@ -35,4 +44,9 @@ void SV8ScriptCommand::Call( SV8CommandEventPtr event )
 	{
 		event->repeat = result->BooleanValue();
 	}
+}
+
+bool SV8ScriptCommand::IsTag()
+{
+	return tag != L"";
 }

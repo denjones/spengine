@@ -163,7 +163,6 @@
     <ClInclude Include="SPTextSprite.h" />
     <ClInclude Include="SPTextureManager.h" />
     <ClInclude Include="SPTextureSprite.h" />
-    <ClInclude Include="SPUpdatableTexture.h" />
     <ClInclude Include="SPV8ScriptEngine.h" />
     <ClInclude Include="SPVideo.h" />
     <ClInclude Include="SPVideoManager.h" />

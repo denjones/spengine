@@ -29,7 +29,7 @@ FPSDisplayer::~FPSDisplayer(void)
 {
 }
 
-bool FPSDisplayer::Update( float timeElapsed )
+void FPSDisplayer::Update( float timeElapsed )
 {
 	frameCount++;
 	elapsedCountTime += timeElapsed;
@@ -40,11 +40,9 @@ bool FPSDisplayer::Update( float timeElapsed )
 		elapsedCountTime = 0;
 		frameCount = 0;
 	}
-
-	return true;
 }
 
-bool FPSDisplayer::Draw( float timeElapsed )
+void FPSDisplayer::Draw( float timeElapsed )
 {
 	SPString text = L"FPS: " + SPStringHelper::ToWString((int)fps);
 	D3DXVECTOR2 position;
@@ -83,36 +81,26 @@ bool FPSDisplayer::Draw( float timeElapsed )
 			(TextFormat)(Top|Right),SPColor::Yellow, 0, 0, NULL);
 		break;
 	}
-
-	return true;
 }
 
-bool FPSDisplayer::Load()
+void FPSDisplayer::Load()
 {
 	font = SPFontManager::GetSingleton()->GetFont(L"yh_20");
-
-	return true;
 }
 
-bool FPSDisplayer::Initialize()
+void FPSDisplayer::Initialize()
 {
 	font = SPFontManager::GetSingleton()->CreateFont(L"yh_20", 20, 0, FW_BOLD, 99, false, L"Î¢ÈíÑÅºÚ");
-
-	return true;
 }
 
-bool FPSDisplayer::Unload()
+void FPSDisplayer::Unload()
 {
 	font = NULL;
-
-	return true;
 }
 
-bool SPEngine::FPSDisplayer::SetLocation( FPSLocation setLocation )
+void SPEngine::FPSDisplayer::SetLocation( FPSLocation setLocation )
 {
 	location = setLocation;
-
-	return true;
 }
 
 SPEngine::FPSLocation SPEngine::FPSDisplayer::GetLocation()

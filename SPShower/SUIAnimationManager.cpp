@@ -11,23 +11,21 @@ SUIAnimationManager::~SUIAnimationManager(void)
 {
 }
 
-bool SUIAnimationManager::Update( float timeDelta )
+void SUIAnimationManager::Update( float timeDelta )
 {
 	AnimationIterator iter = animations.begin();
 
 	while(iter != animations.end())
 	{
-		if(!(*iter)->Update(timeDelta))
+		(*iter)->Update(timeDelta);
+		if ((*iter)->TransitionPosition() >= 1)
 		{
 			AnimationIterator currentIter = iter;
 			iter--;
-
 			*currentIter = NULL;
 			animations.erase(currentIter);
 		}
 
 		iter++;
 	}
-
-	return true;
 }

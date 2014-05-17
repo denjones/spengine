@@ -20,15 +20,13 @@ namespace SPEngine
 		xAudio = NULL;
 	}
 
-	bool SPEngine::SPSoundManager::ReleaseAll()
+	void SPEngine::SPSoundManager::ReleaseAll()
 	{
 		sounds.Clear();
 		tracks.Clear();
-
-		return true;
 	}
 
-	bool SPEngine::SPSoundManager::Update( float timeElapsed )
+	void SPEngine::SPSoundManager::Update( float timeElapsed )
 	{
 		SPWStringMapIterator<SPSoundTrackPtr> iter(&tracks);
 
@@ -39,8 +37,6 @@ namespace SPEngine
 				iter.CurrentItem()->Update(timeElapsed);
 			}			
 		}
-
-		return true;
 	}
 
 	SPSoundPtr SPEngine::SPSoundManager::AddSound(SPString name, SPSoundPtr sound)
@@ -95,7 +91,7 @@ namespace SPEngine
 		SPXAudio::GetSingleton()->GetMasterVoice()->SetVolume(volume);
 	}
 
-	bool SPSoundManager::Release( SPString name )
+	void SPSoundManager::Release( SPString name )
 	{
 		SPSoundPtr sound = sounds[name];
 
@@ -111,8 +107,6 @@ namespace SPEngine
 
 		sounds.Remove(name);
 		sound = NULL;
-
-		return true;
 	}
 
 	SPSoundPtr SPSoundManager::CreateSound( SPString name, SPString path )
@@ -174,7 +168,7 @@ namespace SPEngine
 		return NULL;
 	}
 
-	bool SPSoundManager::LoadFromString( SPString stringStream )
+	void SPSoundManager::LoadFromString( SPString stringStream )
 	{
 		SPString soundsString = SPStringHelper::XMLExcludeFrom(stringStream, L"Sounds");
 
@@ -219,8 +213,6 @@ namespace SPEngine
 				track->Play();
 			}
 		}
-
-		return true;
 	}
 
 	SPString SPSoundManager::SaveAsString()

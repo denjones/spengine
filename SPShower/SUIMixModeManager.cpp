@@ -20,11 +20,8 @@ SUIMixModePtr SUIMixModeManager::GetMixMode( SPString name )
 	else
 	{
 		SUIMixModePtr mode = new SUIMixMode();
-
-		if (mode->Load(name))
-		{
-			return mode;
-		}
+		mode->Load(name);
+		return mode;
 	}
 
 	return NULL;
@@ -34,15 +31,11 @@ SUIMixModePtr SUIMixModeManager::CreateMixMode( SPString path )
 {
 	SUIMixModePtr mode = new SUIMixMode();
 
-	if (mode->Load(path))
-	{
-		return mode;
-	}
-
-	return NULL;
+	mode->Load(path);
+	return mode;
 }
 
-bool SUIMixModeManager::Load()
+void SUIMixModeManager::Load()
 {
 	mixModeFileNames.Set(L"Mask",		L"mix\\mix_mask.fxo");
 	mixModeFileNames.Set(L"ColorBurn",	L"mix\\mix_color_burn.fxo");
@@ -63,6 +56,4 @@ bool SUIMixModeManager::Load()
 	mixModeFileNames.Set(L"Screen",		L"mix\\mix_screen.fxo");
 	mixModeFileNames.Set(L"SoftLight",	L"mix\\mix_soft_light.fxo");
 	mixModeFileNames.Set(L"VividLight",	L"mix\\mix_vivid_light.fxo");
-
-	return true;
 }

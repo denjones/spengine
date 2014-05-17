@@ -10,6 +10,7 @@
 #include "SV8ScriptManager.h"
 #include "SUITrackManager.h"
 #include "SUIVideoManager.h"
+#include "SV8FunctionManager.h"
 
 #pragma warning(disable:4244)
 
@@ -59,15 +60,15 @@ bool SPGameShow::Initialize()
 
 bool SPGameShow::SaveAsFile( SPString path )
 {
-//	SPFileHelper::CreatePath(SPFileHelper::GetUpperPath(path));
-//
-//	HANDLE handle = CreateFile(path.c_str(),
-//		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
-//
-//	if (handle == INVALID_HANDLE_VALUE)
-//	{
-//		return false;
-//	}
+	SPFileHelper::CreatePath(SPFileHelper::GetUpperPath(path));
+
+	HANDLE handle = CreateFile(path.c_str(),
+		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
+
+	if (handle == INVALID_HANDLE_VALUE)
+	{
+		return false;
+	}
 //
 //	SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 //
@@ -80,13 +81,15 @@ bool SPGameShow::SaveAsFile( SPString path )
 //		+ SUIPictureManager::GetSingleton()->SaveAsString()		
 //		+ SUIManager::GetSingleton()->SaveAsString(),L"SaveData");
 //
-//	string shortResult = SPStringHelper::WStringToUTF8String(result);
-//
-//	DWORD numOfByteWritten;
-//
-//	WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
-//	
-//	CloseHandle(handle);
+	SPString result = SPV8ScriptEngine::StringToSPString(SPV8ScriptEngine::ToJson(SaveAsObj()));
+
+	string shortResult = SPStringHelper::WStringToUTF8String(result);
+
+	DWORD numOfByteWritten;
+
+	WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
+
+	CloseHandle(handle);
 
 	return true;
 }
@@ -239,4 +242,23 @@ bool SPGameShow::Draw( float timeDelta )
 		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
 
 	return SPGame::Draw(timeDelta);
+}
+
+Handle<Object> SPGameShow::SaveAsObj()
+{
+	Handle<Object> result = Object::New();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SUI"), SUIManager::GetSingleton()->SaveAsObj());
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SScript"), SV8ScriptManager::GetSingleton()->SaveAsObj());
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SV8Func"), SV8FunctionManager::GetSingleton()->SaveAsObj());
+	return result;
+}
+
+void SPGameShow::LoadFromObj( Handle<Object> obj )
+{
+	throw std::exception("The method or operation is not implemented.");
+}
+
+void SPGameShow::OnExit()
+{
+	SV8ScriptManager::GetSingleton()->Exit();
 }

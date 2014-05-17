@@ -11,11 +11,9 @@ SUITransformationManager::~SUITransformationManager(void)
 {
 }
 
-bool SUITransformationManager::Load()
+void SUITransformationManager::Load()
 {
 	transformationFileNames.Set(L"Fade", L"trans\\trans_fade.fxo");
-
-	return true;
 }
 
 SUITransformationPtr SUITransformationManager::GetTransformation( SPString name )
@@ -28,10 +26,8 @@ SUITransformationPtr SUITransformationManager::GetTransformation( SPString name 
 	{
 		SUITransformationPtr transformation = new SUITransformation();
 
-		if (transformation->Load(name))
-		{
-			return transformation;
-		}
+		transformation->Load(name);
+		return transformation;
 	}
 
 	return NULL;
@@ -40,11 +36,6 @@ SUITransformationPtr SUITransformationManager::GetTransformation( SPString name 
 SUITransformationPtr SUITransformationManager::CreateTransformation( SPString path )
 {
 	SUITransformationPtr transformation = new SUITransformation();
-
-	if (transformation->Load(path))
-	{
-		return transformation;
-	}
-
-	return NULL;
+	transformation->Load(path);
+	return transformation;
 }

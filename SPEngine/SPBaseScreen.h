@@ -55,21 +55,21 @@ namespace SPEngine
 	public:
 		/// @name Manage methods.
 		/// @{
-		bool ExitScreen();
-		bool UpdateScreen(
+		void ExitScreen();
+		void UpdateScreen(
 			float timeDelta, bool inputValid, bool visible);
 		/// @}
 
 	public:
 		/// @name Main Methods.
 		/// @{
-		virtual bool Initialize();
-		virtual bool HandleInput(float timeDelta);
-		virtual bool Update(float timeDelta);
-		virtual bool Draw(float timeDelta);
-		virtual bool Unload();
-		virtual bool Load();
-		virtual bool Reload();
+		virtual void Initialize();
+		virtual void HandleInput(float timeDelta);
+		virtual void Update(float timeDelta);
+		virtual void Draw(float timeDelta);
+		virtual void Unload();
+		virtual void Load();
+		virtual void Reload();
 		/// @}
 	};
 

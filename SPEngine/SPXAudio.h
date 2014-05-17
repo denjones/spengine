@@ -33,9 +33,9 @@ namespace SPEngine
 		SPXAudio(void);
 		virtual ~SPXAudio(void);
 
-		bool Load();
-		bool Unload();
-		bool Reload();
+		void Load();
+		void Unload();
+		void Reload();
 	
 	};
 }

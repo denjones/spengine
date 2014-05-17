@@ -13,7 +13,7 @@ public:
 	SUIMixModeManager(void);
 	virtual ~SUIMixModeManager(void);
 
-	bool Load();
+	void Load();
 	SUIMixModePtr GetMixMode(SPString name);
 	SUIMixModePtr CreateMixMode(SPString path);
 };

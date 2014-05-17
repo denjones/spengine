@@ -30,7 +30,7 @@ namespace SPEngine
 		Unload();
 	}
 
-	bool SPXAudio::Load()
+	void SPXAudio::Load()
 	{
 		TCHAR Buffer[MAX_PATH]; 
 		GetSystemDirectory(Buffer, MAX_PATH);
@@ -62,7 +62,7 @@ namespace SPEngine
 		{
 			SPLogHelper::WriteLog("[XAudio] ERROR: Failed to initialize XAudio2!");
 			SPMessageHelper::Msg("Failed to initialize XAudio2!");
-			return false;
+			return;
 		}	
 
 		IXAudio2* pXAudio2;
@@ -95,7 +95,7 @@ namespace SPEngine
 			SPLogHelper::WriteLog(SPStringHelper::Format("[XAudio] ERROR: Failed to create XAudio2! %d %d", hr, GetLastError()));
 			
 			SPMessageHelper::Msg("Failed to create XAudio2!");
-			return false;
+			return;
 		}
 
 		// Enumerate and select devices
@@ -121,13 +121,13 @@ namespace SPEngine
 			SPLogHelper::WriteLog("[XAudio] WARNING: Failed to create Mastering Voice!");
 			//MessageBoxA(NULL, "Failed to create mastering voice!", NULL, NULL);
 			Unload();
-			return false;
+			return;
 		}
 
-		return true;
+		return;
 	}
 
-	bool SPXAudio::Unload()
+	void SPXAudio::Unload()
 	{
 		// Destroy Master Voice.
 		if(masterVoice)
@@ -142,13 +142,11 @@ namespace SPEngine
 			xAudio->Release();
 			xAudio = NULL;
 		}
-
-		return true;
 	}
 
-	bool SPXAudio::Reload()
+	void SPXAudio::Reload()
 	{
-		return Load();
+		Load();
 	}
 }
 

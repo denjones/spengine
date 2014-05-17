@@ -32,7 +32,7 @@ SUITextBox::~SUITextBox(void)
 {
 }
 
-bool SUITextBox::AddText( SUIText text )
+void SUITextBox::AddText( SUIText text )
 {
 	//
 	// Put all texts into one list
@@ -54,7 +54,7 @@ bool SUITextBox::AddText( SUIText text )
 
 	if (characterList.size() == 0)
 	{
-		return true;
+		return;
 	}
 
 	SUITextList::iterator currentCharIter = characterList.begin();
@@ -67,7 +67,7 @@ bool SUITextBox::AddText( SUIText text )
 
 	if(CurrentLine()->size() == 0 && WillExceeded(CurrentLine()->TestPush(*currentCharIter)) || GetTextRect().Width < 14)
 	{
-		return true;
+		return;
 	}
 
 	modificationLock.Lock();
@@ -170,11 +170,9 @@ bool SUITextBox::AddText( SUIText text )
 	}
 
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUITextBox::Clear()
+void SUITextBox::Clear()
 {
 	modificationLock.Lock();
 	lines.clear();
@@ -182,7 +180,6 @@ bool SUITextBox::Clear()
 	lines.push_back(new SUITextLine(this->wordSpace, this->defaultFont, currentPosition));
 	modificationLock.Unlock();
 	//texts.clear();
-	return true;
 }
 
 
@@ -191,12 +188,11 @@ float SUITextBox::GetLineSpace()
 	return lineSpace;
 }
 
-bool SUITextBox::SetLineSpace( float setSpace )
+void SUITextBox::SetLineSpace( float setSpace )
 {
 	modificationLock.Lock();
 	lineSpace = setSpace;
 	modificationLock.Unlock();
-	return true;
 }
 
 
@@ -205,12 +201,11 @@ SUIPadding SUITextBox::GetPadding()
 	return padding;
 }
 
-bool SUITextBox::SetPadding( SUIPadding setPadding )
+void SUITextBox::SetPadding( SUIPadding setPadding )
 {
 	modificationLock.Lock();
 	padding = setPadding;
 	modificationLock.Unlock();
-	return true;
 }
 
 float SUITextBox::GetPaddingTop()
@@ -266,15 +261,14 @@ float SUITextBox::GetWordSpace()
 	return wordSpace;
 }
 
-bool SUITextBox::SetWordSpace( float setSpace )
+void SUITextBox::SetWordSpace( float setSpace )
 {
 	modificationLock.Lock();
 	wordSpace = setSpace;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUITextBox::Draw( float timeDelta )
+void SUITextBox::Draw( float timeDelta )
 {	
 	SPTexturePtr textTex = SPTextureManager::GetSingleton()->
 		CreateRenderTarget(properties.rectangle.Width,
@@ -337,8 +331,6 @@ bool SUITextBox::Draw( float timeDelta )
 		Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 
 	modificationLock.Unlock();
-
-	return true;
 }
 
 SRectangle SUITextBox::GetTextRect()
@@ -352,21 +344,19 @@ SRectangle SUITextBox::GetTextRect()
 	return rect;
 }
 
-bool SUITextBox::SetDefaultFont( SPFontPtr setFont, bool isAnonymous)
+void SUITextBox::SetDefaultFont( SPFontPtr setFont, bool isAnonymous)
 {
 	modificationLock.Lock();
 	defaultFont = setFont;
 	isAnonymousFont = isAnonymous;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUITextBox::SetDefaultColor( D3DCOLOR setColor )
+void SUITextBox::SetDefaultColor( D3DCOLOR setColor )
 {
 	modificationLock.Lock();
 	defaultColor = setColor;
 	modificationLock.Unlock();
-	return true;
 }
 
 D3DCOLOR SUITextBox::GetDefaultColor()
@@ -374,20 +364,18 @@ D3DCOLOR SUITextBox::GetDefaultColor()
 	return defaultColor;
 }
 
-bool SUITextBox::SetPunctuations( SPString setPun )
+void SUITextBox::SetPunctuations( SPString setPun )
 {
 	modificationLock.Lock();
 	punctuations = setPun;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUITextBox::SetDefaultBackEffect(SUIEffectPtr setEffect)
+void SUITextBox::SetDefaultBackEffect(SUIEffectPtr setEffect)
 {
 	modificationLock.Lock();
 	defaultBackEffect = setEffect;
 	modificationLock.Unlock();
-	return true;
 }
 
 SUIEffectPtr SUITextBox::GetDefaultBackEffect()
@@ -395,12 +383,11 @@ SUIEffectPtr SUITextBox::GetDefaultBackEffect()
 	return defaultBackEffect;
 }
 
-bool SUITextBox::SetDefaultFrontEffect( SUIEffectPtr setEffect )
+void SUITextBox::SetDefaultFrontEffect( SUIEffectPtr setEffect )
 {
 	modificationLock.Lock();
 	defaultFrontEffect = setEffect;
 	modificationLock.Unlock();
-	return true;
 }
 
 SUIEffectPtr SUITextBox::GetDefaultFrontEffect()
@@ -413,21 +400,18 @@ SPEngine::SPFontPtr SUITextBox::GetDefaultFont()
 	return defaultFont;
 }
 
-bool SUITextBox::Update( float timeDelta )
+void SUITextBox::Update( float timeDelta )
 {
-	bool result = SUIComponent::Update(timeDelta);
+	SUIComponent::Update(timeDelta);
 
 	if (animations.size() > 0)
 	{
 		RefreshText();
 	}
-
-	return result;
 }
 
-bool SUITextBox::LoadFromString( SPString stringStream )
+void SUITextBox::LoadFromString( SPString stringStream )
 {
-	return true;
 }
 
 SPString SUITextBox::SaveAsString()
@@ -610,24 +594,24 @@ void SUITextBox::SetAutoHeight( bool on )
 	}
 }
 
-bool SUITextBox::Unload()
+void SUITextBox::Unload()
 {
 	if (isAnonymousFont)
 	{
 		defaultFont->Unload();
 	}
 	
-	return SUIComponent::Unload();
+	SUIComponent::Unload();
 }
 
-bool SUITextBox::Reload()
+void SUITextBox::Reload()
 {
 	if (isAnonymousFont)
 	{
 		defaultFont->Reload();
 	}
 
-	return SUIComponent::Reload();
+	SUIComponent::Reload();
 }
 
 bool SUITextBox::IsAnonymousFont()

@@ -28,35 +28,31 @@ namespace SPEngine
 	{
 	}
 
-	bool SPFontWriter::Load()
+	void SPFontWriter::Load()
 	{
 		if (!renderer)
 		{
 			if(FAILED(D3DXCreateSprite(SPDevice::GetSingleton()->GetD3DDevice(), &renderer)))
 			{
 				SPLogHelper::WriteLog("[Game] WARNING£ºFailed to create SpriteRenderer in SPFontWriter!");
-				return false;
+				return;
 			}
 		}		
-
-		return true;
 	}
 
-	bool SPFontWriter::Unload()
+	void SPFontWriter::Unload()
 	{
 		if (!renderer)
 		{
 			SPLogHelper::WriteLog("[Game] WARNING£ºTrying to release empty renderer in SPFontWriter!");
-			return false;			
+			return;			
 		}
 
 		renderer->Release();
 		renderer = NULL;
-
-		return true;
 	}
 
-	bool SPFontWriter::Draw( float timeDelta )
+	void SPFontWriter::Draw( float timeDelta )
 	{	
 		foreach(SPTextToWrite, text, list<SPTextToWrite>, texts)
 		{
@@ -64,11 +60,9 @@ namespace SPEngine
 		}
 
 		texts.clear();
-
-		return true;
 	}
 
-	bool SPFontWriter::WriteText( SPTextToWrite text )
+	void SPFontWriter::WriteText( SPTextToWrite text )
 	{
 		float sizeRate = SPFontManager::GetSingleton()->GetSizeRate();
 		float marginRate = SPFontManager::GetSingleton()->GetMarginRate();
@@ -308,11 +302,9 @@ namespace SPEngine
 		SPSpriteManager::GetSingleton()->RenderOnScreen(tex,
 			NULL, desRect, SPColor::White, 
 			text.depth, text.target);
-
-		return true;
 	}
 
-	bool SPFontWriter::AddTextToWrite(
+	void SPFontWriter::AddTextToWrite(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -335,11 +327,11 @@ namespace SPEngine
 		//return true;
 
 		// Immediately!
-		return WriteText(SPTextToWrite(
+		WriteText(SPTextToWrite(
 			font, ps, text, count, destRect, format, color, space, depth, target));
 	}
 
-	bool SPFontWriter::Write(
+	void SPFontWriter::Write(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -356,12 +348,12 @@ namespace SPEngine
 
 		D3DXVECTOR2 size = font->GetTextSize(text, space);
 
-		return Write(font, ps, text, SPRectangle((int)position.x,
+		Write(font, ps, text, SPRectangle((int)position.x,
 			(int)position.y, (int)size.x,
 			(int)size.y), color, space, depth, target);
 	}
 
-	bool SPFontWriter::Write(
+	void SPFontWriter::Write(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -371,10 +363,10 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr target)
 	{
-		return Write(font, ps, text, -1, destRect, (TextFormat)(Top | Left), color, space, depth, target);
+		Write(font, ps, text, -1, destRect, (TextFormat)(Top | Left), color, space, depth, target);
 	}
 
-	bool SPFontWriter::Write(
+	void SPFontWriter::Write(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -385,10 +377,10 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr target)
 	{
-		return Write(font, ps, text, -1, destRect, format, color, space, depth, target);
+		Write(font, ps, text, -1, destRect, format, color, space, depth, target);
 	}
 
-	bool SPFontWriter::Write(
+	void SPFontWriter::Write(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -406,11 +398,11 @@ namespace SPEngine
 		//return true;
 
 		// Immediately!
-		return WriteText(SPTextToWrite(font, ps, text, count, 
+		WriteText(SPTextToWrite(font, ps, text, count, 
 			destRect, format, color, space, depth, target));
 	}
 
-	bool SPFontWriter::WriteCentered(
+	void SPFontWriter::WriteCentered(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -427,12 +419,12 @@ namespace SPEngine
 
 		D3DXVECTOR2 size = font->GetTextSize(text, Center | CenterVertical, space);
 
-		return WriteCentered(font, ps, text, SPRectangle((int)position.x - (int)size.x / 2,
+		WriteCentered(font, ps, text, SPRectangle((int)position.x - (int)size.x / 2,
 			(int)position.y - (int)size.y / 2, (int)size.x,
 			(int)size.y), color, space, depth, target);
 	}
 
-	bool SPFontWriter::WriteCentered(
+	void SPFontWriter::WriteCentered(
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring		text,
@@ -442,10 +434,10 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr target)
 	{
-		return WriteCentered(font, ps, text, -1, destRect, (TextFormat)0, color, space, depth, target);
+		WriteCentered(font, ps, text, -1, destRect, (TextFormat)0, color, space, depth, target);
 	}
 
-	bool SPFontWriter::WriteCentered( 
+	void SPFontWriter::WriteCentered( 
 		SPFontPtr	font,
 		SPEffectPtr ps,
 		wstring	text, 
@@ -457,17 +449,16 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr target )
 	{
-		return Write(font, ps, text, count, destRect, 
+		Write(font, ps, text, count, destRect, 
 			(TextFormat)(format | Center | CenterVertical), color, space, depth, target);
 	}
 
-	bool SPFontWriter::Initialize()
+	void SPFontWriter::Initialize()
 	{
 		Load();
-		return true;
 	}
 
-	bool SPFontWriter::RealWriteText( SPTextToWrite text )
+	void SPFontWriter::RealWriteText( SPTextToWrite text )
 	{
 		HRESULT hr;
 		float sizeRate = SPFontManager::GetSingleton()->GetSizeRate();
@@ -526,8 +517,6 @@ namespace SPEngine
 				targetRect.X += (wordSize.x + text.wordSpace * text.font->GetHeight()) * sizeRate;
 			}
 		}
-
-		return true;
 	}
 
 }

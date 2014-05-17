@@ -20,7 +20,7 @@ namespace SPEngine
 	template<typename T> class SPSingleton
 	{
 		//static SPPointer<T> singleton; ///< Pointer to hold the singleton.
-		static CCritSec singletonLock;
+		//static CCritSec singletonLock;
 
 	public:
 		SPSingleton(void)
@@ -39,14 +39,14 @@ namespace SPEngine
 		/// @{
 		static void CreateSingleton()
 		{
-			singletonLock.Lock();
+			singletonLock->Lock();
 
 			if (!singleton)
 			{
 				singleton = new T();
 			}
 
-			singletonLock.Unlock();
+			singletonLock->Unlock();
 
 			assert(singleton);			
 		}

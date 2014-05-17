@@ -49,6 +49,7 @@ namespace SPEngine
 		bool RegisterComponent(SPString name, SPComponentPtr newComponent);
 		bool UnregisterComponent(SPString name);
 		SPComponentPtr GetComponent(SPString name);
+		void Clear();
 		/// @}
 	};
 }

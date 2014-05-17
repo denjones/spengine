@@ -16,7 +16,7 @@ namespace SPEngine
 	{
 	}
 
-	bool SPBaseScreen::UpdateScreen( float timeDelta, 
+	void SPBaseScreen::UpdateScreen( float timeDelta, 
 		bool inputValid, bool visible )
 	{
 		isInputValid = inputValid;
@@ -54,10 +54,10 @@ namespace SPEngine
 			}
 		}		
 
-		return Update(timeDelta);
+		Update(timeDelta);
 	}
 
-	bool SPBaseScreen::ExitScreen()
+	void SPBaseScreen::ExitScreen()
 	{
 		if (transitionOffTime == 0)
 		{
@@ -67,8 +67,6 @@ namespace SPEngine
 		{
 			isExiting = true;
 		}
-
-		return true;
 	}
 
 	bool SPBaseScreen::IsPopup()
@@ -86,38 +84,32 @@ namespace SPEngine
 		return isInputValid;
 	}
 
-	bool SPBaseScreen::Initialize()
+	void SPBaseScreen::Initialize()
 	{
-		return true;
 	}
 
-	bool SPBaseScreen::HandleInput( float timeDelta )
+	void SPBaseScreen::HandleInput( float timeDelta )
 	{
-		return true;
 	}
 
-	bool SPBaseScreen::Update( float timeDelta )
+	void SPBaseScreen::Update( float timeDelta )
 	{
-		return true;
 	}
 
-	bool SPBaseScreen::Draw( float timeDelta )
+	void SPBaseScreen::Draw( float timeDelta )
 	{
-		return true;
 	}
 
-	bool SPBaseScreen::Unload()
+	void SPBaseScreen::Unload()
 	{
-		return true;
 	}
 
-	bool SPBaseScreen::Load()
+	void SPBaseScreen::Load()
 	{
-		return true;
 	}
 
-	bool SPBaseScreen::Reload()
+	void SPBaseScreen::Reload()
 	{
-		return Load();
+		Load();
 	}
 }

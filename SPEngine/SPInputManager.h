@@ -45,7 +45,7 @@ namespace SPEngine
 		SPJoystickPtr	GetJoystickPtr() { return joystick; }
 		SPMousePtr		GetMouse() { return mouse; }
 		SPXControllerPtr GetXController(int num) { return xControllers[num]; }
-		bool			SetCursor(SPString path);
+		void			SetCursor(SPString path);
 		SPString		GetCursor();
 		/// @}
 
@@ -55,15 +55,15 @@ namespace SPEngine
 
 		/// @name Component methods
 		/// @{
-		bool Load();
-		bool Update(float timeElapsed);
-		bool Draw(float timeElapsed);
-		bool Initialize();
-		bool Unload();
+		void Load();
+		void Update(float timeElapsed);
+		void Draw(float timeElapsed);
+		void Initialize();
+		void Unload();
 		/// @}
 
 		/// @brief Set the maximum number of XControllers.
-		bool SetMaxXController(int max);		
+		void SetMaxXController(int max);		
 	};
 }
 

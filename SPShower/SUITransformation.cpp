@@ -16,18 +16,16 @@ SUITransformation::~SUITransformation(void)
 {
 }
 
-bool SUITransformation::SetTarget( SPTexturePtr setTarget )
+void SUITransformation::SetTarget( SPTexturePtr setTarget )
 {
 	SetTexture(1, setTarget);
-
-	return true;
 }
 
-bool SUITransformation::Update( float timeDelta )
+void SUITransformation::Update( float timeDelta )
 {
 	if (state == Hidden)
 	{
-		return true;
+		return;
 	}
 
 	SUITransition::Update(timeDelta);
@@ -36,8 +34,6 @@ bool SUITransformation::Update( float timeDelta )
 
 	if (transitionPosition >= 1)
 	{
-		return false;
+		return;
 	}
-
-	return true;
 }

@@ -6,6 +6,7 @@
 #include "SPDevice.h"
 #include "SPStringHelper.h"
 #include "SPWindow.h"
+#include <exception>
 
 namespace SPEngine
 {
@@ -43,7 +44,7 @@ namespace SPEngine
 	// Description: Open a new file for playback.
 	//-----------------------------------------------------------------------------
 
-	bool SPVideo::OpenFile(SPString sFileName)
+	void SPVideo::OpenFile(SPString sFileName)
 	{
 		//Load();
 
@@ -52,18 +53,15 @@ namespace SPEngine
 		if (data->Load(sFileName))
 		{
 			state = STATE_STOPPED;
-			return true;
 		}
-
-		return false;
 	}
 
 	// state changes
-	HRESULT SPVideo::Play()
+	void SPVideo::Play()
 	{
 		if (state != STATE_PAUSED && state != STATE_STOPPED)
 		{
-			return VFW_E_WRONG_STATE;
+			throw exception("VFW_E_WRONG_STATE");
 		}
 
 		assert(data->GetGraph()); // If state is correct, the graph should exist.
@@ -78,15 +76,13 @@ namespace SPEngine
 		{
 			state = STATE_RUNNING;
 		}
-
-		return hr;
 	}
 
-	HRESULT SPVideo::Pause()
+	void SPVideo::Pause()
 	{
 		if (state != STATE_RUNNING)
 		{
-			return VFW_E_WRONG_STATE;
+			throw exception("VFW_E_WRONG_STATE");
 		}
 
 		assert(data->GetGraph()); // If state is correct, the graph should exist.
@@ -101,16 +97,14 @@ namespace SPEngine
 		{
 			state = STATE_PAUSED;
 		}
-
-		return hr;
 	}
 
 
-	HRESULT SPVideo::Stop()
+	void SPVideo::Stop()
 	{
 		if (state != STATE_RUNNING && state != STATE_PAUSED)
 		{
-			return VFW_E_WRONG_STATE;
+			throw exception("VFW_E_WRONG_STATE");
 		}
 
 		assert(data->GetGraph()); // If state is correct, the graph should exist.
@@ -128,8 +122,6 @@ namespace SPEngine
 		{
 			state = STATE_STOPPED;
 		}
-
-		return hr;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -137,7 +129,7 @@ namespace SPEngine
 	// Description: Returns TRUE if the current file is seekable.
 	//-----------------------------------------------------------------------------
 
-	BOOL SPVideo::CanSeek() 
+	bool SPVideo::CanSeek() 
 	{
 		const DWORD caps = AM_SEEKING_CanSeekAbsolute | AM_SEEKING_CanGetDuration;
 		return ((data->GetSeekCap() & caps) == caps);
@@ -149,11 +141,11 @@ namespace SPEngine
 	// Description: Seeks to a new position.
 	//-----------------------------------------------------------------------------
 
-	HRESULT SPVideo::SetPosition(REFERENCE_TIME pos)
+	void SPVideo::SetPosition(REFERENCE_TIME pos)
 	{
 		if (!data->GetControl()  || !data->GetSeek())
 		{
-			return E_UNEXPECTED;
+			throw exception("E_UNEXPECTED");
 		}
 
 		HRESULT hr = S_OK;
@@ -183,8 +175,6 @@ namespace SPEngine
 				data->UnlockControl();
 			}
 		}
-
-		return hr;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -192,14 +182,15 @@ namespace SPEngine
 	// Description: Gets the duration of the current file.
 	//-----------------------------------------------------------------------------
 
-	HRESULT SPVideo::GetDuration(LONGLONG *pDuration)
+	long long SPVideo::GetDuration()
 	{
+		long long duration;
 		if (!data->GetSeek() || FAILED(data->GetSeek()->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME)))
 		{
-			return E_UNEXPECTED;
+			throw exception("E_UNEXPECTED");
 		}
-		
-		return data->GetSeek()->GetDuration(pDuration);
+		data->GetSeek()->GetDuration(&duration);
+		return duration;
 	}
 
 	//-----------------------------------------------------------------------------
@@ -207,14 +198,14 @@ namespace SPEngine
 	// Description: Gets the current playback position.
 	//-----------------------------------------------------------------------------
 
-	HRESULT SPVideo::GetCurrentPosition(LONGLONG *pTimeNow)
+	long long SPVideo::GetCurrentPosition()
 	{
+		long long timeNow;
 		if (!data->GetSeek() || FAILED(data->GetSeek()->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME)))
 		{
-			return E_UNEXPECTED;
+			throw exception("E_UNEXPECTED");
 		}
-
-		return data->GetSeek()->GetCurrentPosition(pTimeNow);
+		data->GetSeek()->GetCurrentPosition(&timeNow);
 	}
 
 
@@ -225,9 +216,9 @@ namespace SPEngine
 	// Description: Mutes or unmutes the audio.
 	//-----------------------------------------------------------------------------
 
-	bool SPVideo::Mute(bool bMute)
+	void SPVideo::Mute(bool bMute)
 	{
-		return data->SetMute(bMute);
+		data->SetMute(bMute);
 	}
 
 	//-----------------------------------------------------------------------------
@@ -235,22 +226,17 @@ namespace SPEngine
 	// Description: Sets the volume. 
 	//-----------------------------------------------------------------------------
 
-	bool SPVideo::SetVolume(float fVolume)
+	void SPVideo::SetVolume(float fVolume)
 	{
-		return data->SetVolume(fVolume);
+		data->SetVolume(fVolume);
 	}
 
 	// Graph building
 	float SPVideo::GetPlayingPosition()
 	{
-		LONGLONG position;
-		GetCurrentPosition(&position);
-
-		LONGLONG duration;
-		GetDuration(&duration);
-
+		long long position = GetCurrentPosition();
+		long long duration = GetDuration();
 		float playingPosititon = (float)position / duration;
-
 		return playingPosititon;
 	}
 
@@ -259,7 +245,7 @@ namespace SPEngine
 		return state == STATE_RUNNING;
 	}
 
-	bool SPVideo::UpdateFrame()
+	void SPVideo::UpdateFrame()
 	{
 		data->HandleGraphEvent(callBack);
 
@@ -267,57 +253,47 @@ namespace SPEngine
 		{
 			data->GetRenderer()->UpdateTexture();
 		}
-
-		return true;
 	}
 
-	bool SPVideo::SetTexture( SPVideoTexture* setTex )
+	void SPVideo::SetTexture( SPVideoTexture* setTex )
 	{
 		if(data->GetRenderer())
 		{
 			data->GetRenderer()->SetTexture(setTex);
-			return true;
 		}
-
-		return false;
 	}
 
-	bool SPVideo::ResizeTexture()
+	void SPVideo::ResizeTexture()
 	{
-		return data->GetRenderer()->ResizeTexture();
+		data->GetRenderer()->ResizeTexture();
 	}
 
-	bool SPVideo::Load()
+	void SPVideo::Load()
 	{
-		return true;//data->Load();
+		//data->Load();
 	}
 
-	bool SPVideo::Unload()
+	void SPVideo::Unload()
 	{
 		state = STATE_CLOSED;
-
-		return data->Unload();
+		data->Unload();
 	}
 
-	bool SPVideo::Reload()
+	void SPVideo::Reload()
 	{
 		data->Unload();
-
 		//data->Load();
-
-		return OpenFile(videoPath);
+		OpenFile(videoPath);
 	}
 
-	HRESULT SPVideo::SetLoopTimes( int times )
+	void SPVideo::SetLoopTimes( int times )
 	{
 		leftTimes = times;
-
-		return S_OK;
 	}
 
-	bool SPVideo::SetFlipVertical( bool setFlip )
+	void SPVideo::SetFlipVertical( bool setFlip )
 	{
-		return data->SetFlipVertical(setFlip);
+		data->SetFlipVertical(setFlip);
 	}
 
 	bool SPVideo::IsMuted()

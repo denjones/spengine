@@ -33,14 +33,12 @@ namespace SPEngine
 		Unload();
 	}
 
-	bool SPSpriteManager::Initialize()
+	void SPSpriteManager::Initialize()
 	{
 		Load();
-
-		return true;
 	}
 
-	bool SPSpriteManager::DrawSimple(float timeDelta)
+	void SPSpriteManager::DrawSimple(float timeDelta)
 	{
 		Renderer->Begin(D3DXSPRITE_ALPHABLEND);// | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
 
@@ -52,8 +50,6 @@ namespace SPEngine
 		Renderer->End();
 
 		sprites.clear();
-
-		return true;
 	}
 
 	bool CompareSprite(SPSpritePtr a, SPSpritePtr b)
@@ -61,7 +57,7 @@ namespace SPEngine
 		return a->depth > b->depth;
 	}
 
-	bool SPSpriteManager::DrawTopological( float timeDelta )
+	void SPSpriteManager::DrawTopological( float timeDelta )
 	{
 		TopologicalSort();
 
@@ -148,15 +144,13 @@ namespace SPEngine
 
 		// Clear the sprite drawn in the frame.
 		sprites.clear();
-
-		return true;
 	}
 
-	bool SPSpriteManager::TopologicalSort()
+	void SPSpriteManager::TopologicalSort()
 	{
 		if (sprites.size() == 0)
 		{
-			return true;
+			return;
 		}
 		
 		vector<SPTexturePtr> targets;
@@ -278,23 +272,18 @@ namespace SPEngine
 
 		// Set sprite list.
 		sprites = tempList;
-
-		return true;
 	}
 
-	bool SPSpriteManager::DrawSprite( SPSpritePtr sprite )
+	void SPSpriteManager::DrawSprite( SPSpritePtr sprite )
 	{
 		sprite->Draw(Renderer, innerRenderer, NULL, NULL);
-
-		return true;
 	}
 
-	bool SPSpriteManager::Update(float timeDelta)
+	void SPSpriteManager::Update(float timeDelta)
 	{
-		return true;
 	}
 
-	bool SPSpriteManager::AddSprite( 
+	void SPSpriteManager::AddSprite( 
 		SPTexturePtr	tex,
 		SPEffectPtr pixelShader,
 		D3DXVECTOR3 center,
@@ -338,11 +327,9 @@ namespace SPEngine
 
 			sprites.push_back(sprite);
 		}
-
-		return true;
 	}
 
-	bool SPSpriteManager::AddSprite( 
+	void SPSpriteManager::AddSprite( 
 		SPTexturePtr	tex , 
 		SPEffectPtr		pixelShader,
 		D3DXMATRIX		transformMatrix,
@@ -375,11 +362,9 @@ namespace SPEngine
 				srcRect, center, position, color, target);
 			sprites.push_back(sprite);
 		}		
-
-		return true;
 	}
 
-	bool SPSpriteManager::AddSprite( 
+	void SPSpriteManager::AddSprite( 
 		SPTexturePtr	tex ,
 		SPEffectPtr pixelShader,
 		D3DXVECTOR2 scalingCenter,
@@ -436,29 +421,25 @@ namespace SPEngine
 
 			sprites.push_back(sprite);
 		}
-
-		return true;
 	}
 
-	bool SPSpriteManager::AddSprite( SPSpritePtr sprite )
+	void SPSpriteManager::AddSprite( SPSpritePtr sprite )
 	{
 		if (!sprite)
 		{
-			return false;
+			return;
 		}
 
 		sprites.push_back(sprite);
-
-		return true;
 	}
 
-	bool SPSpriteManager::Load()
+	void SPSpriteManager::Load()
 	{
 		if (!Renderer)
 		{
 			if(FAILED(D3DXCreateSprite(SPDevice::GetSingleton()->GetD3DDevice(), &Renderer)))
 			{
-				return false;
+				return;
 			}
 		}
 
@@ -466,14 +447,12 @@ namespace SPEngine
 		{
 			if(FAILED(D3DXCreateSprite(SPDevice::GetSingleton()->GetD3DDevice(), &innerRenderer)))
 			{
-				return false;
+				return;
 			}
 		}	
-
-		return true;
 	}
 
-	bool SPSpriteManager::Unload()
+	void SPSpriteManager::Unload()
 	{
 		if (Renderer)
 		{
@@ -488,8 +467,6 @@ namespace SPEngine
 		}
 
 		sprites.clear();
-
-		return true;
 	}
 
 	//LPDIRECT3DDEVICE9 SpriteManager::GetDevice()
@@ -497,42 +474,42 @@ namespace SPEngine
 	//	return currentGame->GetDevice();
 	//}
 	// Simple render function
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, 
 		SPEffectPtr ps,
 		SPTexturePtr target)
 	{
-		return	Render(tex, ps, D3DXVECTOR3(0, 0, 0), target);
+		Render(tex, ps, D3DXVECTOR3(0, 0, 0), target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, x, y, SPColor::White, target);
+		Render(tex, ps, x, y, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, position, SPColor::White, target);
+		Render(tex, ps, position, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, x, y, color, 0, target);
+		Render(tex, ps, x, y, color, 0, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -540,19 +517,19 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, D3DXVECTOR3(x, y, depth), color, target);
+		Render(tex, ps, D3DXVECTOR3(x, y, depth), color, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
+		Render(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps, 
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position, 
@@ -560,11 +537,9 @@ namespace SPEngine
 		SPTexturePtr	target )
 	{
 		AddSprite(tex, ps, center, position, color, target);
-
-		return true;
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -574,11 +549,11 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, D3DXVECTOR3(x, y, depth),
+		Render(tex, ps, D3DXVECTOR3(x, y, depth),
 			D3DXVECTOR2(scale, scale), rotation, color, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scaling,
@@ -586,11 +561,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return Render(tex, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
+		Render(tex, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
 			scaling, D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::Render( 
+	void SPSpriteManager::Render( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,			
 		D3DXVECTOR2 scalingCenter,
@@ -601,13 +576,13 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, 
+		RenderBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, 
 			scalingCenter, scalingRotation, scaling,
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
 	// Render on screen with rectangle
-	bool SPSpriteManager::RenderOnScreen( 
+	void SPSpriteManager::RenderOnScreen( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		SPRectangle	destRect,
 		D3DCOLOR	color,
@@ -616,14 +591,14 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return RenderOnScreen(tex, ps, SPRectangle(0, 0, tex->GetWidth(), 
+		RenderOnScreen(tex, ps, SPRectangle(0, 0, tex->GetWidth(), 
 			tex->GetHeight()), destRect, color, depth, target);
 	}
 
-	bool SPSpriteManager::RenderOnScreen( 
+	void SPSpriteManager::RenderOnScreen( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		SPRectangle	srcRect,
 		SPRectangle	destRect,
@@ -633,10 +608,10 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return RenderBasic(tex, ps, srcRect.CRect(), D3DXVECTOR3(0, 0, 0),
+		RenderBasic(tex, ps, srcRect.CRect(), D3DXVECTOR3(0, 0, 0),
 			D3DXVECTOR3((float)destRect.X, (float)destRect.Y, depth),
 			color, D3DXVECTOR2((float)destRect.X, (float)destRect.Y), 0,
 			D3DXVECTOR2((float)destRect.Width / srcRect.Width, 
@@ -646,7 +621,7 @@ namespace SPEngine
 	}
 
 	// Render with matrix
-	bool SPSpriteManager::RenderWithMatrix( 
+	void SPSpriteManager::RenderWithMatrix( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXMATRIX	transformMatrix,
 		D3DXVECTOR3 center,
@@ -656,7 +631,7 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
 		//RECT srcRect;
@@ -665,11 +640,9 @@ namespace SPEngine
 		//	tex->SourceRectangle().CRect(), center, position, color, target);
 		AddSprite(tex, ps, transformMatrix,
 			tex->SourceRectangle().CRect(), center, position, color, target);
-
-		return true;
 	}
 
-	bool SPSpriteManager::RenderWithMatrix( 
+	void SPSpriteManager::RenderWithMatrix( 
 		SPTexturePtr tex, SPEffectPtr ps, 
 		D3DXMATRIX	transformMatrix,
 		RECT		srcRect,
@@ -680,7 +653,7 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
 		SPRectangle realSrcRect = tex->SourceRectangle();
@@ -692,12 +665,10 @@ namespace SPEngine
 
 		AddSprite(tex, ps, transformMatrix,
 			realSrcRect.CRect(), center, position, color, target);
-
-		return true;
 	}
 
 	// Render with scaling
-	bool SPSpriteManager::RenderWithScaling( 
+	void SPSpriteManager::RenderWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -707,13 +678,13 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return RenderWithScaling(tex, ps, x, y, scale, color, 0, target);
+		RenderWithScaling(tex, ps, x, y, scale, color, 0, target);
 	}
 
-	bool SPSpriteManager::RenderWithScaling( 
+	void SPSpriteManager::RenderWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -724,13 +695,13 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return RenderWithScaling(tex, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
+		RenderWithScaling(tex, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
 	}
 
-	bool SPSpriteManager::RenderWithScaling( 
+	void SPSpriteManager::RenderWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		scale,
@@ -739,14 +710,14 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return	RenderWithScaling(tex, ps, position, 
+		RenderWithScaling(tex, ps, position, 
 			D3DXVECTOR2(scale, scale),	color, target);
 	}
 
-	bool SPSpriteManager::RenderWithScaling( 
+	void SPSpriteManager::RenderWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scaling,
@@ -755,14 +726,14 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return RenderWithScaling(tex, ps, position,
+		RenderWithScaling(tex, ps, position,
 			D3DXVECTOR2(position.x, position.y), 0, scaling, color, target);
 	}
 
-	bool SPSpriteManager::RenderWithScaling( 
+	void SPSpriteManager::RenderWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scalingCenter,
@@ -771,13 +742,13 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
+		RenderBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, scalingCenter, scalingRotation, scaling,
 			D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(0, 0), target);
 	}
 
 	// Render with rotation
-	bool SPSpriteManager::RenderWithRotation( 
+	void SPSpriteManager::RenderWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -785,10 +756,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderWithRotation(tex, ps, x, y, rotation, color, 0, target);
+		RenderWithRotation(tex, ps, x, y, rotation, color, 0, target);
 	}
 
-	bool SPSpriteManager::RenderWithRotation( 
+	void SPSpriteManager::RenderWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -797,21 +768,21 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return RenderWithRotation(tex, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
+		RenderWithRotation(tex, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderWithRotation( 
+	void SPSpriteManager::RenderWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		rotation,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderWithRotation(tex, ps, position, 
+		RenderWithRotation(tex, ps, position, 
 			D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderWithRotation( 
+	void SPSpriteManager::RenderWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 rotationCenter,
@@ -819,12 +790,12 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
+		RenderBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(1, 1),
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::RenderBasic( 
+	void SPSpriteManager::RenderBasic( 
 		SPTexturePtr tex, SPEffectPtr ps, 
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position, 
@@ -839,18 +810,18 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
 		RECT srcRect;
 		SetRect(&srcRect, 0, 0, tex->GetWidth(), tex->GetHeight());
 
-		return RenderBasic(tex, ps, srcRect, center, position, color, scalingCenter, 
+		RenderBasic(tex, ps, srcRect, center, position, color, scalingCenter, 
 			scalingRotation, scaling, rotationCenter, 
 			rotation, translation, target);
 	}
 
-	bool SPSpriteManager::RenderBasic( 
+	void SPSpriteManager::RenderBasic( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		RECT		srcRect,
 		D3DXVECTOR3 center, 
@@ -875,47 +846,45 @@ namespace SPEngine
 			scalingCenter, scalingRotation,	scaling,
 			rotationCenter, rotation, translation,
 			realSrcRect.CRect(), center, position, color, target);
-
-		return true;
 	}
 
 	// Render centered
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, 
 		SPEffectPtr ps,
 		SPTexturePtr	target)
 	{
-		return	RenderCentered(tex, ps, D3DXVECTOR3(0, 0, 0), target);
+		RenderCentered(tex, ps, D3DXVECTOR3(0, 0, 0), target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, x, y, SPColor::White, target);
+		RenderCentered(tex, ps, x, y, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::RenderCentered(
+	void SPSpriteManager::RenderCentered(
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, position, SPColor::White, target);
+		RenderCentered(tex, ps, position, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, x, y, color, 0, target);
+		RenderCentered(tex, ps, x, y, color, 0, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -923,19 +892,19 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, D3DXVECTOR3(x, y, depth), color, target);
+		RenderCentered(tex, ps, D3DXVECTOR3(x, y, depth), color, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
+		RenderCentered(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( SPTexturePtr tex, SPEffectPtr ps, 
+	void SPSpriteManager::RenderCentered( SPTexturePtr tex, SPEffectPtr ps, 
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position, 
 		D3DCOLOR	color ,
@@ -943,17 +912,15 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
 		AddSprite(tex, ps, center, 
 			D3DXVECTOR3(position.x - tex->GetWidth() / 2, 
 			position.y - tex->GetHeight() / 2, position.z), color, target);
-
-		return true;
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -963,11 +930,11 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, D3DXVECTOR3(x, y, depth),
+		RenderCentered(tex, ps, D3DXVECTOR3(x, y, depth),
 			D3DXVECTOR2(scale, scale), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scaling,
@@ -975,11 +942,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
+		RenderCentered(tex, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
 			scaling, D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,			
 		D3DXVECTOR2 scalingCenter,
@@ -990,12 +957,12 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, 
+		RenderCenteredBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, color, 
 			scalingCenter, scalingRotation, scaling,
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		SPRectangle srcRect,
 		D3DXVECTOR3 position,
@@ -1004,11 +971,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCentered(tex, ps, srcRect, position, scale,
+		RenderCentered(tex, ps, srcRect, position, scale,
 			D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderCentered( 
+	void SPSpriteManager::RenderCentered( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		SPRectangle srcRect,
 		D3DXVECTOR3 position,
@@ -1018,7 +985,7 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderBasic(tex, ps, srcRect.CRect(), D3DXVECTOR3(0, 0, 0), 
+		RenderBasic(tex, ps, srcRect.CRect(), D3DXVECTOR3(0, 0, 0), 
 			D3DXVECTOR3(position.x - srcRect.Width / 2,
 			position.y - srcRect.Height / 2, position.z),
 			color, D3DXVECTOR2(position.x, position.y), 
@@ -1027,7 +994,7 @@ namespace SPEngine
 	}
 
 	// Render with scaling
-	bool SPSpriteManager::RenderCenteredWithScaling( 
+	void SPSpriteManager::RenderCenteredWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1035,10 +1002,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredWithScaling(tex, ps, x, y, scale, color, 0, target);
+		RenderCenteredWithScaling(tex, ps, x, y, scale, color, 0, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithScaling( 
+	void SPSpriteManager::RenderCenteredWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1047,32 +1014,32 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredWithScaling(tex, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
+		RenderCenteredWithScaling(tex, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithScaling( 
+	void SPSpriteManager::RenderCenteredWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		scale,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return	RenderCenteredWithScaling(tex, ps, position, 
+		RenderCenteredWithScaling(tex, ps, position, 
 			D3DXVECTOR2(scale, scale),	color, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithScaling( 
+	void SPSpriteManager::RenderCenteredWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scaling,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredWithScaling(tex, ps, position,
+		RenderCenteredWithScaling(tex, ps, position,
 			D3DXVECTOR2(position.x, position.y), 0, scaling, color, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithScaling( 
+	void SPSpriteManager::RenderCenteredWithScaling( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scalingCenter,
@@ -1081,13 +1048,13 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
+		RenderCenteredBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, scalingCenter, scalingRotation, scaling,
 			D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(0, 0), target);
 	}
 
 	// Render with rotation
-	bool SPSpriteManager::RenderCenteredWithRotation( 
+	void SPSpriteManager::RenderCenteredWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1095,10 +1062,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredWithRotation(tex, ps, x, y, rotation, color, 0, target);
+		RenderCenteredWithRotation(tex, ps, x, y, rotation, color, 0, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithRotation( 
+	void SPSpriteManager::RenderCenteredWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1107,21 +1074,21 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredWithRotation(tex, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
+		RenderCenteredWithRotation(tex, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithRotation( 
+	void SPSpriteManager::RenderCenteredWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		rotation,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredWithRotation(tex, ps, position, 
+		RenderCenteredWithRotation(tex, ps, position, 
 			D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredWithRotation( 
+	void SPSpriteManager::RenderCenteredWithRotation( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 rotationCenter,
@@ -1129,12 +1096,12 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return RenderCenteredBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
+		RenderCenteredBasic(tex, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(1, 1),
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::RenderCenteredBasic( 
+	void SPSpriteManager::RenderCenteredBasic( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position,
@@ -1149,18 +1116,18 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
 		RECT srcRect;
 		SetRect(&srcRect, 0, 0, tex->GetWidth(), tex->GetHeight());
 
-		return RenderCenteredBasic(tex, ps, srcRect, center, position, 
+		RenderCenteredBasic(tex, ps, srcRect, center, position, 
 			color, scalingCenter, scalingRotation, scaling, 
 			rotationCenter, rotation,translation, target);
 	}
 
-	bool SPSpriteManager::RenderCenteredBasic( 
+	void SPSpriteManager::RenderCenteredBasic( 
 		SPTexturePtr tex, SPEffectPtr ps,
 		RECT		srcRect,
 		D3DXVECTOR3 center, 
@@ -1176,52 +1143,52 @@ namespace SPEngine
 	{
 		if (!tex)
 		{
-			return false;
+			return;
 		}
 
-		return RenderBasic(tex, ps, srcRect, center, D3DXVECTOR3(position.x - tex->GetWidth() / 2,
+		RenderBasic(tex, ps, srcRect, center, D3DXVECTOR3(position.x - tex->GetWidth() / 2,
 			position.y - tex->GetHeight() / 2, position.z),
 			color, scalingCenter, scalingRotation, scaling,
 			rotationCenter, rotation, translation, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime,
 		SPEffectPtr ps,
 		SPTexturePtr	target)
 	{
-		return	ARender(anime, ps, D3DXVECTOR3(0, 0, 0), target);
+		ARender(anime, ps, D3DXVECTOR3(0, 0, 0), target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime,
 		SPEffectPtr ps,
 		float		x,
 		float		y,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, x, y, SPColor::White, target);
+		ARender(anime, ps, x, y, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, position, SPColor::White, target);
+		ARender(anime, ps, position, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, x, y, color, 0, target);
+		ARender(anime, ps, x, y, color, 0, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1229,33 +1196,33 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, D3DXVECTOR3(x, y, depth), color, target);
+		ARender(anime, ps, D3DXVECTOR3(x, y, depth), color, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
+		ARender(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
 	}
 
-	bool SPSpriteManager::ARender( 
+	void SPSpriteManager::ARender( 
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position, 
 		D3DCOLOR	color ,
 		SPTexturePtr	target)
 	{
-		return ARenderBasic(anime, ps, center, position, color, 
+		ARenderBasic(anime, ps, center, position, color, 
 			D3DXVECTOR2(position.x, position.y), 
 			0, D3DXVECTOR2(1, 1),
 			D3DXVECTOR2(position.x, position.y),
 			0, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1265,11 +1232,11 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, D3DXVECTOR3(x, y, depth),
+		ARender(anime, ps, D3DXVECTOR3(x, y, depth),
 			D3DXVECTOR2(scale, scale), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scaling,
@@ -1277,11 +1244,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARender(anime, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
+		ARender(anime, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
 			scaling, D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARender(
+	void SPSpriteManager::ARender(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,			
 		D3DXVECTOR2 scalingCenter,
@@ -1292,13 +1259,13 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, 
+		ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, 
 			scalingCenter, scalingRotation, scaling,
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
 	// Render on screen with rectangle
-	bool SPSpriteManager::ARenderOnScreen(
+	void SPSpriteManager::ARenderOnScreen(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		SPRectangle	destRect,
 		D3DCOLOR	color,
@@ -1307,10 +1274,10 @@ namespace SPEngine
 	{
 		if (!anime)
 		{
-			return false;
+			return;
 		}
 
-		return ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0),
+		ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0),
 			D3DXVECTOR3((float)destRect.X, (float)destRect.Y, depth),
 			color, D3DXVECTOR2((float)destRect.X, (float)destRect.Y), 0,
 			D3DXVECTOR2((float)destRect.Width / anime->SourceRectangle().Width, 
@@ -1320,7 +1287,7 @@ namespace SPEngine
 	}
 
 	// Render animation with scaling
-	bool SPSpriteManager::ARenderWithScaling(
+	void SPSpriteManager::ARenderWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1330,13 +1297,13 @@ namespace SPEngine
 	{
 		if (!anime)
 		{
-			return false;
+			return;
 		}
 
-		return ARenderWithScaling(anime, ps, x, y, scale, color, 0, target);
+		ARenderWithScaling(anime, ps, x, y, scale, color, 0, target);
 	}
 
-	bool SPSpriteManager::ARenderWithScaling(
+	void SPSpriteManager::ARenderWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1345,32 +1312,32 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARenderWithScaling(anime, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
+		ARenderWithScaling(anime, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
 	}
 
-	bool SPSpriteManager::ARenderWithScaling(
+	void SPSpriteManager::ARenderWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		scale,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return	ARenderWithScaling(anime, ps, position, 
+		ARenderWithScaling(anime, ps, position, 
 			D3DXVECTOR2(scale, scale),	color, target);
 	}
 
-	bool SPSpriteManager::ARenderWithScaling(
+	void SPSpriteManager::ARenderWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scaling,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderWithScaling(anime, ps, position,
+		ARenderWithScaling(anime, ps, position,
 			D3DXVECTOR2(position.x, position.y), 0, scaling, color, target);
 	}
 
-	bool SPSpriteManager::ARenderWithScaling(
+	void SPSpriteManager::ARenderWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scalingCenter,
@@ -1379,13 +1346,13 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
+		ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, scalingCenter, scalingRotation, scaling,
 			D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(0, 0), target);
 	}
 
 	// Render with rotation
-	bool SPSpriteManager::ARenderWithRotation(
+	void SPSpriteManager::ARenderWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1393,10 +1360,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderWithRotation(anime, ps, x, y, rotation, color, 0, target);
+		ARenderWithRotation(anime, ps, x, y, rotation, color, 0, target);
 	}
 
-	bool SPSpriteManager::ARenderWithRotation(
+	void SPSpriteManager::ARenderWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1405,21 +1372,21 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARenderWithRotation(anime, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
+		ARenderWithRotation(anime, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderWithRotation(
+	void SPSpriteManager::ARenderWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		rotation,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderWithRotation(anime, ps, position, 
+		ARenderWithRotation(anime, ps, position, 
 			D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderWithRotation(
+	void SPSpriteManager::ARenderWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 rotationCenter,
@@ -1427,12 +1394,12 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
+		ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(1, 1),
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::ARenderBasic(
+	void SPSpriteManager::ARenderBasic(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position,
@@ -1447,43 +1414,43 @@ namespace SPEngine
 	{
 		if (!anime)
 		{
-			return false;
+			return;
 		}
 
-		return RenderBasic(anime, ps, anime->SourceRectangle().CRect(), 
+		RenderBasic(anime, ps, anime->SourceRectangle().CRect(), 
 			center, position, color,	scalingCenter, scalingRotation, 
 			scaling, rotationCenter,	rotation, translation, target);
 	}
 
 	// Render centered
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		SPTexturePtr	target)
 	{
-		return	ARenderCentered(anime, ps, D3DXVECTOR3(0, 0, 0), target);
+		ARenderCentered(anime, ps, D3DXVECTOR3(0, 0, 0), target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime,
 		SPEffectPtr ps,
 		float		x,
 		float		y,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, x, y, SPColor::White, target);
+		ARenderCentered(anime, ps, x, y, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, position, SPColor::White, target);
+		ARenderCentered(anime, ps, position, SPColor::White, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		float		x,
@@ -1491,10 +1458,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, x, y, color, 0, target);
+		ARenderCentered(anime, ps, x, y, color, 0, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		float		x,
@@ -1503,20 +1470,20 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, D3DXVECTOR3(x, y, depth), color, target);
+		ARenderCentered(anime, ps, D3DXVECTOR3(x, y, depth), color, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime,
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
+		ARenderCentered(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered( 
+	void SPSpriteManager::ARenderCentered( 
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 center, 
@@ -1526,17 +1493,16 @@ namespace SPEngine
 	{
 		if (!anime)
 		{
-			return false;
+			return;
 		}
 
 		return ARender(anime, ps, center, D3DXVECTOR3(
 			position.x - anime->SourceRectangle().Width / 2, 
 			position.y - anime->SourceRectangle().Height / 2,
 			position.z), color, target);
-		return true;
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime,
 		SPEffectPtr ps,
 		float		x,
@@ -1547,11 +1513,11 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, D3DXVECTOR3(x, y, depth),
+		ARenderCentered(anime, ps, D3DXVECTOR3(x, y, depth),
 			D3DXVECTOR2(scale, scale), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
@@ -1560,11 +1526,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
+		ARenderCentered(anime, ps, position, D3DXVECTOR2(position.x, position.y), 0, 
 			scaling, D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,			
@@ -1576,12 +1542,12 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, 
+		ARenderCenteredBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, color, 
 			scalingCenter, scalingRotation, scaling,
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
@@ -1590,11 +1556,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCentered(anime, ps, position, scale,
+		ARenderCentered(anime, ps, position, scale,
 			D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCentered(
+	void SPSpriteManager::ARenderCentered(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
@@ -1606,10 +1572,10 @@ namespace SPEngine
 	{
 		if (!anime)
 		{
-			return false;
+			return;
 		}
 
-		return ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), 
+		ARenderBasic(anime, ps, D3DXVECTOR3(0, 0, 0), 
 			D3DXVECTOR3(position.x - anime->SourceRectangle().Width / 2,
 			position.y - anime->SourceRectangle().Height / 2, position.z),
 			color, D3DXVECTOR2(position.x, position.y), 
@@ -1618,7 +1584,7 @@ namespace SPEngine
 	}
 
 	// Render with scaling
-	bool SPSpriteManager::ARenderCenteredWithScaling(
+	void SPSpriteManager::ARenderCenteredWithScaling(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		float		x,
@@ -1627,10 +1593,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredWithScaling(anime, ps, x, y, scale, color, 0, target);
+		ARenderCenteredWithScaling(anime, ps, x, y, scale, color, 0, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithScaling(
+	void SPSpriteManager::ARenderCenteredWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1639,10 +1605,10 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredWithScaling(anime, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
+		ARenderCenteredWithScaling(anime, ps, D3DXVECTOR3(x, y, depth), scale, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithScaling(
+	void SPSpriteManager::ARenderCenteredWithScaling(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
@@ -1650,11 +1616,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return	ARenderCenteredWithScaling(anime, ps, position, 
+		ARenderCenteredWithScaling(anime, ps, position, 
 			D3DXVECTOR2(scale, scale),	color, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithScaling(
+	void SPSpriteManager::ARenderCenteredWithScaling(
 		SPAnimatedTexturePtr anime, 
 		SPEffectPtr ps,
 		D3DXVECTOR3 position,
@@ -1662,11 +1628,11 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredWithScaling(anime, ps, position,
+		ARenderCenteredWithScaling(anime, ps, position,
 			D3DXVECTOR2(position.x, position.y), 0, scaling, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithScaling(
+	void SPSpriteManager::ARenderCenteredWithScaling(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 scalingCenter,
@@ -1675,13 +1641,13 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
+		ARenderCenteredBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, scalingCenter, scalingRotation, scaling,
 			D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(0, 0), target);
 	}
 
 	// Render with rotation
-	bool SPSpriteManager::ARenderCenteredWithRotation(
+	void SPSpriteManager::ARenderCenteredWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1689,10 +1655,10 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredWithRotation(anime, ps, x, y, rotation, color, 0, target);
+		ARenderCenteredWithRotation(anime, ps, x, y, rotation, color, 0, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithRotation(
+	void SPSpriteManager::ARenderCenteredWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		float		x,
 		float		y,
@@ -1701,21 +1667,21 @@ namespace SPEngine
 		float		depth,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredWithRotation(anime, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
+		ARenderCenteredWithRotation(anime, ps, D3DXVECTOR3(x,y,depth), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithRotation(
+	void SPSpriteManager::ARenderCenteredWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		float		rotation,
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredWithRotation(anime, ps, position, 
+		ARenderCenteredWithRotation(anime, ps, position, 
 			D3DXVECTOR2(position.x, position.y), rotation, color, target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredWithRotation(
+	void SPSpriteManager::ARenderCenteredWithRotation(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 position,
 		D3DXVECTOR2 rotationCenter,
@@ -1723,12 +1689,12 @@ namespace SPEngine
 		D3DCOLOR	color,
 		SPTexturePtr	target)
 	{
-		return ARenderCenteredBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
+		ARenderCenteredBasic(anime, ps, D3DXVECTOR3(0, 0, 0), position, 
 			color, D3DXVECTOR2(position.x, position.y), 0, D3DXVECTOR2(1, 1),
 			rotationCenter, rotation, D3DXVECTOR2(0, 0), target);
 	}
 
-	bool SPSpriteManager::ARenderCenteredBasic(
+	void SPSpriteManager::ARenderCenteredBasic(
 		SPAnimatedTexturePtr anime, SPEffectPtr ps,
 		D3DXVECTOR3 center, 
 		D3DXVECTOR3 position,
@@ -1743,15 +1709,15 @@ namespace SPEngine
 	{
 		if (!anime)
 		{
-			return false;
+			return;
 		}
 
-		return RenderCenteredBasic(anime, ps, anime->SourceRectangle().CRect(), center, position, 
+		RenderCenteredBasic(anime, ps, anime->SourceRectangle().CRect(), center, position, 
 			color, scalingCenter, scalingRotation, scaling, 
 			rotationCenter, rotation,translation, target);
 	}
 
-	bool SPSpriteManager::Draw( float timeDelta )
+	void SPSpriteManager::Draw( float timeDelta )
 	{
 		if (isTopological)
 		{
@@ -1761,11 +1727,9 @@ namespace SPEngine
 		{
 			DrawSimple(timeDelta);
 		}
-
-		return true;
 	}
 
-	bool SPSpriteManager::PreDraw()
+	void SPSpriteManager::PreDraw()
 	{
 		HRESULT hr = S_OK;
 		hr = SPDevice::GetSingleton()->GetD3DDevice()->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
@@ -1791,11 +1755,9 @@ namespace SPEngine
 		//hr = SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState( 0, D3DTSS_RESULTARG, D3DTA_CURRENT );
 		//hr = SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
 		//hr = SPDevice::GetSingleton()->GetD3DDevice()->SetTextureStageState( 1, D3DTSS_ALPHAOP, D3DTOP_DISABLE );
-		return true;
 	}
 
-	bool SPSpriteManager::PostDraw()
+	void SPSpriteManager::PostDraw()
 	{
-		return true;
 	}
 }

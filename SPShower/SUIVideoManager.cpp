@@ -116,7 +116,7 @@ Handle<ObjectTemplate> SUIVideoManager::GetVideoTemplate()
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*videoTempl));
 }
 
-bool SUIVideoManager::Initialize()
+void SUIVideoManager::Initialize()
 {
 	//
 	// Enter
@@ -131,6 +131,4 @@ bool SUIVideoManager::Initialize()
 
 	videoTempl = new Persistent<ObjectTemplate>(SPV8ScriptEngine::GetSingleton()->GetIsolate(), 
 		SV8TemplVideo::GetTemplate());
-
-	return true;
 }

@@ -28,6 +28,6 @@ public:
 	Handle<Object> CreateParticleSystem(Handle<Object> argObj);
 	Handle<ObjectTemplate> GetParticleSystemTemplate();
 
-	virtual bool Initialize();
+	virtual void Initialize();
 };
 

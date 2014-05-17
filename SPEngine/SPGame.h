@@ -190,10 +190,10 @@ namespace SPEngine
 		virtual bool Start();
 
 		/// @brief    Exit. Exit the game.
-		/// @return   bool. Return true if successfully exited.
-		virtual bool Exit();
-		virtual bool ExitGameThread();
-		bool		ExitButtonPressed();
+		virtual void Exit();
+		virtual void ExitGameThread();
+		virtual void OnExit();
+		bool ExitButtonPressed();
 
 		bool ApplyConfig(SPConfig config);
 		void ApplyConfigWhenCurrentDrawFinished(SPConfig config);

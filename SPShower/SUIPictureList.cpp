@@ -15,13 +15,13 @@ SUIPictureList::~SUIPictureList(void)
 {
 }
 
-bool SUIPictureList::Draw( float timeDelta )
+void SUIPictureList::Draw( float timeDelta )
 {
 	target = NULL;
 
 	if (!baseImage)
 	{
-		return true;
+		return;
 	}	
 
 	SRectangle texRect;
@@ -34,7 +34,7 @@ bool SUIPictureList::Draw( float timeDelta )
 	{
 		target = baseImage;
 
-		return true;
+		return;
 	}
 
 	ImageIterator iter = mixImages.begin();	
@@ -74,18 +74,16 @@ bool SUIPictureList::Draw( float timeDelta )
 	}
 
 	target = lastTarget;
-
-	return true;
 }
 
-bool SUIPictureList::SetMixImage( SUIMixImage image)
+void SUIPictureList::SetMixImage( SUIMixImage image)
 {
 	ImageIterator iter = mixImages.begin();	
 
 	if (mixImages.size() == 0)
 	{
 		mixImages.push_back(image);
-		return true;
+		return;
 	}
 
 	ImageIterator nextIter = iter;
@@ -109,15 +107,11 @@ bool SUIPictureList::SetMixImage( SUIMixImage image)
 	}
 
 	mixImages.insert(nextIter, image);
-
-	return true;
 }
 
-bool SUIPictureList::SetBaseImage( SPTexturePtr base )
+void SUIPictureList::SetBaseImage( SPTexturePtr base )
 {
 	baseImage = base;
-
-	return true;
 }
 
 SPEngine::SPTexturePtr SUIPictureList::GetTarget()
@@ -145,35 +139,28 @@ int SUIPictureList::GetWidth()
 	return baseImage->GetWidth();
 }
 
-bool SUIPictureList::SetName( SPString setName )
+void SUIPictureList::SetName( SPString setName )
 {
 	name = setName;
-
-	return true;
 }
 
-bool SUIPictureList::Reload()
+void SUIPictureList::Reload()
 {
-	return Load();
+	Load();
 }
 
-bool SUIPictureList::Load()
+void SUIPictureList::Load()
 {
-	return true;
 }
 
-bool SUIPictureList::Unload()
+void SUIPictureList::Unload()
 {
 	target = NULL;
-
-	return true;
 }
 
-bool SUIPictureList::SaveBaseAsFile( SPString path )
+void SUIPictureList::SaveBaseAsFile( SPString path )
 {
 	D3DXSaveTextureToFile((path+L".bmp").c_str(), D3DXIFF_BMP, baseImage->GetD3DTexture(), NULL);
-
-	return true;
 }
 
 SPString SUIPictureList::GetName()
@@ -181,9 +168,8 @@ SPString SUIPictureList::GetName()
 	return name;
 }
 
-bool SUIPictureList::LoadFromString( SPString stringStream )
+void SUIPictureList::LoadFromString( SPString stringStream )
 {
-	return true;
 }
 
 SPString SUIPictureList::SaveAsString()

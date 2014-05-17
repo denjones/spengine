@@ -20,7 +20,7 @@ SUIDialogBox::~SUIDialogBox(void)
 {
 }
 
-bool SUIDialogBox::AddText( SUIText text )
+void SUIDialogBox::AddText( SUIText text )
 {
 	Clean();
 
@@ -36,11 +36,9 @@ bool SUIDialogBox::AddText( SUIText text )
 	modificationLock.Lock();
 	textsToPush.push_back(text);
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIDialogBox::Update( float timeDelta )
+void SUIDialogBox::Update( float timeDelta )
 {
 	SPTransition::Update(timeDelta);
 
@@ -61,7 +59,7 @@ bool SUIDialogBox::Update( float timeDelta )
 
 		modificationLock.Unlock();
 
-		return true;
+		return;
 	}
 
 	if (elapsedLastAddTime > 1.0 / displaySpeed || nextLine)
@@ -83,14 +81,14 @@ bool SUIDialogBox::Update( float timeDelta )
 			{
 				waitingNextLine = true;
 				modificationLock.Unlock();
-				return true;
+				return;
 			}
 
 			if (characterToPush.text == L"\f")
 			{
 				waitingNextPage = true;
 				modificationLock.Unlock();
-				return true;
+				return;
 			}
 
 			modificationLock.Unlock();
@@ -212,16 +210,13 @@ bool SUIDialogBox::Update( float timeDelta )
 
 		elapsedLastAddTime = 0;
 	}
-
-	return true;
 }
 
-bool SUIDialogBox::SetSpeed( float setSpeed )
+void SUIDialogBox::SetSpeed( float setSpeed )
 {
 	modificationLock.Lock();
 	displaySpeed = setSpeed;
 	modificationLock.Unlock();
-	return true;
 }
 
 float SUIDialogBox::GetSpeed()
@@ -229,15 +224,14 @@ float SUIDialogBox::GetSpeed()
 	return displaySpeed;
 }
 
-bool SUIDialogBox::Next()
+void SUIDialogBox::Next()
 {
 	modificationLock.Lock();
 	nextLine = true;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIDialogBox::Draw( float timeDelta )
+void SUIDialogBox::Draw( float timeDelta )
 {
 	D3DXVECTOR2 pos = Position();
 
@@ -257,26 +251,24 @@ bool SUIDialogBox::Draw( float timeDelta )
 	}
 
 
-	return SUITextBox::Draw(timeDelta);
+	SUITextBox::Draw(timeDelta);
 }
 
-bool SUIDialogBox::SetNextLineTex( SPTexturePtr setTex )
+void SUIDialogBox::SetNextLineTex( SPTexturePtr setTex )
 {
 	modificationLock.Lock();
 	nextLineTex = setTex;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIDialogBox::SetNextPageTex( SPTexturePtr setTex )
+void SUIDialogBox::SetNextPageTex( SPTexturePtr setTex )
 {
 	modificationLock.Lock();
 	nextPageTex = setTex;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIDialogBox::Clear()
+void SUIDialogBox::Clear()
 {
 	Clean();
 	SUITextBox::Clear();
@@ -287,14 +279,12 @@ bool SUIDialogBox::Clear()
 
 	if (textsToPush.size() == 0 && CurrentLine()->size() == 0)
 	{
-		return true;
+		return;
 	}
 
 	modificationLock.Lock();
 	textsToPush.push_back(SUIText(L"\f"));	
 	modificationLock.Unlock();
-
-	return true;
 }
 
 bool SUIDialogBox::IsDisplaying()
@@ -302,9 +292,9 @@ bool SUIDialogBox::IsDisplaying()
 	return (!waitingNextLine && !waitingNextPage);
 }
 
-bool SUIDialogBox::LoadFromString( SPString stringStream )
+void SUIDialogBox::LoadFromString( SPString stringStream )
 {
-	return true;
+
 }
 
 SPString SUIDialogBox::SaveAsString()
@@ -329,25 +319,21 @@ SPString SUIDialogBox::SaveAsString()
 	return L"";
 }
 
-bool SUIDialogBox::ForceClear()
+void SUIDialogBox::ForceClear()
 {
 	modificationLock.Lock();
 	textsToPush.clear();
 	modificationLock.Unlock();
 
 	Clear();
-
-	return true;
 }
 
-bool SUIDialogBox::ForceAddText( SUIText text )
+void SUIDialogBox::ForceAddText( SUIText text )
 {
 	SUITextBox::AddText(text);
-
-	return true;
 }
 
-bool SUIDialogBox::Skip()
+void SUIDialogBox::Skip()
 {
 	SUIComponent::Skip();
 
@@ -387,11 +373,9 @@ bool SUIDialogBox::Skip()
 	}
 
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIDialogBox::Clean()
+void SUIDialogBox::Clean()
 {
 	if(lines.size() == 1 && CurrentLine()->size() == 1 && CurrentLine()->front()->text.text.size() == 0)
 	{
@@ -404,26 +388,22 @@ bool SUIDialogBox::Clean()
 		textsToPush.clear();
 		modificationLock.Unlock();
 	}
-
-	return true;
 }
 
-bool SUIDialogBox::MarkTextToAdd()
+void SUIDialogBox::MarkTextToAdd()
 {
 	modificationLock.Lock();
 	isHasTextToAdd = true;
 	isHasTextToClear = false;
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIDialogBox::MarkTextToClear()
+void SUIDialogBox::MarkTextToClear()
 {
 	modificationLock.Lock();
 	isHasTextToClear = true;
 	isHasTextToAdd = false;
 	modificationLock.Unlock();
-	return true;
 }
 
 bool SUIDialogBox::IsShowNextLineTex()

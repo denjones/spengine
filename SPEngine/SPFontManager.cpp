@@ -32,30 +32,26 @@ namespace SPEngine
 		}
 	}
 
-	bool SPFontManager::Reload()
+	void SPFontManager::Reload()
 	{
 		SPWStringMapIterator<SPFontPtr> iterFont(&fonts);
 		for(iterFont.First(); !iterFont.IsDone(); iterFont.Next())
 		{
 			iterFont.CurrentItem()->Reload();
 		}
-
-		return true;
 	}
 
-	bool SPFontManager::Unload()
+	void SPFontManager::Unload()
 	{
 		SPWStringMapIterator<SPFontPtr> iterFont(&fonts);
 		for(iterFont.First(); !iterFont.IsDone(); iterFont.Next())
 		{
 			iterFont.CurrentItem()->Unload();
 		}
-		return true;
 	}
 
-	bool SPFontManager::Initialize()
+	void SPFontManager::Initialize()
 	{	
-		return true;
 	}
 
 	SPFontPtr SPFontManager::AddFont(SPString name, SPFontPtr font)
@@ -107,10 +103,9 @@ namespace SPEngine
 		return font;
 	}
 
-	bool SPFontManager::SetUpFont( wstring path )
+	void SPFontManager::SetUpFont( wstring path )
 	{
 		AddFontResource(path.c_str());
-		return true;
 	}
 
 	float SPFontManager::GetSizeRate()
@@ -118,15 +113,14 @@ namespace SPEngine
 		return sizeRate;
 	}
 
-	bool SPFontManager::SetSizeRate(float setRate)
+	void SPFontManager::SetSizeRate(float setRate)
 	{
 		if (setRate <= 0 )
 		{
-			return false;
+			return;
 		}
 
 		sizeRate = setRate;
-		return true;
 	}
 
 	float SPFontManager::GetMarginRate()
@@ -134,26 +128,24 @@ namespace SPEngine
 		return marginRate;
 	}
 
-	bool SPFontManager::SetMarginRate( float setRate )
+	void SPFontManager::SetMarginRate( float setRate )
 	{
 		if (setRate < 0)
 		{
-			return false;
+			return;
 		}
 
 		marginRate = setRate;
-
-		return true;
 	}
 
-	bool SPFontManager::AddExtendedFont( SPString path )
+	void SPFontManager::AddExtendedFont( SPString path )
 	{
 		SPFilePtr file = SPFileManager::GetSingleton()->OpenFile(path);
 
 		if (!file)
 		{
 			SPLogHelper::WriteLog(L"[SPFont] Warning: Failed to open font file: " + path);
-			return false;
+			return;
 		}
 
 		file = SPFileManager::GetSingleton()->OpenFile(path);
@@ -173,16 +165,14 @@ namespace SPEngine
 		if (!handle)
 		{
 			SPLogHelper::WriteLog(L"[SPFont] Warning: Failed to add font: " + path);
-			return false;
+			return;
 		}		
 
 		extendedFont.push_back(handle);
 		extendedFontPath.push_back(path);
-
-		return true;
 	}
 
-	bool SPFontManager::LoadFromString( SPString stringStream )
+	void SPFontManager::LoadFromString( SPString stringStream )
 	{
 		SPString sizeRateString = SPStringHelper::XMLExcludeFrom(stringStream, L"SizeRate");
 		stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"SizeRate");
@@ -223,8 +213,6 @@ namespace SPEngine
 				SPStringHelper::StringToInt(fontMipLevel),
 				SPStringHelper::StringToInt(fontItalic) > 0, fontName);
 		}
-
-		return true;
 	}
 
 	SPString SPFontManager::SaveAsString()

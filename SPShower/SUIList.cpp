@@ -18,7 +18,7 @@ SUIList::~SUIList(void)
 {
 }
 
-bool SUIList::SetScrollPosition( float setPos )
+void SUIList::SetScrollPosition( float setPos )
 {
 	modificationLock.Lock();
 
@@ -35,8 +35,6 @@ bool SUIList::SetScrollPosition( float setPos )
 	scrollPosition = setPos;
 
 	modificationLock.Unlock();
-
-	return true;
 }
 
 float SUIList::GetScrollPosition()
@@ -44,7 +42,7 @@ float SUIList::GetScrollPosition()
 	return scrollPosition;
 }
 
-bool SUIList::Update( float timeDelta )
+void SUIList::Update( float timeDelta )
 {
 	SUIComponent::Update(timeDelta);
 
@@ -55,11 +53,9 @@ bool SUIList::Update( float timeDelta )
 		SUIManager::GetSingleton()->GetCurrentScreen()->RemoveComponent(children.front()->GetName());
 		children.pop_front();
 	}
-
-	return true;
 }
 
-bool SUIList::Draw( float timeDelta )
+void SUIList::Draw( float timeDelta )
 {
 	// Render children UI component.
 	int currentPos = 0;
@@ -212,16 +208,13 @@ bool SUIList::Draw( float timeDelta )
 
 		iter++;
 	}	
-
-	return true;
 }
 
-bool SUIList::SetDirection( ListType setType )
+void SUIList::SetDirection( ListType setType )
 {
 	modificationLock.Lock();
 	type = setType;
 	modificationLock.Unlock();
-	return true;
 }
 
 SUIList::ListType SUIList::GetDirection()
@@ -229,12 +222,11 @@ SUIList::ListType SUIList::GetDirection()
 	return type;
 }
 
-bool SUIList::SetMaxItemNum( int setNum )
+void SUIList::SetMaxItemNum( int setNum )
 {
 	modificationLock.Lock();
 	maxItemNum = setNum;
 	modificationLock.Unlock();
-	return true;
 }
 
 int SUIList::GetMaxItemNum()
@@ -242,9 +234,8 @@ int SUIList::GetMaxItemNum()
 	return maxItemNum;
 }
 
-bool SUIList::LoadFromString( SPString stringStream )
+void SUIList::LoadFromString( SPString stringStream )
 {
-	return true;
 }
 
 SPString SUIList::SaveAsString()
@@ -256,16 +247,13 @@ SPString SUIList::SaveAsString()
 	return L"";
 }
 
-bool SUIList::Scroll( int delta )
+void SUIList::Scroll( int delta )
 {
 	float deltaPos = (float)delta / (maxLength - GetHeight());
-
 	SetScrollPosition(scrollPosition + deltaPos);
-
-	return true;
 }
 
-bool SUIList::ClearChild()
+void SUIList::ClearChild()
 {
 	modificationLock.Lock();
 
@@ -283,11 +271,9 @@ bool SUIList::ClearChild()
 	}
 
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIList::HandleEvent( SUIEventPtr e )
+void SUIList::HandleEvent( SUIEventPtr e )
 {
 	//if (!e)
 	//{
@@ -328,7 +314,7 @@ bool SUIList::HandleEvent( SUIEventPtr e )
 
 	//return true;
 
-	return SUIComponent::HandleEvent(e);
+	SUIComponent::HandleEvent(e);
 }
 
 Handle<Object> SUIList::GetV8Obj()

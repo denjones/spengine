@@ -4,6 +4,7 @@
 #include "SUITextBox.h"
 #include "SUIPictureBox.h"
 #include "SUIEvent.h"
+#include "ISV8Serializable.h"
 
 using namespace SPEngine;
 
@@ -11,7 +12,9 @@ class SUIScreen;
 
 typedef SPPointer<SUIScreen> SUIScreenPtr;
 
-class SUIScreen : public SPBaseScreen
+class SUIScreen : 
+	public SPBaseScreen,
+	public ISV8Serializable
 {
 	// V8 Object
 	SPPointer<Persistent<Object>> v8Obj;
@@ -50,39 +53,43 @@ public:
 	SUIComponentPtr GetPersistentComponent( SUIComponent* component );
 	SPTexturePtr GetRenderTarget();
 	SUIComponentPtr GetComponent(SPString name);
-	bool AddComponent(SUIComponentPtr newComponent);
-	bool CreateComponent(SPString name, SUIComponentPtr newComponent);
-	bool RemoveComponent(SPString name);
-	bool AddChildComponent(SPString fatherName, SPString childName);
-	bool SetTargetScreen(SUIScreenPtr setTarget);
+	void AddComponent(SUIComponentPtr newComponent);
+	void CreateComponent(SPString name, SUIComponentPtr newComponent);
+	void RemoveComponent(SPString name);
+	void AddChildComponent(SPString fatherName, SPString childName);
+	void SetTargetScreen(SUIScreenPtr setTarget);
 	SUIScreenPtr GetTargetScreen();
-	bool SetTransformation(SUITransformationPtr setTrans);
-	bool SetBackgroundColor(D3DCOLOR setColor);
+	void SetTransformation(SUITransformationPtr setTrans);
+	void SetBackgroundColor(D3DCOLOR setColor);
 	D3DCOLOR GetBackgroundColor();
-	bool SetCurrentComponent(SUIComponentPtr setComponent);
-	bool SetCurrentTextBox(SUITextBoxPtr setTextBox);
-	bool SetCurrentPictureBox(SUIPictureBoxPtr setPictureBox);
+	void SetCurrentComponent(SUIComponentPtr setComponent);
+	void SetCurrentTextBox(SUITextBoxPtr setTextBox);
+	void SetCurrentPictureBox(SUIPictureBoxPtr setPictureBox);
 	SUIComponentPtr GetCurrentComponent();
 	SUITextBoxPtr GetCurrentTextBox();
 	SUIPictureBoxPtr GetCurrentPictureBox();
 
-	bool SetPopUp(bool setPopUp);
+	void SetPopUp(bool setPopUp);
 
 	void Focus();
 
-	bool HandleEvent(SUIEventPtr e);
+	void HandleEvent(SUIEventPtr e);
 
-	bool Initialize();
-	bool Load();
-	bool Unload();
-	bool Reload();
-	bool Update(float timeDelta);
-	bool Draw(float timeDelta);
-	bool DrawOffScreen(float timeDelta);
-	bool Clear();
+	void Initialize();
+	void Load();
+	void Unload();
+	void Reload();
+	void Update(float timeDelta);
+	void Draw(float timeDelta);
+	void DrawOffScreen(float timeDelta);
+	void Clear();
 
 	SPString SaveAsString();
-	bool LoadFromString(SPString stringStrema);
+	void LoadFromString(SPString stringStrema);
+
+	virtual Handle<Object> SaveAsObj();
+	virtual void LoadFromObj( Handle<Object> obj );
+
 };
 
 

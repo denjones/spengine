@@ -15,8 +15,8 @@ public:
 	SUIEffectManager(void);
 	virtual ~SUIEffectManager(void);
 
-	bool Load();
-	bool Initialize();
+	void Load();
+	void Initialize();
 
 	SUIEffectPtr CreateEffect(SPString path );
 	SUIEffectPtr GetEffect(SPString name);

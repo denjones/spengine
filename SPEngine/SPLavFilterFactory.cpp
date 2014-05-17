@@ -15,7 +15,7 @@ namespace SPEngine
 	{
 	}
 
-	bool SPLavFilterFactory::Load()
+	void SPLavFilterFactory::Load()
 	{
 		//
 		// Load Splitter Factory
@@ -96,18 +96,15 @@ namespace SPEngine
 		{
 			SPLogHelper::WriteLog("[DShow] WARNING: Failed to Load LAVAudio.ax :" + SPStringHelper::ToString((int)GetLastError()));
 		}
-
-		return true;
 	}
 
-	bool SPLavFilterFactory::Unload()
+	void SPLavFilterFactory::Unload()
 	{
-		return true;
 	}
 
-	bool SPLavFilterFactory::Reload()
+	void SPLavFilterFactory::Reload()
 	{
-		return Load();
+		Load();
 	}
 
 	HRESULT SPLavFilterFactory::CreateLAVSplitter( IBaseFilter* &pLAVSplitter )

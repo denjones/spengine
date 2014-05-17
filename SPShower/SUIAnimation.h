@@ -11,8 +11,8 @@ class SUIAnimation : public SUITransition
 	SUIProperties currentPoint;
 
 public:
-	bool SetStartPoint(SUIProperties setStart);
-	bool SetEndPoint(SUIProperties setEnd);
+	void SetStartPoint(SUIProperties setStart);
+	void SetEndPoint(SUIProperties setEnd);
 	SUIProperties GetCurrentPoint();
 	SUIProperties GetTargetPoint();
 
@@ -20,7 +20,7 @@ public:
 	SUIAnimation(void);
 	virtual ~SUIAnimation(void);
 
-	bool Update(float timeDelta);
+	void Update(float timeDelta);
 };
 
 typedef SPPointer<SUIAnimation> SUIAnimationPtr;

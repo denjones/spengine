@@ -130,7 +130,7 @@ namespace SPEngine
 		void AdjustMainWindow(bool bExclusive,
 			int nScreenWidth, int nScreenHeight);
 
-		bool Update(float timeDelta);
+		void Update(float timeDelta);
 
 		bool IsActive();
 		bool IsJustActive();

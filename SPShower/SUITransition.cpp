@@ -19,12 +19,12 @@ SUITransition::~SUITransition(void)
 {
 }
 
-bool SUITransition::Update( float timeDelta )
+void SUITransition::Update( float timeDelta )
 {
-	return SPTransition::Update(timeDelta);
+	SPTransition::Update(timeDelta);
 }
 
-bool SUITransition::Play()
+void SUITransition::Play()
 {
 	if (transitionOnTime == 0)
 	{
@@ -37,35 +37,28 @@ bool SUITransition::Play()
 		transitionPosition = 0;
 		state = TransitionOn;
 	}
-
-	return true;
 }
 
-bool SUITransition::Stop()
+void SUITransition::Stop()
 {
 	transitionPosition = 0;
 	state = Hidden;
-	return true;
 }
 
-bool SUITransition::Skip()
+void SUITransition::Skip()
 {
 	if (CanSkip())
 	{
 		transitionPosition = 1;
 		state = Active;
-		return true;
+		return;
 	}
-	
-	return false;
 }
 
-bool SUITransition::SetTime( float time )
+void SUITransition::SetTime( float time )
 {
 	transitionOnTime = time;
 	transitionOffTime = time;
-
-	return true;
 }
 
 float SUITransition::GetTransition()
@@ -98,16 +91,13 @@ float SUITransition::GetTransition()
 	return position;
 }
 
-bool SUITransition::SetType( TransitionType setType )
+void SUITransition::SetType( TransitionType setType )
 {
 	type = setType;
-
-	return true;
 }
 
-bool SUITransition::SetCanSkip( bool setSkip )
+void SUITransition::SetCanSkip( bool setSkip )
 {
 	canSkip = setSkip; 
-	return true;
 }
 

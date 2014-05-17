@@ -34,22 +34,22 @@ namespace SPEngine
 
 		/// @name Component methods.
 		/// @{
-		bool Initialize();
-		bool Load();
-		bool Unload();
-		bool Update(float timeDelta);
-		bool PreDraw();
-		bool Draw(float timeDelta);
-		bool PostDraw();
+		void Initialize();
+		void Load();
+		void Unload();
+		void Update(float timeDelta);
+		void PreDraw();
+		void Draw(float timeDelta);
+		void PostDraw();
 		/// @}
 
 		/// @brief Add Sprite.
-		bool AddSprite3D(SPTexturePtr tex, SPEffectPtr ps);
-		bool AddSprite3D(
+		void AddSprite3D(SPTexturePtr tex, SPEffectPtr ps);
+		void AddSprite3D(
 			SPTexturePtr	tex, 
 			SPEffectPtr ps, 
 			D3DXMATRIX		transformMatrix);
-		bool AddSprite3D(
+		void AddSprite3D(
 			SPTexturePtr	tex, 
 			SPEffectPtr ps, 
 			D3DXVECTOR3		scalingCenter, 
@@ -58,7 +58,7 @@ namespace SPEngine
 			D3DXVECTOR3		rotationCenter,
 			D3DXQUATERNION	rotation, 
 			D3DXVECTOR3		translation);
-		bool AddSprite3D(
+		void AddSprite3D(
 			SPTexturePtr	setTexture,
 			SPEffectPtr ps, 
 			D3DXVECTOR3		scalingCenter,
@@ -75,8 +75,8 @@ namespace SPEngine
 
 		/// @name Render methods.
 		/// @{
-		bool Render(SPTexturePtr setTexture, SPEffectPtr ps);
-		bool Render( 
+		void Render(SPTexturePtr setTexture, SPEffectPtr ps);
+		void Render( 
 			SPTexturePtr	setTexture,
 			SPEffectPtr ps, 
 			D3DXVECTOR3		scalingCenter, 
@@ -85,24 +85,24 @@ namespace SPEngine
 			D3DXVECTOR3		rotationCenter,
 			D3DXQUATERNION	rotation, 
 			D3DXVECTOR3		translation);
-		bool RenderByPosition(
+		void RenderByPosition(
 			SPTexturePtr	setTexture,
 			SPEffectPtr ps, 
 			D3DXVECTOR3		position);
-		bool RenderByPositionWithRotateself(
+		void RenderByPositionWithRotateself(
 			SPTexturePtr	setTexture,
 			SPEffectPtr ps, 
 			D3DXVECTOR3		position,
 			D3DXVECTOR3		rotationPoint,
 			D3DXVECTOR3		rotationAxis,
 			float			degree);
-		bool RenderWithTranformation(			
+		void RenderWithTranformation(			
 			SPTexturePtr	setTexture,
 			SPEffectPtr ps, 
 			D3DXMATRIX		transformMatrix);		
 		/// @}
 
 	protected:
-		bool DrawSprite(SPSprite3D sprite);		
+		void DrawSprite(SPSprite3D sprite);		
 	};
 }

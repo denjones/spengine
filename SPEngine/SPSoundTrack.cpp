@@ -18,51 +18,41 @@ namespace SPEngine
 		Unload();
 	}
 
-	bool SPSoundTrack::Unload()
+	void SPSoundTrack::Unload()
 	{
 		sound = NULL;
-
-		return true;
 	}
 
-	bool SPSoundTrack::Pause()
+	void SPSoundTrack::Pause()
 	{
 		if (sound)
 		{
 			sound->Pause();
 		}
-
-		return true;
 	}
 
-	bool SPSoundTrack::Play()
+	void SPSoundTrack::Play()
 	{
 		if (sound)
 		{
 			sound->Play();
 		}
-
-		return true;
 	}
 
-	bool SPSoundTrack::Stop()
+	void SPSoundTrack::Stop()
 	{
 		if (sound)
 		{
 			sound->Stop();
 		}
-
-		return true;
 	}
 
-	bool SPSoundTrack::Update( float timeDelta )
+	void SPSoundTrack::Update( float timeDelta )
 	{
 		if (sound)
 		{
-			return sound->Update(timeDelta);
+			sound->Update(timeDelta);
 		}
-
-		return true;
 	}
 
 	SPEngine::SPSoundPtr SPSoundTrack::GetSound()
@@ -70,11 +60,11 @@ namespace SPEngine
 		return sound;
 	}
 
-	bool SPSoundTrack::SetSound( SPSoundPtr setSound )
+	void SPSoundTrack::SetSound( SPSoundPtr setSound )
 	{
 		if (!setSound)
 		{
-			return false;
+			return;
 		}
 
 		if (sound)
@@ -96,11 +86,9 @@ namespace SPEngine
 		sound->SetLoopTimes(loopTimes);
 
 		soundName = setSound->GetPath();
-
-		return true;
 	}
 
-	bool SPSoundTrack::SetSound( SPString setSound )
+	void SPSoundTrack::SetSound( SPString setSound )
 	{
 		SPSoundPtr sound = SPSoundManager::GetSingleton()->GetSound(setSound);
 		if (!sound)
@@ -111,13 +99,11 @@ namespace SPEngine
 		if (sound)
 		{
 			soundName = setSound;
-			return SetSound(sound);
+			SetSound(sound);
 		}
-		
-		return false;
 	}
 
-	bool SPSoundTrack::SetVolume(float setVol)
+	void SPSoundTrack::SetVolume(float setVol)
 	{
 		volume = setVol;
 
@@ -132,8 +118,6 @@ namespace SPEngine
 				sound->SetVolume(volume);
 			}
 		}		
-
-		return true;
 	}
 
 	float SPSoundTrack::GetVolume()
@@ -146,11 +130,9 @@ namespace SPEngine
 		return isMute;
 	}
 
-	bool SPSoundTrack::Mute()
+	void SPSoundTrack::Mute()
 	{
 		SetMute(!isMute);	
-
-		return true;
 	}
 
 	SPString SPSoundTrack::GetSoundName()

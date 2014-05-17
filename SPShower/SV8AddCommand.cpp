@@ -23,11 +23,27 @@ void SV8Function::AddCommand( const FunctionCallbackInfo<Value>& args )
 	}
 
 	Handle<Function> function = Handle<Function>::Cast(args[0]);
+
+	int stackLimit = 10;
+	Handle<StackTrace> stackTrace = v8::StackTrace::CurrentStackTrace(stackLimit);
 	
-	Handle<StackFrame> stackFrame = v8::StackTrace::CurrentStackTrace(1)->GetFrame(0);
-	int line = stackFrame->GetLineNumber();
-	int col = stackFrame->GetColumn();
-	SPString file = SPV8ScriptEngine::StringToSPString(stackFrame->GetScriptName());
+	SPString functionName = L"";
+	SPString file = L"";
+	int col = 0;
+	int line = 0;
+
+	for (int i = 0; i < stackTrace->GetFrameCount(); i++)
+	{
+		Handle<StackFrame> stackFrame = stackTrace->GetFrame(i);
+		line = stackFrame->GetLineNumber();
+		col = stackFrame->GetColumn();
+		functionName = SPV8ScriptEngine::StringToSPString(stackFrame->GetFunctionName());
+		file = SPV8ScriptEngine::StringToSPString(stackFrame->GetScriptName());
+		if (functionName == L"")
+		{
+			break;
+		}
+	}
 	SV8ScriptManager::GetSingleton()->AddCommand(new SV8ScriptCommand(function, line, col, file));
 	
 }

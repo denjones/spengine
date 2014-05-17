@@ -22,19 +22,19 @@ protected:
 
 public:
 	bool CanSkip() { return canSkip; }
-	bool SetType(TransitionType setType);
-	bool SetCanSkip(bool setSkip);
+	void SetType(TransitionType setType);
+	void SetCanSkip(bool setSkip);
 	float GetTransition();
 
 public:
 	SUITransition(void);
 	virtual ~SUITransition(void);
 
-	virtual bool Update(float timeDelta);
-	virtual bool Play();
-	virtual bool Stop();
-	virtual bool Skip();
-	virtual bool SetTime(float time);
+	virtual void Update(float timeDelta);
+	virtual void Play();
+	virtual void Stop();
+	virtual void Skip();
+	virtual void SetTime(float time);
 };
 
 

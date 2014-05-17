@@ -27,7 +27,7 @@ namespace SPEngine
 	{
 	}
 
-	bool SPPixelShaderCore::Load( SPString path )
+	void SPPixelShaderCore::Load( SPString path )
 	{
 		name = path;
 
@@ -36,7 +36,7 @@ namespace SPEngine
 		if (!file)
 		{
 			SPLogHelper::WriteLog(L"[SPShader] WARNING: Failed to open shader file: " + path);
-			return false;
+			return;
 		}
 
 		ID3DXBuffer* shaderBuffer = NULL;
@@ -47,7 +47,7 @@ namespace SPEngine
 		if(!file->Read(pData, (DWORD)length))
 		{
 			SPLogHelper::WriteLog(L"[SPShader] WARNING: Failed to read shader file: " + path);
-			return false;
+			return;
 		}
 
 		// Compile shader files.
@@ -69,7 +69,7 @@ namespace SPEngine
 		if (FAILED(hr))
 		{
 			SPLogHelper::WriteLog(L"[SPShader] WARNING: Failed to compile shader file: " + path);
-			return false;
+			return;
 		}
 
 		// Create pixel shader.
@@ -86,21 +86,18 @@ namespace SPEngine
 				shaderBuffer = NULL;
 			}
 
-			return false;
+			return;
 		}
 
 		shaderBuffer->Release();
 		shaderBuffer = NULL;
-
-		return true;
 	}
 
-	bool SPPixelShaderCore::Load()
+	void SPPixelShaderCore::Load()
 	{
-		return true;
 	}
 
-	bool SPPixelShaderCore::Unload()
+	void SPPixelShaderCore::Unload()
 	{
 		if (pixelShader)
 		{
@@ -113,13 +110,11 @@ namespace SPEngine
 			constantTable->Release();
 			constantTable = NULL;
 		}
-
-		return true;
 	}
 
-	bool SPPixelShaderCore::Reload()
+	void SPPixelShaderCore::Reload()
 	{
-		return Load(name);
+		Load(name);
 	}
 
 	ID3DXConstantTable* SPPixelShaderCore::GetConstantTable()

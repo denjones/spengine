@@ -13,18 +13,14 @@ SUIAnimation::~SUIAnimation(void)
 {
 }
 
-bool SUIAnimation::SetStartPoint( SUIProperties setStart )
+void SUIAnimation::SetStartPoint( SUIProperties setStart )
 {
 	startPoint = setStart;
-
-	return true;
 }
 
-bool SUIAnimation::SetEndPoint( SUIProperties setEnd )
+void SUIAnimation::SetEndPoint( SUIProperties setEnd )
 {
 	endPoint = setEnd;
-
-	return true;
 }
 
 SUIProperties SUIAnimation::GetCurrentPoint()
@@ -32,13 +28,13 @@ SUIProperties SUIAnimation::GetCurrentPoint()
 	return currentPoint;
 }
 
-bool SUIAnimation::Update( float timeDelta )
+void SUIAnimation::Update( float timeDelta )
 {
 	SUITransition::Update(timeDelta);
 
 	if (state == Hidden)
 	{
-		return true;
+		return;
 	}
 
 	currentPoint.rectangle.X = 
@@ -126,7 +122,7 @@ bool SUIAnimation::Update( float timeDelta )
 		currentPoint.backgroundImage = endPoint.backgroundImage;
 		currentPoint.backgroundMode = endPoint.backgroundMode;
 		currentPoint.backgroundPosition = endPoint.backgroundPosition;
-		return false;
+		return;
 	}
 	else
 	{
@@ -134,8 +130,6 @@ bool SUIAnimation::Update( float timeDelta )
 		currentPoint.backgroundMode = startPoint.backgroundMode;
 		currentPoint.backgroundPosition = startPoint.backgroundPosition;
 	}
-
-	return true;
 }
 
 SUIProperties SUIAnimation::GetTargetPoint()

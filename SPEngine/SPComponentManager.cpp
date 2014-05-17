@@ -19,13 +19,7 @@ namespace SPEngine
 	{
 		foreach(SPComponentPtr, component, list<SPComponentPtr>, components)
 		{
-			if (!component->Initialize())
-			{
-				MessageBoxA(NULL, "Failed to initialize game component!",
-					NULL, NULL);
-
-				return false;
-			}
+			component->Initialize();
 		}
 
 		isInitialized = true;
@@ -38,13 +32,7 @@ namespace SPEngine
 		// Force all registered components to load contents.
 		foreach(SPComponentPtr, component, list<SPComponentPtr>, components)
 		{
-			if (!component->Load())
-			{
-				MessageBoxA(NULL, "Failed to load game content!",
-					NULL, NULL);
-
-				return false;
-			}			
+			component->Load();	
 		}
 
 		isLoaded = true;
@@ -57,14 +45,7 @@ namespace SPEngine
 		// Force all registered components to unload contents.
 		foreach(SPComponentPtr, component, list<SPComponentPtr>, components)
 		{
-			if (!component->Unload())
-			{
-				MessageBoxA(NULL, "Failed to unload game content!",
-					NULL, NULL);
-
-				return false;
-			}
-
+			component->Unload();
 		}
 
 		isLoaded = false;
@@ -79,13 +60,7 @@ namespace SPEngine
 		{
 			if (component->IsEnabled())
 			{
-				if (!component->Update(timeDelta))
-				{
-					MessageBoxA(NULL, "Runtime error!",
-						NULL, NULL);
-
-					return false;
-				}
+				component->Update(timeDelta);
 			}		
 		}
 
@@ -99,15 +74,9 @@ namespace SPEngine
 		{
 			if (component->IsEnabled())
 			{
-				if (!component->PreDraw() ||
-					!component->Draw(timeDelta) ||
-					!component->PostDraw())
-				{				
-					MessageBoxA(NULL, "Runtime error!",
-						NULL, NULL);
-
-					return false;
-				}				
+				component->PreDraw();
+				component->Draw(timeDelta);
+				component->PostDraw();		
 			}
 		}
 
@@ -165,13 +134,7 @@ namespace SPEngine
 		// Force all registered components to load contents.
 		foreach(SPComponentPtr, component, list<SPComponentPtr>, components)
 		{
-			if (!component->Reload())
-			{
-				MessageBoxA(NULL, "Failed to load game content!",
-					NULL, NULL);
-
-				return false;
-			}			
+			component->Reload();
 		}
 
 		isLoaded = true;
@@ -182,5 +145,11 @@ namespace SPEngine
 	SPEngine::SPComponentPtr SPComponentManager::GetComponent( SPString name )
 	{
 		return componentMap.Get(name);
+	}
+
+	void SPComponentManager::Clear()
+	{
+		componentMap.Clear();
+		components.clear();
 	}
 }

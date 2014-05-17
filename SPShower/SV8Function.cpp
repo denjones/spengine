@@ -235,6 +235,45 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 	return NULL;
 }
 
+Handle<Value> SV8Function::GetObjFromTexture( SPTexturePtr texture )
+{
+	SPString texType = texture->GetTextureType();
+
+	if (SPStringHelper::EqualsIgnoreCase(texType, L"Texture"))
+	{
+		Handle<Object> texObj = Object::New();
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"src"), SPV8ScriptEngine::SPStringToString(texture->GetPath()));
+		return texObj;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(texType, L"AnimatedTexture"))
+	{
+		Handle<Object> texObj = Object::New();
+		SPAnimatedTexturePtr animatedTexture = (SPAnimatedTexturePtr)texture;
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"src"), SPV8ScriptEngine::SPStringToString(animatedTexture->GetPath()));
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"col"), Integer::New(animatedTexture->GetColumn()));
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"row"), Integer::New(animatedTexture->GetRow()));
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"fps"), Integer::New(animatedTexture->GetFPS()));
+		return texObj;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(texType, L"VideoTexture"))
+	{
+		Handle<Object> texObj = Object::New();
+		SPVideoTexturePtr videoTexture = (SPVideoTexturePtr)texture;
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"video"), SUIVideoManager::GetSingleton()->GetVideo(videoTexture->GetVideo().GetHandle()));
+		return texObj;
+	}
+	else if (SPStringHelper::EqualsIgnoreCase(texType, L"ParticleSystemTexture"))
+	{
+		Handle<Object> texObj = Object::New();
+		SPParticleSystemTexturePtr particleSystemTexture = (SPParticleSystemTexturePtr)texture;
+		texObj->Set(SPV8ScriptEngine::SPStringToString(L"particleSystem"), SUIParticleSystemManager::GetSingleton()->GetParticleSystem(particleSystemTexture->GetParticleSystem().GetHandle()));
+		return texObj;
+	}
+	return Undefined();
+}
+
+
+
 
 
 

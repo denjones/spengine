@@ -72,7 +72,7 @@ Handle<Object> SUITrackManager::CreateTrack( Handle<Object> argObj )
 	return obj;
 }
 
-bool SUITrackManager::Initialize()
+void SUITrackManager::Initialize()
 {
 	//
 	// Enter
@@ -87,8 +87,6 @@ bool SUITrackManager::Initialize()
 
 	trackTempl = new Persistent<ObjectTemplate>(isolate, 
 		SV8TemplTrack::GetTemplate());
-
-	return true;
 }
 
 Handle<ObjectTemplate> SUITrackManager::GetTrackTemplate()

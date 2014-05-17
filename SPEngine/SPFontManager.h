@@ -35,9 +35,9 @@ namespace SPEngine
 
 	public:
 		float GetSizeRate();
-		bool SetSizeRate(float setRate);
+		void SetSizeRate(float setRate);
 		float GetMarginRate();
-		bool SetMarginRate(float setRate);
+		void SetMarginRate(float setRate);
 
 	public:
 		SPFontManager(void);
@@ -45,9 +45,9 @@ namespace SPEngine
 
 		/// @name Component methods
 		/// @{
-		bool Initialize();
-		bool Reload();
-		bool Unload();
+		void Initialize();
+		void Reload();
+		void Unload();
 		/// @}
 
 		/// @brief Add a Font
@@ -70,12 +70,12 @@ namespace SPEngine
 			bool	Italic,
 			SPString	pFaceName);
 
-		bool AddExtendedFont(SPString path);
+		void AddExtendedFont(SPString path);
 
 		SPFontPtr GetFont(SPString name);
-		bool SetUpFont(wstring path);
+		void SetUpFont(wstring path);
 
-		virtual bool LoadFromString(SPString stringStream);
+		virtual void LoadFromString(SPString stringStream);
 		virtual SPString SaveAsString();
 	};
 }

@@ -33,9 +33,9 @@ namespace SPEngine
 		SPSoundManager(void);
 		virtual ~SPSoundManager(void);
 
-		bool ReleaseAll();
-		bool Release(SPString name);
-		bool Update(float timeElapsed);
+		void ReleaseAll();
+		void Release(SPString name);
+		void Update(float timeElapsed);
 
 		SPSoundPtr GetSound(SPString name);
 		SPSoundTrackPtr GetTrack(SPString trackName);
@@ -43,7 +43,7 @@ namespace SPEngine
 		SPSoundPtr CreateSound(SPString name, SPString path);
 		SPSoundPtr AddSound(SPString name, SPSoundPtr sound);
 		SPSoundTrackPtr CreateSoundTrack(SPString track);
-		bool RemoveSoundTrack(SPString track);
+		void RemoveSoundTrack(SPString track);
 		
 		void PlaySoundInTrack(SPString name, SPString track);
 		void PlayTrack(SPString track);
@@ -53,7 +53,7 @@ namespace SPEngine
 		float GetVolume();
 		void SetVolume(float volume);
 
-		virtual bool LoadFromString(SPString stringStream);
+		virtual void LoadFromString(SPString stringStream);
 		virtual SPString SaveAsString();
 	};
 }

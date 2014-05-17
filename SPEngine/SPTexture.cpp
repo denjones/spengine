@@ -64,7 +64,7 @@ namespace SPEngine
 		Load(setPath);
 	}
 
-	bool SPTexture::Load( SPString setPath )
+	void SPTexture::Load( SPString setPath )
 	{
 		D3DXIMAGE_INFO i;
 		//PALETTEENTRY p; Don't know why we cannot make use of both palette and info.
@@ -76,7 +76,7 @@ namespace SPEngine
 		if (!file)
 		{
 			SPLogHelper::WriteLog(L"[SPGraphics] WARNING: Failed to open file: " + setPath);
-			return false;
+			return;
 		}
 
 		// Read file data.
@@ -86,7 +86,7 @@ namespace SPEngine
 		if (!file->Read(pData, (DWORD)length))
 		{
 			SPLogHelper::WriteLog(L"[SPGraphics] WARNING: Failed to read file: " + setPath);
-			return false;
+			return;
 		}		
 
 		// Create texture from memory.
@@ -111,18 +111,16 @@ namespace SPEngine
 		if (FAILED(hr))
 		{
 			texture = NULL;
-			return false;
+			return;
 		}
 	
 		path = setPath;
 		height = i.Height;
 		width = i.Width;
 		format = D3DFMT_A8R8G8B8;
-
-		return true;
 	}
 
-	bool SPTexture::Load( 
+	void SPTexture::Load( 
 		LPDIRECT3DDEVICE9 pDevice,
 		LPCSTR		pSrcFile,
 		UINT		setWidth,
@@ -143,26 +141,24 @@ namespace SPEngine
 		height = i.Height;
 		width = i.Width;
 		format = Format;
-
-		return true;
 	}
 
-	bool SPTexture::Load()
+	void SPTexture::Load()
 	{
-		return Reload();
+		Reload();
 	}
 
-	bool SPTexture::Reload()
+	void SPTexture::Reload()
 	{
 		if (path == L"")
 		{
-			return CreateBlank(width, height);
+			CreateBlank(width, height);
 		}
 
-		return Load(path);
+		Load(path);
 	}
 
-	bool SPTexture::CreateBlank( int setWidth, int setHeight )
+	void SPTexture::CreateBlank( int setWidth, int setHeight )
 	{
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTexture(
@@ -176,21 +172,19 @@ namespace SPEngine
 		if (FAILED(hr))
 		{
 			texture = NULL;
-			return false;
+			return;
 		}
 
 		height = setHeight;
 		width = setWidth;
 		format = D3DFMT_A8R8G8B8;
-
-		return true;
 	}
 
-	bool SPTexture::Fill( D3DCOLOR color )
+	void SPTexture::Fill( D3DCOLOR color )
 	{
 		if (!texture)
 		{
-			return false;
+			return;
 		}
 
 		if (isRenderTarget)
@@ -234,7 +228,7 @@ namespace SPEngine
 				SPDevice::GetSingleton()->GetD3DDevice()->BeginScene();
 			}
 
-			return SUCCEEDED(hr);
+			return;
 		}
 
 		D3DLOCKED_RECT lockedRect;
@@ -255,11 +249,9 @@ namespace SPEngine
 		}
 
 		texture->UnlockRect(0);
-
-		return true;
 	}
 
-	bool SPTexture::CreateRenderTarget( int setWidth, int setHeight, D3DXCOLOR setColor )
+	void SPTexture::CreateRenderTarget( int setWidth, int setHeight, D3DXCOLOR setColor )
 	{
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTexture(
@@ -273,7 +265,7 @@ namespace SPEngine
 		if (FAILED(hr))
 		{
 			texture = NULL;
-			return false;
+			return;
 		}
 
 		height = setHeight;
@@ -283,8 +275,6 @@ namespace SPEngine
 		backgroundColor = setColor;
 
 		//Fill(0x00000000);
-
-		return true;
 	}
 
 	SPEngine::SPRectangle SPTexture::SourceRectangle()
@@ -292,14 +282,36 @@ namespace SPEngine
 		return SPRectangle(0, 0, width, height);
 	}
 
-	bool SPEngine::SPTexture::Unload()
+	void SPTexture::Update( float timeDelta )
+	{
+	}
+
+	void SPTexture::Play()
+	{
+
+	}
+
+	void SPTexture::Pause()
+	{
+
+	}
+
+	void SPTexture::Stop()
+	{
+
+	}
+
+	SPString SPTexture::GetTextureType()
+	{
+		return L"Texture";
+	}
+
+	void SPEngine::SPTexture::Unload()
 	{
 		if (texture)
 		{
 			texture->Release();
 			texture = NULL;
 		}
-
-		return true;
 	}
 }

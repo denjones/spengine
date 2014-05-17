@@ -19,7 +19,7 @@ public:
 	Handle<Object> CreateTrack(Handle<Object> argObj);
 	Handle<ObjectTemplate> GetTrackTemplate();
 
-	virtual bool Initialize();
+	virtual void Initialize();
 };
 
 

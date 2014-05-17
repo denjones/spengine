@@ -30,7 +30,7 @@ namespace SPEngine
 		SPShaderManager(void);
 		virtual ~SPShaderManager(void);
 
-		bool Reload();
+		void Reload();
 
 		SPPixelShaderCorePtr CreateCore(SPString name, SPString path);
 		SPPixelShaderCorePtr AddCore(SPString name, SPPixelShaderCorePtr shader);

@@ -19,22 +19,22 @@ public:
 	SUIPictureList(void);
 	virtual ~SUIPictureList(void);
 
-	bool Draw(float timeDelta);
-	bool SetBaseImage(SPTexturePtr base);
-	bool SetMixImage(SUIMixImage image);
+	void Draw(float timeDelta);
+	void SetBaseImage(SPTexturePtr base);
+	void SetMixImage(SUIMixImage image);
 	SPTexturePtr GetTarget();
-	bool SetName(SPString setName);
+	void SetName(SPString setName);
 	SPString GetName();
-	bool Load();
-	bool Unload();
-	bool Reload();
-	bool SaveBaseAsFile(SPString path);
+	void Load();
+	void Unload();
+	void Reload();
+	void SaveBaseAsFile(SPString path);
 
 	int GetHeight();
 	int GetWidth();
 
 	SPString SaveAsString();
-	bool LoadFromString(SPString stringStream);
+	void LoadFromString(SPString stringStream);
 };
 
 typedef SPPointer<SUIPictureList> SUIPictureListPtr;

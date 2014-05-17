@@ -93,7 +93,7 @@ Handle<ObjectTemplate> SUIParticleSystemManager::GetParticleSystemTemplate()
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*particleSystemTempl));
 }
 
-bool SUIParticleSystemManager::Initialize()
+void SUIParticleSystemManager::Initialize()
 {
 	//
 	// Enter
@@ -108,8 +108,6 @@ bool SUIParticleSystemManager::Initialize()
 
 	particleSystemTempl = new Persistent<ObjectTemplate>(isolate, 
 		SV8TemplParticleSystem::GetTemplate());
-
-	return true;
 }
 
 SPString SUIParticleSystemManager::GetParticleSystemName( SUIParticleSystemHandle handle )

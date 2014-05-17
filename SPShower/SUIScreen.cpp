@@ -49,16 +49,15 @@ SUIComponentPtr SUIScreen::GetComponent( SPString name )
 	return NULL;
 }
 
-bool SUIScreen::AddComponent( SUIComponentPtr newComponent )
+void SUIScreen::AddComponent( SUIComponentPtr newComponent )
 {
 	modificationLock.Lock();
 	componentMap.Set(newComponent->GetName(), newComponent);
 	SetPersistentComponent(newComponent);
 	modificationLock.Unlock();
-	return true;
 }
 
-bool SUIScreen::Initialize()
+void SUIScreen::Initialize()
 {
 	topComponent = new SUIComponent(this);
 
@@ -84,11 +83,9 @@ bool SUIScreen::Initialize()
 	topComponent->SetAbsoluteRender(false);
 
 	AddComponent(topComponent);
-
-	return true;
 }
 
-bool SUIScreen::Load()
+void SUIScreen::Load()
 {
 	ComponentIterator iter(&componentMap);
 
@@ -99,11 +96,9 @@ bool SUIScreen::Load()
 			iter.CurrentItem()->Load();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIScreen::Unload()
+void SUIScreen::Unload()
 {
 	screenTexture = NULL;
 
@@ -116,11 +111,9 @@ bool SUIScreen::Unload()
 			iter.CurrentItem()->Unload();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIScreen::Reload()
+void SUIScreen::Reload()
 {
 	ComponentIterator iter(&componentMap);
 
@@ -131,38 +124,34 @@ bool SUIScreen::Reload()
 			iter.CurrentItem()->Reload();
 		}		
 	}
-
-	return true;
 }
 
-bool SUIScreen::Update( float timeDelta )
+void SUIScreen::Update( float timeDelta )
 {
 	if (transformation && targetScreen)
 	{
 		targetScreen->Update(timeDelta);
-
-		if(!transformation->Update(timeDelta))
+		transformation->Update(timeDelta);
+		if (transformation->TransitionPosition() >= 1)
 		{
 			transformation = NULL;
 			targetScreen = NULL;
-			return false;
+			return;
 		}
 	}
 	else if (targetScreen && !transformation)
 	{
-		return false;
+		return;
 	}
 
 	topComponent->Update(timeDelta);
-
-	return true;
 }
 
-bool SUIScreen::Draw( float timeDelta )
+void SUIScreen::Draw( float timeDelta )
 {
 	if (!isDisplay)
 	{
-		return true;
+		return;
 	}	
 
 	if (transformation && targetScreen)
@@ -188,21 +177,17 @@ bool SUIScreen::Draw( float timeDelta )
 		iter->second->ClearAbsoluteCache();
 		iter++;
 	}
-
-	return true;
 }
 
-bool SUIScreen::CreateComponent( SPString name, SUIComponentPtr newComponent )
+void SUIScreen::CreateComponent( SPString name, SUIComponentPtr newComponent )
 {
 	newComponent->SetName(name);
 	modificationLock.Lock();
 	componentMap.Set(name, newComponent);
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIScreen::AddChildComponent( SPString fatherName, SPString childName )
+void SUIScreen::AddChildComponent( SPString fatherName, SPString childName )
 {
 	if (componentMap.IsSet(fatherName) && componentMap.IsSet(childName))
 	{
@@ -214,26 +199,20 @@ bool SUIScreen::AddChildComponent( SPString fatherName, SPString childName )
 			father->AddChild(child);
 		}
 	}
-
-	return true;
 }
 
-bool SUIScreen::SetTargetScreen( SUIScreenPtr setTarget )
+void SUIScreen::SetTargetScreen( SUIScreenPtr setTarget )
 {
 	modificationLock.Lock();
 	targetScreen = setTarget;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIScreen::SetTransformation( SUITransformationPtr setTrans )
+void SUIScreen::SetTransformation( SUITransformationPtr setTrans )
 {
 	modificationLock.Lock();
 	transformation = setTrans;
 	modificationLock.Unlock();
-
-	return true;
 }
 
 SUIScreenPtr SUIScreen::GetTargetScreen()
@@ -241,7 +220,7 @@ SUIScreenPtr SUIScreen::GetTargetScreen()
 	return targetScreen;
 }
 
-bool SUIScreen::DrawOffScreen( float timeDelta )
+void SUIScreen::DrawOffScreen( float timeDelta )
 {
 	screenTexture = SPTextureManager::GetSingleton()->CreateRenderTarget(
 		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth, 
@@ -250,26 +229,20 @@ bool SUIScreen::DrawOffScreen( float timeDelta )
 
 	topComponent->SetRenderTarget(screenTexture);
 	topComponent->Render(timeDelta);
-
-	return true;
 }
 
-bool SUIScreen::SetCurrentTextBox( SUITextBoxPtr setTextBox )
+void SUIScreen::SetCurrentTextBox( SUITextBoxPtr setTextBox )
 {
 	modificationLock.Lock();
 	currentTextBox = setTextBox;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIScreen::SetCurrentPictureBox( SUIPictureBoxPtr setPictureBox )
+void SUIScreen::SetCurrentPictureBox( SUIPictureBoxPtr setPictureBox )
 {
 	modificationLock.Lock();
 	currentPictureBox = setPictureBox;
 	modificationLock.Unlock();
-	
-	return true;
 }
 
 SUITextBoxPtr SUIScreen::GetCurrentTextBox()
@@ -282,13 +255,11 @@ SUIPictureBoxPtr SUIScreen::GetCurrentPictureBox()
 	return currentPictureBox;
 }
 
-bool SUIScreen::SetCurrentComponent( SUIComponentPtr setComponent )
+void SUIScreen::SetCurrentComponent( SUIComponentPtr setComponent )
 {
 	modificationLock.Lock();
 	currentComponent = setComponent;
 	modificationLock.Unlock();
-
-	return true;
 }
 
 SUIComponentPtr SUIScreen::GetCurrentComponent()
@@ -297,14 +268,14 @@ SUIComponentPtr SUIScreen::GetCurrentComponent()
 }
 
 
-bool SUIScreen::HandleEvent( SUIEventPtr e )
+void SUIScreen::HandleEvent( SUIEventPtr e )
 {
 	if (!e)
 	{
-		return true;
+		return;
 	}
 
-	return topComponent->HandleEvent(e);
+	topComponent->HandleEvent(e);
 }
 
 SPString SUIScreen::SaveAsString()
@@ -362,7 +333,7 @@ SPString SUIScreen::SaveAsString()
 	return result;
 }
 
-bool SUIScreen::LoadFromString( SPString stringStream )
+void SUIScreen::LoadFromString( SPString stringStream )
 {
 	//SPString nameString = SPStringHelper::XMLExcludeFrom(stringStream, L"Name");
 	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Name");
@@ -473,38 +444,30 @@ bool SUIScreen::LoadFromString( SPString stringStream )
 	//SPString currentPictureBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentPictureBoxName");
 	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentPictureBoxName");
 	//currentPictureBox = GetComponent(currentPictureBoxNameString);
-
-	return true;
 }
 
-bool SUIScreen::SetPopUp( bool setPopUp )
+void SUIScreen::SetPopUp( bool setPopUp )
 {
 	modificationLock.Lock();
 	isPopup = setPopUp;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIScreen::RemoveComponent( SPString name )
+void SUIScreen::RemoveComponent( SPString name )
 {
 	modificationLock.Lock();
 	componentMap.Remove(name);
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIScreen::SetBackgroundColor( D3DCOLOR setColor )
+void SUIScreen::SetBackgroundColor( D3DCOLOR setColor )
 {
 	modificationLock.Lock();
 	backgroundColor = setColor;
 	modificationLock.Unlock();
-
-	return true;
 }
 
-bool SUIScreen::Clear()
+void SUIScreen::Clear()
 {
 	modificationLock.Lock();
 
@@ -530,8 +493,6 @@ bool SUIScreen::Clear()
 	currentPictureBox = NULL;	
 
 	modificationLock.Unlock();
-
-	return true;
 }
 
 D3DCOLOR SUIScreen::GetBackgroundColor()
@@ -579,6 +540,18 @@ SUIComponentPtr SUIScreen::GetPersistentComponent( SUIComponent* component )
 void SUIScreen::Focus()
 {
 	SUIManager::GetSingleton()->FocusScreen(SUIManager::GetSingleton()->GetPersistentScreen(this));
+}
+
+Handle<Object> SUIScreen::SaveAsObj()
+{
+	Handle<Object> result = SPV8ScriptEngine::CopyObject(GetV8Obj());
+	result->Set(SPV8ScriptEngine::SPStringToString(L"root"), topComponent->SaveAsObj());
+	return result;
+}
+
+void SUIScreen::LoadFromObj( Handle<Object> obj )
+{
+	return;
 }
 
 
