@@ -546,12 +546,23 @@ Handle<Object> SUIScreen::SaveAsObj()
 {
 	Handle<Object> result = SPV8ScriptEngine::CopyObject(GetV8Obj());
 	result->Set(SPV8ScriptEngine::SPStringToString(L"root"), topComponent->SaveAsObj());
+	result->Set(SPV8ScriptEngine::SPStringToString(L"_eventHandlerManager"), eventHandlerManager.SaveAsObj());
 	return result;
 }
 
 void SUIScreen::LoadFromObj( Handle<Object> obj )
 {
 	return;
+}
+
+SV8FunctionHandle SUIScreen::RegisterHandler( Handle<v8::Function> func )
+{
+	return eventHandlerManager.RegisterFunction(func);
+}
+
+Handle<v8::Value> SUIScreen::GetHandler( SV8FunctionHandle handle )
+{
+	return eventHandlerManager.GetFunction(handle);
 }
 
 

@@ -123,7 +123,10 @@ namespace SPEngine
 		static DWORD WINAPI ScriptRunningThread(void* context);
 		static Handle<String> SPStringToString(SPString str);
 		static Handle<String> ToJson(Handle<Value> object);
+		static Handle<Object> JsonParse(Handle<String> object);
 		static Handle<Object> CopyObject(Handle<Object> object);
+		static Handle<v8::Function> ParseFunction(Handle<String> str);
+		static void CoverObject(Handle<Value> destObj, Handle<Value> srcObj);
 
 	public:
 		static void Import(const FunctionCallbackInfo<Value>& args);

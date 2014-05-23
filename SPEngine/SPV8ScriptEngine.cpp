@@ -773,4 +773,37 @@ namespace SPEngine
 		return obj;
 	}
 
+	Handle<Object> SPV8ScriptEngine::JsonParse( Handle<String> str )
+	{
+		EscapableHandleScope scope(SPV8ScriptEngine::GetSingleton()->GetIsolate());
+		Handle<Context> context = Context::GetCurrent();
+		Handle<Object> global = context->Global();
+
+		Handle<Object> JSON = global->Get(String::New("JSON"))->ToObject();
+		Handle<Function> JSON_parse = Handle<Function>::Cast(JSON->Get(String::New("parse")));
+		Handle<Value> args[1];
+		args[0] = str;
+
+		return Handle<Object>::Cast(scope.Escape(JSON_parse->Call(JSON, 1, args)));
+	}
+
+	Handle<v8::Function> SPV8ScriptEngine::ParseFunction( Handle<String> str )
+	{
+		SPString spStr = SPV8ScriptEngine::StringToSPString(str);
+		spStr = L"(" + spStr + L")";
+		Handle<Script> script = Script::Compile(SPV8ScriptEngine::SPStringToString(spStr));
+		return Handle<v8::Function>::Cast(script->Run());
+	}
+
+	void SPV8ScriptEngine::CoverObject( Handle<Value> destObj, Handle<Value> srcObj )
+	{
+		const Local<Array> props = Handle<Object>::Cast(srcObj)->GetPropertyNames();
+		const uint32_t length = props->Length();
+		for (uint32_t i = 0; i < length; i++)
+		{
+			const Local<Value> key = props->Get(i);
+			const Local<Value> value = Handle<Object>::Cast(srcObj)->Get(key);
+			Handle<Object>::Cast(destObj)->Set(key, value);
+		}
+	}
 }

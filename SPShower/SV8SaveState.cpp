@@ -4,12 +4,13 @@
 #include "SUIManager.h"
 #include "SPGameShow.h"
 
-void SV8Function::SaveStateAs( const FunctionCallbackInfo<Value>& args )
+void SV8Function::SaveState( const FunctionCallbackInfo<Value>& args )
 {
 	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	HandleScope handleScope(isolate);
 
 	SPString fileName = L"state.dat";
+	SPString screen = L"*";
 
 	if(args.Length() >= 0)
 	{
@@ -22,6 +23,11 @@ void SV8Function::SaveStateAs( const FunctionCallbackInfo<Value>& args )
 				fileName = SPV8ScriptEngine::StringToSPString(GetProperty(L"file", argObj)->ToString());
 			}
 
+			if (HasProperty(L"screen", argObj))
+			{
+				screen = SPV8ScriptEngine::StringToSPString(GetProperty(L"screen", argObj)->ToString());
+			}
+
 		}
 		else if (args[0]->IsString())
 		{
@@ -29,5 +35,5 @@ void SV8Function::SaveStateAs( const FunctionCallbackInfo<Value>& args )
 		}
 	}
 
-	((SPPointer<SPGameShow>)SPGameManager::GetSingleton()->GetGame())->SaveAsFile(fileName);
+	((SPPointer<SPGameShow>)SPGameManager::GetSingleton()->GetGame())->SaveAsFile(fileName, screen);
 }

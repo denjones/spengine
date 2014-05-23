@@ -967,11 +967,14 @@
     <ClCompile Include="SV8AddTag.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
-    <ClCompile Include="SV8SaveStateAs.cpp">
-      <Filter>Source\SScript\SV8Function</Filter>
-    </ClCompile>
     <ClCompile Include="SV8FunctionManager.cpp">
       <Filter>Source\SScript</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8SaveState.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8LoadState.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
