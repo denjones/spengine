@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "SUIManager.h"
+#include "SV8Function.h"
 
 
 SUIManager::SUIManager(void)
@@ -589,9 +590,98 @@ Handle<Object> SUIManager::SaveAsObj()
 	return resultObj;
 }
 
+Handle<Object> SUIManager::SaveScreenAsObj( SPString screensStr )
+{
+	Handle<Object> resultObj = Object::New();
+	Handle<Object> screenDict = Object::New();
+
+	if (screensStr == L"*")
+	{
+		
+		ScreenIterator screenIter = ScreenIterator(&screenMap);
+		for (screenIter.First(); !screenIter.IsDone(); screenIter.Next())
+		{
+			screenDict->Set(SPV8ScriptEngine::SPStringToString(screenIter.CurrentIndex()), screenIter.CurrentItem()->SaveAsObj());
+		}
+		resultObj->Set(SPV8ScriptEngine::SPStringToString(L"screens"), screenDict);
+
+		Handle<Array> displayStackArr = Array::New();
+		for (ScreenStackIterator displayIter = dispalyStack->rbegin(); displayIter != dispalyStack->rend(); displayIter++)
+		{
+			displayStackArr->Set(displayStackArr->Length(), SPV8ScriptEngine::SPStringToString((*displayIter)->GetName()));
+		}
+		resultObj->Set(SPV8ScriptEngine::SPStringToString(L"display"), displayStackArr);
+	}
+	else
+	{
+		size_t pos = screensStr.find(',');
+		if (pos == SPString::npos)
+		{
+			SPString screenName = screensStr;
+			if (screenMap.IsSet(screenName))
+			{
+				screenDict->Set(SPV8ScriptEngine::SPStringToString(screenName), screenMap[screenName]->SaveAsObj());
+			}
+		}
+		else
+		{
+			do
+			{
+				SPString screenStr = screensStr.substr(0, pos);
+				screensStr = screensStr.substr(pos + 1);
+				if (screenMap.IsSet(screenStr))
+				{
+					screenDict->Set(SPV8ScriptEngine::SPStringToString(screenStr), screenMap[screensStr]->SaveAsObj());
+				}
+				pos = screensStr.find(L',');
+			}while(pos != SPString::npos);
+
+			if (screenMap.IsSet(screensStr))
+			{
+				screenDict->Set(SPV8ScriptEngine::SPStringToString(screensStr), screenMap[screensStr]->SaveAsObj());
+			}
+		}
+		resultObj->Set(SPV8ScriptEngine::SPStringToString(L"screens"), screenDict);
+	}
+	return resultObj;
+}
+
 void SUIManager::LoadFromObj(Handle<Object> obj)
 {
+	if (SV8Function::HasProperty(L"display", obj))
+	{
+		dispalyStack->clear();
+		screenMap.Clear();
+	}
 
+	if (SV8Function::HasProperty(L"screens", obj))
+	{
+		Handle<Object> screens = Handle<Object>::Cast(SV8Function::GetProperty(L"screens", obj));
+		const Local<Array> props = screens->GetPropertyNames();
+		const uint32_t length = props->Length();
+		for (uint32_t i = 0; i < length; i++)
+		{
+			const Local<Value> key = props->Get(i);
+			const Local<Value> value = screens->Get(key);
+
+			SUIScreenPtr screen = new SUIScreen();
+			screen->LoadFromObj(Handle<Object>::Cast(value));
+			screenMap.Set(SPV8ScriptEngine::StringToSPString(key->ToString()), screen);
+		}
+	}
+
+	if (SV8Function::HasProperty(L"display", obj))
+	{
+		Handle<Array> display = Handle<Array>::Cast(SV8Function::GetProperty(L"display", obj));
+		for (int i = 0; i < display->Length(); i++)
+		{
+			SPString screenName = SPV8ScriptEngine::StringToSPString(display->Get(i)->ToString());
+			if (screenMap.IsSet(screenName))
+			{
+				dispalyStack->push_back(screenMap[screenName]);
+			}
+		}
+	}
 }
 
 

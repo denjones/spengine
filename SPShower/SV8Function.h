@@ -27,7 +27,9 @@ public:
 	static void AddCommand(const FunctionCallbackInfo<Value>& args);
 	static void AddTag(const FunctionCallbackInfo<Value>& args);
 	static void Goto(const FunctionCallbackInfo<Value>& args);
-	static void SaveStateAs(const FunctionCallbackInfo<Value>& args);
+	static void SaveState(const FunctionCallbackInfo<Value>& args);
+	static void LoadState(const FunctionCallbackInfo<Value>& args);
+	//static void SaveScreen(const FunctionCallbackInfo<Value>& args);
 
 	//
 	// SpeShow Command

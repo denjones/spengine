@@ -1,16 +1,17 @@
 #pragma once
 #include "SUIEventHandler.h"
 #include "SV8FunctionManager.h"
+#include "SUIComponent.h"
 
 using namespace v8;
 
 class SUIV8FunctionEventHandler : public SUIEventHandler
 {
 	SV8FunctionHandle v8Func;
-	SPPointer<Persistent<Object>> v8Self;
+	SUIComponentPtr self;
 
 public:
-	SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, Handle<Object> v8Self);
+	SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, SUIComponentPtr self);
 	~SUIV8FunctionEventHandler(void);
 
 	virtual bool Function( SUIEventPtr e );

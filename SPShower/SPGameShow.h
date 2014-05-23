@@ -16,7 +16,7 @@ public:
 	bool Load();
 	bool UnloadContent();
 
-	bool SaveAsFile(SPString path);
+	bool SaveAsFile(SPString path, SPString screens);
 	bool LoadFromFile(SPString path);
 
 	bool DrawWhileLoading(float timeDelta);
@@ -26,6 +26,7 @@ public:
 	bool LoadSystemData();
 
 	virtual Handle<Object> SaveAsObj();
+	virtual Handle<Object> SaveAsObj(SPString screens);
 	virtual void LoadFromObj( Handle<Object> obj );
 
 	virtual void OnExit();

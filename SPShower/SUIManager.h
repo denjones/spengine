@@ -75,6 +75,7 @@ public:
 
 	// V8
 	Handle<Object> SaveAsObj();
+	Handle<Object> SaveScreenAsObj(SPString screensStr);
 	void LoadFromObj(Handle<Object> obj);
 
 	static void HandleAllEventCallback( uv_async_t *handle, int status );

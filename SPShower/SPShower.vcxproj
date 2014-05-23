@@ -390,7 +390,8 @@
     <ClCompile Include="SV8CommandEvent.cpp" />
     <ClCompile Include="SV8FunctionManager.cpp" />
     <ClCompile Include="SV8Goto.cpp" />
-    <ClCompile Include="SV8SaveStateAs.cpp" />
+    <ClCompile Include="SV8LoadState.cpp" />
+    <ClCompile Include="SV8SaveState.cpp" />
     <ClCompile Include="SV8TemplCommandEvent.cpp" />
     <ClCompile Include="SV8TemplComponent.cpp" />
     <ClCompile Include="SV8CreateParticleSystem.cpp" />

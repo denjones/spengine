@@ -101,6 +101,24 @@ SV8ScriptManager::~SV8ScriptManager(void)
 		delete exitAsync;
 		exitAsync = NULL;
 	}
+
+	if (onExit)
+	{
+		onExit->ClearAndLeak();
+		onExit = NULL;
+	}
+
+	if (systemVariables)
+	{
+		systemVariables->ClearAndLeak();
+		systemVariables = NULL;
+	}
+
+	if (variables)
+	{
+		variables->ClearAndLeak();
+		variables = NULL;
+	}
 }
 
 void SV8ScriptManager::Initialize()
@@ -155,6 +173,9 @@ void SV8ScriptManager::Initialize()
 		SV8TemplEvent::GetTemplate());
 	commandEventTempl = new Persistent<ObjectTemplate>(isolate, 
 		SV8TemplCommandEvent::GetTemplate());
+	systemVariables = new Persistent<Object>(isolate, Object::New());
+	variables = new Persistent<Object>(isolate, Object::New());
+
 	
 
 	////
@@ -285,13 +306,16 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"addCommand"), FunctionTemplate::New(SV8Function::AddCommand)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"addTag"), FunctionTemplate::New(SV8Function::AddTag)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"goto"), FunctionTemplate::New(SV8Function::Goto)->GetFunction());
-	exports->Set(SPV8ScriptEngine::SPStringToString(L"saveStateAs"), FunctionTemplate::New(SV8Function::SaveStateAs)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"saveState"), FunctionTemplate::New(SV8Function::SaveState)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"loadState"), FunctionTemplate::New(SV8Function::LoadState)->GetFunction());
 
 	//
 	// Set Global Window Object
 	//
 
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"window"), SV8ScriptManager::GetSingleton()->GetWindowTemplate()->NewInstance());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"sysVar"),  SV8ScriptManager::GetSingleton()->GetSystemVariable());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"var"), SV8ScriptManager::GetSingleton()->GetVariable());
 
 	//
 	// Create Global Screen Object
@@ -466,8 +490,20 @@ Handle<Object> SV8ScriptManager::SaveAsObj()
 	CommandIterator iter = commands.begin();
 	while(iter != commands.end())
 	{
+		Handle<Object> funcObj = Object::New();
 		Handle<v8::Function> func = Handle<v8::Function>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), *((*iter)->v8Function));
-		commandList->Set(commandList->Length(), func->ToString());
+		funcObj->Set(SPV8ScriptEngine::SPStringToString(L"file"), SPV8ScriptEngine::SPStringToString((*iter)->file));
+		funcObj->Set(SPV8ScriptEngine::SPStringToString(L"line"), Integer::New((*iter)->line));
+		funcObj->Set(SPV8ScriptEngine::SPStringToString(L"col"), Integer::New((*iter)->col));
+		if((*iter)->IsTag())
+		{
+			funcObj->Set(SPV8ScriptEngine::SPStringToString(L"tag"), SPV8ScriptEngine::SPStringToString((*iter)->tag));
+		}
+		else
+		{
+			funcObj->Set(SPV8ScriptEngine::SPStringToString(L"func"), func->ToString());
+		}		
+		commandList->Set(commandList->Length(), funcObj);
 		iter++;
 	}
 
@@ -480,13 +516,58 @@ Handle<Object> SV8ScriptManager::SaveAsObj()
 	{
 		windowObj->Set(SPV8ScriptEngine::SPStringToString(L"onExit"), GetOnExitFunc()->ToString());
 	}
+	windowObj->Delete(SPV8ScriptEngine::SPStringToString(L"width"));
+	windowObj->Delete(SPV8ScriptEngine::SPStringToString(L"height"));
 	result->Set(SPV8ScriptEngine::SPStringToString(L"window"), windowObj);
+
+	// Serialize Variable
+
+	result->Set(SPV8ScriptEngine::SPStringToString(L"var"), GetVariable());
 
 	return result;
 }
 
 void SV8ScriptManager::LoadFromObj( Handle<Object> obj )
 {
+	// Deserialize Command List
+
+	commands.clear();
+	Handle<Array> commandList = Handle<Array>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"commands")));
+	for (int i = 0; i < commandList->Length(); i++)
+	{
+		Handle<Object> funcObj = Handle<Object>::Cast(commandList->Get(i));
+		int line = funcObj->Get(SPV8ScriptEngine::SPStringToString(L"line"))->Int32Value();
+		int col = funcObj->Get(SPV8ScriptEngine::SPStringToString(L"col"))->Int32Value();
+		SPString file = SPV8ScriptEngine::StringToSPString(funcObj->Get(SPV8ScriptEngine::SPStringToString(L"file"))->ToString());
+		SV8ScriptCommandPtr command;
+		if (SV8Function::HasProperty(L"tag", funcObj))
+		{
+			SPString tag = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"tag", funcObj)->ToString());
+			command = new SV8ScriptCommand(tag, line, col, file);
+		}
+		else
+		{
+			Handle<v8::Function> func = Handle<v8::Function>::Cast(SV8Function::GetProperty(L"func", funcObj));
+			command = new SV8ScriptCommand(func, line, col, file);
+		}
+		commands.push_back(command);
+	}
+
+	// Deserialize Window Obj
+
+	Handle<Object> windowObj = Handle<Array>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"window")));
+	if (SV8Function::HasProperty(L"onExit", windowObj))
+	{
+		Handle<v8::Function> onExitFunc = SPV8ScriptEngine::ParseFunction(SV8Function::GetProperty(L"onExit", windowObj)->ToString());
+		windowObj->Set(SPV8ScriptEngine::SPStringToString(L"onExit"), onExitFunc);
+	}
+	Handle<Object> realWindowObj = SV8ScriptManager::GetSingleton()->GetWindowTemplate()->NewInstance();
+	SPV8ScriptEngine::CoverObject(realWindowObj, windowObj);
+
+	// Deserialize Variable
+
+	SPV8ScriptEngine::CoverObject(GetVariable(), obj->Get(SPV8ScriptEngine::SPStringToString(L"var")));
+
 	return;
 }
 
@@ -545,7 +626,24 @@ Handle<v8::Value> SV8ScriptManager::GetOnExitFunc()
 void SV8ScriptManager::SetOnExitFunc( Handle<v8::Function> func )
 {
 	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	if (onExit)
+	{
+		onExit->ClearAndLeak();
+		onExit = NULL;
+	}
 	onExit = new Persistent<v8::Function>(isolate,func);
+}
+
+Handle<v8::Value> SV8ScriptManager::GetVariable()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	return Handle<Object>::New(isolate, *variables);
+}
+
+Handle<v8::Value> SV8ScriptManager::GetSystemVariable()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	return Handle<Object>::New(isolate, *systemVariables);
 }
 
 NODE_MODULE_CONTEXT_AWARE_BUILTIN(speshow, SV8ScriptManager::InitModule)

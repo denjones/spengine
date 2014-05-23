@@ -9,8 +9,7 @@ using namespace SPEngine;
 typedef int SV8FunctionHandle;
 
 class SV8FunctionManager : 
-	public ISV8Serializable,
-	public SPSingleton<SV8FunctionManager>
+	public ISV8Serializable
 {
 	typedef SPPointer<Persistent<v8::Function>> FunctionPtr;
 	typedef map<SV8FunctionHandle, FunctionPtr> FunctionDict;

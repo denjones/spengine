@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "SV8FunctionManager.h"
+#include "SV8Function.h"
 
 
 SV8FunctionManager::SV8FunctionManager(void)
@@ -37,9 +38,9 @@ SV8FunctionHandle SV8FunctionManager::RegisterFunction( Handle<v8::Function> ori
 		}
 	}
 
-	SV8FunctionHandle handle = SPRandomHelper::NextInt(100000000);
+	SV8FunctionHandle handle = SPRandomHelper::NextInt(1000000);
 	while(functionDict.find(handle) != functionDict.end()){
-		handle = SPRandomHelper::NextInt(100000000);
+		handle = SPRandomHelper::NextInt(1000000);
 	}
 
 	FunctionPtr persistentFunc = new Persistent<v8::Function>(SPV8ScriptEngine::GetSingleton()->GetIsolate(), origin);
@@ -74,5 +75,19 @@ Handle<Object> SV8FunctionManager::SaveAsObj()
 
 void SV8FunctionManager::LoadFromObj( Handle<Object> obj )
 {
+	functionDict.clear();
+	Handle<Object> funcs = Handle<Object>::Cast(SV8Function::GetProperty(L"functions", obj));
+	const Local<Array> props = funcs->GetPropertyNames();
+	const uint32_t length = props->Length();
+	for (uint32_t i = 0; i < length; i++)
+	{
+		const Local<Value> key = props->Get(i);
+		const Local<Value> value = funcs->Get(key);
+
+		Handle<v8::Function> func = SPV8ScriptEngine::ParseFunction(value->ToString());
+		int handle = key->ToInt32()->Int32Value();
+		functionDict[handle] = new Persistent<v8::Function>(SPV8ScriptEngine::GetSingleton()->GetIsolate(), func);
+	}
+
 	return;
 }

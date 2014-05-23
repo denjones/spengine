@@ -11,6 +11,7 @@
 #include "SUITrackManager.h"
 #include "SUIVideoManager.h"
 #include "SV8FunctionManager.h"
+#include "SV8Function.h"
 
 #pragma warning(disable:4244)
 
@@ -58,7 +59,7 @@ bool SPGameShow::Initialize()
 	return true;	
 }
 
-bool SPGameShow::SaveAsFile( SPString path )
+bool SPGameShow::SaveAsFile( SPString path , SPString screens)
 {
 	SPFileHelper::CreatePath(SPFileHelper::GetUpperPath(path));
 
@@ -69,19 +70,8 @@ bool SPGameShow::SaveAsFile( SPString path )
 	{
 		return false;
 	}
-//
-//	SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-//
-//	result += SPStringHelper::XMLSurroundWith(
-//		SPVideoManager::GetSingleton()->SaveAsString()
-//		+ SPFontManager::GetSingleton()->SaveAsString()
-//		+ SPSoundManager::GetSingleton()->SaveAsString()
-////		+ SScriptManager::GetSingleton()->SaveAsString()
-//		//+ SUIParticleSystemManager::GetSingleton()->SaveAsString()
-//		+ SUIPictureManager::GetSingleton()->SaveAsString()		
-//		+ SUIManager::GetSingleton()->SaveAsString(),L"SaveData");
-//
-	SPString result = SPV8ScriptEngine::StringToSPString(SPV8ScriptEngine::ToJson(SaveAsObj()));
+
+	SPString result = SPV8ScriptEngine::StringToSPString(SPV8ScriptEngine::ToJson(SaveAsObj(screens)));
 
 	string shortResult = SPStringHelper::WStringToUTF8String(result);
 
@@ -96,64 +86,34 @@ bool SPGameShow::SaveAsFile( SPString path )
 
 bool SPGameShow::LoadFromFile( SPString path )
 {
-	//HANDLE handle = CreateFile(path.c_str(),
-	//	GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
+	HANDLE handle = CreateFile(path.c_str(),
+		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
 
-	//if (handle == INVALID_HANDLE_VALUE)
-	//{
-	//	return false;
-	//}
+	if (handle == INVALID_HANDLE_VALUE)
+	{
+		return false;
+	}
 
-	//ULARGE_INTEGER fileLength = {0};
-	//fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
+	ULARGE_INTEGER fileLength = {0};
+	fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
 
-	//char* pBuffer = new char[fileLength.QuadPart];
+	char* pBuffer = new char[fileLength.QuadPart + 1];
 
-	//DWORD numOfByteRead;
+	DWORD numOfByteRead;
 
-	//ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
+	ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
+	pBuffer[fileLength.QuadPart] = 0;
 
-	//CloseHandle(handle);
+	CloseHandle(handle);
 
-	//SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
+	SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
 
-	//delete [] pBuffer;
-	//pBuffer = NULL;
+	delete [] pBuffer;
+	pBuffer = NULL;
 
-	//SPVideoManager::GetSingleton()->LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SPVideoManager"));
+	Handle<Object> obj = SPV8ScriptEngine::JsonParse(SPV8ScriptEngine::SPStringToString(result));
 
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SPVideoManager");
-
-	//SPFontManager::GetSingleton()->LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SPFontManager"));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SPFontManager");
-
-	//SPSoundManager::GetSingleton()->LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SPSoundManager"));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SPSoundManager");
-
-	//SScriptManager::GetSingleton()->LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SScriptManager"));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SScriptManager");
-
-	////SUIParticleSystemManager::GetSingleton()->LoadFromString(
-	////	SPStringHelper::XMLExcludeFrom(result, L"SUIParticleSys"));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIParticleSys");
-
-	//SUIPictureManager::GetSingleton()->LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SUIPictureManager"));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIPictureManager");
-
-	//SUIManager::GetSingleton()->LoadFromString(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SUIManager"));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SUIManager");
+	LoadFromObj(obj);
 
 	return true;
 }
@@ -249,13 +209,28 @@ Handle<Object> SPGameShow::SaveAsObj()
 	Handle<Object> result = Object::New();
 	result->Set(SPV8ScriptEngine::SPStringToString(L"SUI"), SUIManager::GetSingleton()->SaveAsObj());
 	result->Set(SPV8ScriptEngine::SPStringToString(L"SScript"), SV8ScriptManager::GetSingleton()->SaveAsObj());
-	result->Set(SPV8ScriptEngine::SPStringToString(L"SV8Func"), SV8FunctionManager::GetSingleton()->SaveAsObj());
+	return result;
+}
+
+Handle<Object> SPGameShow::SaveAsObj(SPString screens)
+{
+	Handle<Object> result = Object::New();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SUI"), SUIManager::GetSingleton()->SaveScreenAsObj(screens));
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SScript"), SV8ScriptManager::GetSingleton()->SaveAsObj());
 	return result;
 }
 
 void SPGameShow::LoadFromObj( Handle<Object> obj )
 {
-	throw std::exception("The method or operation is not implemented.");
+	if(SV8Function::HasProperty(L"SScript", obj))
+	{
+		SV8ScriptManager::GetSingleton()->LoadFromObj(Handle<Object>::Cast(SV8Function::GetProperty(L"SScript", obj)));
+	}
+
+	if(SV8Function::HasProperty(L"SUI", obj))
+	{
+		SUIManager::GetSingleton()->LoadFromObj(Handle<Object>::Cast(SV8Function::GetProperty(L"SUI", obj)));
+	}
 }
 
 void SPGameShow::OnExit()

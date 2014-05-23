@@ -5,6 +5,7 @@
 #include "SUIPictureBox.h"
 #include "SUIEvent.h"
 #include "ISV8Serializable.h"
+#include "SV8FunctionManager.h"
 
 using namespace SPEngine;
 
@@ -31,6 +32,8 @@ class SUIScreen :
 	ComponentMap componentMap;
 	PersistentComponentMap persistentComponentMap;
 	SPString name;
+
+	SV8FunctionManager eventHandlerManager;
 
 	SUIComponentPtr topComponent;
 	SUIComponentPtr currentComponent;
@@ -68,8 +71,11 @@ public:
 	SUIComponentPtr GetCurrentComponent();
 	SUITextBoxPtr GetCurrentTextBox();
 	SUIPictureBoxPtr GetCurrentPictureBox();
-
 	void SetPopUp(bool setPopUp);
+
+	SV8FunctionHandle RegisterHandler(Handle<v8::Function> func);
+	Handle<v8::Value> GetHandler(SV8FunctionHandle handle);
+	
 
 	void Focus();
 

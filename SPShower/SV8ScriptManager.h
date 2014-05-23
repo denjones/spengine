@@ -53,6 +53,8 @@ private:
 	SPPointer<Persistent<ObjectTemplate>> commandEventTempl;
 	SPPointer<Persistent<ObjectTemplate>> fpsTempl;
 	SPPointer<Persistent<v8::Function>> onExit;
+	SPPointer<Persistent<v8::Object>> systemVariables;
+	SPPointer<Persistent<v8::Object>> variables;
 
 public:
 	Handle<ObjectTemplate> GetScreenTemplate();
@@ -67,6 +69,8 @@ public:
 	Handle<ObjectTemplate> GetFPSTemplate();
 	Handle<v8::Value> GetOnExitFunc();
 	void SetOnExitFunc(Handle<v8::Function> func);
+	Handle<v8::Value> GetSystemVariable();
+	Handle<v8::Value> GetVariable();
 
 private:
 	static bool HasProperty(SPString propertyName, Handle<Object> obj);
