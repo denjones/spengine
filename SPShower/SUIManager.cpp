@@ -94,6 +94,8 @@ void SUIManager::Reload()
 
 void SUIManager::Update( float timeDelta )
 {
+	displayLock.Lock();
+
 	GenerateEvent(timeDelta);
 	bool isInputValid = true;
 	bool isVisible = true;
@@ -125,10 +127,14 @@ void SUIManager::Update( float timeDelta )
 	{
 		uv_async_send((uv_async_t*)asyncEvent);
 	}
+
+	displayLock.Unlock();
 }
 
 void SUIManager::Draw( float timeDelta )
 {
+	displayLock.Lock();
+
 	ScreenStack::iterator screen = dispalyStack->begin();
 	while(screen != dispalyStack->end())
 	{
@@ -136,6 +142,8 @@ void SUIManager::Draw( float timeDelta )
 
 		screen++;
 	}
+
+	displayLock.Unlock();
 }
 
 void SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
@@ -648,6 +656,8 @@ Handle<Object> SUIManager::SaveScreenAsObj( SPString screensStr )
 
 void SUIManager::LoadFromObj(Handle<Object> obj)
 {
+	displayLock.Lock();
+
 	if (SV8Function::HasProperty(L"display", obj))
 	{
 		dispalyStack->clear();
@@ -667,6 +677,7 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 			SUIScreenPtr screen = new SUIScreen();
 			screen->LoadFromObj(Handle<Object>::Cast(value));
 			screenMap.Set(SPV8ScriptEngine::StringToSPString(key->ToString()), screen);
+			SetPersistentScreen(screen);
 		}
 	}
 
@@ -681,7 +692,11 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 				dispalyStack->push_back(screenMap[screenName]);
 			}
 		}
+
+		dispalyStack->back()->Focus();
 	}
+
+	displayLock.Unlock();
 }
 
 

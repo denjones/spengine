@@ -8,10 +8,10 @@ using namespace v8;
 class SUIV8FunctionEventHandler : public SUIEventHandler
 {
 	SV8FunctionHandle v8Func;
-	SUIComponentPtr self;
+	SUIComponent* self;
 
 public:
-	SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, SUIComponentPtr self);
+	SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, SUIComponent* self);
 	~SUIV8FunctionEventHandler(void);
 
 	virtual bool Function( SUIEventPtr e );

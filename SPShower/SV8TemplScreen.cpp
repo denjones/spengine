@@ -198,6 +198,8 @@ void SV8TemplScreen::IdSetter( Local<String> property, Local<Value> value, const
 		isolate->ThrowException(Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
 		return;
 	}
+
+	screen->SetName(SPV8ScriptEngine::StringToSPString(value->ToString()));
 		
 	return;
 }

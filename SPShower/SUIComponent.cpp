@@ -3,6 +3,7 @@
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
 #include "SUIV8FunctionEventHandler.h"
+#include "SV8Function.h"
 
 #pragma warning (disable:4244)
 
@@ -1715,6 +1716,137 @@ Handle<Object> SUIComponent::SaveAsObj()
 
 void SUIComponent::LoadFromObj( Handle<Object> obj )
 {
+	if(SV8Function::HasProperty(L"onClick", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onClick", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onClick"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onDClick", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onDClick", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onDClick"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onMouseDown", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onMouseDown", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onMouseDown"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onMouseUp", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onMouseUp", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onMouseUp"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onMouseScroll", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onMouseScroll", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onMouseScroll"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onMouseOver", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onMouseOver", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onMouseOver"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onMouseIn", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onMouseIn", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onMouseIn"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onMouseOut", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onMouseOut", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onMouseOut"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onKeyPress", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onKeyPress", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onKeyPress"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onKeyDown", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onKeyDown", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onKeyDown"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"onKeyUp", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"onKeyUp", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"onKeyUp"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+
+	if(SV8Function::HasProperty(L"catchClick", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchClick", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchClick"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchDClick", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchDClick", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchDClick"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchMouseDown", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchMouseDown", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseDown"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchMouseUp", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchMouseUp", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseUp"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchMouseScroll", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchMouseScroll", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseScroll"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchMouseOver", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchMouseOver", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseOver"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchMouseIn", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchMouseIn", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseIn"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchMouseOut", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchMouseOut", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchMouseOut"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchKeyPress", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchKeyPress", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchKeyPress"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchKeyDown", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchKeyDown", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchKeyDown"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+	if(SV8Function::HasProperty(L"catchKeyUp", obj))
+	{
+		SV8FunctionHandle handle = SV8Function::GetProperty(L"catchKeyUp", obj)->Int32Value();
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"catchKeyUp"), Handle<v8::Function>::Cast(GetScreen()->GetHandler(handle)));
+	}
+
+	Handle<Array> childList = Handle<Array>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"childComponents")));
+
+	obj->Delete(SPV8ScriptEngine::SPStringToString(L"childComponents"));
+
+	SPV8ScriptEngine::CoverObject(GetV8Obj(), obj);
+
+	for (int i = 0; i < childList->Length(); i++)
+	{
+		Handle<Object> childObj = Handle<Object>::Cast(childList->Get(i));
+
+		// Register component before loaded.
+		SUIComponentPtr child = new SUIComponent(GetScreen());
+		GetScreen()->SetPersistentComponent(child);
+		child->LoadFromObj(childObj);
+
+		AddChild(child);
+		child->SetFather(GetScreen()->GetPersistentComponent(this));
+	}
+
 	return;
 }
 

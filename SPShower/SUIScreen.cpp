@@ -4,6 +4,7 @@
 #include "SScriptHelper.h"
 #include "SV8ScriptManager.h"
 #include "SUIManager.h"
+#include "SV8Function.h"
 
 #pragma warning (disable:4244)
 
@@ -552,6 +553,24 @@ Handle<Object> SUIScreen::SaveAsObj()
 
 void SUIScreen::LoadFromObj( Handle<Object> obj )
 {
+	Handle<Object> rootObj = Handle<Object>::Cast(SV8Function::GetProperty(L"root", obj));
+	obj->Delete(SPV8ScriptEngine::SPStringToString(L"root"));
+	
+	Handle<Object> eventHandlerManagerObj = Handle<Object>::Cast(SV8Function::GetProperty(L"_eventHandlerManager", obj));
+	obj->Delete(SPV8ScriptEngine::SPStringToString(L"_eventHandlerManager"));
+
+	SPV8ScriptEngine::CoverObject(GetV8Obj(), obj);
+
+	// Build function manager before root component built.
+	eventHandlerManager.LoadFromObj(eventHandlerManagerObj);
+
+	// Register component before loaded.
+	topComponent = new SUIComponent(this);
+	SetPersistentComponent(topComponent);
+	topComponent->LoadFromObj(rootObj);
+
+	componentMap[L"global_root"] = topComponent;
+	
 	return;
 }
 
