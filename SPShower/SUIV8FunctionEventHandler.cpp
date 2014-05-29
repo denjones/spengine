@@ -4,7 +4,7 @@
 #include "SUIScreen.h"
 
 
-SUIV8FunctionEventHandler::SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, SUIComponentPtr self)
+SUIV8FunctionEventHandler::SUIV8FunctionEventHandler(Handle<v8::Function> v8Func, SUIComponent* self)
 {
 	this->v8Func = self->GetScreen()->RegisterHandler(v8Func);
 	this->self = self;

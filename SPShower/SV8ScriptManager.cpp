@@ -547,7 +547,7 @@ void SV8ScriptManager::LoadFromObj( Handle<Object> obj )
 		}
 		else
 		{
-			Handle<v8::Function> func = Handle<v8::Function>::Cast(SV8Function::GetProperty(L"func", funcObj));
+			Handle<v8::Function> func = SPV8ScriptEngine::ParseFunction(SV8Function::GetProperty(L"func", funcObj)->ToString());
 			command = new SV8ScriptCommand(func, line, col, file);
 		}
 		commands.push_back(command);

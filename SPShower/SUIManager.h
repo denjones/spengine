@@ -36,6 +36,7 @@ class SUIManager :
 
 	void* asyncEvent;
 	CCritSec eventLock;
+	CCritSec displayLock;
 
 public:
 	SUIManager(void);

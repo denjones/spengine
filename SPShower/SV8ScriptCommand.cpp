@@ -34,7 +34,7 @@ void SV8ScriptCommand::Call( SV8CommandEventPtr event )
 {
 	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
 	HandleScope handleScope(isolate);
-	Handle<Function> function = Handle<v8::Function>::New(isolate, (*v8Function));
+	Handle<v8::Function> function = Handle<v8::Function>::New(isolate, (*v8Function));
 	Handle<Object> eventObj = event->GetV8Obj();
 	Handle<Value> argv[1];
 	argv[0] = eventObj;
