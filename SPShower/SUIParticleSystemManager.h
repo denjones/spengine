@@ -10,7 +10,7 @@ class SUIParticleSystemManager :
 {
 	//SPWStringMap<VariableMap> particleSystemPropertiesMap;
 
-	map<SUIParticleSystemHandle, Handle<Object>> particleSystemHandleManager;
+	map<SUIParticleSystemHandle, SPPointer<Persistent<Object>>> particleSystemHandleManager;
 	map<SUIParticleSystemHandle, SPString> particleSystemIdManager;
 	SPPointer<Persistent<ObjectTemplate>> particleSystemTempl;
 

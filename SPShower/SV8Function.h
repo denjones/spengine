@@ -29,6 +29,7 @@ public:
 	static void Goto(const FunctionCallbackInfo<Value>& args);
 	static void SaveState(const FunctionCallbackInfo<Value>& args);
 	static void LoadState(const FunctionCallbackInfo<Value>& args);
+	static void GetTrackById(const FunctionCallbackInfo<Value>& args);
 	//static void SaveScreen(const FunctionCallbackInfo<Value>& args);
 
 	//
