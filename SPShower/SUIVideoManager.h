@@ -9,7 +9,7 @@ class SUIVideoManager :
 	public SPSingleton<SUIVideoManager>
 {
 	SPWStringMap<SPString> videoPaths;
-	map<SUIVideoHandle, Handle<Object>> videoHandleManager;
+	map<SUIVideoHandle, SPPointer<Persistent<Object>>> videoHandleManager;
 	map<SUIVideoHandle, SPString> videoIdManager;
 	SPPointer<Persistent<ObjectTemplate>> videoTempl;
 

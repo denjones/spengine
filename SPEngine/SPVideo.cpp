@@ -206,6 +206,7 @@ namespace SPEngine
 			throw exception("E_UNEXPECTED");
 		}
 		data->GetSeek()->GetCurrentPosition(&timeNow);
+		return timeNow;
 	}
 
 

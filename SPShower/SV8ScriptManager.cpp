@@ -309,6 +309,9 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"saveState"), FunctionTemplate::New(SV8Function::SaveState)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"loadState"), FunctionTemplate::New(SV8Function::LoadState)->GetFunction());
 
+	// Getter
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"getTrackById"), FunctionTemplate::New(SV8Function::GetTrackById)->GetFunction());
+
 	//
 	// Set Global Window Object
 	//

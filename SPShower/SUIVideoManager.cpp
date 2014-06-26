@@ -51,11 +51,14 @@ SPEngine::SPVideoTexturePtr SUIVideoManager::GetVideoTexture( SUIVideoHandle han
 
 Handle<Object> SUIVideoManager::GetVideo( SUIVideoHandle handle )
 {
-	return videoHandleManager[handle];
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	return Handle<Object>::New(isolate, *videoHandleManager[handle]);
 }
 
 Handle<Object> SUIVideoManager::CreateVideo( Handle<Object> argObj )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+
 	SPVideoPtr video;
 
 	bool isNameSet = false;
@@ -105,7 +108,7 @@ Handle<Object> SUIVideoManager::CreateVideo( Handle<Object> argObj )
 		}
 	}
 
-	videoHandleManager[handle] = obj;
+	videoHandleManager[handle] = new Persistent<Object>(isolate, obj);
 	videoIdManager[handle] = id;
 
 	return obj;

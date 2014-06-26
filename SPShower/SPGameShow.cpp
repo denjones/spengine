@@ -209,6 +209,7 @@ Handle<Object> SPGameShow::SaveAsObj()
 	Handle<Object> result = Object::New();
 	result->Set(SPV8ScriptEngine::SPStringToString(L"SUI"), SUIManager::GetSingleton()->SaveAsObj());
 	result->Set(SPV8ScriptEngine::SPStringToString(L"SScript"), SV8ScriptManager::GetSingleton()->SaveAsObj());
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SSound"), SUITrackManager::GetSingleton()->SaveAsObj());
 	return result;
 }
 
@@ -217,6 +218,7 @@ Handle<Object> SPGameShow::SaveAsObj(SPString screens)
 	Handle<Object> result = Object::New();
 	result->Set(SPV8ScriptEngine::SPStringToString(L"SUI"), SUIManager::GetSingleton()->SaveScreenAsObj(screens));
 	result->Set(SPV8ScriptEngine::SPStringToString(L"SScript"), SV8ScriptManager::GetSingleton()->SaveAsObj());
+	result->Set(SPV8ScriptEngine::SPStringToString(L"SSound"), SUITrackManager::GetSingleton()->SaveAsObj());
 	return result;
 }
 
@@ -230,6 +232,11 @@ void SPGameShow::LoadFromObj( Handle<Object> obj )
 	if(SV8Function::HasProperty(L"SUI", obj))
 	{
 		SUIManager::GetSingleton()->LoadFromObj(Handle<Object>::Cast(SV8Function::GetProperty(L"SUI", obj)));
+	}
+
+	if(SV8Function::HasProperty(L"SSound", obj))
+	{
+		SUITrackManager::GetSingleton()->LoadFromObj(Handle<Object>::Cast(SV8Function::GetProperty(L"SSound", obj)));
 	}
 }
 

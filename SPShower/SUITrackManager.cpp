@@ -20,11 +20,14 @@ SUITrackManager::~SUITrackManager(void)
 
 Handle<Object> SUITrackManager::GetTrack( SUISoundTrackHandle handle )
 {
-	return trackHandleManager[handle];
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	return Handle<Object>::New(isolate, *trackHandleManager[handle]);
 }
 
 Handle<Object> SUITrackManager::CreateTrack( Handle<Object> argObj )
 {
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+
 	SPSoundTrackPtr track;
 
 	bool isNameSet = false;
@@ -67,7 +70,9 @@ Handle<Object> SUITrackManager::CreateTrack( Handle<Object> argObj )
 		}
 	}
 
-	trackHandleManager[handle] = obj;
+	trackHandleManager[handle] = new Persistent<Object>(isolate, obj);
+
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"control"), argObj->Get(SPV8ScriptEngine::SPStringToString(L"control")));
 
 	return obj;
 }
@@ -92,6 +97,33 @@ void SUITrackManager::Initialize()
 Handle<ObjectTemplate> SUITrackManager::GetTrackTemplate()
 {
 	return Handle<ObjectTemplate>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), (*trackTempl));
+}
+
+Handle<Object> SUITrackManager::SaveAsObj()
+{
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<Object> trackManagerObj = Object::New();
+	map<SUISoundTrackHandle, SPPointer<Persistent<Object>>>::iterator iter = trackHandleManager.begin();
+	while(iter != trackHandleManager.end())
+	{
+		Handle<Object> trackObj = Handle<Object>::New(isolate, *iter->second);
+		trackManagerObj->Set(trackObj->Get(SPV8ScriptEngine::SPStringToString(L"id")), trackObj);
+		iter++;
+	}
+	return trackManagerObj;
+}
+
+void SUITrackManager::LoadFromObj( Handle<Object> obj )
+{
+	const Local<Array> props = obj->GetPropertyNames();
+	const uint32_t length = props->Length();
+	for (uint32_t i = 0; i < length; i++)
+	{
+		const Local<Value> key = props->Get(i);
+		const Local<Value> value = obj->Get(key);
+
+		CreateTrack(Handle<Object>::Cast(value));
+	}
 }
 
 

@@ -26,7 +26,8 @@ SPEngine::SPParticleSystemTexturePtr SUIParticleSystemManager::GetParticleSystem
 
 Handle<Object> SUIParticleSystemManager::GetParticleSystem( SUIParticleSystemHandle handle )
 {
-	return particleSystemHandleManager[handle];
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	return Handle<Object>::New(isolate, *particleSystemHandleManager[handle]);
 }
 
 Handle<Object> SUIParticleSystemManager::CreateParticleSystem( Handle<Object> argObj )
@@ -82,7 +83,8 @@ Handle<Object> SUIParticleSystemManager::CreateParticleSystem( Handle<Object> ar
 		}
 	}
 
-	particleSystemHandleManager[handle] = obj;
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	particleSystemHandleManager[handle] = new Persistent<Object>(isolate, obj);
 	
 
 	return obj;

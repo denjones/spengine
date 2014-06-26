@@ -30,7 +30,7 @@ namespace SPEngine
 		T*		pointer;
 		typedef T *(SPPointer::*bool_type)() const;
 
-		void AddReference()
+		virtual void AddReference()
 		{
 			if (!pointerCount)
 			{
@@ -42,7 +42,7 @@ namespace SPEngine
 			}
 		}
 
-		void RemoveReference()
+		virtual void RemoveReference()
 		{
 			if (pointerCount)
 			{
@@ -282,4 +282,19 @@ namespace SPEngine
 
 	template <typename T>
 	SPPointer<T> SPPointer<T>::null = SPPointer<T>((T*)NULL);
+
+	template <typename T>
+	class SPPersistent : public SPPointer<T>
+	{
+	protected:
+		virtual void AddReference()
+		{
+			return;
+		}
+
+		virtual void RemoveReference()
+		{
+			return;
+		}
+	};
 }

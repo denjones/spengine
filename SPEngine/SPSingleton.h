@@ -66,21 +66,10 @@ namespace SPEngine
 		/// @return T&
 		static SPPointer<T> GetSingleton()
 		{
-			static SPPointer<T> singleton = NULL;
+			// = NULL;
 			static SPPointer<CCritSec> singletonLock = new CCritSec();
-
-			if (!singletonLock)
-			{
-				return NULL;
-			}
-
 			singletonLock->Lock();
-
-			if (!singleton)
-			{
-				singleton = new T();
-			}
-
+			static SPPointer<T> singleton = new T();
 			singletonLock->Unlock();
 
 			assert(singleton);

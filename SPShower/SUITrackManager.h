@@ -1,4 +1,5 @@
 #pragma once
+#include "ISV8Serializable.h"
 
 using namespace SPEngine;
 
@@ -6,9 +7,10 @@ typedef SPSoundTrack* SUISoundTrackHandle;
 
 class SUITrackManager : 
 	public SPComponent,
+	public ISV8Serializable,
 	public SPSingleton<SUITrackManager>
 {
-	map<SUISoundTrackHandle, Handle<Object>> trackHandleManager;
+	map<SUISoundTrackHandle, SPPointer<Persistent<Object>>> trackHandleManager;
 	SPPointer<Persistent<ObjectTemplate>> trackTempl;
 
 public:
@@ -20,6 +22,9 @@ public:
 	Handle<ObjectTemplate> GetTrackTemplate();
 
 	virtual void Initialize();
+
+	virtual Handle<Object> SaveAsObj();
+	virtual void LoadFromObj( Handle<Object> obj );
 };
 
 
