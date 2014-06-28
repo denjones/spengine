@@ -311,6 +311,9 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 
 	// Getter
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"getTrackById"), FunctionTemplate::New(SV8Function::GetTrackById)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"getScreenById"), FunctionTemplate::New(SV8Function::GetScreenById)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"getVideoById"), FunctionTemplate::New(SV8Function::GetVideoById)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"getParticleSystemById"), FunctionTemplate::New(SV8Function::GetParticleSystemById)->GetFunction());
 
 	//
 	// Set Global Window Object

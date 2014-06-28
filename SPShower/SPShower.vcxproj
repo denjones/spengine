@@ -389,7 +389,10 @@
     <ClCompile Include="SV8AddTag.cpp" />
     <ClCompile Include="SV8CommandEvent.cpp" />
     <ClCompile Include="SV8FunctionManager.cpp" />
+    <ClCompile Include="SV8GetParticleSystemById.cpp" />
+    <ClCompile Include="SV8GetScreenById.cpp" />
     <ClCompile Include="SV8GetTrackById.cpp" />
+    <ClCompile Include="SV8GetVideoById.cpp" />
     <ClCompile Include="SV8Goto.cpp" />
     <ClCompile Include="SV8LoadState.cpp" />
     <ClCompile Include="SV8SaveState.cpp" />

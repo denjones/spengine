@@ -979,6 +979,15 @@
     <ClCompile Include="SV8GetTrackById.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
+    <ClCompile Include="SV8GetScreenById.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8GetVideoById.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8GetParticleSystemById.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPShower.rc">
