@@ -33,6 +33,8 @@ public:
 	static void GetScreenById(const FunctionCallbackInfo<Value>& args);
 	static void GetVideoById(const FunctionCallbackInfo<Value>& args);
 	static void GetParticleSystemById(const FunctionCallbackInfo<Value>& args);
+	static void SaveSystemData(const FunctionCallbackInfo<Value>& args);
+	static void LoadSystemData(const FunctionCallbackInfo<Value>& args);
 	//static void SaveScreen(const FunctionCallbackInfo<Value>& args);
 
 	//

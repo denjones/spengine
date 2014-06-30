@@ -8,6 +8,9 @@
 // 获取SpeShow对象
 var ss = process.binding('speshow');
 
+// 读取系统变量以及已读函数
+ss.loadSystemData();
+
 // 窗口标题
 ss.window.title = 'Sicily - 零与一的幻想 序章 (with SpeShow.JS 0.11)';
 

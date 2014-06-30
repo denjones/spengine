@@ -10,6 +10,7 @@
 #include <vector>
 #include <direct.h>
 #include <iomanip>
+#include "SPString.h"
 
 using namespace std;
 
@@ -383,6 +384,25 @@ namespace SPEngine
 	bool SPStringHelper::EqualsIgnoreCase( wstring str1, wstring str2 )
 	{
 		return _wcsicmp(str1.c_str(), str2.c_str()) == 0;
+	}
+
+	vector<wstring> SPStringHelper::Split( wstring str, wstring spliter )
+	{
+		size_t last = 0;
+		size_t index= str.find_first_of(spliter, last);
+		vector<SPString> ret;
+		while (index!=std::string::npos)
+		{
+			ret.push_back(str.substr(last,index-last));
+			last = index+1;
+			index = str.find_first_of(spliter, last);
+		}
+		if (index-last>0)
+		{
+			ret.push_back(str.substr(last, index-last));
+		}
+
+		return ret;
 	}
 
 }

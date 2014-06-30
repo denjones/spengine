@@ -24,6 +24,8 @@ Handle<ObjectTemplate> SV8TemplScreen::GetTemplate()
 		FunctionTemplate::New(Focus)->GetFunction());
 	templScreen->Set(SPV8ScriptEngine::SPStringToString(L"getComponentById"), 
 		FunctionTemplate::New(GetComponentById)->GetFunction());
+	templScreen->Set(SPV8ScriptEngine::SPStringToString(L"capture"), 
+		FunctionTemplate::New(Capture)->GetFunction());
 
 	return templScreen;
 }
@@ -364,4 +366,39 @@ void SV8TemplScreen::GetComponentById( const FunctionCallbackInfo<Value>& args )
 	{
 		args.GetReturnValue().Set(com->GetV8Obj());
 	}
+}
+
+void SV8TemplScreen::Capture( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIScreen* screen = (SUIScreen*)field->Value();
+
+	SPString fileName = L"capture/default.jpg";
+
+	if(args.Length() >= 0)
+	{
+		if(args[0]->IsObject())
+		{
+			Handle<Object> argObj = Handle<Object>::Cast(args[0]);
+
+			if (SV8Function::HasProperty(L"file", argObj))
+			{
+				fileName = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"file", argObj)->ToString());
+			}
+		}
+		else if (args[0]->IsString())
+		{
+			fileName = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
+		}
+	}
+
+	screen->GetComponent(L"global_root")->SaveAsImage(fileName);
 }

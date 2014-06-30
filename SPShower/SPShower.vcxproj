@@ -395,7 +395,9 @@
     <ClCompile Include="SV8GetVideoById.cpp" />
     <ClCompile Include="SV8Goto.cpp" />
     <ClCompile Include="SV8LoadState.cpp" />
+    <ClCompile Include="SV8LoadSystemData.cpp" />
     <ClCompile Include="SV8SaveState.cpp" />
+    <ClCompile Include="SV8SaveSystemData.cpp" />
     <ClCompile Include="SV8TemplCommandEvent.cpp" />
     <ClCompile Include="SV8TemplComponent.cpp" />
     <ClCompile Include="SV8CreateParticleSystem.cpp" />

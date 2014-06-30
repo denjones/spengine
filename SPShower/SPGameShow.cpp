@@ -29,14 +29,14 @@ bool SPGameShow::Load()
 	//SPScreenManager::GetSingleton()->Register(L"shower");
 	loading = SPTextureManager::GetSingleton()->GetAnime(L"data/images/loading.png", 2, 4, 20);
 
-	LoadSystemData();
+	//LoadSystemData();
 
 	return SPGame::Load();
 }
 
 bool SPGameShow::UnloadContent()
 {
-	SaveSystemData();
+	//SaveSystemData();
 
 	return SPGame::UnloadContent();
 }
@@ -118,32 +118,33 @@ bool SPGameShow::LoadFromFile( SPString path )
 	return true;
 }
 
-bool SPGameShow::SaveSystemData()
+void SPGameShow::SaveSystemData(SPString fileName)
 {
-	//SPString path = L"system.dat";
+	HANDLE handle = CreateFile(fileName.c_str(),
+		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
 
-	//HANDLE handle = CreateFile(path.c_str(),
-	//	GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, NULL, NULL);
+	if (handle == INVALID_HANDLE_VALUE)
+	{
+		SPLogHelper::WriteLog(L"Failed to create file: " + fileName);
+		return;
+	}
 
-	//SPString result = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	Handle<Object> systemObj = Object::New();
+	systemObj->Set(SPV8ScriptEngine::SPStringToString(L"read"), SV8ScriptManager::GetSingleton()->SaveReadAsObj());
+	systemObj->Set(SPV8ScriptEngine::SPStringToString(L"sysVar"), SV8ScriptManager::GetSingleton()->GetSystemVariable());
 
-	//result += SPStringHelper::XMLSurroundWith(	SScriptHelper::VariablesToString(
-	//	SScriptManager::GetSingleton()->GetSystemVariables()), L"SysData");
+	SPString result = SPV8ScriptEngine::StringToSPString(SPV8ScriptEngine::ToJson(systemObj));
 
-	//result += SScriptManager::GetSingleton()->ReadCommandsToString() ;
+	string shortResult = SPStringHelper::WStringToUTF8String(result);
 
-	//string shortResult = SPStringHelper::WStringToUTF8String(result);
+	DWORD numOfByteWritten;
 
-	//DWORD numOfByteWritten;
+	WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
 
-	//WriteFile(handle, shortResult.c_str(), shortResult.size(), &numOfByteWritten, NULL);
-
-	//CloseHandle(handle);
-
-	return true;
+	CloseHandle(handle);
 }
 
-bool SPGameShow::LoadSystemData()
+void SPGameShow::LoadSystemData(SPString fileName)
 {
 	//SPString path = L"system.dat";
 
@@ -179,7 +180,38 @@ bool SPGameShow::LoadSystemData()
 	//delete [] pBuffer;
 	//pBuffer = NULL;
 
-	return true;
+	HANDLE handle = CreateFile(fileName.c_str(),
+		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
+
+	if (handle == INVALID_HANDLE_VALUE)
+	{
+		SPLogHelper::WriteLog(L"Failed to open file: " + fileName);
+		return;
+	}
+
+	ULARGE_INTEGER fileLength = {0};
+	fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
+
+	char* pBuffer = new char[fileLength.QuadPart + 1];
+
+	DWORD numOfByteRead;
+
+	ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
+	pBuffer[fileLength.QuadPart] = 0;
+
+	CloseHandle(handle);
+
+	SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
+
+	delete [] pBuffer;
+	pBuffer = NULL;
+
+	Handle<Object> obj = SPV8ScriptEngine::JsonParse(SPV8ScriptEngine::SPStringToString(result));
+	Handle<Object> readObj = Handle<Object>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"read")));
+	Handle<Object> sysVar = Handle<Object>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"sysVar")));
+	
+	SV8ScriptManager::GetSingleton()->LoadReadFromObj(readObj);
+	SPV8ScriptEngine::CoverObject(SV8ScriptManager::GetSingleton()->GetSystemVariable(), sysVar);
 }
 
 bool SPGameShow::DrawWhileLoading( float timeDelta )
