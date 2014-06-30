@@ -119,6 +119,7 @@ public:
 	static void InitModule(Handle<Object> exports);
 
 	Handle<Object> SaveReadAsObj();
+	void LoadReadFromObj(Handle<Object> obj);
 	virtual Handle<Object> SaveAsObj();
 	virtual void LoadFromObj( Handle<Object> obj );
 

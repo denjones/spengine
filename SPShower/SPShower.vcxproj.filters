@@ -988,6 +988,12 @@
     <ClCompile Include="SV8GetParticleSystemById.cpp">
       <Filter>Source\SScript\SV8Function</Filter>
     </ClCompile>
+    <ClCompile Include="SV8SaveSystemData.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
+    <ClCompile Include="SV8LoadSystemData.cpp">
+      <Filter>Source\SScript\SV8Function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPShower.rc">

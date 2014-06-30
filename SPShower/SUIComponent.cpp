@@ -4,6 +4,8 @@
 #include "SUIManager.h"
 #include "SUIV8FunctionEventHandler.h"
 #include "SV8Function.h"
+#include <shlobj.h>
+#include <shlwapi.h>
 
 #pragma warning (disable:4244)
 
@@ -709,7 +711,24 @@ void SUIComponent::SaveAsImage( SPString path )
 		path += L".bmp";
 	}
 
-	D3DXSaveTextureToFile(path.c_str(), format, childTarget->GetD3DTexture(), NULL);
+	vector<SPString> parts1 = SPStringHelper::Split(path, L"\\");
+	vector<SPString> parts2 = SPStringHelper::Split(path, L"/");
+	if(parts1.size() < parts2.size())
+	{
+		parts1 = parts2;
+	}
+	SPString currentDir = parts1[0];
+	for (int i = 0; i < parts1.size() - 1; i++)
+	{
+		CreateDirectory(currentDir.c_str(), NULL);
+		currentDir = currentDir + L"\\" + parts1[i + 1];
+	}
+
+	HRESULT hr = D3DXSaveTextureToFile(path.c_str(), format, childTarget->GetD3DTexture(), NULL);
+	if (FAILED(hr))
+	{
+		SPLogHelper::WriteLog(SPStringHelper::Format("[SUIComponent] ERROR %d: Failed to save component as image.", GetLastError()));
+	}
 }
 
 SPEngine::SPTexturePtr SUIComponent::SaveAsTexture()

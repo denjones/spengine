@@ -22,8 +22,8 @@ public:
 	bool DrawWhileLoading(float timeDelta);
 	bool Draw(float timeDelta);
 
-	bool SaveSystemData();
-	bool LoadSystemData();
+	void SaveSystemData(SPString fileName);
+	void LoadSystemData(SPString fileName);
 
 	virtual Handle<Object> SaveAsObj();
 	virtual Handle<Object> SaveAsObj(SPString screens);

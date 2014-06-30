@@ -308,6 +308,8 @@ void SV8ScriptManager::InitModule( Handle<Object> exports )
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"goto"), FunctionTemplate::New(SV8Function::Goto)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"saveState"), FunctionTemplate::New(SV8Function::SaveState)->GetFunction());
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"loadState"), FunctionTemplate::New(SV8Function::LoadState)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"saveSystemData"), FunctionTemplate::New(SV8Function::SaveSystemData)->GetFunction());
+	exports->Set(SPV8ScriptEngine::SPStringToString(L"loadSystemData"), FunctionTemplate::New(SV8Function::LoadSystemData)->GetFunction());
 
 	// Getter
 	exports->Set(SPV8ScriptEngine::SPStringToString(L"getTrackById"), FunctionTemplate::New(SV8Function::GetTrackById)->GetFunction());
@@ -590,15 +592,41 @@ Handle<Object> SV8ScriptManager::SaveReadAsObj()
 		{
 			Handle<Object> item = Object::New();
 			item->Set(SPV8ScriptEngine::SPStringToString(L"startLine"), Integer::New((*innerIter)->startLine));
-			item->Set(SPV8ScriptEngine::SPStringToString(L"startCol"), Integer::New((*innerIter)->startLine));
-			item->Set(SPV8ScriptEngine::SPStringToString(L"endLine"), Integer::New((*innerIter)->startLine));
-			item->Set(SPV8ScriptEngine::SPStringToString(L"endCol"), Integer::New((*innerIter)->startLine));
+			item->Set(SPV8ScriptEngine::SPStringToString(L"startCol"), Integer::New((*innerIter)->startCol));
+			item->Set(SPV8ScriptEngine::SPStringToString(L"endLine"), Integer::New((*innerIter)->endLine));
+			item->Set(SPV8ScriptEngine::SPStringToString(L"endCol"), Integer::New((*innerIter)->endCol));
 			readArray->Set(readArray->Length(), item);
 			innerIter++;
 		}
 		result->Set(SPV8ScriptEngine::SPStringToString(iter.CurrentIndex()), readArray);
 	}
 	return result;
+}
+
+void SV8ScriptManager::LoadReadFromObj( Handle<Object> obj )
+{
+	readCommands.Clear();
+	
+	const Local<Array> props = Handle<Object>::Cast(obj)->GetPropertyNames();
+	const uint32_t length = props->Length();
+	for (uint32_t i = 0; i < length; i++)
+	{
+		const Local<Value> key = props->Get(i);
+		const Local<Value> value = obj->Get(key);
+		Handle<Array> readArray = Handle<Array>::Cast(value);
+		ReadListPtr readList = new ReadList();
+		for (int j = 0; j < readArray->Length(); j++)
+		{
+			Handle<Object> regionObj = Handle<Object>::Cast(readArray->Get(j));
+			ReadRegionPtr region = new ReadRegion();
+			region->startLine = regionObj->Get(SPV8ScriptEngine::SPStringToString(L"startLine"))->Int32Value();
+			region->startCol = regionObj->Get(SPV8ScriptEngine::SPStringToString(L"startCol"))->Int32Value();
+			region->endLine = regionObj->Get(SPV8ScriptEngine::SPStringToString(L"endLine"))->Int32Value();
+			region->endCol = regionObj->Get(SPV8ScriptEngine::SPStringToString(L"endCol"))->Int32Value();
+			readList->push_back(region);
+		}
+		readCommands.Set(SPV8ScriptEngine::StringToSPString(key->ToString()), readList);
+	}
 }
 
 void SV8ScriptManager::Exit()

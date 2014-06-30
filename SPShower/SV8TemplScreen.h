@@ -27,4 +27,5 @@ namespace SV8TemplScreen
 	void Focus( const FunctionCallbackInfo<Value>& args );
 	void CreateComponent( const FunctionCallbackInfo<Value>& args );
 	void GetComponentById( const FunctionCallbackInfo<Value>& args );
+	void Capture( const FunctionCallbackInfo<Value>& args );
 }
