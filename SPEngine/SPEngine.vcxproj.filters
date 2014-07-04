@@ -415,6 +415,9 @@
     <ClInclude Include="SPRandomHelper.h">
       <Filter>Source\SPHelper</Filter>
     </ClInclude>
+    <ClInclude Include="SPPathHelper.h">
+      <Filter>Source\SPHelper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SPWindow.cpp">
@@ -643,6 +646,9 @@
       <Filter>Source\SPScript</Filter>
     </ClCompile>
     <ClCompile Include="SPRandomHelper.cpp">
+      <Filter>Source\SPHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="SPPathHelper.cpp">
       <Filter>Source\SPHelper</Filter>
     </ClCompile>
   </ItemGroup>

@@ -221,6 +221,9 @@ public:
 	virtual void Unload();
 	virtual void Reload();
 	virtual void HandleEvent(SUIEventPtr e);
+	virtual void HandleMouseOut(SUIEventPtr e);
+	virtual void HandleMouseOver(SUIEventPtr e);
+	virtual void HandleMouseIn(SUIEventPtr e);
 	virtual void Render(float timeDelta);
 	virtual void AddChild(SUIComponentPtr setChild);
 	virtual void InsertBefore(SUIComponentPtr newChild, SUIComponentPtr child);

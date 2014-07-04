@@ -711,18 +711,7 @@ void SUIComponent::SaveAsImage( SPString path )
 		path += L".bmp";
 	}
 
-	vector<SPString> parts1 = SPStringHelper::Split(path, L"\\");
-	vector<SPString> parts2 = SPStringHelper::Split(path, L"/");
-	if(parts1.size() < parts2.size())
-	{
-		parts1 = parts2;
-	}
-	SPString currentDir = parts1[0];
-	for (int i = 0; i < parts1.size() - 1; i++)
-	{
-		CreateDirectory(currentDir.c_str(), NULL);
-		currentDir = currentDir + L"\\" + parts1[i + 1];
-	}
+	SPPathHelper::MakeSurePathExist(path);
 
 	HRESULT hr = D3DXSaveTextureToFile(path.c_str(), format, childTarget->GetD3DTexture(), NULL);
 	if (FAILED(hr))
@@ -1267,96 +1256,9 @@ void SUIComponent::HandleEvent( SUIEventPtr e )
 
 	if (e->type == SUIEvent::MouseMove)
 	{
-		// Catch Movement
-
-		if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
-			&& lastInRect)
-		{
-			if (catchMouseOut)
-			{
-				if(!catchMouseOut->Function(e))
-				{
-					return;
-				}
-			}
-		}
-		else if (inRect	&& lastInRect)
-		{
-			if (catchMouse)
-			{
-				if(!catchMouse->Function(e))
-				{
-					return;
-				}
-			}
-		}
-		else if (inRect && !lastInRect)
-		{
-			if (catchMouseIn)
-			{
-				if(!onMouseIn->Function(e))
-				{
-					return;
-				}
-			}
-		}
-
-		// For Children
-
-		e->positionX -= properties.rectangle.X;
-		e->positionY -= properties.rectangle.Y;
-
-		Children::reverse_iterator iter = children.rbegin();
-
-		while(iter != children.rend())
-		{
-			if (*iter)
-			{
-				(*iter)->HandleEvent(e);
-				if (!e->returnValue)
-				{
-					return;
-				}
-			}
-			iter++;
-		}
-
-		e->positionX += properties.rectangle.X;
-		e->positionY += properties.rectangle.Y;
-
-		// On Event
-
-		if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
-			&& lastInRect)
-		{
-			if (onMouseOut)
-			{
-				if(!onMouseOut->Function(e))
-				{
-					return;
-				}
-			}
-		}
-		else if (inRect	&& lastInRect)
-		{
-			if (onMouse)
-			{
-				if(!onMouse->Function(e))
-				{
-					return;
-				}
-			}
-		}
-		else if (inRect && !lastInRect)
-		{
-			if (onMouseIn)
-			{
-				if(!onMouseIn->Function(e))
-				{
-					return;
-				}
-			}
-		}
+		HandleMouseOut(e);
+		HandleMouseOver(e);
+		HandleMouseIn(e);
 	}
 	else
 	{
@@ -1867,6 +1769,176 @@ void SUIComponent::LoadFromObj( Handle<Object> obj )
 	}
 
 	return;
+}
+
+void SUIComponent::HandleMouseOut( SUIEventPtr e )
+{
+	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  properties.rectangle.IsPointInRect(
+		e->positionX - e->movementX, e->positionY - e->movementY);
+
+	if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
+			&& lastInRect)
+	{
+		if (catchMouseOut)
+		{
+			if(!catchMouseOut->Function(e))
+			{
+				return;
+			}
+		}
+	}
+
+	// For Children
+
+	e->positionX -= properties.rectangle.X;
+	e->positionY -= properties.rectangle.Y;
+
+	Children::reverse_iterator iter = children.rbegin();
+
+	while(iter != children.rend())
+	{
+		if (*iter)
+		{
+			(*iter)->HandleMouseOut(e);
+			if (!e->returnValue)
+			{
+				e->positionX += properties.rectangle.X;
+				e->positionY += properties.rectangle.Y;
+				return;
+			}
+		}
+		iter++;
+	}
+
+	e->positionX += properties.rectangle.X;
+	e->positionY += properties.rectangle.Y;
+
+	// On Event
+
+	if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
+		&& lastInRect)
+	{
+		if (onMouseOut)
+		{
+			if(!onMouseOut->Function(e))
+			{
+				return;
+			}
+		}
+	}
+}
+
+void SUIComponent::HandleMouseOver( SUIEventPtr e )
+{
+	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  properties.rectangle.IsPointInRect(
+		e->positionX - e->movementX, e->positionY - e->movementY);
+
+	if (inRect && lastInRect)
+	{
+		if (catchMouse)
+		{
+			if(!onMouse->Function(e))
+			{
+				return;
+			}
+		}
+	}
+
+	// For Children
+
+	e->positionX -= properties.rectangle.X;
+	e->positionY -= properties.rectangle.Y;
+
+	Children::reverse_iterator iter = children.rbegin();
+
+	while(iter != children.rend())
+	{
+		if (*iter)
+		{
+			(*iter)->HandleMouseOver(e);
+			if (!e->returnValue)
+			{
+				e->positionX += properties.rectangle.X;
+				e->positionY += properties.rectangle.Y;
+				return;
+			}
+		}
+		iter++;
+	}
+
+	e->positionX += properties.rectangle.X;
+	e->positionY += properties.rectangle.Y;
+
+	// On Event
+
+	if (inRect && lastInRect)
+	{
+		if (onMouse)
+		{
+			if(!onMouse->Function(e))
+			{
+				return;
+			}
+		}
+	}
+}
+
+void SUIComponent::HandleMouseIn( SUIEventPtr e )
+{
+	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  properties.rectangle.IsPointInRect(
+		e->positionX - e->movementX, e->positionY - e->movementY);
+
+	if (inRect && !lastInRect)
+	{
+		if (catchMouseIn)
+		{
+			if(!onMouseIn->Function(e))
+			{
+				return;
+			}
+		}
+	}
+
+	// For Children
+
+	e->positionX -= properties.rectangle.X;
+	e->positionY -= properties.rectangle.Y;
+
+	Children::reverse_iterator iter = children.rbegin();
+
+	while(iter != children.rend())
+	{
+		if (*iter)
+		{
+			(*iter)->HandleMouseIn(e);
+			if (!e->returnValue)
+			{
+				e->positionX += properties.rectangle.X;
+				e->positionY += properties.rectangle.Y;
+				return;
+			}
+		}
+		iter++;
+	}
+
+	e->positionX += properties.rectangle.X;
+	e->positionY += properties.rectangle.Y;
+
+	// On Event
+
+	if (inRect && !lastInRect)
+	{
+		if (onMouseIn)
+		{
+			if(!onMouseIn->Function(e))
+			{
+				return;
+			}
+		}
+	}
 }
 
 

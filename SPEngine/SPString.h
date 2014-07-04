@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace SPEngine
 {
@@ -8,4 +9,7 @@ namespace SPEngine
 #else
 #define	SPString std::string
 #endif
+
+	typedef std::vector<SPString> SPStringList;
+	//typedef SPPointer<SPStringList> SPStringListPtr;
 }

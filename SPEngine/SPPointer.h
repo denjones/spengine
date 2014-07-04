@@ -28,6 +28,7 @@ namespace SPEngine
 	protected:
 		int*	pointerCount;
 		T*		pointer;
+		CCritSec threadLock;
 		typedef T *(SPPointer::*bool_type)() const;
 
 		virtual void AddReference()
@@ -96,6 +97,8 @@ namespace SPEngine
 
 		SPPointer<T>& operator = (T* ptr)
 		{
+			threadLock.Lock();
+
 			// If ptr is different from pointer, go on.
 			// Else do nothing.
 			if (ptr != pointer)
@@ -116,11 +119,15 @@ namespace SPEngine
 				}				
 			}
 
+			threadLock.Unlock();
+
 			return *this;
 		}
 
 		SPPointer<T>& operator = (SPPointer<T>& ptr)
 		{
+			threadLock.Lock();
+
 			if (ptr.pointer != pointer)
 			{
 				if (ptr.pointer)
@@ -143,12 +150,16 @@ namespace SPEngine
 				}
 			}
 
+			threadLock.Unlock();
+
 			return ptr;
 		}
 
 		template <typename U>
 		SPPointer<T>& operator = (SPPointer<U> & ptr)
 		{
+			threadLock.Lock();
+
 			if (ptr.pointer != pointer)
 			{
 				if (ptr.pointer)
@@ -170,6 +181,8 @@ namespace SPEngine
 					pointerCount = NULL;
 				}
 			}
+
+			threadLock.Unlock();
 
 			return *this;
 		}
@@ -272,11 +285,15 @@ namespace SPEngine
 
 		virtual ~SPPointer(void)
 		{
+			threadLock.Lock();
+
 			// Automatically remove reference.
 			if (pointer)
 			{
 				RemoveReference();
 			}
+
+			threadLock.Unlock();
 		}
 	};
 
@@ -286,6 +303,18 @@ namespace SPEngine
 	template <typename T>
 	class SPPersistent : public SPPointer<T>
 	{
+		template<class U> friend class SPPersistent;
+
+	public:
+		SPPersistent(void) : SPPointer() {}
+
+		SPPersistent(T* ptr) : SPPointer(ptr) {}
+
+		SPPersistent(const SPPointer<T>& ptr) : SPPointer(ptr) {}
+
+		template <typename U>
+		SPPersistent(SPPointer<U> const& ptr) : SPPointer(ptr) {}
+
 	protected:
 		virtual void AddReference()
 		{

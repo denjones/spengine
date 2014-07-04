@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 // Demo script of SPShower Beta 0.11
 //
 // Author: Ken.J
@@ -125,9 +125,9 @@ $(function(e){
 });
 
 // 跳转
-$(function (e) {
-    ss.goto({file:'script/logo.js', tag:'动画开始'});
-});
+//$(function (e) {
+//    ss.goto({file:'script/logo.js', tag:'动画开始'});
+//});
 
 $(function(e){
 	ss.include("script/main_menu.js");
