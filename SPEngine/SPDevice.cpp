@@ -14,7 +14,7 @@ namespace SPEngine
 
 	SPDevice::~SPDevice(void)
 	{
-		ReleaseDevice();
+		//ReleaseDevice();
 	}
 
 	bool SPDevice::InitializeD3D( SPConfig config )
