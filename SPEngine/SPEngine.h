@@ -80,6 +80,7 @@
 #include "SPMessageHelper.h"
 #include "SPFileHelper.h"
 #include "SPRandomHelper.h"
+#include "SPPathHelper.h"
 /// @}
 
 //////////////////////////////////////////////////////////////////////////

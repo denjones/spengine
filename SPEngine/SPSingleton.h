@@ -64,12 +64,12 @@ namespace SPEngine
 
 		/// @brief GetSingleton. Get the reference of the inner singleton instance.
 		/// @return T&
-		static SPPointer<T> GetSingleton()
+		static SPPersistent<T> GetSingleton()
 		{
 			// = NULL;
-			static SPPointer<CCritSec> singletonLock = new CCritSec();
+			static SPPersistent<CCritSec> singletonLock = new CCritSec();
 			singletonLock->Lock();
-			static SPPointer<T> singleton = new T();
+			static SPPersistent<T> singleton = new T();
 			singletonLock->Unlock();
 
 			assert(singleton);

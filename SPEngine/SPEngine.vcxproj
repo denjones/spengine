@@ -146,6 +146,7 @@
     <ClInclude Include="SPParticleSystem2D.h" />
     <ClInclude Include="SPParticleSystemManager.h" />
     <ClInclude Include="SPParticleSystemTexture.h" />
+    <ClInclude Include="SPPathHelper.h" />
     <ClInclude Include="SPPixelShader.h" />
     <ClInclude Include="SPPixelShaderCore.h" />
     <ClInclude Include="SPPointer.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="SPParticleSystem2D.cpp" />
     <ClCompile Include="SPParticleSystemManager.cpp" />
     <ClCompile Include="SPParticleSystemTexture.cpp" />
+    <ClCompile Include="SPPathHelper.cpp" />
     <ClCompile Include="SPPixelShader.cpp" />
     <ClCompile Include="SPPixelShaderCore.cpp" />
     <ClCompile Include="SPRandomHelper.cpp" />

@@ -8,6 +8,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "SPPointer.h"
 //#include <atlstr.h>
 
 using namespace std;
@@ -69,7 +70,7 @@ namespace SPEngine
 		static bool EqualsIgnoreCase(string str1, string str2);
 		static bool EqualsIgnoreCase(wstring str1, wstring str2);
 
-		static vector<wstring> Split(wstring str, wstring spliter);
+		static SPPointer<SPStringList> Split(SPString str, SPString spliter);
 	};
 }
 
