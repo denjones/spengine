@@ -66,83 +66,6 @@ namespace SPEngine
 
 	bool SPSound::Update(float timeDelta)
 	{
-		//if (!sourceVoice)
-		//{
-		//	return false;
-		//}
-
-		//// Fade in / out when pauses.
-		//if(state == TransitionOff)
-		//{
-		//	if(currentTime <= fadeOutBeginTime + fadeOutTime)
-		//	{
-		//		sourceVoice->SetVolume(settedVolume * 
-		//			((fadeOutBeginTime + fadeOutTime - currentTime) / fadeOutTime));
-		//	}
-		//	else
-		//	{
-		//		//isPausing = false;
-		//		state = Pausing;
-		//		isPlaying = false;
-		//		sourceVoice->Stop(0);
-		//		if(isPausingStop)
-		//		{
-		//			sourceVoice->FlushSourceBuffers();
-
-		//			LockStreamingThread();
-		//			sourceVoice->SubmitSourceBuffer(&buffer);
-		//			UnlockStreamingThread();
-
-		//			currentTime = 0;
-		//			isPausingStop = false;
-		//		}
-		//	}
-		//}
-
-		//if(state != TransitionOff)
-		//{
-		//	//float lastVolume;
-		//	float songTime = currentTime;
-		//	while(songTime >= songLength && songLength != 0) 
-		//	{				
-		//		songTime -= songLength;
-		//	}
-
-		//	if(songTime < gradualInTime)
-		//	{
-		//		// Fade in.
-		//		sourceVoice->SetVolume(settedVolume * 
-		//			(songTime / gradualInTime)); 
-		//	}
-		//	else if(songTime > songLength - gradualOutTime)
-		//	{
-		//		sourceVoice->SetVolume(settedVolume * ((songLength - songTime)	/ gradualOutTime));// Fadout
-		//	}
-		//	else 
-		//	{
-		//		sourceVoice->SetVolume(settedVolume);
-		//	}
-		//}
-
-
-		//if(state == TransitionOn)
-		//{
-		//	if(currentTime <= fadeOutBeginTime + fadeOutTime)
-		//	{
-		//		sourceVoice->SetVolume((currentTime - fadeOutBeginTime) / fadeOutTime);
-		//	}
-		//	else
-		//	{
-		//		state = Playing;
-
-		//	}
-		//}
-
-		//if(isPlaying)
-		//{
-		//	currentTime += timeDelta;
-		//}
-
 		return true;
 	}
 
@@ -708,6 +631,7 @@ namespace SPEngine
 
 		sound->LockStreamingThread();
 		sound->isStreamingThreadRunning = false;
+		sound->state = Pausing;
 		sound->UnlockStreamingThread();
 
 		CoUninitialize();

@@ -67,10 +67,10 @@ namespace SPEngine
 			return;
 		}
 
-		if (sound)
-		{
-			sound->Stop();
-		}
+		//if (sound)
+		//{
+		//	sound->Stop();
+		//}
 
 		sound = setSound;
 
