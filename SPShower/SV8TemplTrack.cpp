@@ -136,7 +136,9 @@ void SV8TemplTrack::SrcSetter( Local<String> property, Local<Value> value, const
 		return;
 	}
 
-	handle->SetSound(SPV8ScriptEngine::StringToSPString(value->ToString()));
+	handle->SetSound(SPSoundManager::GetSingleton()->CreateSound(
+		SPStringHelper::ToWString(SPRandomHelper::NextInt(1000000)), 
+		SPV8ScriptEngine::StringToSPString(value->ToString())));
 }
 
 void SV8TemplTrack::LoopGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
