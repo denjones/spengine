@@ -954,7 +954,14 @@ void SV8TemplComponent::OnClickSetter( Local<String> property, Local<Value> valu
 		return;
 	}
 
-	component->onMouseClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseClick = NULL;
+	}
+	else
+	{
+		component->onMouseClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnDClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -997,7 +1004,14 @@ void SV8TemplComponent::OnDClickSetter( Local<String> property, Local<Value> val
 		return;
 	}
 
-	component->onMouseDClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseDClick = NULL;
+	}
+	else
+	{
+		component->onMouseDClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnMouseUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1040,7 +1054,14 @@ void SV8TemplComponent::OnMouseUpSetter( Local<String> property, Local<Value> va
 		return;
 	}
 
-	component->onMouseUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseUp = NULL;
+	}
+	else
+	{
+		component->onMouseUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnMouseDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1083,7 +1104,14 @@ void SV8TemplComponent::OnMouseDownSetter( Local<String> property, Local<Value> 
 		return;
 	}
 
-	component->onMouseDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseDown = NULL;
+	}
+	else
+	{
+		component->onMouseDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnMouseScrollGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1126,7 +1154,14 @@ void SV8TemplComponent::OnMouseScrollSetter( Local<String> property, Local<Value
 		return;
 	}
 
-	component->onMouseScroll = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseScroll = NULL;
+	}
+	else
+	{
+		component->onMouseScroll = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnMouseOverGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1169,7 +1204,14 @@ void SV8TemplComponent::OnMouseOverSetter( Local<String> property, Local<Value> 
 		return;
 	}
 
-	component->onMouse = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouse = NULL;
+	}
+	else
+	{
+		component->onMouse = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnMouseInGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1212,7 +1254,14 @@ void SV8TemplComponent::OnMouseInSetter( Local<String> property, Local<Value> va
 		return;
 	}
 
-	component->onMouseIn = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseIn = NULL;
+	}
+	else
+	{
+		component->onMouseIn = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnMouseOutGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1255,7 +1304,14 @@ void SV8TemplComponent::OnMouseOutSetter( Local<String> property, Local<Value> v
 		return;
 	}
 
-	component->onMouseOut = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onMouseOut = NULL;
+	}
+	else
+	{
+		component->onMouseOut = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnKeyPressGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1298,7 +1354,14 @@ void SV8TemplComponent::OnKeyPressSetter( Local<String> property, Local<Value> v
 		return;
 	}
 
-	component->onKeyPress = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onKeyPress = NULL;
+	}
+	else
+	{
+		component->onKeyPress = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnKeyUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1341,7 +1404,14 @@ void SV8TemplComponent::OnKeyUpSetter( Local<String> property, Local<Value> valu
 		return;
 	}
 
-	component->onKeyUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onKeyUp = NULL;
+	}
+	else
+	{
+		component->onKeyUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::OnKeyDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1384,7 +1454,14 @@ void SV8TemplComponent::OnKeyDownSetter( Local<String> property, Local<Value> va
 		return;
 	}
 
-	component->onKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->onKeyDown = NULL;
+	}
+	else
+	{
+		component->onKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1427,7 +1504,14 @@ void SV8TemplComponent::CatchClickSetter( Local<String> property, Local<Value> v
 		return;
 	}
 
-	component->catchMouseClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseClick = NULL;
+	}
+	else
+	{
+		component->catchMouseClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchDClickGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1470,7 +1554,14 @@ void SV8TemplComponent::CatchDClickSetter( Local<String> property, Local<Value> 
 		return;
 	}
 
-	component->catchMouseDClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseDClick = NULL;
+	}
+	else
+	{
+		component->catchMouseDClick = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchMouseUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1513,7 +1604,14 @@ void SV8TemplComponent::CatchMouseUpSetter( Local<String> property, Local<Value>
 		return;
 	}
 
-	component->catchMouseUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseUp = NULL;
+	}
+	else
+	{
+		component->catchMouseUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchMouseDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1556,7 +1654,14 @@ void SV8TemplComponent::CatchMouseDownSetter( Local<String> property, Local<Valu
 		return;
 	}
 
-	component->catchMouseDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseDown = NULL;
+	}
+	else
+	{
+		component->catchMouseDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchMouseScrollGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1599,7 +1704,14 @@ void SV8TemplComponent::CatchMouseScrollSetter( Local<String> property, Local<Va
 		return;
 	}
 
-	component->catchMouseScroll = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseScroll = NULL;
+	}
+	else
+	{
+		component->catchMouseScroll = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchMouseOverGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1642,7 +1754,14 @@ void SV8TemplComponent::CatchMouseOverSetter( Local<String> property, Local<Valu
 		return;
 	}
 
-	component->catchMouse = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouse = NULL;
+	}
+	else
+	{
+		component->catchMouse = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchMouseInGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1685,7 +1804,14 @@ void SV8TemplComponent::CatchMouseInSetter( Local<String> property, Local<Value>
 		return;
 	}
 
-	component->catchMouseIn = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseIn = NULL;
+	}
+	else
+	{
+		component->catchMouseIn = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchMouseOutGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1728,7 +1854,14 @@ void SV8TemplComponent::CatchMouseOutSetter( Local<String> property, Local<Value
 		return;
 	}
 
-	component->catchMouseOut = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchMouseOut = NULL;
+	}
+	else
+	{
+		component->catchMouseOut = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchKeyPressGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1771,7 +1904,14 @@ void SV8TemplComponent::CatchKeyPressSetter( Local<String> property, Local<Value
 		return;
 	}
 
-	component->catchKeyPress = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchKeyPress = NULL;
+	}
+	else
+	{
+		component->catchKeyPress = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchKeyUpGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1814,7 +1954,14 @@ void SV8TemplComponent::CatchKeyUpSetter( Local<String> property, Local<Value> v
 		return;
 	}
 
-	component->catchKeyUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchKeyUp = NULL;
+	}
+	else
+	{
+		component->catchKeyUp = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::CatchKeyDownGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -1857,7 +2004,14 @@ void SV8TemplComponent::CatchKeyDownSetter( Local<String> property, Local<Value>
 		return;
 	}
 
-	component->catchKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	if (value->IsUndefined() || value->IsNull())
+	{
+		component->catchKeyDown = NULL;
+	}
+	else
+	{
+		component->catchKeyDown = new SUIV8FunctionEventHandler(Handle<v8::Function>::Cast(value), component);
+	}
 }
 
 void SV8TemplComponent::ChildComponentsGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )

@@ -4,7 +4,7 @@
 // Sicily 零与一的幻想 预览版
 //
 // Author: Ken.J
-// Date: 2014-07-02
+// Date: 2014-07-05
 ////////////////////////////////////////////////////////////////////////////
 
 // 起始标记
@@ -67,7 +67,7 @@ var mainMenu = {
 		backgroundColor: 0x00FFFFFF,
 		depth: 2,
 		onClick: function(){
-			//@execute{file:"http://www.sprabbit.com"}
+			var proc = spawn('explorer', ['http://www.sprabbit.com']);
 		}
 	}),
 	
@@ -111,7 +111,7 @@ var mainMenu = {
 				addMode: 'Merge'
 			});
 		},
-		catchMouseOut: function(){
+		onMouseOut: function(){
 			mainMenu.button1.backgroundY = 0;
 			mainMenu.round.addAnimation({
 				opacity: 0,
@@ -160,7 +160,7 @@ var mainMenu = {
 				addMode: 'Merge'
 			});
 		},
-		catchMouseOut: function(){
+		onMouseOut: function(){
 			mainMenu.button2.backgroundY = 0;
 			mainMenu.round.addAnimation({
 				opacity: 0,
@@ -208,7 +208,7 @@ var mainMenu = {
 				addMode: 'Merge'
 			});
 		},
-		catchMouseOut: function(){
+		onMouseOut: function(){
 			mainMenu.button3.backgroundY = 0;
 			mainMenu.round.addAnimation({
 				opacity: 0,
@@ -256,7 +256,7 @@ var mainMenu = {
 				addMode: 'Merge'
 			});
 		},
-		catchMouseOut: function(){
+		onMouseOut: function(){
 			mainMenu.button4.backgroundY = 0;
 			mainMenu.round.addAnimation({
 				opacity: 0,
@@ -272,8 +272,11 @@ var mainMenu = {
 		onClick: function(){
 			soundTrack.src = 'data/sounds/confirm.wav';
 			soundTrack.play();
-			//@include{file:"script/main_menu_out.ks"} 
-			//@exit; 
+			// 退出游戏			
+			mainMenu.hide();
+			setTimeout(function(){
+				process.exit(0);
+			}, 2000);
 		}
 	}),
 	
@@ -347,6 +350,9 @@ var mainMenu = {
 	 */
 	show: function(){
 		
+		// 开启事件点击
+		mainMenuScreen.root.catchClick = undefined;
+		
 		mainMenu.background1.addAnimation({
 			time: 1,
 			opacity: 1
@@ -417,6 +423,93 @@ var mainMenu = {
 	 * 菜单退出动画
 	 */
 	hide: function(){
+		
+		// 拦截事件点击
+		mainMenuScreen.root.catchClick = function(){return false;};
+		
+		mainMenu.title.addAnimation({
+			opacity: 0,
+			time: 1,
+			x: 0,
+			replay: 'FastOut',
+			canSkip: false
+		});
+		
+		mainMenu.copyright.addAnimation({
+			opacity: 0,
+			time: 1,
+			replay: 'FastOut',
+			canSkip: false
+		});
+		
+		mainMenu.round.addAnimation({
+			opacity: 0,
+			time:1,
+			replay: 'FastOut',
+			canSkip: false
+		});
+		
+		mainMenu.underline1.addAnimation({
+			x: -500,
+			time: 0.3,
+			addMode: 'Merge'
+		});
+		
+		mainMenu.underline2.addAnimation({
+			x: -500,
+			time: 0.3,
+			addMode: 'Merge'
+		});
+		
+		mainMenu.underline3.addAnimation({
+			x: -500,
+			time: 0.3,
+			addMode: 'Merge'
+		});
+		
+		mainMenu.underline4.addAnimation({
+			x: -500,
+			time: 0.3,
+			addMode: 'Merge'
+		});
+		
+		mainMenu.button1.addAnimation({
+			x: 80,
+			opacity: 0,
+			time: 1,
+			replay: 'FastOut',
+			canSkip: false
+		});
+		
+		setTimeout(function(){
+			mainMenu.button2.addAnimation({
+				x: 110,
+				opacity: 0,
+				time: 1,
+				replay: 'FastOut',
+				canSkip: false
+			});
+		}, 200);
+		
+		setTimeout(function(){
+			mainMenu.button3.addAnimation({
+				x: 140,
+				opacity: 0,
+				time: 1,
+				replay: 'FastOut',
+				canSkip: false
+			});
+		}, 400);
+		
+		setTimeout(function(){
+			mainMenu.button4.addAnimation({
+				x: 110,
+				opacity: 0,
+				time: 1,
+				replay: 'FastOut',
+				canSkip: false
+			});
+		}, 600);
 		
 	}
 };
