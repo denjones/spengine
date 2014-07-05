@@ -7,6 +7,7 @@
 
 // 获取SpeShow对象
 var ss = process.binding('speshow');
+var spawn = require('child_process').spawn;
 
 // 读取系统变量以及已读函数
 ss.loadSystemData();
