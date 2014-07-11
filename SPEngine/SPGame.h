@@ -53,6 +53,7 @@ namespace SPEngine
 		CCritSec			exitLock;
 		CCritSec			exitBtnLock;
 		CCritSec			modificationLock;
+		CCritSec			drawingLock;
 		SPPointer<SPConfig>	configToApply;
 		SPPointer<SPComponentManager> componentManager;
 		/// @}
@@ -200,6 +201,8 @@ namespace SPEngine
 
 		bool LockDrawingWhileLoading();
 		bool UnlockDrawingWhileLoading();
+		void LockDrawing();
+		void UnlockDrawing();
 
 	public:
 		bool Refresh(D3DCOLOR color);

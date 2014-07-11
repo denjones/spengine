@@ -16,6 +16,14 @@ Handle<ObjectTemplate> SV8TemplDialogBox::GetTemplate()
 
 	templ->Set(SPV8ScriptEngine::SPStringToString(L"next"), 
 		FunctionTemplate::New(Next)->GetFunction());
+	templ->Set(SPV8ScriptEngine::SPStringToString(L"isDisplaying"), 
+		FunctionTemplate::New(IsDisplaying)->GetFunction());
+	templ->Set(SPV8ScriptEngine::SPStringToString(L"isAllDisplayed"), 
+		FunctionTemplate::New(IsAllDisplayed)->GetFunction());
+	templ->Set(SPV8ScriptEngine::SPStringToString(L"markNextLine"), 
+		FunctionTemplate::New(MarkNextLine)->GetFunction());
+	templ->Set(SPV8ScriptEngine::SPStringToString(L"markNextPage"), 
+		FunctionTemplate::New(MarkNextPage)->GetFunction());
 
 	return templ;
 }
@@ -162,6 +170,82 @@ void SV8TemplDialogBox::NextPageImageSetter( Local<String> property, Local<Value
 	if (tex)
 	{
 		textBox->SetNextPageTex(tex);
+	}
+}
+
+void SV8TemplDialogBox::IsDisplaying( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIDialogBox* textBox = (SUIDialogBox*)field->Value();
+
+	if (textBox)
+	{
+		args.GetReturnValue().Set(textBox->IsDisplaying());
+	}
+}
+
+void SV8TemplDialogBox::IsAllDisplayed( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIDialogBox* textBox = (SUIDialogBox*)field->Value();
+
+	if (textBox)
+	{
+		args.GetReturnValue().Set(textBox->IsDisplayAllDone());
+	}
+}
+
+void SV8TemplDialogBox::MarkNextLine( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIDialogBox* textBox = (SUIDialogBox*)field->Value();
+
+	if (textBox)
+	{
+		textBox->MarkTextToAdd();
+	}
+}
+
+void SV8TemplDialogBox::MarkNextPage( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIDialogBox* textBox = (SUIDialogBox*)field->Value();
+
+	if (textBox)
+	{
+		textBox->MarkTextToClear();
 	}
 }
 

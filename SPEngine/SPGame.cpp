@@ -548,10 +548,14 @@ namespace SPEngine
 
 	bool SPGame::Draw(float timeDelta)
 	{	
+		LockDrawing();
+
 		if (!SPComponentManager::GetSingleton()->Draw(timeDelta))
 		{
 			return false;
 		}
+
+		UnlockDrawing();
 
 		return true;
 	}
@@ -806,6 +810,16 @@ namespace SPEngine
 	void SPGame::OnExit()
 	{
 		Exit();
+	}
+
+	void SPGame::LockDrawing()
+	{
+		drawingLock.Lock();
+	}
+
+	void SPGame::UnlockDrawing()
+	{
+		drawingLock.Unlock();
 	}
 
 }

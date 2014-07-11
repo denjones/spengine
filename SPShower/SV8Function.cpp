@@ -41,6 +41,8 @@ SUIEffectPtr SV8Function::GetEffectFromObj( Handle<Object> argObj, SUIEffectPtr 
 
 		effect->SetTime(0);
 		effect->SetLevel(5);
+	} else {
+		return NULL;
 	}
 
 	if (!effect)
@@ -65,9 +67,10 @@ SUIEffectPtr SV8Function::GetEffectFromObj( Handle<Object> argObj, SUIEffectPtr 
 			SPString texName = SPV8ScriptEngine::StringToSPString(val->ToString());
 			effect->SetEffectTexture(SPTextureManager::GetSingleton()->GetTexture(texName));
 		}
-		else if (name == L"time")
+		else if (name == L"time" && val->IsNumber())
 		{
-			effect->SetTime(val->NumberValue());
+			float time = val->NumberValue();
+			effect->SetTime(time);
 		}
 		else if (name == L"canSkip")
 		{

@@ -16,4 +16,8 @@ namespace SV8TemplDialogBox
 	void NextPageImageSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 
 	void Next( const FunctionCallbackInfo<Value>& args );
+	void IsDisplaying( const FunctionCallbackInfo<Value>& args );
+	void IsAllDisplayed( const FunctionCallbackInfo<Value>& args );
+	void MarkNextLine( const FunctionCallbackInfo<Value>& args );
+	void MarkNextPage( const FunctionCallbackInfo<Value>& args );
 }
