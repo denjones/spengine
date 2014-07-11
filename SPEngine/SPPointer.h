@@ -306,14 +306,22 @@ namespace SPEngine
 		template<class U> friend class SPPersistent;
 
 	public:
-		SPPersistent(void) : SPPointer() {}
+		SPPersistent(void) : SPPointer() {
+			pointerCount = new int(256);
+		}
 
-		SPPersistent(T* ptr) : SPPointer(ptr) {}
+		SPPersistent(T* ptr) : SPPointer(ptr) {
+			pointerCount = new int(256);
+		}
 
-		SPPersistent(const SPPointer<T>& ptr) : SPPointer(ptr) {}
+		SPPersistent(const SPPointer<T>& ptr) : SPPointer(ptr) {
+			pointerCount = new int(256);
+		}
 
 		template <typename U>
-		SPPersistent(SPPointer<U> const& ptr) : SPPointer(ptr) {}
+		SPPersistent(SPPointer<U> const& ptr) : SPPointer(ptr) {
+			pointerCount = new int(256);
+		}
 
 	protected:
 		virtual void AddReference()

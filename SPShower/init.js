@@ -29,6 +29,15 @@ ss.window.onExit = function () {
     return false;
 }
 
+// 音轨
+var soundTrack = ss.createTrack({
+	id: '音效'
+});
+var musicTrack = ss.createTrack({
+	id: '背景音乐',
+	loop: -1
+});
+
 ////////////////////////////////////////////////////////////////////////////
 // 常量
 ////////////////////////////////////////////////////////////////////////////
@@ -100,11 +109,15 @@ var waitTimeOrClick = function (timeMs, e) {
 ////////////////////////////////////////////////////////////////////////////
 
 // 跳转
+//$(function (e) {
+//    ss.goto({ file: 'script/logo.js' });
+//});
+
 $(function (e) {
-    ss.goto({ file: 'script/logo.js' });
+	ss.include('script/sicily_init.js');
+	storyScreen.focus();
+    ss.goto({ file: 'script/sicily_01.js' });
 });
-
-
 
 //PI = 3.1415926;
 

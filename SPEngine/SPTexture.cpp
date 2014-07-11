@@ -89,6 +89,8 @@ namespace SPEngine
 			return;
 		}		
 
+		SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTextureFromFileInMemoryEx(
 			SPDevice::GetSingleton()->GetD3DDevice(), 
@@ -103,6 +105,8 @@ namespace SPEngine
 			D3DCOLOR_RGBA(0,0,0,0),
 			&i, NULL,
 			&texture);
+
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 
 		// Close texture file.
 		SPFileManager::GetSingleton()->CloseFile(setPath);
@@ -133,6 +137,8 @@ namespace SPEngine
 		DWORD		MipFilter,
 		D3DCOLOR	ColorKey )
 	{
+		SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 		D3DXIMAGE_INFO i;
 		D3DXCreateTextureFromFileExA(pDevice, pSrcFile, setWidth, setHeight,
 			MipLevels, Usage,	Format, Pool, Filter, MipFilter, ColorKey,
@@ -141,6 +147,8 @@ namespace SPEngine
 		height = i.Height;
 		width = i.Width;
 		format = Format;
+
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 	}
 
 	void SPTexture::Load()
@@ -160,6 +168,8 @@ namespace SPEngine
 
 	void SPTexture::CreateBlank( int setWidth, int setHeight )
 	{
+		SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTexture(
 			SPDevice::GetSingleton()->GetD3DDevice(),
@@ -168,6 +178,8 @@ namespace SPEngine
 			D3DFMT_A8R8G8B8,
 			D3DPOOL_MANAGED,
 			&texture);
+
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 
 		if (FAILED(hr))
 		{
@@ -253,6 +265,8 @@ namespace SPEngine
 
 	void SPTexture::CreateRenderTarget( int setWidth, int setHeight, D3DXCOLOR setColor )
 	{
+		SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 		// Create texture from memory.
 		HRESULT hr = D3DXCreateTexture(
 			SPDevice::GetSingleton()->GetD3DDevice(),
@@ -275,6 +289,8 @@ namespace SPEngine
 		backgroundColor = setColor;
 
 		//Fill(0x00000000);
+
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 	}
 
 	SPEngine::SPRectangle SPTexture::SourceRectangle()
