@@ -39,6 +39,7 @@ int _tmain(int argc, wchar_t** argv)
 			if (arg == L"-d")
 			{
 				SPConfigManager::GetSingleton()->SetDebug(true);
+				SPLogHelper::TurnOnLogging();
 			}
 			else if (arg == L"-l")
 			{
