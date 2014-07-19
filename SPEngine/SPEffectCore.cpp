@@ -45,11 +45,15 @@ namespace SPEngine
 			return;
 		}
 
+		SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 		// Create effect.
 		HRESULT hr = D3DXCreateEffect(
 			SPDevice::GetSingleton()->GetD3DDevice(), 
 			pData, (UINT)length, 0, 0, D3DXSHADER_DEBUG, 0, 
 			&effect, &errorBuffer);
+
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 
 		delete [] pData;
 		pData = NULL;

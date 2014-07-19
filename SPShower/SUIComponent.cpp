@@ -1839,7 +1839,7 @@ void SUIComponent::HandleMouseOver( SUIEventPtr e )
 	{
 		if (catchMouse)
 		{
-			if(!onMouse->Function(e))
+			if(!catchMouse->Function(e))
 			{
 				return;
 			}
@@ -1895,7 +1895,7 @@ void SUIComponent::HandleMouseIn( SUIEventPtr e )
 	{
 		if (catchMouseIn)
 		{
-			if(!onMouseIn->Function(e))
+			if(!catchMouseIn->Function(e))
 			{
 				return;
 			}

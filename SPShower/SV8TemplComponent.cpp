@@ -68,6 +68,8 @@ Handle<ObjectTemplate> SV8TemplComponent::GetTemplate()
 		FunctionTemplate::New(AddAnimation)->GetFunction());
 	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"addEffect"), 
 		FunctionTemplate::New(AddEffect)->GetFunction());
+	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"clearEffect"), 
+		FunctionTemplate::New(ClearEffect)->GetFunction());
 	templComponent->Set(SPV8ScriptEngine::SPStringToString(L"skip"), 
 		FunctionTemplate::New(Skip)->GetFunction());
 
@@ -2456,6 +2458,26 @@ void SV8TemplComponent::AddEffect( const FunctionCallbackInfo<Value>& args )
 	}
 }
 
+void SV8TemplComponent::ClearEffect( const FunctionCallbackInfo<Value>& args )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(args.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	component->ClearEffect();
+}
+
 void SV8TemplComponent::Skip( const FunctionCallbackInfo<Value>& args )
 {
 	if(!SPV8ScriptEngine::GetSingleton())
@@ -2475,4 +2497,6 @@ void SV8TemplComponent::Skip( const FunctionCallbackInfo<Value>& args )
 
 	component->Skip();
 }
+
+
 
