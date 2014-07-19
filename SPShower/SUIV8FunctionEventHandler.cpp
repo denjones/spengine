@@ -36,6 +36,7 @@ bool SUIV8FunctionEventHandler::Function( SUIEventPtr e )
 		return e->returnValue;
 	}
 
+	e->returnValue = result->BooleanValue();
 	return result->BooleanValue();
 }
 

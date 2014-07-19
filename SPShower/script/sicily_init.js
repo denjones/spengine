@@ -30,6 +30,7 @@ if (!storyScreen) {
 			onClick: function (e) {
 				if (e.key == 0) {
 					// 停止等待点击
+                    storyObj.skipBackground();
 					if(!storyObj.dialogText.isAllDisplayed()) {
 						storyObj.dialogText.next();
 					} else {
@@ -577,7 +578,19 @@ if (!storyScreen) {
 			width: 1280,
 			height: 720,
 			depth: 254,
-			display: false
+			display: false,
+			catchMouseIn: function(e){
+				return false;
+			},
+			catchMouseOut: function(e){
+				return false;
+			},
+			catchMouseOver: function(e){
+				return false;
+			},
+			catchClick: function(e){
+				return false;
+			}
 		}),
 		/********************* 其他层 End *********************/
 		
@@ -641,17 +654,50 @@ if (!storyScreen) {
 			storyObj.dialogText.markNextPage();
 		},
 		
+		// 全屏遮挡开始
+		maskBegin: function(obj){
+			var time = obj && obj.time ? obj.time : 0;
+			storyObj.maskLayer.opacity = 0;
+			storyObj.maskLayer.display = true;
+			storyObj.maskLayer.backgroundImage = obj && obj.image ? obj.image : 'data/images/bg_black.png';
+			storyObj.maskLayer.addAnimation({time: time, opacity: 1});
+		},
+		
+		// 全屏遮挡结束
+		maskEnd: function(obj){
+			var time = obj && obj.time ? obj.time : 0;
+			storyObj.maskLayer.addAnimation({time: time, opacity: 0});
+			setTimeout(function(){
+				storyObj.maskLayer.display = false;
+			}, time);
+		},
+		
+		// 换背景延时函数句柄
+        backgroundHandle: null,
+        
 		// 换背景
 		changeBackground: function(obj){
 			if(!obj.target){
 				return;
 			}
+            storyObj.skipBackground();
 			obj.time = obj.time || 0;
-			storyObj.backgroundBack.backgroundImage = obj.target;
+            storyObj.backgroundBack.backgroundImage = obj.target;
 			storyObj.backgroundFront.addEffect(obj);
-			var handle = setTimeout(function(){
+			storyObj.backgroundHandle = setTimeout(function(){
 				storyObj.backgroundFront.backgroundImage = obj.target;
-			}, obj.time);
+                storyObj.backgroundFront.clearEffect();
+			}, obj.time * 1000);
+		},
+        
+        // 马上换背景
+		skipBackground: function(){
+            if(storyObj.backgroundHandle){
+				clearTimeout(storyObj.backgroundHandle);
+				storyObj.backgroundHandle = null;
+				storyObj.backgroundFront.backgroundImage = storyObj.backgroundBack.backgroundImage;
+            	storyObj.backgroundFront.clearEffect();
+			}
 		},
 		
 		// 抖
