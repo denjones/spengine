@@ -146,42 +146,8 @@ void SPGameShow::SaveSystemData(SPString fileName)
 
 void SPGameShow::LoadSystemData(SPString fileName)
 {
-	//SPString path = L"system.dat";
-
-	//HANDLE handle = CreateFile(path.c_str(),
-	//	GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
-
-	//if (!handle)
-	//{
-	//	return false;
-	//}
-
-	//ULARGE_INTEGER fileLength = {0};
-	//fileLength.LowPart = GetFileSize(handle, &fileLength.HighPart);
-
-	//char* pBuffer = new char[fileLength.QuadPart];
-
-	//DWORD numOfByteRead;
-
-	//ReadFile(handle, pBuffer, fileLength.QuadPart, &numOfByteRead, NULL);
-
-	//CloseHandle(handle);
-
-	//SPString result = SPStringHelper::UTF8CStringToWString(pBuffer);
-
-	//SScriptManager::GetSingleton()->SetSystemVariables(
-	//	SScriptHelper::StringToVariables(
-	//	SPStringHelper::XMLExcludeFrom(result, L"SysData")));
-
-	//result = SPStringHelper::XMLRemoveFirst(result, L"SysData");
-
-	//SScriptManager::GetSingleton()->ReadCommandsFromString(result);
-
-	//delete [] pBuffer;
-	//pBuffer = NULL;
-
 	HANDLE handle = CreateFile(fileName.c_str(),
-		GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, NULL, NULL);
+		GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, NULL, NULL);
 
 	if (handle == INVALID_HANDLE_VALUE)
 	{
@@ -207,6 +173,11 @@ void SPGameShow::LoadSystemData(SPString fileName)
 	pBuffer = NULL;
 
 	Handle<Object> obj = SPV8ScriptEngine::JsonParse(SPV8ScriptEngine::SPStringToString(result));
+	if (obj.IsEmpty())
+	{
+		SPLogHelper::WriteLog(L"[SScript] Failed to load system data.");
+		return;
+	}
 	Handle<Object> readObj = Handle<Object>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"read")));
 	Handle<Object> sysVar = Handle<Object>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"sysVar")));
 	
