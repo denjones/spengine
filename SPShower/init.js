@@ -26,8 +26,12 @@ ss.window.fps.display = false;
 
 // 退出前验证
 ss.window.onExit = function () {
-    return false;
+	ss.saveSystemData();
+    return true;
 }
+
+// 跳过模式
+ss.sysVar.skipMode = 'read';
 
 // 音轨
 var soundTrack = ss.createTrack({

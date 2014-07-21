@@ -1773,6 +1773,11 @@ void SUIComponent::LoadFromObj( Handle<Object> obj )
 
 void SUIComponent::HandleMouseOut( SUIEventPtr e )
 {
+	if(!isDisplay)
+	{
+		return;
+	}
+
 	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
 	bool lastInRect =  properties.rectangle.IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
@@ -1831,6 +1836,11 @@ void SUIComponent::HandleMouseOut( SUIEventPtr e )
 
 void SUIComponent::HandleMouseOver( SUIEventPtr e )
 {
+	if(!isDisplay)
+	{
+		return;
+	}
+
 	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
 	bool lastInRect =  properties.rectangle.IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
@@ -1887,6 +1897,11 @@ void SUIComponent::HandleMouseOver( SUIEventPtr e )
 
 void SUIComponent::HandleMouseIn( SUIEventPtr e )
 {
+	if(!isDisplay)
+	{
+		return;
+	}
+
 	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
 	bool lastInRect =  properties.rectangle.IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
