@@ -641,7 +641,7 @@ if (!storyScreen) {
 		},
 		
 		// 某人说某话
-		say: function(obj){
+		say: function(e, obj){
 			if(obj instanceof String){
 				obj = { content : obj };
 			}
@@ -649,7 +649,7 @@ if (!storyScreen) {
 				storyObj.dialogRoleText.text = obj.role;
 			}
 			if(obj.content){
-				storyObj.dialogText.text = obj.content;
+				storyObj.dialogText.text = (e.read ? '[已读]' : '') + obj.content;
 			}
 			storyObj.dialogText.markNextPage();
 		},
@@ -713,12 +713,47 @@ if (!storyScreen) {
 			}
 		},
 		
+		// 跳过模式
+		isSkipping: true,
+		
+		// 开启跳过
+		skipOn: function(){
+			storyObj.isSkipping = true;
+			storyObj.isAuto = false;
+		},
+		
+		// 关闭跳过
+		skipOff: function(){
+			storyObj.isSkipping = false;
+		},
+		
+		// 自动模式
+		isAuto: false,
+		
+		// 开启自动模式
+		autoOn: function(){
+			storyObj.isAuto = true;
+			storyObj.isSkipping = false;
+		},
+		
+		// 关闭自动模式
+		autoOff: function(){
+			storyObj.isAuto = false;
+		},
+		
 		// 等待对话框和之后的点击（队列函数）
 		waitDialogAndClick: function(e){
+			// 跳过全部及跳过已读
+			if(storyObj.skipOn){
+				if(ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
+					storyObj.dialogText.skip();
+					return;
+				}
+			}
 			if(!storyObj.dialogText.isAllDisplayed()){
 				e.repeat = true;
 				return;
-			}
+			}			
 			waitClick(e);
 		}
 		/********************* 方法 End **********************/
