@@ -424,17 +424,144 @@ void SV8TemplTextBox::AddText( const FunctionCallbackInfo<Value>& args )
 
 	if (textBox)
 	{
-		try
+		if (args[0]->IsString())
 		{
-			SUIText text;
-			text.text = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
-			text.color = textBox->GetDefaultColor();
-			textBox->AddText(text);
+			try
+			{
+				SUIText text;
+				text.text = SPV8ScriptEngine::StringToSPString(args[0]->ToString());
+				text.color = textBox->GetDefaultColor();
+				textBox->AddText(text);
+			}
+			catch (exception e)
+			{
+				isolate->ThrowException(SPV8ScriptEngine::SPStringToString(L"Game Exited."));
+			}	
 		}
-		catch (exception e)
+		else if(args[0]->IsObject())
 		{
-			isolate->ThrowException(SPV8ScriptEngine::SPStringToString(L"Game Exited."));
-		}	
+			Handle<Object> obj = args[0]->ToObject();
+
+			try
+			{
+				SUIText text;
+				text.text = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"text", obj)->ToString());
+				text.color = textBox->GetDefaultColor();
+
+				if (SV8Function::HasProperty(L"color", obj))
+				{
+					text.color = SV8Function::GetProperty(L"color", obj)->Int32Value();
+				}
+
+				if (SV8Function::HasProperty(L"font", obj))
+				{
+					Handle<Object> argObj = Handle<Object>::Cast(SV8Function::GetProperty(L"font", obj));
+
+					SPFontPtr font = textBox->GetDefaultFont();
+
+					int		size = font->GetHeight();
+					int		weight = font->GetWeight();
+					bool	italic = font->GetItalic();
+					SPString fontName = font->GetFontName();
+
+					if (SV8Function::HasProperty(L"size", argObj))
+					{
+						size = SV8Function::GetProperty(L"size", argObj)->NumberValue();
+					}
+
+					if (SV8Function::HasProperty(L"font", argObj))
+					{
+						fontName = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"font", argObj)->ToString());
+					}
+
+					if (SV8Function::HasProperty(L"weight", argObj))
+					{
+						Handle<Value> weightVal = SV8Function::GetProperty(L"weight", argObj);
+
+						if (weightVal->IsString())
+						{
+							SPString weightType = SPV8ScriptEngine::StringToSPString(weightVal->ToString());
+
+							if (SPStringHelper::EqualsIgnoreCase(weightType, L"DontCare"))
+							{
+								weight = FW_DONTCARE;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Thin"))
+							{
+								weight = FW_THIN;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"ExtraLight") || 
+								SPStringHelper::EqualsIgnoreCase(weightType, L"UltraLight"))
+							{
+								weight = FW_EXTRALIGHT;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Light"))
+							{
+								weight = FW_LIGHT;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Normal") || 
+								SPStringHelper::EqualsIgnoreCase(weightType, L"Regular"))
+							{
+								weight = FW_NORMAL;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Medium"))
+							{
+								weight = FW_MEDIUM;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"SemiBold") || 
+								SPStringHelper::EqualsIgnoreCase(weightType, L"DemiBold"))
+							{
+								weight = FW_SEMIBOLD;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Bold"))
+							{
+								weight = FW_BOLD;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"ExtraBold") ||
+								SPStringHelper::EqualsIgnoreCase(weightType, L"UltraBold"))
+							{
+								weight = FW_EXTRABOLD;
+							}
+							else if (SPStringHelper::EqualsIgnoreCase(weightType, L"Heavy") ||
+								SPStringHelper::EqualsIgnoreCase(weightType, L"Black"))
+							{
+								weight = FW_HEAVY;
+							}
+						}
+						else
+						{
+							weight = weightVal->NumberValue();
+						}
+					}
+
+					if (SV8Function::HasProperty(L"italic", argObj))
+					{
+						Handle<Value> italicVal = SV8Function::GetProperty(L"weight", argObj);
+						italic = italicVal->BooleanValue();
+					}
+
+					font = new SPFont(size, 0, weight, 10, italic, fontName);
+
+					text.font = font;
+				}
+
+				if (SV8Function::HasProperty(L"frontEffect", obj))
+				{
+					text.frontEffect = SV8Function::GetEffectFromObj(SV8Function::GetProperty(L"frontEffect", obj)->ToObject(), NULL);
+				}
+
+				if (SV8Function::HasProperty(L"backEffect", obj))
+				{
+					text.backEffect = SV8Function::GetEffectFromObj(SV8Function::GetProperty(L"backEffect", obj)->ToObject(), NULL);
+				}
+
+				textBox->AddText(text);
+			}
+			catch (exception e)
+			{
+				isolate->ThrowException(SPV8ScriptEngine::SPStringToString(L"Game Exited."));
+			}	
+		}
 	}
 }
 
