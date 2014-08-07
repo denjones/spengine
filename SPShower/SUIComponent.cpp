@@ -1512,6 +1512,8 @@ Handle<Object> SUIComponent::SaveAsObj()
 	Handle<Object> result = SPV8ScriptEngine::CopyObject(GetV8Obj());
 	Handle<Array> childList = Array::New();
 
+	result->Delete(SPV8ScriptEngine::SPStringToString(L"parent"));
+
 	if(onMouseClick)
 	{
 		result->Set(SPV8ScriptEngine::SPStringToString(L"onClick"), 

@@ -12,6 +12,7 @@ Handle<ObjectTemplate> SV8TemplComponent::GetTemplate()
 
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"id"), IdGetter, IdSetter);
 
+	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"parent"), ParentGetter, ParentSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"display"), DisplayGetter, DisplaySetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"absolute"), AbsoluteGetter, AbsoluteSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"depth"), DepthGetter, DepthSetter);
@@ -149,6 +150,69 @@ void SV8TemplComponent::SetComponentProperty( Local<String> property, Local<Valu
 	SPString propertyStr = SPV8ScriptEngine::StringToSPString(property);
 
 	
+}
+
+void SV8TemplComponent::ParentGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	if(component->GetFather())
+	{
+		info.GetReturnValue().Set(component->GetFather()->GetV8Obj());
+	}
+	else
+	{
+		info.GetReturnValue().Set(Undefined(isolate));
+	}
+}
+
+void SV8TemplComponent::ParentSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	Handle<External> fieldParent = Handle<External>::Cast(Handle<Object>::Cast(value)->GetInternalField(0));
+	SUIComponent* parent = (SUIComponent*)fieldParent->Value();
+
+	if (parent == NULL)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Null Argument.")));
+		return;
+	}
+
+	if (component->GetFather())
+	{
+		component->GetFather()->RemoveChild(component);
+	}
+
+	component->SetFather(parent);
+	parent->AddChild(component);
 }
 
 void SV8TemplComponent::IdGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
