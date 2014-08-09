@@ -490,7 +490,8 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 播放声音
+				storyObj.hideDialog();
+				storyObj.showBackLog();
 				return false;
 			}
 		}),
@@ -544,7 +545,7 @@ if (!storyScreen) {
 			id: '履历标题',
 			width: 200,
 			height: 40,
-			paddingTop: 5,
+			paddingTop: 10,
 			paddingLeft: 10,
 			depth: 2,
 			backgroundColor: 0xDD334455,
@@ -823,8 +824,19 @@ if (!storyScreen) {
 		},
 
 		// 抖
-		shake: function () {
-
+		shake: function (com) {
+			com.addAnimation({deltaY: -3});
+			com.addAnimation({deltaY: 3});
+			com.addAnimation({deltaX: 7});
+			com.addAnimation({deltaY: -5});
+			com.addAnimation({deltaY: -7});
+			com.addAnimation({deltaX: 5});
+			com.addAnimation({deltaX: -3});
+			com.addAnimation({deltaX: 3});
+			com.addAnimation({deltaY: 5});
+			com.addAnimation({deltaX: -5});
+			com.addAnimation({deltaX: -7});	
+			com.addAnimation({deltaY: 7});
 		},
 
 		// 等待对话框（队列函数）
