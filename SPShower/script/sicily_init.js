@@ -19,6 +19,8 @@ if (!storyScreen) {
 		isSkipping: true,
 		// 自动模式
 		isAuto: false,
+		// 强跳模式
+		isForceSkipping: false,
 
 		/****************************** 组件 Begin ******************************/
 
@@ -51,6 +53,24 @@ if (!storyScreen) {
 				if (e.movementY > 0 && !storyObj.backlogLayer.display) {
 					storyObj.hideDialog();
 					storyObj.showBackLog();
+				}
+			},
+			onKeyDown: function(e){
+				// ctrl 开启跳过
+				if(e.key == 29){
+					soundTrack.src = 'data/sounds/select.wav';
+					soundTrack.play();
+					storyObj.isForceSkipping = true;
+					storyObj.skipOn();
+				}
+			},
+			onKeyUp: function(e){
+				// ctrl 关闭跳过
+				if(e.key == 29){
+					soundTrack.src = 'data/sounds/select.wav';
+					soundTrack.play();
+					storyObj.isForceSkipping = false;
+					storyObj.skipOff();
 				}
 			}
 		}),
@@ -873,7 +893,7 @@ if (!storyScreen) {
 		waitDialogAndClick: function (e) {
 			// 跳过全部及跳过已读
 			if (storyObj.skipOn) {
-				if (ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
+				if (storyObj.isForceSkipping || ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
 					storyObj.dialogText.skip();
 					return;
 				}

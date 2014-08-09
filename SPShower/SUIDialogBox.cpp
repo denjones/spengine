@@ -223,6 +223,8 @@ void SUIDialogBox::Draw( float timeDelta )
 {
 	D3DXVECTOR2 pos = Position();
 
+	modificationLock.Lock();
+
 	if (IsShowNextLineTex() && nextLineTex)
 	{
 		//SPSpriteManager::GetSingleton()->Render(nextLineTex, NULL, texPosX, texPosY, Alpha() * SPColor::White, CalDepth(1), childTarget);
@@ -238,6 +240,7 @@ void SUIDialogBox::Draw( float timeDelta )
 			Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
 
+	modificationLock.Unlock();
 
 	SUITextBox::Draw(timeDelta);
 }
