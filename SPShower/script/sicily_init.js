@@ -15,11 +15,12 @@ if (!storyScreen) {
 
 	// 初始化组件
 	var storyObj = {
-		skipOn: false, // 快进模式
-		autoOn: false, // 自动模式
-		
+		// 跳过模式
+		isSkipping: true,
+		// 自动模式
+		isAuto: false,
 
-		/*********************** 组件 Begin ***********************/
+		/****************************** 组件 Begin ******************************/
 
 		/********************* 背景层 Begin *********************/
 		backgroundLayer: storyScreen.createComponent({
@@ -30,8 +31,8 @@ if (!storyScreen) {
 			onClick: function (e) {
 				if (e.key == 0) {
 					// 停止等待点击
-                    storyObj.skipBackground();
-					if(!storyObj.dialogText.isAllDisplayed()) {
+					storyObj.skipBackground();
+					if (!storyObj.dialogText.isAllDisplayed()) {
 						storyObj.dialogText.next();
 					} else {
 						stopWaitingClick();
@@ -39,9 +40,19 @@ if (!storyScreen) {
 					return false;
 				} else if (e.key == 1) {
 					// 显示隐藏对话框
-					// @TODO
+					if(storyObj.dialogLayer.display){
+						storyObj.hideDialog();
+					} else {
+						storyObj.showDialog();
+					}
 				}
 			},
+			onMouseScroll: function (e) {
+				if (e.movementY > 0 && !storyObj.backlogLayer.display) {
+					storyObj.hideDialog();
+					storyObj.showBackLog();
+				}
+			}
 		}),
 
 		backgroundBack: storyScreen.createComponent({
@@ -310,7 +321,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -334,7 +345,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 快进
 				return false;
 			}
@@ -358,7 +369,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -382,7 +393,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -406,7 +417,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -430,7 +441,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -454,7 +465,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -478,7 +489,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -502,7 +513,7 @@ if (!storyScreen) {
 			onMouseOut: function (e) {
 				this.backgroundY = -26;
 			},
-			onClick: function(e){
+			onClick: function (e) {
 				// @TODO 播放声音
 				return false;
 			}
@@ -517,7 +528,15 @@ if (!storyScreen) {
 			x: 20,
 			y: 20,
 			depth: 60,
-			display: false
+			display: false,
+			catchClick: function (e) {
+				// @TODO
+				if (e.key == 1) {
+					storyObj.hideBackLog();
+					storyObj.showDialog();
+				}
+				return false;
+			}
 		}),
 
 		backlogTitle: storyScreen.createComponent({
@@ -525,17 +544,15 @@ if (!storyScreen) {
 			id: '履历标题',
 			width: 200,
 			height: 40,
-			padding: 5,
+			paddingTop: 5,
+			paddingLeft: 10,
 			depth: 2,
-			backgroundColor: 0xDD334455, 
+			backgroundColor: 0xDD334455,
 			text: '   履 历',
-			font:{
+			font: {
 				font: '微软雅黑',
 				size: 25,
 				weight: 'SemiBold'
-			},
-			onClick: function(e){
-				// @TODO
 			}
 		}),
 
@@ -548,8 +565,15 @@ if (!storyScreen) {
 			y: 50,
 			depth: 1,
 			maxCount: 20,
-			onScroll: function(e){
+			onMouseScroll: function (e) {
 				// @TODO
+				if ((this.scrollPosition == 1 || this.childComponents.length == 0) && e.movementY < 0) {
+					storyObj.hideBackLog();
+					storyObj.showDialog();
+				} else {
+					this.scrollBy(-e.movementY / 120 * 20);
+				}
+				return false;
 			}
 		}),
 
@@ -579,24 +603,29 @@ if (!storyScreen) {
 			height: 720,
 			depth: 254,
 			display: false,
-			catchMouseIn: function(e){
+			catchMouseIn: function (e) {
 				return false;
 			},
-			catchMouseOut: function(e){
+			catchMouseOut: function (e) {
 				return false;
 			},
-			catchMouseOver: function(e){
+			catchMouseOver: function (e) {
 				return false;
 			},
-			catchClick: function(e){
+			catchClick: function (e) {
+				return false;
+			},
+			catchMouseScroll: function (e) {
 				return false;
 			}
 		}),
 		/********************* 其他层 End *********************/
+
+		/****************************** 组件 End ******************************/
 		
-		/********************* 方法 Begin **********************/
+		/****************************** 方法 Begin ******************************/
 		// 初始化父子关系
-		init: function(){
+		init: function () {
 			storyScreen.root.appendChild(storyObj.backgroundLayer);
 			storyScreen.root.appendChild(storyObj.roleLayer);
 			storyScreen.root.appendChild(storyObj.dialogLayer);
@@ -605,26 +634,26 @@ if (!storyScreen) {
 			storyScreen.root.appendChild(storyObj.backlogLayer);
 			storyScreen.root.appendChild(storyObj.videoLayer);
 			storyScreen.root.appendChild(storyObj.maskLayer);
-			
+
 			storyObj.backgroundLayer.appendChild(storyObj.backgroundFront);
 			storyObj.backgroundLayer.appendChild(storyObj.backgroundBack);
-			
+
 			storyObj.roleLayer.appendChild(storyObj.roleFront1);
 			storyObj.roleLayer.appendChild(storyObj.roleBack1);
 			storyObj.roleLayer.appendChild(storyObj.roleFront2);
 			storyObj.roleLayer.appendChild(storyObj.roleBack2);
 			storyObj.roleLayer.appendChild(storyObj.roleFront3);
 			storyObj.roleLayer.appendChild(storyObj.roleBack3);
-			
+
 			storyObj.dialogLayer.appendChild(storyObj.dialogBackground);
 			storyObj.dialogLayer.appendChild(storyObj.dialogText);
 			storyObj.dialogLayer.appendChild(storyObj.dialogRoleBackground);
 			storyObj.dialogLayer.appendChild(storyObj.dialogRoleText);
-			
+
 			storyObj.seclectionLayer.appendChild(storyObj.seclection1);
 			storyObj.seclectionLayer.appendChild(storyObj.seclection2);
 			storyObj.seclectionLayer.appendChild(storyObj.seclection3);
-			
+
 			storyObj.buttonLayer.appendChild(storyObj.buttonPlaySound);
 			storyObj.buttonLayer.appendChild(storyObj.buttonSkip);
 			storyObj.buttonLayer.appendChild(storyObj.buttonAuto);
@@ -634,129 +663,216 @@ if (!storyScreen) {
 			storyObj.buttonLayer.appendChild(storyObj.buttonQuickLoad);
 			storyObj.buttonLayer.appendChild(storyObj.buttonBackLog);
 			storyObj.buttonLayer.appendChild(storyObj.buttonExit);
-			
+
 			storyObj.backlogLayer.appendChild(storyObj.backlogTitle);
 			storyObj.backlogLayer.appendChild(storyObj.backlogList);
 			storyObj.backlogLayer.appendChild(storyObj.backlogBackground);
 		},
-		
+
 		// 某人说某话
-		say: function(e, obj){
-			if(obj instanceof String){
-				obj = { content : obj };
+		say: function (e, obj) {
+			if (obj instanceof String) {
+				obj = {
+					content: obj
+				};
 			}
-			if(obj.role){
+			if (obj.role) {
 				storyObj.dialogRoleText.text = obj.role;
 			}
-			if(obj.content){
-				storyObj.dialogText.text = (e.read ? '[已读]' : '') + obj.content;
+			if (obj.content) {
+				if (e.read) {
+					storyObj.dialogText.text = '';
+					storyObj.dialogText.addText({
+						text: obj.content,
+						color: 0xffff5555,
+						frontEffect: {}
+					})
+				} else {
+					storyObj.dialogText.text = obj.content;
+				}
 			}
 			storyObj.dialogText.markNextPage();
+
+			// 添加到履历            
+			var newLog = storyScreen.createComponent({
+				width: 1200,
+				height: 100,
+				backgroundColor: 0x00FFFFFF
+			});
+			var logTitle = storyScreen.createComponent({
+				type: 'textBox',
+				width: 140,
+				height: 90,
+				x: 10,
+				y: 5,
+				backgroundColor: 0x00FFFFFF,
+				text: obj.role || ''
+			});
+			var logContent = storyScreen.createComponent({
+				type: 'textBox',
+				width: 1000,
+				height: 90,
+				x: 160,
+				y: 5,
+				text: obj.content || '',
+				autoHeight: true
+			});
+			
+			newLog.appendChild(logTitle);
+			newLog.appendChild(logContent);
+			newLog.height = Math.max(logContent.height + 20, 40);
+			storyObj.backlogList.appendChild(newLog);
 		},
-		
+
 		// 全屏遮挡开始
-		maskBegin: function(obj){
+		maskBegin: function (obj) {
 			var time = obj && obj.time ? obj.time : 0;
 			storyObj.maskLayer.opacity = 0;
 			storyObj.maskLayer.display = true;
 			storyObj.maskLayer.backgroundImage = obj && obj.image ? obj.image : 'data/images/bg_black.png';
-			storyObj.maskLayer.addAnimation({time: time, opacity: 1});
+			storyObj.maskLayer.addAnimation({
+				time: time,
+				opacity: 1
+			});
 		},
-		
+
 		// 全屏遮挡结束
-		maskEnd: function(obj){
+		maskEnd: function (obj) {
 			var time = obj && obj.time ? obj.time : 0;
-			storyObj.maskLayer.addAnimation({time: time, opacity: 0});
-			setTimeout(function(){
+			storyObj.maskLayer.addAnimation({
+				time: time,
+				opacity: 0
+			});
+			setTimeout(function () {
 				storyObj.maskLayer.display = false;
 			}, time);
 		},
+
+		// 显示履历
+		showBackLog: function () {
+			storyObj.backlogLayer.opacity = 0;
+			storyObj.backlogLayer.display = true;
+			storyObj.backlogLayer.addAnimation({
+				time: 0.2,
+				opacity: 1,
+				addMode: 'merge'
+			});
+		},
+
+		// 隐藏履历
+		hideBackLog: function () {
+			storyObj.backlogLayer.addAnimation({
+				time: 0.2,
+				opacity: 0,
+				addMode: 'merge'
+			});
+			setTimeout(function () {
+				storyObj.backlogLayer.display = false;
+			}, 200);
+		},
 		
+		// 显示对话框
+		showDialog: function(){
+			storyObj.dialogLayer.opacity = 0;
+			storyObj.dialogLayer.display = true;
+			storyObj.dialogLayer.addAnimation({
+				time: 0.2,
+				opacity: 1,
+				addMode: 'merge'
+			});
+		},
+		
+		// 隐藏对话框
+		hideDialog: function(){
+			storyObj.dialogLayer.addAnimation({
+				time: 0.2,
+				opacity: 0,
+				addMode: 'merge'
+			});
+			setTimeout(function () {
+				storyObj.dialogLayer.display = false;
+			}, 200);
+		},
+
 		// 换背景延时函数句柄
-        backgroundHandle: null,
-        
+		backgroundHandle: null,
+
 		// 换背景
-		changeBackground: function(obj){
-			if(!obj.target){
+		changeBackground: function (obj) {
+			if (!obj.target) {
 				return;
 			}
-            storyObj.skipBackground();
+			storyObj.skipBackground();
 			obj.time = obj.time || 0;
-            storyObj.backgroundBack.backgroundImage = obj.target;
+			storyObj.backgroundBack.backgroundImage = obj.target;
 			storyObj.backgroundFront.addEffect(obj);
-			storyObj.backgroundHandle = setTimeout(function(){
+			storyObj.backgroundHandle = setTimeout(function () {
 				storyObj.backgroundFront.backgroundImage = obj.target;
-                storyObj.backgroundFront.clearEffect();
+				storyObj.backgroundFront.clearEffect();
 			}, obj.time * 1000);
 		},
-        
-        // 马上换背景
-		skipBackground: function(){
-            if(storyObj.backgroundHandle){
+
+		// 马上换背景
+		skipBackground: function () {
+			if (storyObj.backgroundHandle) {
 				clearTimeout(storyObj.backgroundHandle);
 				storyObj.backgroundHandle = null;
 				storyObj.backgroundFront.backgroundImage = storyObj.backgroundBack.backgroundImage;
-            	storyObj.backgroundFront.clearEffect();
+				storyObj.backgroundFront.clearEffect();
 			}
 		},
-		
+
 		// 抖
-		shake: function(){
-			
+		shake: function () {
+
 		},
-		
+
 		// 等待对话框（队列函数）
-		waitDialog: function(e){
-			if(!storyObj.dialogText.isAllDisplayed()){
+		waitDialog: function (e) {
+			if (!storyObj.dialogText.isAllDisplayed()) {
 				e.repeat = true;
 				return;
 			}
 		},
-		
-		// 跳过模式
-		isSkipping: true,
-		
+
 		// 开启跳过
-		skipOn: function(){
+		skipOn: function () {
 			storyObj.isSkipping = true;
 			storyObj.isAuto = false;
 		},
-		
+
 		// 关闭跳过
-		skipOff: function(){
+		skipOff: function () {
 			storyObj.isSkipping = false;
 		},
-		
-		// 自动模式
-		isAuto: false,
-		
+
 		// 开启自动模式
-		autoOn: function(){
+		autoOn: function () {
 			storyObj.isAuto = true;
 			storyObj.isSkipping = false;
 		},
-		
+
 		// 关闭自动模式
-		autoOff: function(){
+		autoOff: function () {
 			storyObj.isAuto = false;
 		},
-		
+
 		// 等待对话框和之后的点击（队列函数）
-		waitDialogAndClick: function(e){
+		waitDialogAndClick: function (e) {
 			// 跳过全部及跳过已读
-			if(storyObj.skipOn){
-				if(ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
+			if (storyObj.skipOn) {
+				if (ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
 					storyObj.dialogText.skip();
 					return;
 				}
 			}
-			if(!storyObj.dialogText.isAllDisplayed()){
+			if (!storyObj.dialogText.isAllDisplayed()) {
 				e.repeat = true;
 				return;
-			}			
+			}
 			waitClick(e);
 		}
-		/********************* 方法 End **********************/
+		/****************************** 方法 End ******************************/
 	}
 
 	storyObj.init();

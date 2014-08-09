@@ -46,10 +46,10 @@ void SUIDialogBox::Update( float timeDelta )
 
 	elapsedLastAddTime += timeDelta;
 
+	modificationLock.Lock();
+
 	if (textsToPush.size() == 0)
 	{
-		modificationLock.Lock();
-
 		waitingNextPage = true;
 
 		if (nextLine)
@@ -66,8 +66,6 @@ void SUIDialogBox::Update( float timeDelta )
 	{
 		if (!nextLine)
 		{
-			modificationLock.Lock();
-
 			waitingNextLine = false;
 			waitingNextPage = false;
 
@@ -107,8 +105,6 @@ void SUIDialogBox::Update( float timeDelta )
 			{
 				textsToPush.pop_front();
 			}
-
-			modificationLock.Unlock();
 		}		
 		else
 		{
@@ -117,8 +113,6 @@ void SUIDialogBox::Update( float timeDelta )
 				// Forward to line change or end of text.
 				while(textsToPush.size() > 0)
 				{
-					modificationLock.Lock();
-
 					SUIText characterToPush = textsToPush.front();
 
 					characterToPush.text = characterToPush.text.substr(0,1);	
@@ -153,14 +147,10 @@ void SUIDialogBox::Update( float timeDelta )
 					{
 						textsToPush.pop_front();
 					}
-
-					modificationLock.Unlock();
 				}
 			}
 			else
 			{
-				modificationLock.Lock();
-
 				waitingNextLine = false;
 				waitingNextPage = false;
 
@@ -196,20 +186,18 @@ void SUIDialogBox::Update( float timeDelta )
 				{
 					textsToPush.pop_front();
 				}				
-
-				modificationLock.Unlock();
 			}
 		}
 
 		if (nextLine)
 		{
-			modificationLock.Lock();
 			nextLine = false;
-			modificationLock.Unlock();
 		}
 
 		elapsedLastAddTime = 0;
 	}
+
+	modificationLock.Unlock();
 }
 
 void SUIDialogBox::SetSpeed( float setSpeed )
