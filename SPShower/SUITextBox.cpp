@@ -619,4 +619,11 @@ bool SUITextBox::IsAnonymousFont()
 	return isAnonymousFont;
 }
 
+Handle<Object> SUITextBox::SaveAsObj()
+{
+	Handle<Object> result = SUIComponent::SaveAsObj();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"textBox"));
+	return result;
+}
+
 

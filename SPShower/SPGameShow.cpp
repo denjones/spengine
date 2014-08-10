@@ -227,6 +227,8 @@ Handle<Object> SPGameShow::SaveAsObj(SPString screens)
 
 void SPGameShow::LoadFromObj( Handle<Object> obj )
 {
+	LockDrawing();
+
 	if(SV8Function::HasProperty(L"SScript", obj))
 	{
 		SV8ScriptManager::GetSingleton()->LoadFromObj(Handle<Object>::Cast(SV8Function::GetProperty(L"SScript", obj)));
@@ -241,6 +243,8 @@ void SPGameShow::LoadFromObj( Handle<Object> obj )
 	{
 		SUITrackManager::GetSingleton()->LoadFromObj(Handle<Object>::Cast(SV8Function::GetProperty(L"SSound", obj)));
 	}
+
+	UnlockDrawing();
 }
 
 void SPGameShow::OnExit()

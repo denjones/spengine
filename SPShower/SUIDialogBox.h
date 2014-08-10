@@ -49,7 +49,7 @@ public:
 	virtual SPString SaveAsString();
 
 	virtual Handle<Object> GetV8Obj();
-
+	virtual Handle<Object> SaveAsObj();
 };
 
 typedef SPPointer<SUIDialogBox> SUIDialogBoxPtr;

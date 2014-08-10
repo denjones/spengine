@@ -50,6 +50,7 @@ if (!storyScreen) {
 				}
 			},
 			onMouseScroll: function (e) {
+				// 显示履历
 				if (e.movementY > 0 && !storyObj.backlogLayer.display) {
 					storyObj.hideDialog();
 					storyObj.showBackLog();
@@ -57,7 +58,7 @@ if (!storyScreen) {
 			},
 			onKeyDown: function(e){
 				// ctrl 开启跳过
-				if(e.key == 29){
+				if(e.key == 29 || e.key == 157){
 					soundTrack.src = 'data/sounds/select.wav';
 					soundTrack.play();
 					storyObj.isForceSkipping = true;
@@ -66,7 +67,7 @@ if (!storyScreen) {
 			},
 			onKeyUp: function(e){
 				// ctrl 关闭跳过
-				if(e.key == 29){
+				if(e.key == 29 || e.key == 157){
 					soundTrack.src = 'data/sounds/select.wav';
 					soundTrack.play();
 					storyObj.isForceSkipping = false;
@@ -149,13 +150,7 @@ if (!storyScreen) {
 			width: 1280,
 			height: 180,
 			y: 540,
-			depth: 30,
-			catchScroll: function (e) {
-				if (e.y < 0) {
-					// 显示履历
-					// @TODO
-				}
-			}
+			depth: 30
 		}),
 
 		dialogBackground: storyScreen.createComponent({
@@ -414,7 +409,7 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 播放声音
+				// @TODO
 				return false;
 			}
 		}),
@@ -462,7 +457,9 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 播放声音
+				ss.saveState({screens: 'Sicily剧情'});
+				soundTrack.src = 'data/sounds/select.wav';
+				soundTrack.play();
 				return false;
 			}
 		}),
@@ -486,7 +483,10 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 播放声音
+				ss.loadState();
+				storyObj.refresh();
+				soundTrack.src = 'data/sounds/select.wav';
+				soundTrack.play();
 				return false;
 			}
 		}),
@@ -903,6 +903,53 @@ if (!storyScreen) {
 				return;
 			}
 			waitClick(e);
+		},
+		
+		// 用于读取屏幕数据后重置组件对象
+		refresh: function(){
+			storyScreen = ss.getScreenById('Sicily剧情');
+			
+			storyObj.backgroundLayer = storyScreen.getComponentById('背景');
+			storyObj.backgroundFront = storyScreen.getComponentById('背景前');
+			storyObj.backgroundBack = storyScreen.getComponentById('背景后');
+			
+			storyObj.roleLayer = storyScreen.getComponentById('立绘');
+			storyObj.roleFront1 = storyScreen.getComponentById('立绘前1');
+			storyObj.roleBack1 = storyScreen.getComponentById('立绘后1');
+			storyObj.roleFront2 = storyScreen.getComponentById('立绘前2');
+			storyObj.roleBack2 = storyScreen.getComponentById('立绘后2');
+			storyObj.roleFront3 = storyScreen.getComponentById('立绘前3');
+			storyObj.roleBack3 = storyScreen.getComponentById('立绘后3');
+			
+			storyObj.dialogLayer = storyScreen.getComponentById('对话框');
+			storyObj.dialogBackground = storyScreen.getComponentById('对话框背景');
+			storyObj.dialogText = storyScreen.getComponentById('对话框文字');
+			storyObj.dialogRoleBackground = storyScreen.getComponentById('对话框角色背景');
+			storyObj.dialogRoleText = storyScreen.getComponentById('对话框角色');
+			
+			storyObj.seclectionLayer = storyScreen.getComponentById('选项框');
+			storyObj.seclection1 = storyScreen.getComponentById('选项1');
+			storyObj.seclection2 = storyScreen.getComponentById('选项2');
+			storyObj.seclection3 = storyScreen.getComponentById('选项3');
+			
+			storyObj.buttonLayer = storyScreen.getComponentById('功能按钮');
+			storyObj.buttonPlaySound = storyScreen.getComponentById('播放声音按钮');
+			storyObj.buttonSkip = storyScreen.getComponentById('快进按钮');
+			storyObj.buttonAuto = storyScreen.getComponentById('自动按钮');
+			storyObj.buttonSave = storyScreen.getComponentById('保存按钮');
+			storyObj.buttonLoad = storyScreen.getComponentById('读取按钮');
+			storyObj.buttonQuickSave = storyScreen.getComponentById('快速保存按钮');
+			storyObj.buttonQuickLoad = storyScreen.getComponentById('快速读取按钮');
+			storyObj.buttonBackLog = storyScreen.getComponentById('履历按钮');
+			storyObj.buttonExit = storyScreen.getComponentById('退出按钮');
+		
+			storyObj.backlogLayer = storyScreen.getComponentById('履历');
+			storyObj.backlogTitle = storyScreen.getComponentById('履历标题');
+			storyObj.backlogList = storyScreen.getComponentById('履历列表');
+			storyObj.backlogBackground = storyScreen.getComponentById('履历背景');
+			
+			storyObj.videoLayer = storyScreen.getComponentById('视频');
+			storyObj.maskLayer = storyScreen.getComponentById('全屏遮挡');
 		}
 		/****************************** 方法 End ******************************/
 	}

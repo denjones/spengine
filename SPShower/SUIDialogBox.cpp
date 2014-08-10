@@ -476,3 +476,10 @@ Handle<Object> SUIDialogBox::GetV8Obj()
 
 	return Handle<Object>::New(isolate, *v8Obj);
 }
+
+Handle<Object> SUIDialogBox::SaveAsObj()
+{
+	Handle<Object> result = SUITextBox::SaveAsObj();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"dialogBox"));
+	return result;
+}

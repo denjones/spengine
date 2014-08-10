@@ -6,6 +6,10 @@
 #include "SV8Function.h"
 #include <shlobj.h>
 #include <shlwapi.h>
+#include "SUITextBox.h"
+#include "SUIDialogBox.h"
+#include "SUIPictureBox.h"
+#include "SUIList.h"
 
 #pragma warning (disable:4244)
 
@@ -1762,7 +1766,37 @@ void SUIComponent::LoadFromObj( Handle<Object> obj )
 		Handle<Object> childObj = Handle<Object>::Cast(childList->Get(i));
 
 		// Register component before loaded.
-		SUIComponentPtr child = new SUIComponent(GetScreen());
+		SUIComponentPtr child;
+		if(SV8Function::HasProperty(L"type", childObj))
+		{
+			SPString type = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"type", childObj)->ToString());
+
+			if (SPStringHelper::EqualsIgnoreCase(type, L"textBox"))
+			{
+				child = new SUITextBox(GetScreen());
+			}
+			else if (SPStringHelper::EqualsIgnoreCase(type, L"dialogBox"))
+			{
+				child = new SUIDialogBox(GetScreen());
+			}
+			else if (SPStringHelper::EqualsIgnoreCase(type, L"pictureBox"))
+			{
+				child = new SUIPictureBox(GetScreen());
+			}
+			else if (SPStringHelper::EqualsIgnoreCase(type, L"scroll"))
+			{
+				child = new SUIList(GetScreen());
+			}
+			else
+			{
+				child = new SUIComponent(GetScreen());
+			}
+		}
+		else
+		{
+			child = new SUIComponent(GetScreen());
+		}
+		
 		GetScreen()->SetPersistentComponent(child);
 		child->LoadFromObj(childObj);
 

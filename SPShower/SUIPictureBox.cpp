@@ -593,3 +593,10 @@ Handle<Object> SUIPictureBox::GetV8Obj()
 
 	return Handle<Object>::New(isolate, *v8Obj);
 }
+
+Handle<Object> SUIPictureBox::SaveAsObj()
+{
+	Handle<Object> result = SUIComponent::SaveAsObj();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"pictureBox"));
+	return result;
+}

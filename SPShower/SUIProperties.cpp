@@ -129,39 +129,39 @@ SUIProperties::BackgroundMode SUIProperties::StringToBackgroundMode( SPString mo
 
 SUIProperties::BackgroundPosition SUIProperties::StringToBackgroundPosition( SPString modeName )
 {
-	if(modeName ==  L"Normal")
+	if(SPStringHelper::EqualsIgnoreCase(modeName, L"Normal"))
 	{
 		return Normal;
 	}
-	else if (modeName == L"TopLeft")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"TopLeft"))
 	{
 		return TopLeft;
 	}
-	else if (modeName == L"TopRight")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"TopRight"))
 	{
 		return TopRight;
 	}
-	else if (modeName == L"BottomLeft")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"BottomLeft"))
 	{
 		return BottomLeft;
 	}
-	else if (modeName == L"BottomRight")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"BottomRight"))
 	{
 		return BottomRight;
 	}
-	else if (modeName == L"BottomCenter")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"BottomCenter"))
 	{
 		return BottomCenter;
 	}
-	else if (modeName == L"CenterLeft")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"CenterLeft"))
 	{
 		return CenterLeft;
 	}
-	else if (modeName == L"CenterRight")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"CenterRight"))
 	{
 		return CenterRight;
 	}
-	else if (modeName == L"CenterAll")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"CenterAll"))
 	{
 		return CenterAll;
 	}

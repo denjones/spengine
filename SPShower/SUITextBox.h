@@ -128,6 +128,7 @@ public:
 	virtual void LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
 	virtual Handle<Object> GetV8Obj();
+	virtual Handle<Object> SaveAsObj();
 
 private:
 	bool IsPunctuation(SPString character);

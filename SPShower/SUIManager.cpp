@@ -94,8 +94,6 @@ void SUIManager::Reload()
 
 void SUIManager::Update( float timeDelta )
 {
-	displayLock.Lock();
-
 	GenerateEvent(timeDelta);
 	bool isInputValid = true;
 	bool isVisible = true;
@@ -127,8 +125,6 @@ void SUIManager::Update( float timeDelta )
 	{
 		uv_async_send((uv_async_t*)asyncEvent);
 	}
-
-	displayLock.Unlock();
 }
 
 void SUIManager::Draw( float timeDelta )
