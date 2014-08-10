@@ -785,7 +785,7 @@ void SV8TemplTextBox::FontSetter( Local<String> property, Local<Value> value, co
 
 		if (SV8Function::HasProperty(L"italic", argObj))
 		{
-			Handle<Value> italicVal = SV8Function::GetProperty(L"weight", argObj);
+			Handle<Value> italicVal = SV8Function::GetProperty(L"italic", argObj);
 			italic = italicVal->BooleanValue();
 		}
 
