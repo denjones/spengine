@@ -34,140 +34,9 @@ SUITextBox::~SUITextBox(void)
 
 void SUITextBox::AddText( SUIText text )
 {
-	//
-	// Put all texts into one list
-	//
-
-	SUITextList characterList;
-
-	if (!text.font)
-	{
-		text.font = defaultFont;
-	}
-
-	for(int i = 0; i < text.text.size(); i++)
-	{
-		SUIText character = text; // Copy
-		character.text = text.text.substr(i, 1).c_str(); 
-		characterList.push_back(character);
-	}
-
-	if (characterList.size() == 0)
-	{
-		return;
-	}
-
-	SUITextList::iterator currentCharIter = characterList.begin();
-	SUITextList::iterator nextCharIter = currentCharIter;
-	nextCharIter++;
-
-	//
-	// First char of the line exceeded ?!
-	//
-
-	if(CurrentLine()->size() == 0 && WillExceeded(CurrentLine()->TestPush(*currentCharIter)) || GetTextRect().Width < 14)
-	{
-		return;
-	}
-
 	modificationLock.Lock();
 
-	try
-	{
-		//
-		// Loop through all characters.
-		//
-
-		while(nextCharIter != characterList.end())
-		{
-			SPString currentChar = currentCharIter->text;
-			SPString nextChar = nextCharIter->text;
-
-			SUIText currentAndNext = *currentCharIter;
-			currentAndNext.text += nextCharIter->text;
-
-			bool willCurrentExceeded = WillExceeded(CurrentLine()->TestPush(*currentCharIter));
-			bool willNextExceeded = WillExceeded(CurrentLine()->TestPush(currentAndNext));
-			bool isCurrentPun = IsPunctuation(currentChar);
-			bool isNextPun = IsPunctuation(nextChar);
-			bool isCurrentAlphabet = IsAlphabet(currentChar);
-			bool isNextAlphabet = IsAlphabet(nextChar);
-
-			if (currentChar == L"\n")
-			{
-				//
-				// If next character is punctuation, go to new line
-				//
-
-				NewLine();
-			}
-			else if(
-				!willCurrentExceeded && willNextExceeded &&		 
-				!isCurrentPun && isNextPun &&
-				!isCurrentAlphabet &&
-				currentCharIter != characterList.begin())	// Not the first char.
-			{
-				//
-				// Next is exceeded punctuation, go to new line.
-				//
-
-				NewLine();
-				continue;
-			}
-			else if(!willCurrentExceeded) 
-			{
-				// Line width not exceeded. Push new text span into line.
-				CurrentLine()->Push(*currentCharIter);
-
-				// Add "-" into English words.
-
-				if(	willNextExceeded &&	isCurrentAlphabet && isNextAlphabet ) 
-				{
-					SUIText connector = *currentCharIter; // Copy
-					connector.text = L"-";
-					CurrentLine()->Push(connector);
-
-					NewLine();
-				}
-			}		
-			else if(currentCharIter != characterList.begin())
-			{
-				//
-				// Meets the edge of the rectangle, go to new line
-				//
-
-				NewLine();
-				continue;
-			}		
-
-			nextCharIter++;
-			currentCharIter++;
-		}
-
-		//
-		// Last character.
-		//
-
-		if (WillExceeded(CurrentLine()->TestPush(*currentCharIter)) || currentCharIter->text == L"\n")
-		{
-			NewLine();	
-		}
-
-		if(currentCharIter->text != L"\n")
-		{
-			CurrentLine()->Push(*currentCharIter);
-		}
-
-		if (isAutoHeight)
-		{
-			properties.rectangle.Height = currentPosition.y + CurrentLine()->height + padding.top + padding.bottom;
-		}
-	}
-	catch(exception e)
-	{
-		modificationLock.Unlock();
-		throw e;
-	}
+	textToAdd.push_back(text);
 
 	modificationLock.Unlock();
 }
@@ -270,14 +139,14 @@ void SUITextBox::SetWordSpace( float setSpace )
 
 void SUITextBox::Draw( float timeDelta )
 {	
+	modificationLock.Lock();
+
 	SPTexturePtr textTex = SPTextureManager::GetSingleton()->
 		CreateRenderTarget(properties.rectangle.Width,
 		properties.rectangle.Height, properties.backgroundColor);
 
 	// A card problem?
 	textTex->Fill(SPColorHelper::AlphaColor(0, properties.backgroundColor));
-
-	modificationLock.Lock();
 
 	SUITextBlock::iterator iter;
 	D3DXVECTOR2 pos = Position();
@@ -349,6 +218,7 @@ void SUITextBox::SetDefaultFont( SPFontPtr setFont, bool isAnonymous)
 	modificationLock.Lock();
 	defaultFont = setFont;
 	isAnonymousFont = isAnonymous;
+	RefreshText();
 	modificationLock.Unlock();
 }
 
@@ -356,6 +226,7 @@ void SUITextBox::SetDefaultColor( D3DCOLOR setColor )
 {
 	modificationLock.Lock();
 	defaultColor = setColor;
+	RefreshText();
 	modificationLock.Unlock();
 }
 
@@ -375,6 +246,7 @@ void SUITextBox::SetDefaultBackEffect(SUIEffectPtr setEffect)
 {
 	modificationLock.Lock();
 	defaultBackEffect = setEffect;
+	RefreshText();
 	modificationLock.Unlock();
 }
 
@@ -387,6 +259,7 @@ void SUITextBox::SetDefaultFrontEffect( SUIEffectPtr setEffect )
 {
 	modificationLock.Lock();
 	defaultFrontEffect = setEffect;
+	RefreshText();
 	modificationLock.Unlock();
 }
 
@@ -404,10 +277,20 @@ void SUITextBox::Update( float timeDelta )
 {
 	SUIComponent::Update(timeDelta);
 
+	modificationLock.Lock();
+
+	while(textToAdd.size() > 0)
+	{
+		AddTextWithoutLock(textToAdd.front());
+		textToAdd.pop_front();
+	}
+
 	if (animations.size() > 0)
 	{
 		RefreshText();
 	}
+
+	modificationLock.Unlock();
 }
 
 void SUITextBox::LoadFromString( SPString stringStream )
@@ -624,6 +507,141 @@ Handle<Object> SUITextBox::SaveAsObj()
 	Handle<Object> result = SUIComponent::SaveAsObj();
 	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"textBox"));
 	return result;
+}
+
+void SUITextBox::AddTextWithoutLock( SUIText text )
+{
+	//
+	// Put all texts into one list
+	//
+
+	SUITextList characterList;
+
+	if (!text.font)
+	{
+		text.font = defaultFont;
+	}
+
+	for(int i = 0; i < text.text.size(); i++)
+	{
+		SUIText character = text; // Copy
+		character.text = text.text.substr(i, 1).c_str(); 
+		characterList.push_back(character);
+	}
+
+	if (characterList.size() == 0)
+	{
+		return;
+	}
+
+	SUITextList::iterator currentCharIter = characterList.begin();
+	SUITextList::iterator nextCharIter = currentCharIter;
+	nextCharIter++;
+
+	//
+	// First char of the line exceeded ?!
+	//
+
+	if(CurrentLine()->size() == 0 && WillExceeded(CurrentLine()->TestPush(*currentCharIter)) || GetTextRect().Width < 14)
+	{
+		return;
+	}
+
+	try
+	{
+		//
+		// Loop through all characters.
+		//
+
+		while(nextCharIter != characterList.end())
+		{
+			SPString currentChar = currentCharIter->text;
+			SPString nextChar = nextCharIter->text;
+
+			SUIText currentAndNext = *currentCharIter;
+			currentAndNext.text += nextCharIter->text;
+
+			bool willCurrentExceeded = WillExceeded(CurrentLine()->TestPush(*currentCharIter));
+			bool willNextExceeded = WillExceeded(CurrentLine()->TestPush(currentAndNext));
+			bool isCurrentPun = IsPunctuation(currentChar);
+			bool isNextPun = IsPunctuation(nextChar);
+			bool isCurrentAlphabet = IsAlphabet(currentChar);
+			bool isNextAlphabet = IsAlphabet(nextChar);
+
+			if (currentChar == L"\n")
+			{
+				//
+				// If next character is punctuation, go to new line
+				//
+
+				NewLine();
+			}
+			else if(
+				!willCurrentExceeded && willNextExceeded &&		 
+				!isCurrentPun && isNextPun &&
+				!isCurrentAlphabet &&
+				currentCharIter != characterList.begin())	// Not the first char.
+			{
+				//
+				// Next is exceeded punctuation, go to new line.
+				//
+
+				NewLine();
+				continue;
+			}
+			else if(!willCurrentExceeded) 
+			{
+				// Line width not exceeded. Push new text span into line.
+				CurrentLine()->Push(*currentCharIter);
+
+				// Add "-" into English words.
+
+				if(	willNextExceeded &&	isCurrentAlphabet && isNextAlphabet ) 
+				{
+					SUIText connector = *currentCharIter; // Copy
+					connector.text = L"-";
+					CurrentLine()->Push(connector);
+
+					NewLine();
+				}
+			}		
+			else if(currentCharIter != characterList.begin())
+			{
+				//
+				// Meets the edge of the rectangle, go to new line
+				//
+
+				NewLine();
+				continue;
+			}		
+
+			nextCharIter++;
+			currentCharIter++;
+		}
+
+		//
+		// Last character.
+		//
+
+		if (WillExceeded(CurrentLine()->TestPush(*currentCharIter)) || currentCharIter->text == L"\n")
+		{
+			NewLine();	
+		}
+
+		if(currentCharIter->text != L"\n")
+		{
+			CurrentLine()->Push(*currentCharIter);
+		}
+
+		if (isAutoHeight)
+		{
+			properties.rectangle.Height = currentPosition.y + CurrentLine()->height + padding.top + padding.bottom;
+		}
+	}
+	catch(exception e)
+	{
+		throw e;
+	}
 }
 
 

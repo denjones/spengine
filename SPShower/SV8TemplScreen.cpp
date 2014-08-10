@@ -306,6 +306,18 @@ void SV8TemplScreen::CreateComponent( const FunctionCallbackInfo<Value>& args )
 
 	Handle<Object> obj = com->GetV8Obj();
 
+	if (SV8Function::HasProperty(L"width", argObj))
+	{
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"width"), SV8Function::GetProperty(L"width", argObj));
+		argObj->Delete(SPV8ScriptEngine::SPStringToString(L"width"));
+	}
+
+	if (SV8Function::HasProperty(L"height", argObj))
+	{
+		obj->Set(SPV8ScriptEngine::SPStringToString(L"height"), SV8Function::GetProperty(L"height", argObj));
+		argObj->Delete(SPV8ScriptEngine::SPStringToString(L"height"));
+	}
+
 	const Local<Array> props = argObj->GetPropertyNames();
 	const uint32_t length = props->Length();
 	for (uint32_t i = 0; i < length; i++)

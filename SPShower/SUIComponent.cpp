@@ -204,9 +204,10 @@ void SUIComponent::UpdateAnimation( float timeDelta )
 
 void SUIComponent::SetRenderTarget( SPTexturePtr setTarget )
 {
-	modificationLock.Lock();
+	// Don't need to lock because the method will only be called in Drawing function.
+	//modificationLock.Lock();
 	renderTarget = setTarget;
-	modificationLock.Unlock();
+	//modificationLock.Unlock();
 }
 
 void SUIComponent::AddEffect( SUIEffectPtr setEffect )
@@ -245,14 +246,14 @@ void SUIComponent::SetTransparency( float setTrans )
 
 void SUIComponent::UpdateEffect( float timeDelta )
 {
+	modificationLock.Lock();
+
 	// Update animation position.
 	if (effects.size() > 0)
 	{
 		while(effects.size() > 0 && !effects.front())
 		{
-			modificationLock.Lock();
 			effects.pop_front();
-			modificationLock.Unlock();
 		}
 
 		if (effects.size() > 0)
@@ -269,14 +270,13 @@ void SUIComponent::UpdateEffect( float timeDelta )
 				// Set current state as the start point of next animation.
 				if (effects.size() > 1)
 				{
-					modificationLock.Lock();
 					effects.pop_front();
-					modificationLock.Unlock();
 				}
 			}
 		}
-		
 	}
+
+	modificationLock.Unlock();
 }
 
 SUIProperties SUIComponent::GetProperties()
@@ -402,9 +402,7 @@ SUIEffectPtr SUIComponent::GetCurrentEffect()
 {
 	if (effects.size() == 0)
 	{
-		modificationLock.Lock();
-		effects.push_back(NULL);
-		modificationLock.Unlock();
+		return NULL;
 	}
 
 	return effects.front();
@@ -1758,6 +1756,20 @@ void SUIComponent::LoadFromObj( Handle<Object> obj )
 	Handle<Array> childList = Handle<Array>::Cast(obj->Get(SPV8ScriptEngine::SPStringToString(L"childComponents")));
 
 	obj->Delete(SPV8ScriptEngine::SPStringToString(L"childComponents"));
+
+	if (SV8Function::HasProperty(L"width", obj))
+	{
+		GetV8Obj()->Set(SPV8ScriptEngine::SPStringToString(L"width"), 
+			SV8Function::GetProperty(L"width", obj));
+		obj->Delete(SPV8ScriptEngine::SPStringToString(L"width"));
+	}
+
+	if (SV8Function::HasProperty(L"height", obj))
+	{
+		GetV8Obj()->Set(SPV8ScriptEngine::SPStringToString(L"height"), 
+			SV8Function::GetProperty(L"height", obj));
+		obj->Delete(SPV8ScriptEngine::SPStringToString(L"height"));
+	}
 
 	SPV8ScriptEngine::CoverObject(GetV8Obj(), obj);
 

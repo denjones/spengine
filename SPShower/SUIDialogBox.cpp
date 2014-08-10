@@ -89,13 +89,9 @@ void SUIDialogBox::Update( float timeDelta )
 				return;
 			}
 
-			modificationLock.Unlock();
-
 			// Push new character.
 			//texts.push_back(characterToPush);
-			SUITextBox::AddText(characterToPush);
-
-			modificationLock.Lock();
+			SUITextBox::AddTextWithoutLock(characterToPush);
 
 			// Remove the character.
 			textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -131,13 +127,9 @@ void SUIDialogBox::Update( float timeDelta )
 						break;
 					}
 
-					modificationLock.Unlock();
-
 					// Push new character.
 					//texts.push_back(characterToPush);
-					SUITextBox::AddText(characterToPush);
-
-					modificationLock.Lock();
+					SUITextBox::AddTextWithoutLock(characterToPush);
 
 					// Remove the character.
 					textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -153,8 +145,6 @@ void SUIDialogBox::Update( float timeDelta )
 			{
 				waitingNextLine = false;
 				waitingNextPage = false;
-
-				modificationLock.Unlock();
 
 				SUIText characterToPush = textsToPush.front();
 
@@ -173,10 +163,8 @@ void SUIDialogBox::Update( float timeDelta )
 				{
 					// Push new character.
 					//texts.push_back(characterToPush);
-					SUITextBox::AddText(characterToPush);
+					SUITextBox::AddTextWithoutLock(characterToPush);
 				}				
-
-				modificationLock.Lock();
 
 				// Remove the character.
 				textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -221,9 +209,9 @@ void SUIDialogBox::Next()
 
 void SUIDialogBox::Draw( float timeDelta )
 {
-	D3DXVECTOR2 pos = Position();
-
 	modificationLock.Lock();
+
+	D3DXVECTOR2 pos = Position();
 
 	if (IsShowNextLineTex() && nextLineTex)
 	{

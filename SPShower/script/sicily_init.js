@@ -569,12 +569,7 @@ if (!storyScreen) {
 			paddingLeft: 10,
 			depth: 2,
 			backgroundColor: 0xDD334455,
-			text: '   履 历',
-			font: {
-				font: '微软雅黑',
-				size: 25,
-				weight: 'SemiBold'
-			}
+			text: '   履 历'
 		}),
 
 		backlogList: storyScreen.createComponent({
@@ -691,6 +686,7 @@ if (!storyScreen) {
 		},
 
 		// 某人说某话
+		tempI: 0,
 		say: function (e, obj) {
 			if (obj instanceof String) {
 				obj = {
@@ -716,28 +712,43 @@ if (!storyScreen) {
 
 			// 添加到履历            
 			var newLog = storyScreen.createComponent({
+				id: '履历' + storyObj.tempI,
 				width: 1200,
 				height: 100,
 				backgroundColor: 0x00FFFFFF
 			});
 			var logTitle = storyScreen.createComponent({
+				id: '履历T' + storyObj.tempI,
 				type: 'textBox',
 				width: 140,
 				height: 90,
 				x: 10,
 				y: 5,
 				backgroundColor: 0x00FFFFFF,
-				text: obj.role || ''
+				text: obj.role || '',
+				font: {
+					font: '微软雅黑',
+					size: 25,
+					weight: 'SemiBold'
+				}
 			});
 			var logContent = storyScreen.createComponent({
+				id: '履历C' + storyObj.tempI,
 				type: 'textBox',
 				width: 1000,
 				height: 90,
 				x: 160,
 				y: 5,
 				text: obj.content || '',
-				autoHeight: true
+				autoHeight: true,
+				font: {
+					font: '微软雅黑',
+					size: 25,
+					weight: 'SemiBold'
+				}
 			});
+			
+			storyObj.tempI++;
 			
 			newLog.appendChild(logTitle);
 			newLog.appendChild(logContent);
