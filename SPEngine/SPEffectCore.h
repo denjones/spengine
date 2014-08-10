@@ -18,6 +18,7 @@ namespace SPEngine
 
 		ID3DXEffect* GetEffect();
 
+		SPString GetName();
 		void Load(SPString path);
 		
 	private:

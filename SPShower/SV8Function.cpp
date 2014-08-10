@@ -64,8 +64,17 @@ SUIEffectPtr SV8Function::GetEffectFromObj( Handle<Object> argObj, SUIEffectPtr 
 		}
 		else if (name == L"texture")
 		{
-			SPString texName = SPV8ScriptEngine::StringToSPString(val->ToString());
-			effect->SetEffectTexture(SPTextureManager::GetSingleton()->GetTexture(texName));
+			SPTexturePtr tex;
+			if(val->IsString())
+			{
+				SPString texName = SPV8ScriptEngine::StringToSPString(val->ToString());
+				tex = SPTextureManager::GetSingleton()->GetTexture(texName);
+			}
+			else if(val->IsObject())
+			{
+				tex = SV8Function::GetTextureFromObj(val->ToObject());
+			}
+			effect->SetEffectTexture(tex);
 		}
 		else if (name == L"time" && val->IsNumber())
 		{
@@ -273,6 +282,58 @@ Handle<Value> SV8Function::GetObjFromTexture( SPTexturePtr texture )
 		return texObj;
 	}
 	return Undefined();
+}
+
+Handle<Value> SV8Function::GetObjFromEffect( SUIEffectPtr effect )
+{
+	Handle<Object> effectObj = Object::New();
+	SPString effectType = effect->GetCore()->GetName();
+	Handle<Value> texObj = GetObjFromTexture(effect->GetEffectTexture());
+	float time = effect->GetTime();
+	bool canSkip = effect->CanSkip();
+	SUITransition::TransitionType type = effect->GetType();
+	SPString replay;
+	switch(type)
+	{
+	case SUITransition::SlowIn:
+		replay = L"SlowIn";
+		break;
+	case SUITransition::SlowOut:
+		replay = L"SlowOut";
+		break;
+	case SUITransition::SlowInOut:
+		replay = L"SlowInOut";
+		break;
+	case SUITransition::FastInOut:
+		replay = L"FastInOut";
+		break;
+	default:
+		replay = L"Normal";
+	}
+
+	effectObj->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(effectType));
+	effectObj->Set(SPV8ScriptEngine::SPStringToString(L"texture"), texObj);
+	effectObj->Set(SPV8ScriptEngine::SPStringToString(L"time"), Number::New(time));
+	effectObj->Set(SPV8ScriptEngine::SPStringToString(L"canSkip"), Boolean::New(canSkip));
+	effectObj->Set(SPV8ScriptEngine::SPStringToString(L"replay"), SPV8ScriptEngine::SPStringToString(replay));
+	
+	SPEffect::ValueMap values = effect->GetValues();
+	
+	SPStringMapIterator<SPEffect::ValuePairPtr> iter(&values);
+
+	for(iter.First(); !iter.IsDone(); iter.Next())
+	{
+		SPString name = SPStringHelper::ToWString(iter.CurrentIndex());
+		SPEffect::ValuePairPtr valuePair = iter.CurrentItem();
+		if(valuePair->length == sizeof(float))
+		{
+			float value = *(float*)(valuePair->pData);
+			effectObj->Set(SPV8ScriptEngine::SPStringToString(name), Number::New(value));
+		}
+		
+	}
+
+	return effectObj;
 }
 
 

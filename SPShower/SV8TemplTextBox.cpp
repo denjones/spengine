@@ -567,7 +567,26 @@ void SV8TemplTextBox::AddText( const FunctionCallbackInfo<Value>& args )
 
 void SV8TemplTextBox::TextEffectFrontGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
-	// Nothing
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUITextBox* textBox = (SUITextBox*)field->Value();
+
+	SUIEffectPtr effect = textBox->GetDefaultFrontEffect();
+
+	if(!effect)
+	{
+		info.GetReturnValue().Set(Undefined());
+	}
+	else
+	{
+		info.GetReturnValue().Set(SV8Function::GetObjFromEffect(effect));
+	}
 }
 
 void SV8TemplTextBox::TextEffectFrontSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -608,7 +627,26 @@ void SV8TemplTextBox::TextEffectFrontSetter( Local<String> property, Local<Value
 
 void SV8TemplTextBox::TextEffectBackGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
-	// Nothing
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	HandleScope handleScope(isolate);
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUITextBox* textBox = (SUITextBox*)field->Value();
+
+	SUIEffectPtr effect = textBox->GetDefaultBackEffect();
+
+	if(!effect)
+	{
+		info.GetReturnValue().Set(Undefined());
+	}
+	else
+	{
+		info.GetReturnValue().Set(SV8Function::GetObjFromEffect(effect));
+	}
 }
 
 void SV8TemplTextBox::TextEffectBackSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )

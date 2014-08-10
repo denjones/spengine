@@ -31,10 +31,22 @@ void SUIEffect::Update( float timeDelta )
 void SUIEffect::SetEffectTexture( SPTexturePtr setTex )
 {
 	effectTexture = setTex;
+	SetTexture(1, effectTexture);
 }
 
 void SUIEffect::SetLevel( float setLevel )
 {
 	level = setLevel;
 	SetFloat("level", level);
+}
+
+float SUIEffect::GetLevel()
+{
+	return level;
+	SetFloat("level", level);
+}
+
+SPEngine::SPTexturePtr SUIEffect::GetEffectTexture()
+{
+	return effectTexture;
 }

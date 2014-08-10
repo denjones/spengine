@@ -129,4 +129,9 @@ namespace SPEngine
 		}
 	}
 
+	SPString SPEffectCore::GetName()
+	{
+		return name;
+	}
+
 }

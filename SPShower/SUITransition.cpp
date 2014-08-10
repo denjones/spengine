@@ -101,3 +101,13 @@ void SUITransition::SetCanSkip( bool setSkip )
 	canSkip = setSkip; 
 }
 
+float SUITransition::GetTime()
+{
+	return transitionOnTime;
+}
+
+SUITransition::TransitionType SUITransition::GetType()
+{
+	return type;
+}
+
