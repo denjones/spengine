@@ -522,6 +522,14 @@ SUIScreenPtr SUIManager::GetPersistentScreen( SUIScreen* screenPtr )
 	return persistentScreenMap[screenPtr];
 }
 
+void SUIManager::DeletePersistentScreen( SUIScreen* handle )
+{
+	if (persistentScreenMap.find(handle) != persistentScreenMap.end())
+	{
+		persistentScreenMap.erase(handle);
+	}
+}
+
 SUIManager::ScreenStackPtr SUIManager::GetDisplayStack()
 {
 	return dispalyStack;
@@ -657,7 +665,6 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 	if (SV8Function::HasProperty(L"display", obj))
 	{
 		dispalyStack->clear();
-		screenMap.Clear();
 	}
 
 	if (SV8Function::HasProperty(L"screens", obj))
@@ -672,7 +679,14 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 
 			SUIScreenPtr screen = new SUIScreen();
 			screen->LoadFromObj(Handle<Object>::Cast(value));
-			screenMap.Set(SPV8ScriptEngine::StringToSPString(key->ToString()), screen);
+			SPString id = SPV8ScriptEngine::StringToSPString(key->ToString());
+
+			if (screenMap.IsSet(id))
+			{
+				DeletePersistentScreen(screenMap[id].GetHandle());
+			}
+
+			screenMap.Set(id, screen);
 			SetPersistentScreen(screen);
 		}
 	}

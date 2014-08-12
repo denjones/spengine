@@ -526,6 +526,7 @@ Handle<Object> SV8ScriptManager::SaveAsObj()
 	}
 	windowObj->Delete(SPV8ScriptEngine::SPStringToString(L"width"));
 	windowObj->Delete(SPV8ScriptEngine::SPStringToString(L"height"));
+	windowObj->Delete(SPV8ScriptEngine::SPStringToString(L"fullScreen"));
 	result->Set(SPV8ScriptEngine::SPStringToString(L"window"), windowObj);
 
 	// Serialize Variable

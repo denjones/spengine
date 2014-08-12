@@ -25,6 +25,10 @@ SUIComponent::SUIComponent(SUIScreen* screen)
 
 SUIComponent::~SUIComponent(void)
 {
+	if (v8Obj)
+	{
+		v8Obj->ClearAndLeak();
+	}
 }
 
 int SUIComponent::GetWidth() 

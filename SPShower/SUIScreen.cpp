@@ -88,14 +88,11 @@ void SUIScreen::Initialize()
 
 void SUIScreen::Load()
 {
-	ComponentIterator iter(&componentMap);
-
-	for (iter.First(); !iter.IsDone(); iter.Next())
+	PersistentComponentMap::iterator iter = persistentComponentMap.begin();
+	while (iter!= persistentComponentMap.end())
 	{
-		if (iter.CurrentItem())
-		{
-			iter.CurrentItem()->Load();
-		}		
+		iter->second->Load();
+		iter++;
 	}
 }
 
@@ -103,27 +100,21 @@ void SUIScreen::Unload()
 {
 	screenTexture = NULL;
 
-	ComponentIterator iter(&componentMap);
-
-	for (iter.First(); !iter.IsDone(); iter.Next())
+	PersistentComponentMap::iterator iter = persistentComponentMap.begin();
+	while (iter!= persistentComponentMap.end())
 	{
-		if (iter.CurrentItem())
-		{
-			iter.CurrentItem()->Unload();
-		}		
+		iter->second->Unload();
+		iter++;
 	}
 }
 
 void SUIScreen::Reload()
 {
-	ComponentIterator iter(&componentMap);
-
-	for (iter.First(); !iter.IsDone(); iter.Next())
+	PersistentComponentMap::iterator iter = persistentComponentMap.begin();
+	while (iter!= persistentComponentMap.end())
 	{
-		if (iter.CurrentItem())
-		{
-			iter.CurrentItem()->Reload();
-		}		
+		iter->second->Reload();
+		iter++;
 	}
 }
 
@@ -281,170 +272,14 @@ void SUIScreen::HandleEvent( SUIEventPtr e )
 
 SPString SUIScreen::SaveAsString()
 {
-	SPString result = L"<SUIScreen>";
-
-	result += L"<Name>";
-	result += name;
-	result += L"</Name>";
-
-	result += L"<ComponentMap>";
-
-	ComponentIterator iter(&componentMap);
-
-	for (iter.First(); !iter.IsDone(); iter.Next())
-	{
-		if (iter.CurrentItem())
-		{
-			result += iter.CurrentItem()->SaveAsString();
-		}
-	}
-
-	result += L"</ComponentMap>";
-
-	if (topComponent)
-	{
-		result += L"<TopComponentName>";
-		result += topComponent->GetName();
-		result += L"</TopComponentName>";
-	}
-
-	if (currentComponent)
-	{
-		result += L"<CurrentComponentName>";
-		result += currentComponent->GetName();
-		result += L"</CurrentComponentName>";
-	}
-
-	if (currentTextBox)
-	{
-		result += L"<CurrentTextBoxName>";
-		result += currentTextBox->GetName();
-		result += L"</CurrentTextBoxName>";
-	}
-
-	if (currentPictureBox)
-	{
-		result += L"<CurrentPictureBoxName>";
-		result += currentPictureBox->GetName();
-		result += L"</CurrentPictureBoxName>";
-	}
-
-	result += L"</SUIScreen>";
+	SPString result = L"<SUIScreen></SUIScreen>";
 
 	return result;
 }
 
 void SUIScreen::LoadFromString( SPString stringStream )
 {
-	//SPString nameString = SPStringHelper::XMLExcludeFrom(stringStream, L"Name");
-	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"Name");
-	//SetName(nameString);
 
-	//SPString componentsString = SPStringHelper::XMLExcludeFrom(stringStream, L"ComponentMap");
-	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"ComponentMap");
-	//SPString componentsStringCopy = componentsString;
-	//while(componentsString.size() > 0)
-	//{		
-	//	if (componentsString.find(L"<SUICC>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUICC");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUICC");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFComponent().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUIL>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIL");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIL");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFList().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUIPB>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIPB");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIPB");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFPictureBox().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUITB>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUITB");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUITB");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFTextBox().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUIDB>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIDB");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIDB");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFDialogBox().Function(properties, false);
-	//	}
-	//}
-
-	//componentsString = componentsStringCopy;
-	//while(componentsString.size() > 0)
-	//{		
-	//	if (componentsString.find(L"<SUICC>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUICC");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUICC");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFComponent().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUIL>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIL");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIL");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFList().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUIPB>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIPB");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIPB");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFPictureBox().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUITB>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUITB");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUITB");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFTextBox().Function(properties, false);
-	//	}
-
-	//	if (componentsString.find(L"<SUIDB>") == 0)
-	//	{
-	//		SPString componentString = SPStringHelper::XMLExcludeFrom(componentsString, L"SUIDB");
-	//		componentsString = SPStringHelper::XMLRemoveFirst(componentsString, L"SUIDB");
-	//		VariableMap properties = SScriptHelper::StringToVariables(componentString);
-	//		SSFDialogBox().Function(properties, false);
-	//	}
-	//}
-
-	//SPString topNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"TopComponentName");
-	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"TopComponentName");
-	//topComponent = GetComponent(topNameString);
-
-	//SPString currentNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentComponentName");
-	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"TopComponentName");
-	//currentComponent = GetComponent(currentNameString);
-
-	//SPString currentTextBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentTextBoxName");
-	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentTextBoxName");
-	//currentTextBox = GetComponent(currentTextBoxNameString);
-
-	//SPString currentPictureBoxNameString = SPStringHelper::XMLExcludeFrom(stringStream, L"CurrentPictureBoxName");
-	//stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"CurrentPictureBoxName");
-	//currentPictureBox = GetComponent(currentPictureBoxNameString);
 }
 
 void SUIScreen::SetPopUp( bool setPopUp )
@@ -476,16 +311,17 @@ void SUIScreen::Clear()
 	// Clear the circle references.
 	//
 
-	ComponentIterator iter(&componentMap);
+	PersistentComponentMap::iterator iter = persistentComponentMap.begin();
 
-	for (iter.First(); !iter.IsDone(); iter.Next())
+	// Clear Cache
+
+	while (iter!= persistentComponentMap.end())
 	{
-		if (iter.CurrentItem())
-		{
-			iter.CurrentItem()->SetFather(NULL);
-		}
+		iter->second->SetFather(NULL);
+		iter++;
 	}
 
+	persistentComponentMap.clear();
 	componentMap.Clear();
 
 	topComponent = NULL;
@@ -536,6 +372,14 @@ SUIComponentPtr SUIScreen::GetPersistentComponent( SUIComponent* component )
 	}
 	
 	return NULL;
+}
+
+void SUIScreen::DeletePersistentComponent( SUIComponent* component )
+{
+	if (persistentComponentMap.find(component) != persistentComponentMap.end())
+	{
+		persistentComponentMap.erase(component);
+	}
 }
 
 void SUIScreen::Focus()

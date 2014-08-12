@@ -49,6 +49,7 @@ public:
 
 	void SetPersistentScreen(SUIScreenPtr screen);
 	SUIScreenPtr GetPersistentScreen(SUIScreen* screenPtr);
+	void DeletePersistentScreen(SUIScreen* handle);
 
 	SUIScreenPtr GetScreen(SPString name);
 	void AddScreen(SUIScreenPtr newComponent);
