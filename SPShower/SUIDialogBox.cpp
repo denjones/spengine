@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "SUIDialogBox.h"
 #include "SV8ScriptManager.h"
+#include "SV8Function.h"
 
 #pragma warning(disable:4244)
 #pragma warning(disable:4129)
@@ -469,5 +470,48 @@ Handle<Object> SUIDialogBox::SaveAsObj()
 {
 	Handle<Object> result = SUITextBox::SaveAsObj();
 	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"dialogBox"));
+	result->Set(SPV8ScriptEngine::SPStringToString(L"isNextLine"), Boolean::New(isHasTextToAdd));
+	result->Set(SPV8ScriptEngine::SPStringToString(L"isNextPage"), Boolean::New(isHasTextToClear));
 	return result;
+}
+
+SPEngine::SPTexturePtr SUIDialogBox::GetNextLineTex()
+{
+	return nextLineTex;
+}
+
+SPEngine::SPTexturePtr SUIDialogBox::GetNextPageTex()
+{
+	return nextPageTex;
+}
+
+void SUIDialogBox::LoadFromObj( Handle<Object> obj )
+{
+	bool markNextLine = false;
+	bool markNextPage = false;
+
+	if (SV8Function::HasProperty(L"isNextLine", obj))
+	{
+		markNextLine = SV8Function::GetProperty(L"isNextLine", obj)->BooleanValue();
+		obj->Delete(SPV8ScriptEngine::SPStringToString(L"isNextLine"));
+
+	}
+
+	if (SV8Function::HasProperty(L"isNextPage", obj))
+	{
+		markNextPage = SV8Function::GetProperty(L"isNextPage", obj)->BooleanValue();
+		obj->Delete(SPV8ScriptEngine::SPStringToString(L"isNextPage"));
+	}
+
+	SUITextBox::LoadFromObj(obj);
+
+	if (markNextLine)
+	{
+		MarkTextToAdd();
+	}
+
+	if (markNextPage)
+	{
+		MarkTextToClear();
+	}
 }

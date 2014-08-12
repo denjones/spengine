@@ -687,7 +687,6 @@ if (!storyScreen) {
 		},
 
 		// 某人说某话
-		tempI: 0,
 		say: function (e, obj) {
 			if (obj instanceof String) {
 				obj = {
@@ -713,13 +712,11 @@ if (!storyScreen) {
 
 			// 添加到履历            
 			var newLog = storyScreen.createComponent({
-				id: '履历L',// + storyObj.tempI,
 				width: 1200,
 				height: 100,
 				backgroundColor: 0x00FFFFFF
 			});
 			var logTitle = storyScreen.createComponent({
-				id: '履历T',// + storyObj.tempI,
 				type: 'textBox',
 				width: 140,
 				height: 90,
@@ -734,7 +731,6 @@ if (!storyScreen) {
 				}
 			});
 			var logContent = storyScreen.createComponent({
-				id: '履历C',// + storyObj.tempI,
 				type: 'textBox',
 				width: 1000,
 				height: 90,
