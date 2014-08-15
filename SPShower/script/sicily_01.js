@@ -2,12 +2,10 @@
  * 剧本01
  */
 
-$tag('序2');
-musicTrack.stop();
+$tag('序1');
 
 $(function(e){
-	musicTrack.src = 'data/sounds/bgm12.ogg';
-	musicTrack.play();
+	storyObj.switchBGM('data/sounds/bgm12.ogg');
 	storyObj.changeBackground({target: 'data/images/bg_black.png', type: 'Mask', texture: 'mask/mask_040.png', time: 0, quality: 3, control: 'play'});
 	storyObj.say(e, {role: '', content: '最初的相遇——\n金色。'});
 });
@@ -219,4 +217,13 @@ $(function(e){
 
 $(function(e){
 	storyObj.maskBegin({time: 3});
+});
+$(function(e){
+	waitTime(3000, e);
+});
+
+
+$(function(e){
+	musicTrack.stop();
+	ss.goto({file: 'script/sicily_02.js'});
 });

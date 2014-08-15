@@ -120,7 +120,7 @@ var waitTimeOrClick = function (timeMs, e) {
 $(function (e) {
 	ss.include('script/sicily_init.js');
 	storyScreen.focus();
-    ss.goto({ file: 'script/sicily_01.js' });
+    ss.goto({ file: 'script/sicily_02.js', tag: '序2-2'});
 });
 
 //PI = 3.1415926;

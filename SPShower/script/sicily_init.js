@@ -104,42 +104,44 @@ if (!storyScreen) {
 
 		roleFront1: storyScreen.createComponent({
 			id: '立绘前1',
-			width: 1280,
+			width: 720,
 			height: 720,
 			depth: 2
 		}),
 
 		roleBack1: storyScreen.createComponent({
 			id: '立绘后1',
-			width: 1280,
+			width: 720,
 			height: 720,
 			depth: 1
 		}),
 
 		roleFront2: storyScreen.createComponent({
 			id: '立绘前2',
-			width: 1280,
+			width: 720,
 			height: 720,
+			x: 300,
 			depth: 2
 		}),
 
 		roleBack2: storyScreen.createComponent({
 			id: '立绘后2',
-			width: 1280,
+			width: 720,
 			height: 720,
+			x: 300,
 			depth: 1
 		}),
 
 		roleFront3: storyScreen.createComponent({
 			id: '立绘前3',
-			width: 1280,
+			width: 720,
 			height: 720,
 			depth: 2
 		}),
 
 		roleBack3: storyScreen.createComponent({
 			id: '立绘后3',
-			width: 1280,
+			width: 720,
 			height: 720,
 			depth: 1
 		}),
@@ -640,8 +642,13 @@ if (!storyScreen) {
 
 		/****************************** 组件 End ******************************/
 		
-		/****************************** 方法 Begin ******************************/
-		// 初始化父子关系
+		
+		
+		/****************************** 功能方法 Begin ******************************/
+		
+		/**
+		 * 初始化父子关系
+		 */ 
 		init: function () {
 			storyScreen.root.appendChild(storyObj.backgroundLayer);
 			storyScreen.root.appendChild(storyObj.roleLayer);
@@ -686,7 +693,9 @@ if (!storyScreen) {
 			storyObj.backlogLayer.appendChild(storyObj.backlogBackground);
 		},
 
-		// 某人说某话
+		/** 
+		 * 某人说某话
+		 */
 		say: function (e, obj) {
 			if (obj instanceof String) {
 				obj = {
@@ -745,15 +754,32 @@ if (!storyScreen) {
 				}
 			});
 			
-			storyObj.tempI++;
-			
 			newLog.appendChild(logTitle);
 			newLog.appendChild(logContent);
 			newLog.height = Math.max(logContent.height + 20, 40);
 			storyObj.backlogList.appendChild(newLog);
 		},
+		
+		/**
+		 * 播放音效
+		 */
+		playSound: function(src){
+			soundTrack.src = src;
+			soundTrack.play();
+		},
+		
+		/**
+		 * 切换音乐
+		 */
+		switchBGM: function(src){
+			musicTrack.stop();
+			musicTrack.src = src;
+			musicTrack.play();
+		},
 
-		// 全屏遮挡开始
+		/**
+		 * 全屏遮挡开始
+		 */ 
 		maskBegin: function (obj) {
 			var time = obj && obj.time ? obj.time : 0;
 			storyObj.maskLayer.opacity = 0;
@@ -765,7 +791,9 @@ if (!storyScreen) {
 			});
 		},
 
-		// 全屏遮挡结束
+		/**
+		 * 全屏遮挡结束
+		 */ 
 		maskEnd: function (obj) {
 			var time = obj && obj.time ? obj.time : 0;
 			storyObj.maskLayer.addAnimation({
@@ -777,7 +805,9 @@ if (!storyScreen) {
 			}, time);
 		},
 
-		// 显示履历
+		/**
+		 * 显示履历
+		 */ 
 		showBackLog: function () {
 			storyObj.backlogLayer.opacity = 0;
 			storyObj.backlogLayer.display = true;
@@ -788,7 +818,9 @@ if (!storyScreen) {
 			});
 		},
 
-		// 隐藏履历
+		/**
+		 * 隐藏履历
+		 */ 
 		hideBackLog: function () {
 			storyObj.backlogLayer.addAnimation({
 				time: 0.2,
@@ -800,7 +832,9 @@ if (!storyScreen) {
 			}, 200);
 		},
 		
-		// 显示对话框
+		/**
+		 * 显示对话框
+		 */ 
 		showDialog: function(){
 			storyObj.dialogLayer.opacity = 0;
 			storyObj.dialogLayer.display = true;
@@ -811,7 +845,9 @@ if (!storyScreen) {
 			});
 		},
 		
-		// 隐藏对话框
+		/**
+		 * 隐藏对话框
+		 */ 
 		hideDialog: function(){
 			storyObj.dialogLayer.addAnimation({
 				time: 0.2,
@@ -823,10 +859,14 @@ if (!storyScreen) {
 			}, 200);
 		},
 
-		// 换背景延时函数句柄
+		/**
+		 * 换背景延时函数句柄
+		 */ 
 		backgroundHandle: null,
 
-		// 换背景
+		/**
+		 * 换背景
+		 */ 
 		changeBackground: function (obj) {
 			if (!obj.target) {
 				return;
@@ -841,7 +881,9 @@ if (!storyScreen) {
 			}, obj.time * 1000);
 		},
 
-		// 马上换背景
+		/**
+		 * 马上换背景
+		 */ 
 		skipBackground: function () {
 			if (storyObj.backgroundHandle) {
 				clearTimeout(storyObj.backgroundHandle);
@@ -850,8 +892,34 @@ if (!storyScreen) {
 				storyObj.backgroundFront.clearEffect();
 			}
 		},
+		
+		/**
+		 * 换立绘延时函数句柄
+		 */
+		standHandle: null,
+		
+		/**
+		 * 换立绘
+		 */
+		switchStand: function(e, opt) {
+			var time = opt.time || 0;
+			var id = opt.id || 1;
+			var image = opt.image || null;
+			storyObj['roleFront' + id].opacity = 1;
+			storyObj['roleBack' + id].opacity = 0;
+			storyObj['roleBack' + id].backgroundImage = image;
+			storyObj['roleBack' + id].addAnimation({opacity: 1, time: time, control: 'play'});
+			storyObj['roleFront' + id].addAnimation({opacity: 0, time: time, control: 'play'});
+			storyObj.standHandle = setTimeout(function () {
+				storyObj['roleFront' + id].backgroundImage = image;
+				storyObj['roleFront' + id].opacity = 1;
+				storyObj['roleBack' + id].opacity = 0;
+			}, time * 1000);
+		},
 
-		// 抖
+		/**
+		 * 抖
+		 */ 
 		shake: function (com) {
 			com.addAnimation({deltaY: -3});
 			com.addAnimation({deltaY: 3});
@@ -867,7 +935,9 @@ if (!storyScreen) {
 			com.addAnimation({deltaY: 7});
 		},
 
-		// 等待对话框（队列函数）
+		/**
+		 * 等待对话框（队列函数）
+		 */ 
 		waitDialog: function (e) {
 			if (!storyObj.dialogText.isAllDisplayed()) {
 				e.repeat = true;
@@ -875,29 +945,39 @@ if (!storyScreen) {
 			}
 		},
 
-		// 开启跳过
+		/**
+		 * 开启跳过
+		 */ 
 		skipOn: function () {
 			storyObj.isSkipping = true;
 			storyObj.isAuto = false;
 		},
 
-		// 关闭跳过
+		/**
+		 * 关闭跳过
+		 */ 
 		skipOff: function () {
 			storyObj.isSkipping = false;
 		},
 
-		// 开启自动模式
+		/**
+		 * 开启自动模式
+		 */ 
 		autoOn: function () {
 			storyObj.isAuto = true;
 			storyObj.isSkipping = false;
 		},
 
-		// 关闭自动模式
+		/**
+		 * 关闭自动模式
+		 */ 
 		autoOff: function () {
 			storyObj.isAuto = false;
 		},
 
-		// 等待对话框和之后的点击（队列函数）
+		/**
+		 * 等待对话框和之后的点击（队列函数）
+		 */ 
 		waitDialogAndClick: function (e) {
 			// 跳过全部及跳过已读
 			if (storyObj.skipOn) {
@@ -913,7 +993,9 @@ if (!storyScreen) {
 			waitClick(e);
 		},
 		
-		// 用于读取屏幕数据后重置组件对象
+		/**
+		 * 用于读取屏幕数据后重置组件对象
+		 */ 
 		refresh: function(){
 			storyScreen = ss.getScreenById('Sicily剧情');
 			
@@ -959,7 +1041,8 @@ if (!storyScreen) {
 			storyObj.videoLayer = storyScreen.getComponentById('视频');
 			storyObj.maskLayer = storyScreen.getComponentById('全屏遮挡');
 		}
-		/****************************** 方法 End ******************************/
+		
+		/****************************** 功能方法 End ******************************/
 	}
 
 	storyObj.init();
