@@ -759,6 +759,9 @@ $(function(e){	storyObj.waitDialogAndClick(e); });
 $(function(e){	storyObj.say(e, {role: '菜比浩 ', content: '好吧。'}); });
 $(function(e){	storyObj.waitDialogAndClick(e); });
 
+/////////////////////////////////////////////////////////////////////////////////////////
+
+$tag('序2-4');
 $(function(e){	storyObj.changeBackground({target: 'data/images/bg_bin_01.png', type: 'Mask', texture: 'mask/mask_036.png', time: 1, quality: 3, control: 'play'}); });
 
 $(function(e){	storyObj.say(e, {role: '', content: '我用记事本打开了其中一个数据包。思维马上被一堆二进制数字占据。'}); });
@@ -845,7 +848,7 @@ $(function(e){	storyObj.changeBackground({target: 'data/images/bg_dormitory_01.p
 $(function(e){
 	// 光点粒子系统
 	var ps = ss.createParticleSystem({
-		id: 'snow',
+		id: 'hikari',
 		tex: 'data/images/snow.png',
 		bornXMin: 0,
 		bornXMax: 1280,
@@ -877,10 +880,13 @@ $(function(e){
 		rotateMin: 0,
 		rotateRateMin: 0,
 		rotateRateMax: 0,
-		control: 'Play'
+		backgroundColor: 0x00ffffff
 	});
 	
-	storyObj.backgroundFront.backgroundImage = { particleSystem: ps };	
+	ps.play();
+	
+	storyObj.backgroundEffect.backgroundColor = 0x55000000;
+	storyObj.backgroundEffect.backgroundImage = { particleSystem: ps };	
 });
 
 $(function(e){	storyObj.switchBGM('data/sounds/bgm08.ogg'); });
@@ -931,19 +937,40 @@ $(function(e){	waitTime(500, e); });
 $(function(e){	storyObj.maskBegin({time: 3}); });
 $(function(e){	waitTime(3000, e); });
 
-//@particleSystem{ name:"snow" control:"Stop"}
-//@pictureBox{ name:"光点" display:"hidden"}
+$(function(e){
+	// 停止光点粒子动画
+	ss.getParticleSystemById('hikari').stop(); 
+	storyObj.backgroundEffect.backgroundImage = null;
+	storyObj.backgroundEffect.backgroundColor = 0x00000000;
+	// 停止音乐
+	musicTrack.stop();
+	// 播放OP视频
+	storyObj.videoLayer.display = true;
+	var op = ss.createVideo({
+		id: 'op',
+		src: 'data/videos/opening.mp4'
+	});
+	storyObj.videoLayer.backgroundColor = 0xffffffff;
+	storyObj.videoLayer.backgroundImage = {video: op};
+	op.play();
+});
+$(function(e){	waitTime(5000, e); });
+$(function(e){	waitTimeOrClick(150000, e); });
 
-$(function(e){	musicTrack.stop(); });
+$(function(e){
+	ss.getVideoById('op').stop();
+	storyObj.videoLayer.display = false;
+	storyObj.maskEnd({time: 3}); 
+});
+$(function(e){	waitTime(3000, e); });
 
-//@video{name:"op" src:"data/videos/opening.mpg" control:"Play"}
-//@picture{name:"video" video:"op"}
-//@pictureBox{name:"视频" width:1280 height:720 picture:"video" fill_mode:"Fill" transparency:1  display:"unhidden"}
-//@include{ file:"script/sicily_auto_off.ks" }
-//@include{ file:"script/sicily_skip_off.ks" }
-//@include{ file:"script/sicily_dialog_off.ks" }
-
-$(function(e){	storyObj.maskEnd({time: 3}); });
+$(function(e){	storyObj.maskBegin({time: 3}); });
+$(function(e){	waitTime(3000, e); });
+$(function(e){	
+	// 回主菜单
+	mainMenuScreen.focus(); 
+	mainMenu.show();
+});
 
 //@waitTime{time:10}
 //@wait{time:144 click:true}

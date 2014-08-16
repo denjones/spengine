@@ -21,7 +21,7 @@ class SUIManager :
 
 	ScreenMap screenMap;
 	PersistentScreenMap persistentScreenMap;
-	ScreenStackPtr dispalyStack;
+	ScreenStackPtr displayStack;
 	EventQueuePtr eventQueue;
 	float elapsedMouseDownTime[3];
 	int elapsedMouseDownMovementX[3];

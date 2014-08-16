@@ -1911,28 +1911,31 @@ void SUIComponent::HandleMouseOver( SUIEventPtr e )
 
 	// For Children
 
-	e->positionX -= properties.rectangle.X;
-	e->positionY -= properties.rectangle.Y;
-
-	Children::reverse_iterator iter = children.rbegin();
-
-	while(iter != children.rend())
+	if (inRect)
 	{
-		if (*iter)
-		{
-			(*iter)->HandleMouseOver(e);
-			if (!e->returnValue)
-			{
-				e->positionX += properties.rectangle.X;
-				e->positionY += properties.rectangle.Y;
-				return;
-			}
-		}
-		iter++;
-	}
+		e->positionX -= properties.rectangle.X;
+		e->positionY -= properties.rectangle.Y;
 
-	e->positionX += properties.rectangle.X;
-	e->positionY += properties.rectangle.Y;
+		Children::reverse_iterator iter = children.rbegin();
+
+		while(iter != children.rend())
+		{
+			if (*iter)
+			{
+				(*iter)->HandleMouseOver(e);
+				if (!e->returnValue)
+				{
+					e->positionX += properties.rectangle.X;
+					e->positionY += properties.rectangle.Y;
+					return;
+				}
+			}
+			iter++;
+		}
+
+		e->positionX += properties.rectangle.X;
+		e->positionY += properties.rectangle.Y;
+	}
 
 	// On Event
 
@@ -1972,28 +1975,31 @@ void SUIComponent::HandleMouseIn( SUIEventPtr e )
 
 	// For Children
 
-	e->positionX -= properties.rectangle.X;
-	e->positionY -= properties.rectangle.Y;
-
-	Children::reverse_iterator iter = children.rbegin();
-
-	while(iter != children.rend())
+	if (inRect)
 	{
-		if (*iter)
-		{
-			(*iter)->HandleMouseIn(e);
-			if (!e->returnValue)
-			{
-				e->positionX += properties.rectangle.X;
-				e->positionY += properties.rectangle.Y;
-				return;
-			}
-		}
-		iter++;
-	}
+		e->positionX -= properties.rectangle.X;
+		e->positionY -= properties.rectangle.Y;
 
-	e->positionX += properties.rectangle.X;
-	e->positionY += properties.rectangle.Y;
+		Children::reverse_iterator iter = children.rbegin();
+
+		while(iter != children.rend())
+		{
+			if (*iter)
+			{
+				(*iter)->HandleMouseIn(e);
+				if (!e->returnValue)
+				{
+					e->positionX += properties.rectangle.X;
+					e->positionY += properties.rectangle.Y;
+					return;
+				}
+			}
+			iter++;
+		}
+
+		e->positionX += properties.rectangle.X;
+		e->positionY += properties.rectangle.Y;
+	}
 
 	// On Event
 

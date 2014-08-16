@@ -230,7 +230,7 @@ SPEngine::SPTexturePtr SV8Function::GetTextureFromObj( Handle<Object> argObj )
 
 			if (psObj->InternalFieldCount() != 1)
 			{
-				psObj = SUIVideoManager::GetSingleton()->CreateVideo(psObj);
+				psObj = SUIParticleSystemManager::GetSingleton()->CreateParticleSystem(psObj);
 			}
 
 			Handle<External> field = Handle<External>::Cast(psObj->GetInternalField(0));

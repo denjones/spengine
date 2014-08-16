@@ -92,6 +92,13 @@ if (!storyScreen) {
 			depth: 2,
 			backgroundImage: 'data/images/bg_black.png'
 		}),
+		
+		backgroundEffect: storyScreen.createComponent({
+			id: '背景特效',
+			width: 1280,
+			height: 720,
+			depth: 3
+		}),
 		/********************* 背景层 End *********************/
 
 		/********************* 角色层 Begin *********************/
@@ -174,6 +181,7 @@ if (!storyScreen) {
 			x: 80,
 			y: 40,
 			depth: 10,
+			speed: ss.sysVar.textSpeed,
 			backgroundColor: 0x00FFFFFF,
 			font: {
 				size: 30,
@@ -364,7 +372,11 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 快进
+				if(storyObj.isSkipping){
+					storyObj.skipOff();
+				}else{
+					storyObj.skipOn();
+				}
 				return false;
 			}
 		}),
@@ -388,7 +400,11 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 播放声音
+				if(storyObj.isAuto){
+					storyObj.autoOff();
+				}else{
+					storyObj.autoOn();
+				}
 				return false;
 			}
 		}),
@@ -538,7 +554,14 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				// @TODO 播放声音
+				soundTrack.src = 'data/sounds/confirm.wav';
+				soundTrack.play();
+				storyObj.maskBegin();
+				setTimeout(function(){
+					mainMenuScreen.focus();
+					mainMenu.show();
+					//ss.goto({file:'script/main_menu.js'});
+				}, 1000);
 				return false;
 			}
 		}),
@@ -612,8 +635,12 @@ if (!storyScreen) {
 			id: '视频',
 			width: 1280,
 			height: 720,
-			depth: 70,
-			display: false
+			depth: 255,
+			display: false,
+			backgroundFillMode: 'fill',
+			onClick: function(e){
+				stopWaitingClick();
+			}
 		}),
 
 		maskLayer: storyScreen.createComponent({
@@ -661,6 +688,7 @@ if (!storyScreen) {
 
 			storyObj.backgroundLayer.appendChild(storyObj.backgroundFront);
 			storyObj.backgroundLayer.appendChild(storyObj.backgroundBack);
+			storyObj.backgroundLayer.appendChild(storyObj.backgroundEffect);
 
 			storyObj.roleLayer.appendChild(storyObj.roleFront1);
 			storyObj.roleLayer.appendChild(storyObj.roleBack1);
@@ -802,7 +830,7 @@ if (!storyScreen) {
 			});
 			setTimeout(function () {
 				storyObj.maskLayer.display = false;
-			}, time);
+			}, time * 1000);
 		},
 
 		/**
@@ -811,6 +839,7 @@ if (!storyScreen) {
 		showBackLog: function () {
 			storyObj.backlogLayer.opacity = 0;
 			storyObj.backlogLayer.display = true;
+			storyObj.backlogList.scrollPosition = 1;
 			storyObj.backlogLayer.addAnimation({
 				time: 0.2,
 				opacity: 1,
@@ -957,6 +986,8 @@ if (!storyScreen) {
 		skipOn: function () {
 			storyObj.isSkipping = true;
 			storyObj.isAuto = false;
+			storyObj.buttonAuto.backgroundImage = 'data/images/dialog_button_auto.png';
+			storyObj.buttonSkip.backgroundImage = 'data/images/dialog_button_skip_on.png';
 		},
 
 		/**
@@ -964,6 +995,7 @@ if (!storyScreen) {
 		 */ 
 		skipOff: function () {
 			storyObj.isSkipping = false;
+			storyObj.buttonSkip.backgroundImage = 'data/images/dialog_button_skip.png';
 		},
 
 		/**
@@ -972,6 +1004,8 @@ if (!storyScreen) {
 		autoOn: function () {
 			storyObj.isAuto = true;
 			storyObj.isSkipping = false;
+			storyObj.buttonAuto.backgroundImage = 'data/images/dialog_button_auto_on.png';
+			storyObj.buttonSkip.backgroundImage = 'data/images/dialog_button_skip.png';
 		},
 
 		/**
@@ -979,6 +1013,7 @@ if (!storyScreen) {
 		 */ 
 		autoOff: function () {
 			storyObj.isAuto = false;
+			storyObj.buttonAuto.backgroundImage = 'data/images/dialog_button_auto.png';
 		},
 
 		/**
@@ -987,7 +1022,7 @@ if (!storyScreen) {
 		waitDialogAndClick: function (e) {
 			// 跳过全部及跳过已读
 			if (storyObj.isSkipping) {
-				if (storyObj.isForceSkipping || ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
+				if (storyObj.isForceSkipping || ss.sysVar.skipMode == 1 || (ss.sysVar.skipMode == 0 && e.read)) {
 					storyObj.dialogText.skip();
 					return;
 				}
@@ -1008,6 +1043,7 @@ if (!storyScreen) {
 			storyObj.backgroundLayer = storyScreen.getComponentById('背景');
 			storyObj.backgroundFront = storyScreen.getComponentById('背景前');
 			storyObj.backgroundBack = storyScreen.getComponentById('背景后');
+			storyObj.backgroundEffect = storyScreen.getComponentById('背景特效');
 			
 			storyObj.roleLayer = storyScreen.getComponentById('立绘');
 			storyObj.roleFront1 = storyScreen.getComponentById('立绘前1');
@@ -1046,6 +1082,23 @@ if (!storyScreen) {
 			
 			storyObj.videoLayer = storyScreen.getComponentById('视频');
 			storyObj.maskLayer = storyScreen.getComponentById('全屏遮挡');
+		},
+		
+		/**
+		 * 重置背景图像等
+		 */
+		reset: function(){
+			storyObj.backgroundBack.backgroundImage = null;
+			storyObj.backgroundFront.backgroundImage = null;
+			storyObj.roleBack1.backgroundImage = null;
+			storyObj.roleFront1.backgroundImage = null;
+			storyObj.roleBack2.backgroundImage = null;
+			storyObj.roleFront2.backgroundImage = null;
+			storyObj.roleBack3.backgroundImage = null;
+			storyObj.roleFront3.backgroundImage = null;
+			storyObj.dialogText.text = '';
+			storyObj.dialogRoleText.text = '';
+			storyObj.backlogList.clear();
 		}
 		
 		/****************************** 功能方法 End ******************************/
@@ -1053,3 +1106,4 @@ if (!storyScreen) {
 
 	storyObj.init();
 }
+

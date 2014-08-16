@@ -15,7 +15,7 @@ SUIManager::SUIManager(void)
 	ZeroMemory(interceptKeyboardKeyEvent, 256 * sizeof(int));
 	maxClickTime = 0.300f;
 	maxDClickTime = 0.300f;
-	dispalyStack = new ScreenStack();
+	displayStack = new ScreenStack();
 	eventQueue = new EventQueue();
 	asyncEvent = new uv_async_t();
 }
@@ -98,8 +98,10 @@ void SUIManager::Update( float timeDelta )
 	bool isInputValid = true;
 	bool isVisible = true;
 
-	ScreenStackIterator screen = dispalyStack->rbegin();
-	while(screen != dispalyStack->rend())
+	displayLock.Lock();
+
+	ScreenStackIterator screen = displayStack->rbegin();
+	while(screen != displayStack->rend())
 	{
 		(*screen)->UpdateScreen(timeDelta, isInputValid, isVisible);
 
@@ -121,6 +123,8 @@ void SUIManager::Update( float timeDelta )
 		screen++;
 	}
 
+	displayLock.Unlock();
+
 	if (eventQueue->size() > 0)
 	{
 		uv_async_send((uv_async_t*)asyncEvent);
@@ -131,8 +135,8 @@ void SUIManager::Draw( float timeDelta )
 {
 	displayLock.Lock();
 
-	ScreenStack::iterator screen = dispalyStack->begin();
-	while(screen != dispalyStack->end())
+	ScreenStack::iterator screen = displayStack->begin();
+	while(screen != displayStack->end())
 	{
 		(*screen)->Draw(timeDelta);
 
@@ -160,9 +164,9 @@ void SUIManager::CreateScreen( SPString name, SUIScreenPtr newScreen )
 
 SUIScreenPtr SUIManager::GetCurrentScreen()
 {
-	if (dispalyStack->size() > 0)
+	if (displayStack->size() > 0)
 	{
-		return dispalyStack->back();
+		return displayStack->back();
 	}
 
 	return NULL;
@@ -181,33 +185,37 @@ void SUIManager::FocusScreen( SPString name )
 
 void SUIManager::FocusScreen( SUIScreenPtr screen )
 {
-	ScreenStack::iterator iter = find(dispalyStack->begin(), dispalyStack->end(), screen);
-	if (iter != dispalyStack->end())
+	displayLock.Lock();
+
+	ScreenStack::iterator iter = find(displayStack->begin(), displayStack->end(), screen);
+	if (iter != displayStack->end())
 	{
-		dispalyStack->erase(iter);
+		displayStack->erase(iter);
 	}
 
-	dispalyStack->push_back(screen);
+	displayStack->push_back(screen);
+
+	displayLock.Unlock();
 }
 
 void SUIManager::SwitchToScreen( SPString name , SUITransformationPtr trans)
 {	
-	if (dispalyStack->size() == 0 || !screenMap.IsSet(name))
+	if (displayStack->size() == 0 || !screenMap.IsSet(name))
 	{
 		return;
 	}
 
-	if (dispalyStack->back() == screenMap[name])
+	if (displayStack->back() == screenMap[name])
 	{
 		return;
 	}
 
-	SUIScreenPtr top = dispalyStack->back();
-	dispalyStack->pop_back();
+	SUIScreenPtr top = displayStack->back();
+	displayStack->pop_back();
 
 	FocusScreen(name);
 
-	dispalyStack->push_back(top);
+	displayStack->push_back(top);
 
 	top->SetTargetScreen(screenMap[name]);
 	top->SetTransformation(trans);
@@ -434,9 +442,9 @@ SPString SUIManager::SaveAsString()
 
 	result += L"<DisplayStack>";
 
-	ScreenStackIterator screenStackIter = dispalyStack->rbegin();
+	ScreenStackIterator screenStackIter = displayStack->rbegin();
 
-	while(screenStackIter != dispalyStack->rend())
+	while(screenStackIter != displayStack->rend())
 	{
 		result += L"<ScreenName>";
 
@@ -469,11 +477,11 @@ void SUIManager::LoadFromString( SPString stringStream )
 		SUIScreenPtr screen = new SUIScreen();		
 		screen->SetName(screenNameString);
 		AddScreen(screen);
-		dispalyStack->push_back(screen);
+		displayStack->push_back(screen);
 		screen->LoadFromString(screenString);		
 	}
 
-	dispalyStack->clear();
+	displayStack->clear();
 
 	SPString displayStackString = SPStringHelper::XMLExcludeFrom(stringStream, L"DisplayStack");
 	stringStream = SPStringHelper::XMLRemoveFirst(stringStream, L"DisplayStack");
@@ -483,7 +491,7 @@ void SUIManager::LoadFromString( SPString stringStream )
 		SPString screenNameString = SPStringHelper::XMLExcludeFrom(displayStackString, L"ScreenName");
 		displayStackString = SPStringHelper::XMLRemoveFirst(displayStackString, L"ScreenName");
 
-		dispalyStack->push_front(GetScreen(screenNameString));
+		displayStack->push_front(GetScreen(screenNameString));
 	}
 }
 
@@ -532,7 +540,7 @@ void SUIManager::DeletePersistentScreen( SUIScreen* handle )
 
 SUIManager::ScreenStackPtr SUIManager::GetDisplayStack()
 {
-	return dispalyStack;
+	return displayStack;
 }
 
 SUIManager::EventQueuePtr SUIManager::GetEventQueue()
@@ -559,8 +567,8 @@ void SUIManager::HandleAllEvent()
 {
 	LockEventQueue();
 
-	ScreenStackIterator screen = dispalyStack->rbegin();
-	while(screen != dispalyStack->rend())
+	ScreenStackIterator screen = displayStack->rbegin();
+	while(screen != displayStack->rend())
 	{
 		if ((*screen)->State() == TransitionOn ||
 			(*screen)->State() == Active)
@@ -593,7 +601,7 @@ Handle<Object> SUIManager::SaveAsObj()
 	resultObj->Set(SPV8ScriptEngine::SPStringToString(L"screens"), screenDict);
 
 	Handle<Array> displayStackArr = Array::New();
-	for (ScreenStackIterator displayIter = dispalyStack->rbegin(); displayIter != dispalyStack->rend(); displayIter++)
+	for (ScreenStackIterator displayIter = displayStack->rbegin(); displayIter != displayStack->rend(); displayIter++)
 	{
 		displayStackArr->Set(displayStackArr->Length(), SPV8ScriptEngine::SPStringToString((*displayIter)->GetName()));
 	}
@@ -618,7 +626,7 @@ Handle<Object> SUIManager::SaveScreenAsObj( SPString screensStr )
 		resultObj->Set(SPV8ScriptEngine::SPStringToString(L"screens"), screenDict);
 
 		Handle<Array> displayStackArr = Array::New();
-		for (ScreenStackIterator displayIter = dispalyStack->rbegin(); displayIter != dispalyStack->rend(); displayIter++)
+		for (ScreenStackIterator displayIter = displayStack->rbegin(); displayIter != displayStack->rend(); displayIter++)
 		{
 			displayStackArr->Set(displayStackArr->Length(), SPV8ScriptEngine::SPStringToString((*displayIter)->GetName()));
 		}
@@ -664,7 +672,7 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 
 	if (SV8Function::HasProperty(L"display", obj))
 	{
-		dispalyStack->clear();
+		displayStack->clear();
 	}
 
 	if (SV8Function::HasProperty(L"screens", obj))
@@ -699,11 +707,11 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 			SPString screenName = SPV8ScriptEngine::StringToSPString(display->Get(i)->ToString());
 			if (screenMap.IsSet(screenName))
 			{
-				dispalyStack->push_back(screenMap[screenName]);
+				displayStack->push_back(screenMap[screenName]);
 			}
 		}
 
-		dispalyStack->back()->Focus();
+		displayStack->back()->Focus();
 	}
 
 	displayLock.Unlock();
