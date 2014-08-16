@@ -46,7 +46,8 @@ SUIVideoManager::~SUIVideoManager(void)
 
 SPEngine::SPVideoTexturePtr SUIVideoManager::GetVideoTexture( SUIVideoHandle handle )
 {
-	return SPTextureManager::GetSingleton()->GetVideo(videoIdManager[handle]);
+	SPVideoTexturePtr tex = SPTextureManager::GetSingleton()->GetVideo(videoIdManager[handle]);
+	return tex;
 }
 
 Handle<Object> SUIVideoManager::GetVideo( SUIVideoHandle handle )
@@ -69,11 +70,13 @@ Handle<Object> SUIVideoManager::CreateVideo( Handle<Object> argObj )
 		id = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"id", argObj)->ToString());
 		video = SPVideoManager::GetSingleton()->GetVideo(id);
 
-		if (!video)
+		if (video)
 		{
-			SPVideoManager::GetSingleton()->CreateVideo(id);
-			video =  SPVideoManager::GetSingleton()->GetVideo(id);
+			SPTextureManager::GetSingleton()->ReleaseTexture(id);
 		}
+
+		SPVideoManager::GetSingleton()->CreateVideo(id);
+		video =  SPVideoManager::GetSingleton()->GetVideo(id);
 	}
 	else
 	{
