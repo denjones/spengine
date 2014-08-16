@@ -309,10 +309,10 @@ namespace SPEngine
 		}
 		else
 		{
-			float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth / 
-				SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
-			float yRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight / 
-				SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+			float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig()->windowWidth / 
+				SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth;
+			float yRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig()->windowHeight / 
+				SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 
 			//D3DXMatrixTransformation2D(&transformMatrix, 
 			//	NULL, 0, &D3DXVECTOR2(xRate, yRate), NULL, 0, NULL);
@@ -347,10 +347,10 @@ namespace SPEngine
 		}
 		else
 		{
-			float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth / 
-				SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
-			float yRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight / 
-				SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+			float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig()->windowWidth / 
+				SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth;
+			float yRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig()->windowHeight / 
+				SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 
 			D3DXMATRIX mulMatrix;
 			D3DXMatrixTransformation2D(&mulMatrix, 
@@ -398,10 +398,10 @@ namespace SPEngine
 		}
 		else
 		{
-			float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth / 
-				SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
-			float yRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight / 
-				SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+			float xRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig()->windowWidth / 
+				SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth;
+			float yRate = (float)SPConfigManager::GetSingleton()->GetCurrentConfig()->windowHeight / 
+				SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 
 			D3DXVECTOR2 realScalingCenter = D3DXVECTOR2(scalingCenter.x * xRate, scalingCenter.y * yRate);
 			D3DXVECTOR2 realScaling = D3DXVECTOR2(scaling.x * xRate, scaling.y * yRate);

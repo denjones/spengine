@@ -17,7 +17,7 @@ namespace SPEngine
 		//ReleaseDevice();
 	}
 
-	bool SPDevice::InitializeD3D( SPConfig config )
+	bool SPDevice::InitializeD3D( SPConfigPtr config )
 	{
 		SPLogHelper::WriteLog("[DirectX] Initializing D3D ...");
 
@@ -63,7 +63,7 @@ namespace SPEngine
 		return true;
 	}
 
-	bool SPDevice::CreateD3DDevice( SPConfig config )
+	bool SPDevice::CreateD3DDevice( SPConfigPtr config )
 	{
 		SPLogHelper::WriteLog("[DirectX] Creating D3D Device ...");
 
@@ -84,7 +84,7 @@ namespace SPEngine
 		}
 
 		// Set up the structure to create the D3DDevice.
-		D3DPRESENT_PARAMETERS d3dpp = config.ToD3DParameters();
+		D3DPRESENT_PARAMETERS d3dpp = config->ToD3DParameters();
 
 		HWND hWnd = SPWindow::GetSingleton()->GetHWnd();
 
@@ -92,7 +92,7 @@ namespace SPEngine
 
 		// Create the D3DDevice
 		HRESULT hr = d3dObject->CreateDevice(D3DADAPTER_DEFAULT,
-			(D3DDEVTYPE)config.deviceType, 
+			(D3DDEVTYPE)config->deviceType, 
 			hWnd, vp, &d3dpp, &d3dDevice);
 		
 		if (hr != S_OK)
@@ -105,14 +105,14 @@ namespace SPEngine
 		return true;
 	}
 
-	bool SPDevice::ResetDevice( SPConfig config )
+	bool SPDevice::ResetDevice( SPConfigPtr config )
 	{
 		//SPTextureManager::GetSingleton()->Unload();
 
 		// Try to reset.
 		if (d3dDevice)
 		{
-			if (D3D_OK == d3dDevice->Reset(&config.ToD3DParameters()))
+			if (D3D_OK == d3dDevice->Reset(&config->ToD3DParameters()))
 			{
 				return true;
 			}

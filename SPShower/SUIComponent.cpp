@@ -931,6 +931,7 @@ SPRectangle SUIComponent::BackgroundSrcRect()
 {
 	if (isAbsoluteRender)
 	{
+		modificationLock.Lock();
 		if (!_backgroudSrcRect)
 		{
 			SPRectangle rect = properties.rectangle;
@@ -947,7 +948,7 @@ SPRectangle SUIComponent::BackgroundSrcRect()
 
 			_backgroudSrcRect = new SPRectangle(rect);
 		}
-		
+		modificationLock.Unlock();
 		return *_backgroudSrcRect;
 	}
 

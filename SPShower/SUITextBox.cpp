@@ -367,7 +367,8 @@ void SUITextBox::NewLine()
 
 D3DXVECTOR2 SUITextBox::CurrentPosition()
 {
-	return D3DXVECTOR2(CurrentLine()->CurrentPosition().x, currentPosition.y);
+	D3DXVECTOR2 result = D3DXVECTOR2(CurrentLine()->CurrentPosition().x, currentPosition.y);
+	return result;
 }
 
 SUITextLinePtr SUITextBox::CurrentLine()

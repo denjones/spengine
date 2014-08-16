@@ -47,7 +47,7 @@ namespace SPEngine
 			return currentGame;
 		}
 
-		bool ApplyConfig(SPConfig config)
+		bool ApplyConfig(SPConfigPtr config)
 		{
 			return currentGame->ApplyConfig(config);
 		}

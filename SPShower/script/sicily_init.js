@@ -17,10 +17,10 @@ if (!storyScreen) {
 	// 初始化组件
 	storyObj = {
 		// 跳过模式
-		isSkipping: true,
+		isSkipping: false,
 		// 自动模式
 		isAuto: false,
-		// 强跳模式
+		// 强跳模式（ctrl）
 		isForceSkipping: false,
 
 		/****************************** 组件 Begin ******************************/
@@ -242,9 +242,9 @@ if (!storyScreen) {
 			textEffectBack: {
 				type: 'TextShadow',
 				texture: 'data/images/dialog_shadow.png',
-				level: 5,
+				level: 2,
 				quality: 4,
-				opacity: 0.9,
+				opacity: 0.5,
 				control: 'play'
 			}
 		}),
@@ -583,7 +583,7 @@ if (!storyScreen) {
 			x: 20,
 			y: 50,
 			depth: 1,
-			maxCount: 20,
+			maxCount: 200,
 			onMouseScroll: function (e) {
 				// @TODO
 				if ((this.scrollPosition == 1 || this.childComponents.length == 0) && e.movementY < 0) {
@@ -894,45 +894,51 @@ if (!storyScreen) {
 		},
 		
 		/**
-		 * 换立绘延时函数句柄
-		 */
-		standHandle: null,
-		
-		/**
 		 * 换立绘
 		 */
 		switchStand: function(e, opt) {
 			var time = opt.time || 0;
 			var id = opt.id || 1;
 			var image = opt.image || null;
+			storyObj.skipStand(e, id);
 			storyObj['roleFront' + id].opacity = 1;
 			storyObj['roleBack' + id].opacity = 0;
 			storyObj['roleBack' + id].backgroundImage = image;
 			storyObj['roleBack' + id].addAnimation({opacity: 1, time: time, control: 'play'});
 			storyObj['roleFront' + id].addAnimation({opacity: 0, time: time, control: 'play'});
-			storyObj.standHandle = setTimeout(function () {
+			storyObj['standHandle' + id] = setTimeout(function () {
 				storyObj['roleFront' + id].backgroundImage = image;
 				storyObj['roleFront' + id].opacity = 1;
 				storyObj['roleBack' + id].opacity = 0;
 			}, time * 1000);
+		},
+		
+		/**
+		 * 马上换立绘
+		 */ 
+		skipStand: function(e, id) {
+			if (storyObj['standHandle' + id]) {
+				clearTimeout(storyObj['standHandle' + id]);
+				storyObj['standHandle' + id] = null;
+				storyObj['roleFront' + id].backgroundImage = storyObj['roleBack' + id].backgroundImage;
+				storyObj['roleFront' + id].opacity = 1;
+				storyObj['roleBack' + id].opacity = 0;
+			}
 		},
 
 		/**
 		 * 抖
 		 */ 
 		shake: function (com) {
-			com.addAnimation({deltaY: -3});
-			com.addAnimation({deltaY: 3});
-			com.addAnimation({deltaX: 7});
-			com.addAnimation({deltaY: -5});
-			com.addAnimation({deltaY: -7});
-			com.addAnimation({deltaX: 5});
-			com.addAnimation({deltaX: -3});
-			com.addAnimation({deltaX: 3});
-			com.addAnimation({deltaY: 5});
-			com.addAnimation({deltaX: -5});
-			com.addAnimation({deltaX: -7});	
-			com.addAnimation({deltaY: 7});
+			var posList = [-3, 3, 7, -5, -7, 5, -3, 3, 5, -5, -7, 7];
+			for(var i = 0; i < posList.length; i++){
+				var move = function(dx, dy, j) {
+					setTimeout(function() {
+						com.addAnimation({yDelta: dy, xDelta: dx});
+					}, j * 50);
+				};
+				move(posList[i], posList[(i + 3) % posList.length], i);
+			}
 		},
 
 		/**
@@ -980,7 +986,7 @@ if (!storyScreen) {
 		 */ 
 		waitDialogAndClick: function (e) {
 			// 跳过全部及跳过已读
-			if (storyObj.skipOn) {
+			if (storyObj.isSkipping) {
 				if (storyObj.isForceSkipping || ss.sysVar.skipMode == 'all' || (ss.sysVar.skipMode == 'read' && e.read)) {
 					storyObj.dialogText.skip();
 					return;

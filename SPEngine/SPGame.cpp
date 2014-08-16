@@ -44,13 +44,13 @@ namespace SPEngine
 		bool		isFullScreen,
 		D3DDEVTYPE	deviceType)
 	{
-		SPConfig config;
-		config.workingWidth = setWidth;
-		config.workingHeight = setHeight;
-		config.windowWidth = setWidth;
-		config.windowHeight = setHeight;
-		config.windowed = !isFullScreen;
-		config.deviceType = deviceType;
+		SPConfigPtr config = new SPConfig();
+		config->workingWidth = setWidth;
+		config->workingHeight = setHeight;
+		config->windowWidth = setWidth;
+		config->windowHeight = setHeight;
+		config->windowed = !isFullScreen;
+		config->deviceType = deviceType;
 		SPConfigManager::GetSingleton()->SetConfig(config);
 		isLockFPS = true;
 		lockedFPS = 60;
@@ -97,7 +97,7 @@ namespace SPEngine
 
 		SPLogHelper::WriteLog("============= Game Starting =============");
 
-		SPConfig config = SPConfigManager::GetSingleton()->GetCurrentConfig();
+		SPConfigPtr config = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		// Initialize D3D with default config.
 		if (!SPDevice::GetSingleton()->InitializeD3D(config))
@@ -114,15 +114,15 @@ namespace SPEngine
 	#pragma region Game
 	bool SPGame::Start()
 	{
-		SPConfig config = SPConfigManager::GetSingleton()->GetCurrentConfig();
+		SPConfigPtr config = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		//
 		// Initialize window with default config.
 		// 
 
 		if (!SPWindow::GetSingleton()->Initialize(
-			hInstance, config.windowWidth, config.windowHeight, 
-			!config.windowed))
+			hInstance, config->windowWidth, config->windowHeight, 
+			!config->windowed))
 		{
 			SPMessageHelper::Msg("Failed to initialize game window!");
 			SPLogHelper::WriteLog("[Game] ERROR: Failed to initialize game window!");
@@ -356,20 +356,19 @@ namespace SPEngine
 			hr = SPDevice::GetSingleton()->GetD3DDevice()->Present(0, 0, 0, 0);
 		}
 
+		modificationLock.Lock();
 		if (configToApply)
 		{
-			ApplyConfig(*configToApply);
-			modificationLock.Lock();
+			ApplyConfig(configToApply);
 			configToApply = NULL;
-			modificationLock.Unlock();
 		}
+		modificationLock.Unlock();
 
 		// Get current config.
-		SPConfig currentConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
+		SPConfigPtr currentConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		// Reset full screen if window is just active.
-		if (!SPConfigManager::GetSingleton()->GetCurrentConfig().windowed 
-			&& SPWindow::GetSingleton()->IsJustActive())
+		if (!currentConfig->windowed && SPWindow::GetSingleton()->IsJustActive())
 		{
 			if (ResetDevice(currentConfig))
 			{
@@ -389,7 +388,7 @@ namespace SPEngine
 
 			if (dhr == D3DERR_DEVICENOTRESET)
 			{
-				if (currentConfig.windowed)
+				if (currentConfig->windowed)
 				{
 					if(ResetDevice(currentConfig))
 					{
@@ -409,7 +408,7 @@ namespace SPEngine
 					}
 					else
 					{
-						currentConfig.windowed = true;
+						currentConfig->windowed = true;
 
 						if(ResetDevice(currentConfig))
 						{
@@ -578,15 +577,15 @@ namespace SPEngine
 
 	int SPGame::GetWidth()
 	{
-		return SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
+		return SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth;
 	}
 
 	int SPGame::GetHeight()
 	{
-		return SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;;
+		return SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;;
 	}
 
-	bool SPGame::ResetDevice( SPConfig config )
+	bool SPGame::ResetDevice( SPConfigPtr config )
 	{
 		SPLogHelper::WriteLog("[Game] Ready to Reset Device.");
 
@@ -638,11 +637,11 @@ namespace SPEngine
 		return elapsedLastTimeS;
 	}
 
-	bool SPGame::ApplyConfig( SPConfig config )
+	bool SPGame::ApplyConfig( SPConfigPtr config )
 	{
 		LockDrawingWhileLoading();
 
-		SPConfig oldConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
+		SPConfigPtr oldConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
 
 		SPConfigManager::GetSingleton()->SetConfig(config);			
 
@@ -655,9 +654,9 @@ namespace SPEngine
 		}
 
 		SPWindow::GetSingleton()->AdjustMainWindow(
-			!config.windowed,
-			config.windowWidth, 
-			config.windowHeight);
+			!config->windowed,
+			config->windowWidth, 
+			config->windowHeight);
 
 		UnlockDrawingWhileLoading();
 
@@ -794,10 +793,10 @@ namespace SPEngine
 		return true;
 	}
 
-	void SPGame::ApplyConfigWhenCurrentDrawFinished( SPConfig config )
+	void SPGame::ApplyConfigWhenCurrentDrawFinished( SPConfigPtr config )
 	{
 		modificationLock.Lock();
-		configToApply = new SPConfig(config);
+		configToApply = new SPConfig(*config);
 		SPConfigManager::GetSingleton()->SetConfig(config);
 		modificationLock.Unlock();
 	}

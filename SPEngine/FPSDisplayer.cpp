@@ -57,14 +57,14 @@ void FPSDisplayer::Draw( float timeElapsed )
 
 	case LeftBottom:
 		position = D3DXVECTOR2(0,
-			(float)SPConfigManager::GetSingleton()->GetCurrentConfig().
+			(float)SPConfigManager::GetSingleton()->GetCurrentConfig()->
 			workingHeight - font->GetHeight());
 		SPFontWriter::GetSingleton()->Write(font, NULL, text, position, SPColor::Yellow, 0, 0, NULL);
 		break;
 
 	case RightTop:
 		position = D3DXVECTOR2(
-			(float)SPConfigManager::GetSingleton()->GetCurrentConfig().
+			(float)SPConfigManager::GetSingleton()->GetCurrentConfig()->
 			workingWidth - size.x, 0);
 		SPFontWriter::GetSingleton()->Write(font, NULL, text, SPRectangle((int)position.x, (int)position.y, 
 			(int)size.x, (int)size.y),
@@ -73,8 +73,8 @@ void FPSDisplayer::Draw( float timeElapsed )
 
 	case RightBottom:
 		position = D3DXVECTOR2((float)SPConfigManager::GetSingleton()->
-			GetCurrentConfig().workingWidth - size.x,
-			(float)(SPConfigManager::GetSingleton()->GetCurrentConfig().
+			GetCurrentConfig()->workingWidth - size.x,
+			(float)(SPConfigManager::GetSingleton()->GetCurrentConfig()->
 			workingHeight - font->GetHeight()));
 		SPFontWriter::GetSingleton()->Write(font, NULL, text, SPRectangle((int)position.x, (int)position.y, 
 			(int)size.x, (int)size.y),

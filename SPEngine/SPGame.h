@@ -54,7 +54,7 @@ namespace SPEngine
 		CCritSec			exitBtnLock;
 		CCritSec			modificationLock;
 		CCritSec			drawingLock;
-		SPPointer<SPConfig>	configToApply;
+		SPConfigPtr			configToApply;
 		SPPointer<SPComponentManager> componentManager;
 		/// @}
 
@@ -84,7 +84,7 @@ namespace SPEngine
 
 		/// @brief    ResetDevice
 		/// @return   bool. True if successful.
-		bool ResetDevice(SPConfig config);
+		bool ResetDevice(SPConfigPtr config);
 
 	protected:
 		SPGame(void);
@@ -196,8 +196,8 @@ namespace SPEngine
 		virtual void OnExit();
 		bool ExitButtonPressed();
 
-		bool ApplyConfig(SPConfig config);
-		void ApplyConfigWhenCurrentDrawFinished(SPConfig config);
+		bool ApplyConfig(SPConfigPtr config);
+		void ApplyConfigWhenCurrentDrawFinished(SPConfigPtr config);
 
 		bool LockDrawingWhileLoading();
 		bool UnlockDrawingWhileLoading();

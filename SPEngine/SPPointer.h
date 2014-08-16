@@ -28,11 +28,13 @@ namespace SPEngine
 	protected:
 		int*	pointerCount;
 		T*		pointer;
-		CCritSec threadLock;
+		CCritSec* threadLock;
 		typedef T *(SPPointer::*bool_type)() const;
 
 		virtual void AddReference()
 		{
+			threadLock->Lock();
+
 			if (!pointerCount)
 			{
 				pointerCount = new int(1);
@@ -41,10 +43,16 @@ namespace SPEngine
 			{
 				(*pointerCount)++;
 			}
+
+			threadLock->Unlock();
 		}
 
 		virtual void RemoveReference()
 		{
+			bool deleteLock = false;
+
+			threadLock->Lock();
+
 			if (pointerCount)
 			{
 				(*pointerCount)--;
@@ -52,6 +60,7 @@ namespace SPEngine
 				{
 					delete pointer;
 					delete pointerCount;
+					deleteLock = true;
 
 					pointer = NULL;
 					pointerCount = NULL;
@@ -59,46 +68,56 @@ namespace SPEngine
 			}
 			else
 			{
+				threadLock->Unlock();
 				throw runtime_error("Error removing SPPointer reference.");
+			}
+
+			threadLock->Unlock();
+
+			if (deleteLock)
+			{
+				delete threadLock;
+				threadLock = NULL;
 			}
 		}
 
 	public:
-		SPPointer(void) : pointerCount(NULL), pointer(NULL) {}
+		SPPointer(void) : pointerCount(NULL), pointer(NULL), threadLock(NULL) {}
 
-		SPPointer(T* ptr) : pointer(ptr), pointerCount(NULL)
+		SPPointer(T* ptr) : pointer(ptr), pointerCount(NULL), threadLock(NULL)
 		{
 			if (pointer)
 			{
+				threadLock = new CCritSec();
 				AddReference();
 			}
 		}
 
-		SPPointer(const SPPointer<T>& ptr) : pointer(NULL), pointerCount(NULL) 
+		SPPointer(const SPPointer<T>& ptr) : pointer(NULL), pointerCount(NULL), threadLock(NULL)
 		{
 			if (ptr.pointer)
 			{
 				this->pointer = ptr.pointer;
 				this->pointerCount = ptr.pointerCount;
+				this->threadLock = ptr.threadLock;
 				AddReference();
 			}
 		}
 
 		template <typename U>
-		SPPointer(SPPointer<U> const& ptr) : pointer(NULL), pointerCount(NULL)
+		SPPointer(SPPointer<U> const& ptr) : pointer(NULL), pointerCount(NULL), threadLock(NULL)
 		{
 			if (ptr.pointer)
 			{
 				this->pointer = static_cast<T*>(ptr.pointer);//reinterpret_cast<T*>(ptr.pointer);
 				this->pointerCount = ptr.pointerCount;
+				this->threadLock = ptr.threadLock;
 				AddReference();
 			}
 		}
 
 		SPPointer<T>& operator = (T* ptr)
 		{
-			threadLock.Lock();
-
 			// If ptr is different from pointer, go on.
 			// Else do nothing.
 			if (ptr != pointer)
@@ -109,25 +128,23 @@ namespace SPEngine
 					// Remove reference.
 					RemoveReference();
 					pointerCount = NULL;
+					threadLock = NULL;
 				}
 
 				pointer = ptr;
 
 				if (pointer)
 				{
+					threadLock = new CCritSec();
 					AddReference();	
 				}				
 			}
-
-			threadLock.Unlock();
 
 			return *this;
 		}
 
 		SPPointer<T>& operator = (SPPointer<T>& ptr)
 		{
-			threadLock.Lock();
-
 			if (ptr.pointer != pointer)
 			{
 				if (ptr.pointer)
@@ -139,6 +156,7 @@ namespace SPEngine
 
 					pointer = ptr.pointer;
 					pointerCount = ptr.pointerCount;
+					threadLock = ptr.threadLock;
 
 					AddReference();
 				}
@@ -147,10 +165,9 @@ namespace SPEngine
 					RemoveReference();
 					pointer = NULL;
 					pointerCount = NULL;
+					threadLock = NULL;
 				}
 			}
-
-			threadLock.Unlock();
 
 			return ptr;
 		}
@@ -158,8 +175,6 @@ namespace SPEngine
 		template <typename U>
 		SPPointer<T>& operator = (SPPointer<U> & ptr)
 		{
-			threadLock.Lock();
-
 			if (ptr.pointer != pointer)
 			{
 				if (ptr.pointer)
@@ -171,6 +186,7 @@ namespace SPEngine
 
 					pointer = reinterpret_cast<T*>(ptr.pointer);
 					pointerCount = ptr.pointerCount;
+					threadLock = ptr.threadLock;
 
 					AddReference();
 				}
@@ -179,10 +195,9 @@ namespace SPEngine
 					RemoveReference();
 					pointer = NULL;
 					pointerCount = NULL;
+					threadLock = NULL;
 				}
 			}
-
-			threadLock.Unlock();
 
 			return *this;
 		}
@@ -285,15 +300,11 @@ namespace SPEngine
 
 		virtual ~SPPointer(void)
 		{
-			threadLock.Lock();
-
 			// Automatically remove reference.
 			if (pointer)
 			{
 				RemoveReference();
 			}
-
-			threadLock.Unlock();
 		}
 	};
 

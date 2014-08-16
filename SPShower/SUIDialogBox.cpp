@@ -41,7 +41,7 @@ void SUIDialogBox::AddText( SUIText text )
 
 void SUIDialogBox::Update( float timeDelta )
 {
-	SPTransition::Update(timeDelta);
+	SUITextBox::Update(timeDelta);
 
 	Clean();
 

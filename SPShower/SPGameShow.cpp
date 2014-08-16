@@ -188,12 +188,12 @@ void SPGameShow::LoadSystemData(SPString fileName)
 bool SPGameShow::DrawWhileLoading( float timeDelta )
 {
 	SPSpriteManager::GetSingleton()->RenderOnScreen(SPTextureManager::GetSingleton()->GetBlankWhiteTexture(), NULL,
-		SPRectangle(0,0,SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
-		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
+		SPRectangle(0,0,SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight), SPColor::Black, 1, NULL);
 
 	SPSpriteManager::GetSingleton()->Render(loading, NULL, 
-		SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth - loading->GetWidth() - 20,
-		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight- loading->GetHeight() - 20, SPColor::White, 0, NULL);
+		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth - loading->GetWidth() - 20,
+		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight- loading->GetHeight() - 20, SPColor::White, 0, NULL);
 
 	return SPGame::DrawWhileLoading(timeDelta);
 }
@@ -201,8 +201,8 @@ bool SPGameShow::DrawWhileLoading( float timeDelta )
 bool SPGameShow::Draw( float timeDelta )
 {
 	SPSpriteManager::GetSingleton()->RenderOnScreen(SPTextureManager::GetSingleton()->GetBlankWhiteTexture(), NULL,
-		SPRectangle(0,0,SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
-		SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight), SPColor::Black, 1, NULL);
+		SPRectangle(0,0,SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight), SPColor::Black, 1, NULL);
 
 	return SPGame::Draw(timeDelta);
 }

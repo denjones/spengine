@@ -842,58 +842,46 @@ $(function(e){	storyObj.waitDialogAndClick(e); });
 
 $(function(e){	storyObj.changeBackground({target: 'data/images/bg_dormitory_01.png', type: 'Mask', texture: 'mask/mask_036.png', time: 1, quality: 3, control: 'play'}); });
 
-//@particleSystem{
-//	name:"snow"
-//	tex_src:"data/images/snow.png"
-//	born_x_min:0
-//	born_x_max:1280
-//	born_y_min:721
-//	born_y_max:722
-//	live_x_min:-2
-//	live_y_min:-2
-//	live_x_max:1282
-//	live_y_max:722
-//	live_time:5
-//	shoot_velocity_min:100
-//	shoot_velocity_max:200
-//	shoot_angle_min: PI + PI / 6 * 2
-//	shoot_angle_max: PI + PI / 6 * 5
-//	shoot_rate:20
-//	acceleration_x:0
-//	acceleration_y:0
-//	fade_time:1
-//	scale_max:1
-//	scale_min:0.5
-//	scale_rate_min:-0.5
-//	scale_rate_max:0
-//	num_max:300
-//	color:0xf9ffffff
-//	width:1280
-//	height:720
-//	special_rotation:true
-//	rotate_max:0
-//	rotate_min:0
-//	rotate_rate_min:0
-//	rotate_rate_max:0
-//	control: "Play"
-//}
-//
-//@picture{
-//	name:"particles"
-//	particle_system:"snow"
-//}
-//
-//@pictureBox{
-//	name:"光点"
-//	x:0
-//	y:0
-//	width:1280
-//	height:720
-//	layer:11
-//	picture:"particles"
-//	background_color:0x00ffffff
-//	display: "unhidden"
-//}
+$(function(e){
+	// 光点粒子系统
+	var ps = ss.createParticleSystem({
+		id: 'snow',
+		tex: 'data/images/snow.png',
+		bornXMin: 0,
+		bornXMax: 1280,
+		bornYMin: 721,
+		bornYMax: 722,
+		liveXMin: -2,
+		liveYMin: -2,
+		liveXMax: 1282,
+		liveYMax: 722,
+		liveTime: 5,
+		shootVelocityMin: 100,
+		shootVelocityMax: 200,
+		shootAngleMin: PI + PI / 6 * 2,
+		shootAngleMax: PI + PI / 6 * 5,
+		shootRate: 20,
+		accelerationX: 0,
+		accelerationY: 0,
+		fadeTime: 1,
+		scaleMax: 1,
+		scaleMin: 0.5,
+		scaleRateMin: -0.5,
+		scaleRateMax: 0,
+		countMax: 300,
+		color: 0xf9ffffff,
+		width: 1280,
+		height: 720,
+		specialRotation: true,
+		rotateMax: 0,
+		rotateMin: 0,
+		rotateRateMin: 0,
+		rotateRateMax: 0,
+		control: 'Play'
+	});
+	
+	storyObj.backgroundFront.backgroundImage = { particleSystem: ps };	
+});
 
 $(function(e){	storyObj.switchBGM('data/sounds/bgm08.ogg'); });
 
@@ -938,8 +926,10 @@ $(function(e){	storyObj.say(e, {role: '', content: '那一天——我与梦想�
 $(function(e){	storyObj.waitDialogAndClick(e); });
 
 $(function(e){	storyObj.switchStand(e, {id: 2, image: null, time: 0.5 }); });
+$(function(e){	waitTime(500, e); });
 
 $(function(e){	storyObj.maskBegin({time: 3}); });
+$(function(e){	waitTime(3000, e); });
 
 //@particleSystem{ name:"snow" control:"Stop"}
 //@pictureBox{ name:"光点" display:"hidden"}

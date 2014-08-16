@@ -20,7 +20,7 @@ namespace SPEngine
 		public SPSingleton<SPConfigManager>
 	{
 		string configFile;		///< File path;
-		SPConfig currentConfig; ///< Current config.
+		SPConfigPtr currentConfig; ///< Current config.
 		CCritSec modificationLock;
 
 	public:
@@ -29,8 +29,8 @@ namespace SPEngine
 
 		void SetDebug(bool on);
 		bool LoadConfig(string path);
-		bool SetConfig(SPConfig &config);
-		SPConfig GetCurrentConfig();
+		bool SetConfig(SPConfigPtr config);
+		SPConfigPtr GetCurrentConfig();
 	};
 }
 
