@@ -204,6 +204,7 @@ public:
 	virtual Handle<Object> GetV8Obj();
 	Handle<Array> GetV8ChildComponents();
 	
+	SRectangle GetRectangle();
 	/// @}
 	
 	

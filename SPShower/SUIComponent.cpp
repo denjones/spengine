@@ -20,6 +20,7 @@ SUIComponent::SUIComponent(SUIScreen* screen)
 	isDisplay = true;
 	isAbsoluteRender = true;
 	screenBelongsTo = screen;
+	properties.Init();
 }
 
 
@@ -33,7 +34,7 @@ SUIComponent::~SUIComponent(void)
 
 int SUIComponent::GetWidth() 
 { 
-	return properties.rectangle.Width; 
+	return *properties.width; 
 }
 
 void SUIComponent::SetWidth(int setWidth)
@@ -43,20 +44,14 @@ void SUIComponent::SetWidth(int setWidth)
 		return;
 	}
 
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.rectangle.Width = setWidth;
-	}
-	else
-	{
-		properties.rectangle.Width = setWidth;
-	}	
+	modificationLock.Lock();
+	*properties.width = setWidth;
+	modificationLock.Unlock();
 }
 
 int SUIComponent::GetHeight()
 {
-	return properties.rectangle.Height;
+	return *properties.height;
 }
 
 void SUIComponent::SetHeight(int setHeight)
@@ -66,73 +61,47 @@ void SUIComponent::SetHeight(int setHeight)
 		return;
 	}
 
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.rectangle.Height = setHeight;
-	}
-	else
-	{
-		properties.rectangle.Height = setHeight;
-	}
+	modificationLock.Lock();
+	*properties.height = setHeight;
+	modificationLock.Unlock();
 }
 
 D3DXVECTOR2 SUIComponent::GetPosition() 
 { 
-	return D3DXVECTOR2(properties.rectangle.X, properties.rectangle.Y); 
+	return D3DXVECTOR2(*properties.x, *properties.y); 
 }
 
 void SUIComponent::SetPosition(D3DXVECTOR2 pos)
 {
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.rectangle.X = pos.x;
-		targetProperties.rectangle.Y = pos.y;
-	}
-	else
-	{
-		properties.rectangle.X = pos.x;
-		properties.rectangle.Y = pos.y;
-	}
+	modificationLock.Lock();
+	*properties.x = pos.x;
+	*properties.y = pos.y;
+	modificationLock.Unlock();
 }
 
 D3DXVECTOR2 SUIComponent::GetRotationCenter() 
 { 
-	return properties.rotationCenter;
+	return D3DXVECTOR2(*properties.rotationCenterX, *properties.rotationCenterY);
 }
 
 void SUIComponent::SetRotationCenter(D3DXVECTOR2 pos)
 {
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.rotationCenter.x = pos.x;
-		targetProperties.rotationCenter.y = pos.y;
-	}
-	else
-	{
-		properties.rotationCenter.x = pos.x;
-		properties.rotationCenter.y = pos.y;
-	}
+	modificationLock.Lock();
+	*properties.rotationCenterX = pos.x;
+	*properties.rotationCenterY = pos.y;
+	modificationLock.Unlock();
 }
 
 float SUIComponent::GetRotation()
 {
-	return properties.rotation;
+	return *properties.rotation;
 }
 
 void SUIComponent::SetRotation( float setRotation )
 {
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.rotation = setRotation;
-	}
-	else
-	{
-		properties.rotation = setRotation;
-	}	
+	modificationLock.Lock();
+	*properties.rotation = setRotation;
+	modificationLock.Unlock();
 }
 
 SPEngine::SPTexturePtr SUIComponent::GetBackgroundImage()
@@ -142,31 +111,21 @@ SPEngine::SPTexturePtr SUIComponent::GetBackgroundImage()
 
 void SUIComponent::SetBackgroundImage( SPTexturePtr setImage )
 {
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.backgroundImage = setImage;
-	}
-
+	modificationLock.Lock();
 	properties.backgroundImage = setImage;
+	modificationLock.Unlock();
 }
 
 D3DCOLOR SUIComponent::GetBackgroundColor()
 {
-	return properties.backgroundColor;
+	return *properties.backgroundColor;
 }
 
 void SUIComponent::SetBackgroundColor( D3DCOLOR setColor )
 {
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.backgroundColor = setColor;
-	}
-	else
-	{
-		properties.backgroundColor = setColor;
-	}
+	modificationLock.Lock();
+	*properties.backgroundColor = setColor;
+	modificationLock.Unlock();
 }
 
 
@@ -224,27 +183,20 @@ void SUIComponent::AddEffect( SUIEffectPtr setEffect )
 void SUIComponent::AddAnimation( SUIAnimationPtr setAnimation )
 {
 	modificationLock.Lock();
+	setAnimation->SetStartPoint(properties);
 	animations.push_back(setAnimation);
 	modificationLock.Unlock();
 }
 
 float SUIComponent::GetTransparency()
 {
-	return properties.transparency;
+	return *properties.transparency;
 }
 
 void SUIComponent::SetTransparency( float setTrans )
 {
 	modificationLock.Lock();
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.transparency = setTrans;
-	}
-	else
-	{
-		properties.transparency = setTrans;
-	}	
+	*properties.transparency = setTrans;
 	modificationLock.Unlock();
 }
 
@@ -298,7 +250,7 @@ void SUIComponent::PlayAnimation()
 
 float SUIComponent::GetLayer()
 {
-	return properties.layer;
+	return *properties.layer;
 }
 
 void SUIComponent::SetLayer( float setLayer )
@@ -308,14 +260,8 @@ void SUIComponent::SetLayer( float setLayer )
 		setLayer = MaxLayer;
 	}
 
-	if (animations.size() > 0 && animations.back())
-	{
-		SUIProperties targetProperties = animations.back()->GetTargetPoint();
-		targetProperties.layer = setLayer;
-	}
-
 	modificationLock.Lock();
-	properties.layer = setLayer;
+	*properties.layer = setLayer;
 	modificationLock.Unlock();
 }
 
@@ -427,39 +373,41 @@ void SUIComponent::Render( float timeDelta )
 void SUIComponent::SetPositionX( int setX )
 {
 	modificationLock.Lock();
-	properties.rectangle.X = setX;
+	*properties.x = setX;
 	modificationLock.Unlock();
 }
 
 void SUIComponent::SetPositionY( int setY )
 {
 	modificationLock.Lock();
-	properties.rectangle.Y = setY;
+	*properties.y = setY;
 	modificationLock.Unlock();
 }
 
 void SUIComponent::SetRotationCenterX( int setX )
 {
 	modificationLock.Lock();
-	properties.rotationCenter.x = setX;
+	*properties.rotationCenterX = setX;
 	modificationLock.Unlock();
 }
 
 void SUIComponent::SetRotationCenterY( int setY )
 {
 	modificationLock.Lock();
-	properties.rotationCenter.y = setY;
+	*properties.rotationCenterY = setY;
 	modificationLock.Unlock();
 }
 
 SUIProperties SUIComponent::GetTargetProperties()
 {
+	SUIProperties target = GetProperties();
 	if (animations.size() == 0)
 	{
-		return GetProperties();
+		return target;
 	}
 
-	return animations.back()->GetTargetPoint();
+	target = animations.back()->GetTargetPoint();
+	return target;
 }
 
 void SUIComponent::SetFather( SUIComponentPtr setFather )
@@ -478,21 +426,21 @@ SRectangle SUIComponent::GetBackgroundRect()
 {
 	if (!properties.backgroundImage)
 	{
-		return properties.rectangle;
+		return GetRectangle();
 	}
 
 	SRectangle rect;
 	int imageWidth = properties.backgroundImage->GetWidth();
 	int imageHeight = properties.backgroundImage->GetHeight();
-	int boxWidth = properties.rectangle.Width;
-	int boxHeight = properties.rectangle.Height;
+	int boxWidth = *properties.width;
+	int boxHeight = *properties.height;
 
-	if (properties.backgroundMode == SUIProperties::Positioning)
+	if (*properties.backgroundMode == SUIProperties::Positioning)
 	{
 		rect.Width = imageWidth;
 		rect.Height = imageHeight;
 
-		switch(properties.backgroundPosition)
+		switch(*properties.backgroundPosition)
 		{
 		case SUIProperties::TopLeft:
 			rect.X = 0;
@@ -540,18 +488,18 @@ SRectangle SUIComponent::GetBackgroundRect()
 			break;
 
 		default:
-			rect.X = properties.backgroundX;
-			rect.Y = properties.backgroundY;
+			rect.X = *properties.backgroundX;
+			rect.Y = *properties.backgroundY;
 			break;
 		}
 
 		return rect;
 	}
 
-	switch(properties.backgroundMode)
+	switch(*properties.backgroundMode)
 	{
 	case SUIProperties::Fill:
-		rect = properties.rectangle;
+		rect = GetRectangle();
 		rect.X = 0;
 		rect.Y = 0;
 		break;
@@ -613,38 +561,38 @@ SRectangle SUIComponent::GetBackgroundRect()
 void SUIComponent::SetBackgroundX( int setX )
 {
 	modificationLock.Lock();
-	properties.backgroundX = setX;
+	*properties.backgroundX = setX;
 	modificationLock.Unlock();
 }
 
 void SUIComponent::SetBackgroundY( int setY )
 {
 	modificationLock.Lock();
-	properties.backgroundY = setY;
+	*properties.backgroundY = setY;
 	modificationLock.Unlock();
 }
 
 int SUIComponent::GetBackgroundX()
 {
-	return properties.backgroundX;
+	return *properties.backgroundX;
 }
 
 int SUIComponent::GetBackgroundY()
 {
-	return properties.backgroundY;
+	return *properties.backgroundY;
 }
 
 void SUIComponent::SetBackgroundMode( SUIProperties::BackgroundMode setMode )
 {
 	modificationLock.Lock();
-	properties.backgroundMode = setMode;
+	*properties.backgroundMode = setMode;
 	modificationLock.Unlock();
 }
 
 void SUIComponent::SetBackgroundPositionMode( SUIProperties::BackgroundPosition setMode )
 {
 	modificationLock.Lock();
-	properties.backgroundPosition = setMode;
+	*properties.backgroundPosition = setMode;
 	modificationLock.Unlock();
 }
 
@@ -734,7 +682,7 @@ SPEngine::SPTexturePtr SUIComponent::SaveAsTexture()
 	}
 
 	SPTexturePtr tex = SPTextureManager::GetSingleton()->CreateRenderTarget(
-		childTarget->GetWidth(), childTarget->GetHeight(), properties.backgroundColor);
+		childTarget->GetWidth(), childTarget->GetHeight(), *properties.backgroundColor);
 
 	SPSpriteManager::GetSingleton()->Render(childTarget, NULL, 0, 0, tex);
 
@@ -785,7 +733,7 @@ float SUIComponent::Depth()
 
 			float fatherDepth = father->Depth();
 
-			float depth = fatherDepth  - (properties.layer + 1) / base;
+			float depth = fatherDepth  - (*properties.layer + 1) / base;
 
 			_depth = new float(depth);
 		}
@@ -793,7 +741,7 @@ float SUIComponent::Depth()
 		return *_depth;
 	}
 
-	float depth =  (MaxLayer - properties.layer) / MaxLayer;
+	float depth =  (MaxLayer - *properties.layer) / MaxLayer;
 	return depth;
 }
 
@@ -810,8 +758,8 @@ D3DXMATRIX SUIComponent::TransformMatrix()
 		&D3DXVECTOR2(0, 0),
 		0, 
 		&D3DXVECTOR2(1, 1),
-		&properties.rotationCenter,
-		properties.rotation, 
+		&GetRotationCenter(),
+		*properties.rotation, 
 		&D3DXVECTOR2(0, 0));
 
 	if (isAbsoluteRender && father)
@@ -873,7 +821,7 @@ D3DXVECTOR3 SUIComponent::Position()
 		return *_position;
 	}
 
-	return D3DXVECTOR3(properties.rectangle.X, properties.rectangle.Y, Depth());
+	return D3DXVECTOR3(*properties.x, *properties.y, Depth());
 }
 
 D3DXVECTOR3 SUIComponent::PositionBG()
@@ -887,7 +835,7 @@ D3DXVECTOR3 SUIComponent::PositionBG()
 		
 		return *_positionBG;
 	}
-	return D3DXVECTOR3(properties.backgroundX, properties.backgroundY, 1);
+	return D3DXVECTOR3(*properties.backgroundX, *properties.backgroundY, 1);
 }
 
 SPTexturePtr SUIComponent::ChildTarget()
@@ -918,7 +866,7 @@ float SUIComponent::Alpha()
 	{
 		if (!_alpha)
 		{
-			_alpha = new float(father->Alpha() * properties.transparency);
+			_alpha = new float(father->Alpha() * *properties.transparency);
 		}
 
 		return *_alpha;
@@ -934,9 +882,9 @@ SPRectangle SUIComponent::BackgroundSrcRect()
 		modificationLock.Lock();
 		if (!_backgroudSrcRect)
 		{
-			SPRectangle rect = properties.rectangle;
-			rect.X = -properties.backgroundX;
-			rect.Y = -properties.backgroundY;
+			SPRectangle rect = GetRectangle();
+			rect.X = -*properties.backgroundX;
+			rect.Y = -*properties.backgroundY;
 			if (rect.Width > properties.backgroundImage->GetWidth())
 			{
 				rect.Width = properties.backgroundImage->GetWidth();
@@ -1026,7 +974,7 @@ D3DXVECTOR3 SUIComponent::PositionColor()
 
 		return *_postionColor;
 	}
-	return D3DXVECTOR3(properties.rectangle.X, properties.rectangle.Y, Depth());
+	return D3DXVECTOR3(*properties.x, *properties.y, Depth());
 }
 
 void SUIComponent::ClearAbsoluteCache()
@@ -1051,12 +999,12 @@ bool SUIComponent::IsAbsoluteRender()
 
 SUIProperties::BackgroundPosition SUIComponent::GetBackgroundPositionMode()
 {
-	return properties.backgroundPosition;
+	return *properties.backgroundPosition;
 }
 
 SUIProperties::BackgroundMode SUIComponent::GetBackgroundMode()
 {
-	return properties.backgroundMode;
+	return *properties.backgroundMode;
 }
 
 Handle<Object> SUIComponent::GetV8Obj()
@@ -1121,7 +1069,7 @@ void SUIComponent::PreDraw()
 	if (!isAbsoluteRender)
 	{
 		childTarget = SPTextureManager::GetSingleton()->
-			CreateRenderTarget(GetWidth(), GetHeight(), properties.backgroundColor);
+			CreateRenderTarget(GetWidth(), GetHeight(), *properties.backgroundColor);
 	}
 	else
 	{
@@ -1131,7 +1079,7 @@ void SUIComponent::PreDraw()
 	// A card problem ?
 	//childTarget->Fill(properties.backgroundColor);
 
-	SPRectangle destRect = properties.rectangle;
+	SPRectangle destRect = GetRectangle();
 	destRect.X = 0;
 	destRect.Y = 0;
 
@@ -1141,7 +1089,7 @@ void SUIComponent::PreDraw()
 	//SPSpriteManager::GetSingleton()->RenderOnScreen(backgroundColorTex,
 	//	NULL, destRect, properties.backgroundColor, 1, childTarget);
 	float alpha = Alpha();
-	D3DCOLOR realColor = alpha * (D3DXCOLOR)properties.backgroundColor;
+	D3DCOLOR realColor = alpha * (D3DXCOLOR)*properties.backgroundColor;
 
 	SPSpriteManager::GetSingleton()->RenderWithMatrix(backgroundColorTex,
 		isAbsoluteRender ? GetCurrentEffect() : NULL, TransformMatrixColor(), 
@@ -1216,9 +1164,9 @@ void SUIComponent::PostDraw()
 			childTarget, 
 			GetCurrentEffect(), 
 			D3DXVECTOR3(GetPosition().x, GetPosition().y, Depth()),
-			properties.rotationCenter,
-			properties.rotation,
-			properties.transparency * SPColor::White,
+			GetRotationCenter(),
+			*properties.rotation,
+			*properties.transparency * SPColor::White,
 			renderTarget);
 	}
 
@@ -1257,8 +1205,8 @@ void SUIComponent::HandleEvent( SUIEventPtr e )
 		return;
 	}
 
-	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
-	bool lastInRect =  properties.rectangle.IsPointInRect(
+	bool inRect = GetRectangle().IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  GetRectangle().IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
 
 	if (e->type == SUIEvent::MouseMove)
@@ -1353,8 +1301,8 @@ void SUIComponent::HandleEvent( SUIEventPtr e )
 			}
 		}
 		
-		e->positionX -= properties.rectangle.X;
-		e->positionY -= properties.rectangle.Y;
+		e->positionX -= *properties.x;
+		e->positionY -= *properties.y;
 
 		Children::reverse_iterator iter = children.rbegin();
 
@@ -1371,8 +1319,8 @@ void SUIComponent::HandleEvent( SUIEventPtr e )
 			iter++;
 		}
 
-		e->positionX += properties.rectangle.X;
-		e->positionY += properties.rectangle.Y;
+		e->positionX += *properties.x;
+		e->positionY += *properties.y;
 
 		// On Event
 
@@ -1831,8 +1779,8 @@ void SUIComponent::HandleMouseOut( SUIEventPtr e )
 		return;
 	}
 
-	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
-	bool lastInRect =  properties.rectangle.IsPointInRect(
+	bool inRect = GetRectangle().IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  GetRectangle().IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
 
 	if ((!inRect || !SPInputManager::GetSingleton()->GetMouse()->IsWithinWindow()) 
@@ -1849,8 +1797,8 @@ void SUIComponent::HandleMouseOut( SUIEventPtr e )
 
 	// For Children
 
-	e->positionX -= properties.rectangle.X;
-	e->positionY -= properties.rectangle.Y;
+	e->positionX -= *properties.x;
+	e->positionY -= *properties.y;
 
 	Children::reverse_iterator iter = children.rbegin();
 
@@ -1861,16 +1809,16 @@ void SUIComponent::HandleMouseOut( SUIEventPtr e )
 			(*iter)->HandleMouseOut(e);
 			if (!e->returnValue)
 			{
-				e->positionX += properties.rectangle.X;
-				e->positionY += properties.rectangle.Y;
+				e->positionX += *properties.x;
+				e->positionY += *properties.y;
 				return;
 			}
 		}
 		iter++;
 	}
 
-	e->positionX += properties.rectangle.X;
-	e->positionY += properties.rectangle.Y;
+	e->positionX += *properties.x;
+	e->positionY += *properties.y;
 
 	// On Event
 
@@ -1894,8 +1842,8 @@ void SUIComponent::HandleMouseOver( SUIEventPtr e )
 		return;
 	}
 
-	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
-	bool lastInRect =  properties.rectangle.IsPointInRect(
+	bool inRect = GetRectangle().IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  GetRectangle().IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
 
 	if (inRect && lastInRect)
@@ -1913,8 +1861,8 @@ void SUIComponent::HandleMouseOver( SUIEventPtr e )
 
 	if (inRect)
 	{
-		e->positionX -= properties.rectangle.X;
-		e->positionY -= properties.rectangle.Y;
+		e->positionX -= *properties.x;
+		e->positionY -= *properties.y;
 
 		Children::reverse_iterator iter = children.rbegin();
 
@@ -1925,16 +1873,16 @@ void SUIComponent::HandleMouseOver( SUIEventPtr e )
 				(*iter)->HandleMouseOver(e);
 				if (!e->returnValue)
 				{
-					e->positionX += properties.rectangle.X;
-					e->positionY += properties.rectangle.Y;
+					e->positionX += *properties.x;
+					e->positionY += *properties.y;
 					return;
 				}
 			}
 			iter++;
 		}
 
-		e->positionX += properties.rectangle.X;
-		e->positionY += properties.rectangle.Y;
+		e->positionX += *properties.x;
+		e->positionY += *properties.y;
 	}
 
 	// On Event
@@ -1958,8 +1906,8 @@ void SUIComponent::HandleMouseIn( SUIEventPtr e )
 		return;
 	}
 
-	bool inRect = properties.rectangle.IsPointInRect(e->positionX, e->positionY);
-	bool lastInRect =  properties.rectangle.IsPointInRect(
+	bool inRect = GetRectangle().IsPointInRect(e->positionX, e->positionY);
+	bool lastInRect =  GetRectangle().IsPointInRect(
 		e->positionX - e->movementX, e->positionY - e->movementY);
 
 	if (inRect && !lastInRect)
@@ -1977,8 +1925,8 @@ void SUIComponent::HandleMouseIn( SUIEventPtr e )
 
 	if (inRect)
 	{
-		e->positionX -= properties.rectangle.X;
-		e->positionY -= properties.rectangle.Y;
+		e->positionX -= *properties.x;
+		e->positionY -= *properties.y;
 
 		Children::reverse_iterator iter = children.rbegin();
 
@@ -1989,16 +1937,16 @@ void SUIComponent::HandleMouseIn( SUIEventPtr e )
 				(*iter)->HandleMouseIn(e);
 				if (!e->returnValue)
 				{
-					e->positionX += properties.rectangle.X;
-					e->positionY += properties.rectangle.Y;
+					e->positionX += *properties.x;
+					e->positionY += *properties.y;
 					return;
 				}
 			}
 			iter++;
 		}
 
-		e->positionX += properties.rectangle.X;
-		e->positionY += properties.rectangle.Y;
+		e->positionX += *properties.x;
+		e->positionY += *properties.y;
 	}
 
 	// On Event
@@ -2013,6 +1961,11 @@ void SUIComponent::HandleMouseIn( SUIEventPtr e )
 			}
 		}
 	}
+}
+
+SRectangle SUIComponent::GetRectangle()
+{
+	return SRectangle(*properties.x, *properties.y, *properties.width, *properties.height);
 }
 
 

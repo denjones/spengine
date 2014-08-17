@@ -476,7 +476,7 @@ if (!storyScreen) {
 				this.backgroundY = -26;
 			},
 			onClick: function (e) {
-				ss.saveState({screens: 'Sicily剧情'});
+				ss.saveState({screen: 'Sicily剧情'});
 				soundTrack.src = 'data/sounds/select.wav';
 				soundTrack.play();
 				return false;
@@ -503,7 +503,9 @@ if (!storyScreen) {
 			},
 			onClick: function (e) {
 				ss.loadState();
+				storyScreen = ss.getScreenById('Sicily剧情');
 				storyObj.refresh();
+				storyScreen.focus();
 				soundTrack.src = 'data/sounds/select.wav';
 				soundTrack.play();
 				return false;
@@ -730,7 +732,7 @@ if (!storyScreen) {
 					content: obj
 				};
 			}
-			if (obj.role) {
+			if (obj.role || obj.role === '') {
 				storyObj.dialogRoleText.text = obj.role;
 			}
 			if (obj.content) {
@@ -1029,9 +1031,19 @@ if (!storyScreen) {
 			}
 			if (!storyObj.dialogText.isAllDisplayed()) {
 				e.repeat = true;
-				return;
+				if(!storyObj.isAuto){
+					return;
+				}
 			}
-			waitClick(e);
+			if (storyObj.isAuto) {
+				if(!storyObj.dialogText.isDisplaying() && !storyObj.dialogText.isAllDisplayed()){
+					storyObj.dialogText.next();
+				} else {
+					waitTime(2000, e);
+				}
+			} else {
+				waitClick(e);
+			}
 		},
 		
 		/**

@@ -499,7 +499,6 @@ Handle<Object> SV8ScriptManager::SaveAsObj()
 	while(iter != commands.end())
 	{
 		Handle<Object> funcObj = Object::New();
-		Handle<v8::Function> func = Handle<v8::Function>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), *((*iter)->v8Function));
 		funcObj->Set(SPV8ScriptEngine::SPStringToString(L"file"), SPV8ScriptEngine::SPStringToString((*iter)->file));
 		funcObj->Set(SPV8ScriptEngine::SPStringToString(L"line"), Integer::New((*iter)->line));
 		funcObj->Set(SPV8ScriptEngine::SPStringToString(L"col"), Integer::New((*iter)->col));
@@ -509,6 +508,7 @@ Handle<Object> SV8ScriptManager::SaveAsObj()
 		}
 		else
 		{
+			Handle<v8::Function> func = Handle<v8::Function>::New(SPV8ScriptEngine::GetSingleton()->GetIsolate(), *((*iter)->v8Function));
 			funcObj->Set(SPV8ScriptEngine::SPStringToString(L"func"), func->ToString());
 		}		
 		commandList->Set(commandList->Length(), funcObj);

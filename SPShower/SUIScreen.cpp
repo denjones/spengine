@@ -64,17 +64,17 @@ void SUIScreen::Initialize()
 
 	SUIProperties topProperties;
 
-	topProperties.layer = 0;
-	topProperties.backgroundColor = (DWORD)0x00000000;
-	topProperties.rectangle = 
-		SRectangle(0, 0, 
-		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth,
-		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight);
-	topProperties.rotation = 0;
-	topProperties.rotationCenter = D3DXVECTOR2(
-		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth / 2,
-		SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight / 2);
-	topProperties.transparency = 1;
+	topProperties.Init();
+	*topProperties.layer = 0;
+	*topProperties.backgroundColor = (DWORD)0x00000000;
+	*topProperties.x = 0;
+	*topProperties.y = 0;
+	*topProperties.width = SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth;
+	*topProperties.height = SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
+	*topProperties.rotation = 0;
+	*topProperties.rotationCenterX = SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth / 2;
+	*topProperties.rotationCenterY = SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight / 2;
+	*topProperties.transparency = 1;
 	topProperties.backgroundImage = NULL;
 
 	topComponent->SetProperties(topProperties);
@@ -402,6 +402,10 @@ void SUIScreen::LoadFromObj( Handle<Object> obj )
 	
 	Handle<Object> eventHandlerManagerObj = Handle<Object>::Cast(SV8Function::GetProperty(L"_eventHandlerManager", obj));
 	obj->Delete(SPV8ScriptEngine::SPStringToString(L"_eventHandlerManager"));
+
+	componentMap.Clear();
+	persistentComponentMap.clear();
+	eventHandlerManager.Clear();
 
 	SPV8ScriptEngine::CoverObject(GetV8Obj(), obj);
 

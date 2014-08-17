@@ -37,98 +37,149 @@ void SUIAnimation::Update( float timeDelta )
 		return;
 	}
 
-	currentPoint.rectangle.X = 
-		(endPoint.rectangle.X - startPoint.rectangle.X) * 
-		GetTransition() + startPoint.rectangle.X;
-	currentPoint.rectangle.Y =
-		(endPoint.rectangle.Y - startPoint.rectangle.Y) * 
-		GetTransition() + startPoint.rectangle.Y;
-	currentPoint.rectangle.Width =
-		(endPoint.rectangle.Width - startPoint.rectangle.Width) * 
-		GetTransition() + startPoint.rectangle.Width;
-	currentPoint.rectangle.Height =
-		(endPoint.rectangle.Height - startPoint.rectangle.Height) * 
-		GetTransition() + startPoint.rectangle.Height;
+	if (endPoint.x)
+	{
+		if (!currentPoint.x)
+		{
+			currentPoint.x = new int(*startPoint.x);
+		}
+		*currentPoint.x = 
+			(*endPoint.x - *startPoint.x) * 
+			GetTransition() + *startPoint.x;
+	}
 
-	currentPoint.rotation = 
-		(endPoint.rotation - startPoint.rotation) * 
-		GetTransition() + startPoint.rotation;
-	currentPoint.rotationCenter = 
-		(endPoint.rotationCenter - startPoint.rotationCenter) *
-		GetTransition() + startPoint.rotationCenter;
+	if (endPoint.y)
+	{
+		if (!currentPoint.y)
+		{
+			currentPoint.y = new int(*startPoint.y);
+		}
+		*currentPoint.y =
+			(*endPoint.y - *startPoint.y) * 
+			GetTransition() + *startPoint.y;
+	}
 
-	currentPoint.transparency = 
-		(endPoint.transparency - startPoint.transparency) *
-		GetTransition() + startPoint.transparency;
+	if (endPoint.width)
+	{
+		if (!currentPoint.width)
+		{
+			currentPoint.width = new int(*startPoint.width);
+		}
+		*currentPoint.width =
+			(*endPoint.width - *startPoint.width) * 
+			GetTransition() + *startPoint.width;
+	}
 
-	currentPoint.backgroundX = 
-		(endPoint.backgroundX - startPoint.backgroundX) *
-		GetTransition() + startPoint.backgroundX;
-	currentPoint.backgroundY = 
-		(endPoint.backgroundY - startPoint.backgroundY) *
-		GetTransition() + startPoint.backgroundY;
+	if (endPoint.height)
+	{
+		if (!currentPoint.height)
+		{
+			currentPoint.height = new int(*startPoint.height);
+		}
+		*currentPoint.height =
+			(*endPoint.height - *startPoint.height) * 
+			GetTransition() + *startPoint.height;
+	}
+	
+	if (endPoint.rotation)
+	{
+		if (!currentPoint.rotation)
+		{
+			currentPoint.rotation = new float(*startPoint.rotation);
+		}
+		*currentPoint.rotation = 
+			(*endPoint.rotation - *startPoint.rotation) * 
+			GetTransition() + *startPoint.rotation;
+	}
 
+	if (endPoint.rotationCenterX)
+	{
+		if (!currentPoint.rotationCenterX)
+		{
+			currentPoint.rotationCenterX = new float(*startPoint.rotationCenterX);
+		}
+		*currentPoint.rotationCenterX = 
+			(*endPoint.rotationCenterX - *startPoint.rotationCenterX) *
+			GetTransition() + *startPoint.rotationCenterX;
+	}
 
-	//float startH, startS, startV;
-	//float endH, endS, endV;
+	if (endPoint.rotationCenterY)
+	{
+		if (!currentPoint.rotationCenterY)
+		{
+			currentPoint.rotationCenterY = new float(*startPoint.rotationCenterY);
+		}
+		*currentPoint.rotationCenterY = 
+			(*endPoint.rotationCenterY - *startPoint.rotationCenterY) *
+			GetTransition() + *startPoint.rotationCenterY;
+	}
+	
+	if (endPoint.transparency)
+	{
+		if (!currentPoint.transparency)
+		{
+			currentPoint.transparency = new float(*startPoint.transparency);
+		}
+		*currentPoint.transparency = 
+			(*endPoint.transparency - *startPoint.transparency) *
+			GetTransition() + *startPoint.transparency;
+	}
 
-	//SPColorHelper::RGBtoHSV(
-	//	startPoint.backgroundColor.r,
-	//	startPoint.backgroundColor.g,
-	//	startPoint.backgroundColor.b,
-	//	&startH,
-	//	&startS,
-	//	&startV);
+	if (endPoint.backgroundX)
+	{
+		if (!currentPoint.backgroundX)
+		{
+			currentPoint.backgroundX = new int(*startPoint.backgroundX);
+		}
+		*currentPoint.backgroundX = 
+			(*endPoint.backgroundX - *startPoint.backgroundX) *
+			GetTransition() + *startPoint.backgroundX;
+	}
 
-	//SPColorHelper::RGBtoHSV(
-	//	endPoint.backgroundColor.r,
-	//	endPoint.backgroundColor.g,
-	//	endPoint.backgroundColor.b,
-	//	&endH,
-	//	&endS,
-	//	&endV);
+	if (endPoint.backgroundY)
+	{
+		if (!currentPoint.backgroundY)
+		{
+			currentPoint.backgroundY = new int(*startPoint.backgroundY);
+		}
+		*currentPoint.backgroundY = 
+			(*endPoint.backgroundY - *startPoint.backgroundY) *
+			GetTransition() + *startPoint.backgroundY;
+	}
 
-	//SPColorHelper::HSVtoRGB(
-	//	&currentPoint.backgroundColor.r,
-	//	&currentPoint.backgroundColor.g,
-	//	&currentPoint.backgroundColor.b,
-	//	GetTransition() * (endH - startH) + startH,
-	//	GetTransition() * (endS - startS) + startS,
-	//	GetTransition() * (endV - startV) + startV);
-
-	//currentPoint.backgroundColor.a = 
-	//	GetTransition() * (endPoint.backgroundColor.a - 
-	//	startPoint.backgroundColor.a) + startPoint.backgroundColor.a;
-
-	//currentPoint.backgroundColor.r = 
-	//	GetTransition() * (endPoint.backgroundColor.r - 
-	//	startPoint.backgroundColor.r) + startPoint.backgroundColor.r;
-
-	//currentPoint.backgroundColor.g = 
-	//	GetTransition() * (endPoint.backgroundColor.g - 
-	//	startPoint.backgroundColor.g) + startPoint.backgroundColor.g;
-
-	//currentPoint.backgroundColor.b = 
-	//	GetTransition() * (endPoint.backgroundColor.b - 
-	//	startPoint.backgroundColor.b) + startPoint.backgroundColor.b;
-
-	currentPoint.backgroundColor = GetTransition() * (endPoint.backgroundColor -startPoint.backgroundColor) + startPoint.backgroundColor;
-
-	currentPoint.layer = GetTransition() * (endPoint.layer - startPoint.layer)
-		+ startPoint.layer;	
+	if (endPoint.backgroundColor)
+	{
+		if (!currentPoint.backgroundColor)
+		{
+			currentPoint.backgroundColor = new D3DCOLOR(*startPoint.backgroundColor);
+		}
+		*currentPoint.backgroundColor = GetTransition() * 
+			(*endPoint.backgroundColor - *startPoint.backgroundColor) + *startPoint.backgroundColor;
+	}
+	
+	if (endPoint.layer)
+	{
+		if (!currentPoint.layer)
+		{
+			currentPoint.layer = new float(*startPoint.layer);
+		}
+		*currentPoint.layer = GetTransition() * (*endPoint.layer - *startPoint.layer)
+			+ *startPoint.layer;	
+	}
+	
 
 	if (state == Active)
 	{
-		currentPoint.backgroundImage = endPoint.backgroundImage;
-		currentPoint.backgroundMode = endPoint.backgroundMode;
-		currentPoint.backgroundPosition = endPoint.backgroundPosition;
+		//currentPoint.backgroundImage = endPoint.backgroundImage;
+		//currentPoint.backgroundMode = endPoint.backgroundMode;
+		//currentPoint.backgroundPosition = endPoint.backgroundPosition;
 		return;
 	}
 	else
 	{
-		currentPoint.backgroundImage = startPoint.backgroundImage;
-		currentPoint.backgroundMode = startPoint.backgroundMode;
-		currentPoint.backgroundPosition = startPoint.backgroundPosition;
+		//currentPoint.backgroundImage = startPoint.backgroundImage;
+		//currentPoint.backgroundMode = startPoint.backgroundMode;
+		//currentPoint.backgroundPosition = startPoint.backgroundPosition;
 	}
 }
 

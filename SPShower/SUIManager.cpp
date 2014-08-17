@@ -685,17 +685,22 @@ void SUIManager::LoadFromObj(Handle<Object> obj)
 			const Local<Value> key = props->Get(i);
 			const Local<Value> value = screens->Get(key);
 
-			SUIScreenPtr screen = new SUIScreen();
-			screen->LoadFromObj(Handle<Object>::Cast(value));
 			SPString id = SPV8ScriptEngine::StringToSPString(key->ToString());
+
+			SUIScreenPtr screen;
 
 			if (screenMap.IsSet(id))
 			{
-				DeletePersistentScreen(screenMap[id].GetHandle());
+				screen = screenMap.Get(id);
+			}
+			else
+			{
+				screen = new SUIScreen();
+				screenMap.Set(id, screen);
+				SetPersistentScreen(screen);
 			}
 
-			screenMap.Set(id, screen);
-			SetPersistentScreen(screen);
+			screen->LoadFromObj(Handle<Object>::Cast(value));
 		}
 	}
 

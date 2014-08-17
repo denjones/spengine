@@ -194,6 +194,7 @@ if (!mainMenu) {
 				mainMenu.hide();
 				setTimeout(function(){
 					ss.include('script/sicily_init.js');
+					storyScreen = ss.getScreenById('Sicily剧情');
 					storyScreen.focus();
 					storyObj.reset();
 					storyObj.maskEnd();

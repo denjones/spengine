@@ -142,11 +142,11 @@ void SUITextBox::Draw( float timeDelta )
 	modificationLock.Lock();
 
 	SPTexturePtr textTex = SPTextureManager::GetSingleton()->
-		CreateRenderTarget(properties.rectangle.Width,
-		properties.rectangle.Height, properties.backgroundColor);
+		CreateRenderTarget(*properties.width,
+		*properties.height, *properties.backgroundColor);
 
 	// A card problem?
-	textTex->Fill(SPColorHelper::AlphaColor(0, properties.backgroundColor));
+	textTex->Fill(SPColorHelper::AlphaColor(0, *properties.backgroundColor));
 
 	SUITextBlock::iterator iter;
 	D3DXVECTOR2 pos = Position();
@@ -204,11 +204,11 @@ void SUITextBox::Draw( float timeDelta )
 
 SRectangle SUITextBox::GetTextRect()
 {
-	SRectangle rect = properties.rectangle;
+	SRectangle rect;
 	rect.X = padding.left;
 	rect.Y = padding.top;
-	rect.Width -= (padding.left + padding.right);
-	rect.Height -= (padding.top + padding.bottom);
+	rect.Width = *properties.width - (padding.left + padding.right);
+	rect.Height = *properties.height - (padding.top + padding.bottom);
 
 	return rect;
 }
@@ -636,7 +636,7 @@ void SUITextBox::AddTextWithoutLock( SUIText text )
 
 		if (isAutoHeight)
 		{
-			properties.rectangle.Height = currentPosition.y + CurrentLine()->height + padding.top + padding.bottom;
+			*properties.height = currentPosition.y + CurrentLine()->height + padding.top + padding.bottom;
 		}
 	}
 	catch(exception e)
