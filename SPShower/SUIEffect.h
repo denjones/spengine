@@ -16,7 +16,9 @@ public:
 
 public:
 	void SetEffectTexture(SPTexturePtr setTex);
+	SPTexturePtr GetEffectTexture();
 	void SetLevel(float setLevel);
+	float GetLevel();
 	void Update(float timeDelta);
 };
 

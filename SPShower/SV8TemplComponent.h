@@ -16,6 +16,9 @@ namespace SV8TemplComponent
 	void GetComponentProperty(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void SetComponentProperty(Local<String> property, Local<Value> value, const PropertyCallbackInfo<Value>& info);
 
+	void ParentGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
+	void ParentSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
+
 	void IdGetter(Local<String> property, const PropertyCallbackInfo<Value>& info);
 	void IdSetter(Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info);
 

@@ -31,7 +31,7 @@ bool SUIV8FunctionEventHandler::Function( SUIEventPtr e )
 	argv[0] = event;
 
 	Handle<Value> result = Handle<v8::Function>::Cast(function)->Call(self->GetV8Obj(), 1, argv);
-	if (result->IsNull())
+	if (result.IsEmpty() || result->IsNull() || result->IsUndefined())
 	{
 		return e->returnValue;
 	}

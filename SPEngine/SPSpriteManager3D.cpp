@@ -95,9 +95,9 @@ namespace SPEngine
 		// Calculate half the texture width and height of the float form.
 		float halfWidth, halfHeight;
 		halfWidth = (float)(sprite.texture->GetWidth()) / 
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 		halfHeight = (float)(sprite.texture->GetHeight()) / 
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 
 		// Set vertex buffer.
 		NormalTexColorVertex *v;
@@ -239,11 +239,11 @@ namespace SPEngine
 		D3DXVECTOR3		translation)
 	{
 		translation.x = translation.x / 
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight * 2.0f;
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight * 2.0f;
 		translation.y = translation.y / 
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight * 2.0f;
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight * 2.0f;
 		translation.z = translation.z / 
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight * 2.0f;
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight * 2.0f;
 
 		AddSprite3D(setTexture, ps, scalingCenter,
 				scalingRotation, scaling, rotationCenter,

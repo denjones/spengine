@@ -52,5 +52,6 @@ public:
 	static SUIEffectPtr GetEffectFromObj(Handle<Object> obj, SUIEffectPtr original);
 	static SPTexturePtr GetTextureFromObj(Handle<Object> obj);
 	static Handle<Value> GetObjFromTexture(SPTexturePtr texture);
+	static Handle<Value> GetObjFromEffect(SUIEffectPtr effect);
 };
 

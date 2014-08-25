@@ -91,3 +91,9 @@ void SV8FunctionManager::LoadFromObj( Handle<Object> obj )
 
 	return;
 }
+
+void SV8FunctionManager::Clear()
+{
+	functionDict.clear();
+	objectDict.clear();
+}

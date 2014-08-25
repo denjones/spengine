@@ -73,8 +73,8 @@ void SV8TemplWindow::WidthSetter( Local<String> property, Local<Value> value, co
 		return;
 	}
 
-	SPConfig newConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
-	newConfig.windowWidth = value->Int32Value();
+	SPConfigPtr newConfig = new SPConfig(*SPConfigManager::GetSingleton()->GetCurrentConfig());
+	newConfig->windowWidth = value->Int32Value();
 	SPGameManager::GetSingleton()->GetGame()->ApplyConfigWhenCurrentDrawFinished(newConfig);
 }
 
@@ -90,8 +90,8 @@ void SV8TemplWindow::HeightGetter( Local<String> property, const PropertyCallbac
 
 void SV8TemplWindow::HeightSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
 {
-	SPConfig newConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
-	newConfig.windowHeight = value->Int32Value();
+	SPConfigPtr newConfig = new SPConfig(*SPConfigManager::GetSingleton()->GetCurrentConfig());
+	newConfig->windowHeight = value->Int32Value();
 	SPGameManager::GetSingleton()->GetGame()->ApplyConfigWhenCurrentDrawFinished(newConfig);
 }
 
@@ -112,8 +112,8 @@ void SV8TemplWindow::FullScreenSetter( Local<String> property, Local<Value> valu
 		return;
 	}
 
-	SPConfig newConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
-	newConfig.windowed = !value->Int32Value();
+	SPConfigPtr newConfig = new SPConfig(*SPConfigManager::GetSingleton()->GetCurrentConfig());
+	newConfig->windowed = !value->Int32Value();
 	SPGameManager::GetSingleton()->GetGame()->ApplyConfigWhenCurrentDrawFinished(newConfig);
 }
 
@@ -133,13 +133,13 @@ void SV8TemplWindow::Resize( const FunctionCallbackInfo<Value>& args )
 		return;
 	}
 
-	SPConfig newConfig = SPConfigManager::GetSingleton()->GetCurrentConfig();
-	newConfig.windowWidth = args[0]->Int32Value();
-	newConfig.windowHeight = args[1]->Int32Value();
+	SPConfigPtr newConfig = new SPConfig(*SPConfigManager::GetSingleton()->GetCurrentConfig());
+	newConfig->windowWidth = args[0]->Int32Value();
+	newConfig->windowHeight = args[1]->Int32Value();
 	
 	if (args.Length() > 2)
 	{
-		newConfig.windowed = !args[2]->BooleanValue();
+		newConfig->windowed = !args[2]->BooleanValue();
 	}
 
 	SPGameManager::GetSingleton()->GetGame()->ApplyConfigWhenCurrentDrawFinished(newConfig);

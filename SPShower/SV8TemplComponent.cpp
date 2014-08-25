@@ -12,6 +12,7 @@ Handle<ObjectTemplate> SV8TemplComponent::GetTemplate()
 
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"id"), IdGetter, IdSetter);
 
+	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"parent"), ParentGetter, ParentSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"display"), DisplayGetter, DisplaySetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"absolute"), AbsoluteGetter, AbsoluteSetter);
 	templComponent->SetAccessor(SPV8ScriptEngine::SPStringToString(L"depth"), DepthGetter, DepthSetter);
@@ -149,6 +150,69 @@ void SV8TemplComponent::SetComponentProperty( Local<String> property, Local<Valu
 	SPString propertyStr = SPV8ScriptEngine::StringToSPString(property);
 
 	
+}
+
+void SV8TemplComponent::ParentGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	if(component->GetFather())
+	{
+		info.GetReturnValue().Set(component->GetFather()->GetV8Obj());
+	}
+	else
+	{
+		info.GetReturnValue().Set(Undefined(isolate));
+	}
+}
+
+void SV8TemplComponent::ParentSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
+{
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIComponent* component = (SUIComponent*)field->Value();
+	if (component == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	Handle<External> fieldParent = Handle<External>::Cast(Handle<Object>::Cast(value)->GetInternalField(0));
+	SUIComponent* parent = (SUIComponent*)fieldParent->Value();
+
+	if (parent == NULL)
+	{
+		isolate->ThrowException(
+			Exception::Error(SPV8ScriptEngine::SPStringToString(L"Null Argument.")));
+		return;
+	}
+
+	if (component->GetFather())
+	{
+		component->GetFather()->RemoveChild(component);
+	}
+
+	component->SetFather(parent);
+	parent->AddChild(component);
 }
 
 void SV8TemplComponent::IdGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
@@ -2223,85 +2287,86 @@ void SV8TemplComponent::AddAnimation( const FunctionCallbackInfo<Value>& args )
 		animation->SetTime(time);
 	}
 
-	SUIProperties endPoint = component->GetTargetProperties();
+	SUIProperties targetPoint = component->GetTargetProperties();
+	SUIProperties endPoint;
 
 	//component->SetProperties(args);
 
 	if (SV8Function::HasProperty(L"layer", argObj))
 	{
-		endPoint.layer = SV8Function::GetProperty(L"layer", argObj)->NumberValue();
+		endPoint.layer = new float(SV8Function::GetProperty(L"layer", argObj)->NumberValue());
 	}
 
 	if (SV8Function::HasProperty(L"width", argObj))
 	{
 		int width = SV8Function::GetProperty(L"width", argObj)->Int32Value();
-		endPoint.rectangle.Width = width;
+		endPoint.width = new int(width);
 	}
 
 	if (SV8Function::HasProperty(L"height", argObj))
 	{
 		int height = SV8Function::GetProperty(L"height", argObj)->Int32Value();
-		endPoint.rectangle.Height = height;
+		endPoint.height = new int(height);
 	}
 
 	if (SV8Function::HasProperty(L"x", argObj))
 	{
 		int x = SV8Function::GetProperty(L"x", argObj)->Int32Value();
-		endPoint.rectangle.X = x;
+		endPoint.x = new int(x);
 	}		
 
 	if (SV8Function::HasProperty(L"xDelta", argObj))
 	{
 		int x =  SV8Function::GetProperty(L"xDelta", argObj)->Int32Value();
-		endPoint.rectangle.X += x;
+		endPoint.x = new int(*targetPoint.x + x);
 	}	
 
 	if (SV8Function::HasProperty(L"y", argObj))
 	{
 		int y =  SV8Function::GetProperty(L"y", argObj)->Int32Value();
-		endPoint.rectangle.Y = y;
+		endPoint.y = new int(y);
 	}
 
 	if (SV8Function::HasProperty(L"yDelta", argObj))
 	{
 		int y = SV8Function::GetProperty(L"yDelta", argObj)->Int32Value();
-		endPoint.rectangle.Y += y;
+		endPoint.y = new int(*targetPoint.y + y);
 	}
 
 	if (SV8Function::HasProperty(L"rotation", argObj))
 	{
 		float rotation = SV8Function::GetProperty(L"rotation", argObj)->NumberValue();
-		endPoint.rotation = rotation;
+		endPoint.rotation = new float(rotation);
 	}
 
 	if (SV8Function::HasProperty(L"rotationDelta", argObj))
 	{
 		float rotation = SV8Function::GetProperty(L"rotationDelta", argObj)->NumberValue();
-		endPoint.rotation += rotation;
+		endPoint.rotation = new float(*targetPoint.rotation + rotation);
 	}
 
 	if (SV8Function::HasProperty(L"rotationCenterX", argObj))
 	{
 		float x =  SV8Function::GetProperty(L"rotationCenterX", argObj)->NumberValue();
-		endPoint.rotationCenter.x = x;
+		endPoint.rotationCenterX = new float(x);
 	}
 
 	if (SV8Function::HasProperty(L"rotationCenterXDelta", argObj))
 	{
 		float x = SV8Function::GetProperty(L"rotationCenterXDelta", argObj)->NumberValue();
-		endPoint.rotationCenter.x += x;
+		endPoint.rotationCenterX = new float(*targetPoint.rotationCenterX + x);
 	}
 
 	if (SV8Function::HasProperty(L"rotationCenterY", argObj))
 	{
 		float y = SV8Function::GetProperty(L"rotationCenterY", argObj)->NumberValue();
-		endPoint.rotationCenter.y = y;
+		endPoint.rotationCenterY = new float(y);
 	}
 
 	if (SV8Function::HasProperty(L"rotationCenterYDelta", argObj))
 	{
 		float y = SV8Function::GetProperty(L"rotationCenterYDelta", argObj)->NumberValue();
-		endPoint.rotationCenter.y += y;
+		endPoint.rotationCenterY = new float(*targetPoint.rotationCenterY + y);
 	}
 
 	if (SV8Function::HasProperty(L"backgroundImage", argObj))
@@ -2311,37 +2376,37 @@ void SV8TemplComponent::AddAnimation( const FunctionCallbackInfo<Value>& args )
 
 	if (SV8Function::HasProperty(L"backgroundColor", argObj))
 	{
-		endPoint.backgroundColor = SV8Function::GetProperty(L"backgroundColor", argObj)->Int32Value();
+		endPoint.backgroundColor = new D3DCOLOR(SV8Function::GetProperty(L"backgroundColor", argObj)->Int32Value());
 	}
 
 	if (SV8Function::HasProperty(L"backgroundX", argObj))
 	{
-		endPoint.backgroundX = SV8Function::GetProperty(L"backgroundX", argObj)->Int32Value();
+		endPoint.backgroundX = new int(SV8Function::GetProperty(L"backgroundX", argObj)->Int32Value());
 	}
 
 	if (SV8Function::HasProperty(L"backgroundXDelta", argObj))
 	{
-		endPoint.backgroundX += SV8Function::GetProperty(L"backgroundXDelta", argObj)->Int32Value();
+		endPoint.backgroundX = new int(*targetPoint.backgroundX + SV8Function::GetProperty(L"backgroundXDelta", argObj)->Int32Value());
 	}
 
 	if (SV8Function::HasProperty(L"backgroundY", argObj))
 	{
-		endPoint.backgroundY = SV8Function::GetProperty(L"backgroundY", argObj)->Int32Value();
+		endPoint.backgroundY = new int(SV8Function::GetProperty(L"backgroundY", argObj)->Int32Value());
 	}
 
 	if (SV8Function::HasProperty(L"backgroundYDelta", argObj))
 	{
-		endPoint.backgroundY += SV8Function::GetProperty(L"backgroundYDelta", argObj)->Int32Value();
+		endPoint.backgroundY = new int(*targetPoint.backgroundY + SV8Function::GetProperty(L"backgroundYDelta", argObj)->Int32Value());
 	}
 
 	if (SV8Function::HasProperty(L"opacity", argObj))
 	{
-		endPoint.transparency = SV8Function::GetProperty(L"opacity", argObj)->NumberValue();
+		endPoint.transparency = new float(SV8Function::GetProperty(L"opacity", argObj)->NumberValue());
 	}
 
 	if (SV8Function::HasProperty(L"opacityDelta", argObj))
 	{
-		endPoint.transparency +=  SV8Function::GetProperty(L"opacityDelta", argObj)->NumberValue();
+		endPoint.transparency = new float(*targetPoint.transparency + SV8Function::GetProperty(L"opacityDelta", argObj)->NumberValue());
 	}
 
 	if (SV8Function::HasProperty(L"canSkip", argObj))

@@ -10,7 +10,7 @@ Handle<ObjectTemplate> SV8TemplScroll::GetTemplate()
 	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"scrollPosition"), ScrollPositionGetter, ScrollPositionSetter);
 	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"direction"), DirectionGetter, DirectionSetter);
 	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"maxCount"), MaxCountGetter, MaxCountSetter);
-	templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"onBoundaryReach"), OnBoundaryReachGetter, OnBoundaryReachSetter);
+	//templ->SetAccessor(SPV8ScriptEngine::SPStringToString(L"onBoundaryReach"), OnBoundaryReachGetter, OnBoundaryReachSetter);
 
 	// Methods
 

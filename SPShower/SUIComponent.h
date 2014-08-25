@@ -8,7 +8,7 @@
 #include "SUIEventHandler.h"
 #include "ISV8Serializable.h"
 
-#define  MaxLayer 255
+#define  MaxLayer 1024
 
 using namespace SPEngine;
 
@@ -204,6 +204,7 @@ public:
 	virtual Handle<Object> GetV8Obj();
 	Handle<Array> GetV8ChildComponents();
 	
+	SRectangle GetRectangle();
 	/// @}
 	
 	

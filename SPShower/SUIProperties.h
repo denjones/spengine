@@ -31,22 +31,31 @@ public:
 	};
 
 public:
-	SRectangle		rectangle;
-	float			rotation;
-	D3DXVECTOR2		rotationCenter;
-	SPTexturePtr	backgroundImage;
-	D3DCOLOR		backgroundColor;
-	float			transparency;	
-	float			layer;
-	int				backgroundX;
-	int				backgroundY;
-	BackgroundMode	backgroundMode;
-	BackgroundPosition backgroundPosition;
+	//SPPointer<SRectangle>		rectangle;
+	SPPointer<int>				x;
+	SPPointer<int>				y;
+	SPPointer<int>				width;
+	SPPointer<int>				height;
+	SPPointer<float>			rotation;
+	//SPPointer<D3DXVECTOR2>		rotationCenter;
+	SPPointer<float>			rotationCenterX;
+	SPPointer<float>			rotationCenterY;
+	SPTexturePtr				backgroundImage;
+	SPPointer<D3DCOLOR>			backgroundColor;
+	SPPointer<float>			transparency;	
+	SPPointer<float>			layer;
+	SPPointer<int>				backgroundX;
+	SPPointer<int>				backgroundY;
+	SPPointer<BackgroundMode>	backgroundMode;
+	SPPointer<BackgroundPosition> backgroundPosition;
 
 public:
 	SUIProperties(void);
 	virtual ~SUIProperties(void);
 
+	void Init();
+
+	void operator = (SUIProperties& target);
 	static SPString BackgroundModeToString(BackgroundMode mode);
 	static SPString BackgroundPositionToString(BackgroundPosition mode);
 	static BackgroundMode StringToBackgroundMode(SPString modeName);

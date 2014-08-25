@@ -23,6 +23,7 @@ protected:
 public:
 	bool CanSkip() { return canSkip; }
 	void SetType(TransitionType setType);
+	TransitionType GetType();
 	void SetCanSkip(bool setSkip);
 	float GetTransition();
 
@@ -35,6 +36,7 @@ public:
 	virtual void Stop();
 	virtual void Skip();
 	virtual void SetTime(float time);
+	virtual float GetTime();
 };
 
 

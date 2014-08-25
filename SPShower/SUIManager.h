@@ -21,7 +21,7 @@ class SUIManager :
 
 	ScreenMap screenMap;
 	PersistentScreenMap persistentScreenMap;
-	ScreenStackPtr dispalyStack;
+	ScreenStackPtr displayStack;
 	EventQueuePtr eventQueue;
 	float elapsedMouseDownTime[3];
 	int elapsedMouseDownMovementX[3];
@@ -49,6 +49,7 @@ public:
 
 	void SetPersistentScreen(SUIScreenPtr screen);
 	SUIScreenPtr GetPersistentScreen(SUIScreen* screenPtr);
+	void DeletePersistentScreen(SUIScreen* handle);
 
 	SUIScreenPtr GetScreen(SPString name);
 	void AddScreen(SUIScreenPtr newComponent);

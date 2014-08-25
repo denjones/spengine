@@ -32,33 +32,41 @@ Handle<Object> SUITrackManager::CreateTrack( Handle<Object> argObj )
 
 	bool isNameSet = false;
 	SPString id = L"";
+	Local<Object> obj;
 
 	if (SV8Function::HasProperty(L"id", argObj))
 	{
 		id = SPV8ScriptEngine::StringToSPString(SV8Function::GetProperty(L"id", argObj)->ToString());
-		track = SPSoundManager::GetSingleton()->GetTrack(id);
+		track = SPSoundManager::GetSingleton()->GetTrack(id);		
 
 		if (!track)
 		{
 			track = SPSoundManager::GetSingleton()->CreateSoundTrack(id);
+			Handle<ObjectTemplate> handleTempl = GetTrackTemplate();
+			obj = handleTempl->NewInstance();
+			obj->SetInternalField(0, External::New(track.GetHandle()));
+			trackHandleManager[track.GetHandle()] = new Persistent<Object>(isolate, obj);
+		}
+		else
+		{
+			obj = GetTrack(track.GetHandle());
 		}
 	}
 	else
 	{
 		track = new SPSoundTrack();
+		Handle<ObjectTemplate> handleTempl = GetTrackTemplate();
+		obj = handleTempl->NewInstance();
+		obj->SetInternalField(0, External::New(track.GetHandle()));
+		trackHandleManager[track.GetHandle()] = new Persistent<Object>(isolate, obj);
 	}
 
-	SUISoundTrackHandle handle = track.GetHandle();
-	
-	Local<Object> obj = Handle<Object>();
-
-	Handle<ObjectTemplate> handleTempl = GetTrackTemplate();
-	obj = handleTempl->NewInstance();
+	track->Stop();
+	Handle<Value> control = argObj->Get(SPV8ScriptEngine::SPStringToString(L"control"));
+	argObj->Delete(SPV8ScriptEngine::SPStringToString(L"control"));
 
 	if(!obj.IsEmpty())
 	{
-		obj->SetInternalField(0, External::New(track.GetHandle()));
-
 		const Local<Array> props = argObj->GetPropertyNames();
 		const uint32_t length = props->Length();
 		for (uint32_t i = 0; i < length; i++)
@@ -70,9 +78,7 @@ Handle<Object> SUITrackManager::CreateTrack( Handle<Object> argObj )
 		}
 	}
 
-	trackHandleManager[handle] = new Persistent<Object>(isolate, obj);
-
-	obj->Set(SPV8ScriptEngine::SPStringToString(L"control"), argObj->Get(SPV8ScriptEngine::SPStringToString(L"control")));
+	obj->Set(SPV8ScriptEngine::SPStringToString(L"control"), control);
 
 	return obj;
 }

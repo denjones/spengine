@@ -16,7 +16,7 @@ using namespace std;
 namespace SPEngine
 {
 	bool SPLogHelper::isLoggingOn = false;
-	bool SPLogHelper::isDebug = SPConfigManager::GetSingleton()->GetCurrentConfig().debug;
+	bool SPLogHelper::isDebug = SPConfigManager::GetSingleton()->GetCurrentConfig()->debug;
 	CCritSec SPLogHelper::logLock;
 
 	SPLogHelper::SPLogHelper(void)

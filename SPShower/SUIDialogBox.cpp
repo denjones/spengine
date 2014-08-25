@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "SUIDialogBox.h"
 #include "SV8ScriptManager.h"
+#include "SV8Function.h"
 
 #pragma warning(disable:4244)
 #pragma warning(disable:4129)
@@ -40,16 +41,16 @@ void SUIDialogBox::AddText( SUIText text )
 
 void SUIDialogBox::Update( float timeDelta )
 {
-	SPTransition::Update(timeDelta);
+	SUITextBox::Update(timeDelta);
 
 	Clean();
 
 	elapsedLastAddTime += timeDelta;
 
+	modificationLock.Lock();
+
 	if (textsToPush.size() == 0)
 	{
-		modificationLock.Lock();
-
 		waitingNextPage = true;
 
 		if (nextLine)
@@ -66,8 +67,6 @@ void SUIDialogBox::Update( float timeDelta )
 	{
 		if (!nextLine)
 		{
-			modificationLock.Lock();
-
 			waitingNextLine = false;
 			waitingNextPage = false;
 
@@ -91,13 +90,9 @@ void SUIDialogBox::Update( float timeDelta )
 				return;
 			}
 
-			modificationLock.Unlock();
-
 			// Push new character.
 			//texts.push_back(characterToPush);
-			SUITextBox::AddText(characterToPush);
-
-			modificationLock.Lock();
+			SUITextBox::AddTextWithoutLock(characterToPush);
 
 			// Remove the character.
 			textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -107,8 +102,6 @@ void SUIDialogBox::Update( float timeDelta )
 			{
 				textsToPush.pop_front();
 			}
-
-			modificationLock.Unlock();
 		}		
 		else
 		{
@@ -117,8 +110,6 @@ void SUIDialogBox::Update( float timeDelta )
 				// Forward to line change or end of text.
 				while(textsToPush.size() > 0)
 				{
-					modificationLock.Lock();
-
 					SUIText characterToPush = textsToPush.front();
 
 					characterToPush.text = characterToPush.text.substr(0,1);	
@@ -137,13 +128,9 @@ void SUIDialogBox::Update( float timeDelta )
 						break;
 					}
 
-					modificationLock.Unlock();
-
 					// Push new character.
 					//texts.push_back(characterToPush);
-					SUITextBox::AddText(characterToPush);
-
-					modificationLock.Lock();
+					SUITextBox::AddTextWithoutLock(characterToPush);
 
 					// Remove the character.
 					textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -153,18 +140,12 @@ void SUIDialogBox::Update( float timeDelta )
 					{
 						textsToPush.pop_front();
 					}
-
-					modificationLock.Unlock();
 				}
 			}
 			else
 			{
-				modificationLock.Lock();
-
 				waitingNextLine = false;
 				waitingNextPage = false;
-
-				modificationLock.Unlock();
 
 				SUIText characterToPush = textsToPush.front();
 
@@ -183,10 +164,8 @@ void SUIDialogBox::Update( float timeDelta )
 				{
 					// Push new character.
 					//texts.push_back(characterToPush);
-					SUITextBox::AddText(characterToPush);
+					SUITextBox::AddTextWithoutLock(characterToPush);
 				}				
-
-				modificationLock.Lock();
 
 				// Remove the character.
 				textsToPush.front().text = textsToPush.front().text.substr(1);
@@ -196,20 +175,18 @@ void SUIDialogBox::Update( float timeDelta )
 				{
 					textsToPush.pop_front();
 				}				
-
-				modificationLock.Unlock();
 			}
 		}
 
 		if (nextLine)
 		{
-			modificationLock.Lock();
 			nextLine = false;
-			modificationLock.Unlock();
 		}
 
 		elapsedLastAddTime = 0;
 	}
+
+	modificationLock.Unlock();
 }
 
 void SUIDialogBox::SetSpeed( float setSpeed )
@@ -233,6 +210,8 @@ void SUIDialogBox::Next()
 
 void SUIDialogBox::Draw( float timeDelta )
 {
+	modificationLock.Lock();
+
 	D3DXVECTOR2 pos = Position();
 
 	if (IsShowNextLineTex() && nextLineTex)
@@ -250,6 +229,7 @@ void SUIDialogBox::Draw( float timeDelta )
 			Alpha() * (D3DXCOLOR)SPColor::White, childTarget);
 	}
 
+	modificationLock.Unlock();
 
 	SUITextBox::Draw(timeDelta);
 }
@@ -484,4 +464,54 @@ Handle<Object> SUIDialogBox::GetV8Obj()
 	}
 
 	return Handle<Object>::New(isolate, *v8Obj);
+}
+
+Handle<Object> SUIDialogBox::SaveAsObj()
+{
+	Handle<Object> result = SUITextBox::SaveAsObj();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"dialogBox"));
+	result->Set(SPV8ScriptEngine::SPStringToString(L"isNextLine"), Boolean::New(isHasTextToAdd));
+	result->Set(SPV8ScriptEngine::SPStringToString(L"isNextPage"), Boolean::New(isHasTextToClear));
+	return result;
+}
+
+SPEngine::SPTexturePtr SUIDialogBox::GetNextLineTex()
+{
+	return nextLineTex;
+}
+
+SPEngine::SPTexturePtr SUIDialogBox::GetNextPageTex()
+{
+	return nextPageTex;
+}
+
+void SUIDialogBox::LoadFromObj( Handle<Object> obj )
+{
+	bool markNextLine = false;
+	bool markNextPage = false;
+
+	if (SV8Function::HasProperty(L"isNextLine", obj))
+	{
+		markNextLine = SV8Function::GetProperty(L"isNextLine", obj)->BooleanValue();
+		obj->Delete(SPV8ScriptEngine::SPStringToString(L"isNextLine"));
+
+	}
+
+	if (SV8Function::HasProperty(L"isNextPage", obj))
+	{
+		markNextPage = SV8Function::GetProperty(L"isNextPage", obj)->BooleanValue();
+		obj->Delete(SPV8ScriptEngine::SPStringToString(L"isNextPage"));
+	}
+
+	SUITextBox::LoadFromObj(obj);
+
+	if (markNextLine)
+	{
+		MarkTextToAdd();
+	}
+
+	if (markNextPage)
+	{
+		MarkTextToClear();
+	}
 }

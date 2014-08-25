@@ -32,8 +32,8 @@ void SPCamera::Initialize()
 
 	viewAngle = D3DX_PI  * 0.5f;
 	aspectRation = 
-		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth /
-		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth /
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 	frontPlaneDistance = 0.2f;
 	backPlaneDistance = 10.0f;
 
@@ -41,8 +41,8 @@ void SPCamera::Initialize()
 	SetPosition(D3DXVECTOR3(0.0f, -1.0f, 0.0f));
 	SetProjection(viewAngle, aspectRation, frontPlaneDistance, backPlaneDistance);
 	SetViewport( 0, 0,
-		SPConfigManager::GetSingleton()->GetCurrentConfig().windowWidth,
-		SPConfigManager::GetSingleton()->GetCurrentConfig().windowHeight);
+		SPConfigManager::GetSingleton()->GetCurrentConfig()->windowWidth,
+		SPConfigManager::GetSingleton()->GetCurrentConfig()->windowHeight);
 }
 
 void SPCamera::SetCameraType(CameraType setType)
@@ -217,8 +217,8 @@ void SPCamera::Draw(float timeDelta)
 void SPCamera::Load()
 {
 	aspectRation = 
-		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth /
-		(float)SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth /
+		(float)SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_VIEW, &ViewMatrix()); 
 	SPDevice::GetSingleton()->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix());

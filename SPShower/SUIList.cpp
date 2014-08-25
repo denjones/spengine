@@ -337,3 +337,10 @@ Handle<Object> SUIList::GetV8Obj()
 
 	return Handle<Object>::New(isolate, *v8Obj);
 }
+
+Handle<Object> SUIList::SaveAsObj()
+{
+	Handle<Object> result = SUIComponent::SaveAsObj();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"scroll"));
+	return result;
+}

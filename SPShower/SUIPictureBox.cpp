@@ -72,14 +72,14 @@ SRectangle SUIPictureBox::GetTexRect()
 {
 	if (!picture)
 	{
-		return properties.rectangle;
+		return SRectangle(*properties.x, *properties.y, *properties.width, *properties.height);
 	}
 
 	SRectangle rect;
 	int imageWidth = picture->GetWidth();
 	int imageHeight = picture->GetHeight();
-	int boxWidth = properties.rectangle.Width;
-	int boxHeight = properties.rectangle.Height;
+	int boxWidth = *properties.width;
+	int boxHeight = *properties.height;
 
 	if (fillMode == Positioning)
 	{
@@ -145,7 +145,7 @@ SRectangle SUIPictureBox::GetTexRect()
 	switch(fillMode)
 	{
 	case Fill:
-		rect = properties.rectangle;
+		rect = GetRectangle();
 		rect.X = 0;
 		rect.Y = 0;
 		break;
@@ -201,9 +201,9 @@ SRectangle SUIPictureBox::GetTexRect()
 		break;
 
 	case ResizeBox:
-		properties.rectangle.Width = imageWidth;
-		properties.rectangle.Height = imageHeight;
-		rect = properties.rectangle;
+		*properties.width = imageWidth;
+		*properties.height = imageHeight;
+		rect = GetRectangle();
 		rect.X = 0;
 		rect.Y = 0;
 		break;
@@ -388,9 +388,9 @@ SPEngine::SPRectangle SUIPictureBox::ImageSrcRect()
 {
 	if (isAbsoluteRender)
 	{
-		SPRectangle rect = properties.rectangle;
-		rect.X = -properties.backgroundX;
-		rect.Y = -properties.backgroundY;
+		SPRectangle rect = GetRectangle();
+		rect.X = -*properties.backgroundX;
+		rect.Y = -*properties.backgroundY;
 		return rect;
 	}
 
@@ -592,4 +592,11 @@ Handle<Object> SUIPictureBox::GetV8Obj()
 	}
 
 	return Handle<Object>::New(isolate, *v8Obj);
+}
+
+Handle<Object> SUIPictureBox::SaveAsObj()
+{
+	Handle<Object> result = SUIComponent::SaveAsObj();
+	result->Set(SPV8ScriptEngine::SPStringToString(L"type"), SPV8ScriptEngine::SPStringToString(L"pictureBox"));
+	return result;
 }

@@ -54,6 +54,7 @@ public:
 
 	void SetPersistentComponent( SUIComponentPtr pointer );
 	SUIComponentPtr GetPersistentComponent( SUIComponent* component );
+	void DeletePersistentComponent( SUIComponent* component );
 	SPTexturePtr GetRenderTarget();
 	SUIComponentPtr GetComponent(SPString name);
 	void AddComponent(SUIComponentPtr newComponent);

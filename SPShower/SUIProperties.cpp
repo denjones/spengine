@@ -4,17 +4,6 @@
 
 SUIProperties::SUIProperties(void)
 {
-	rectangle = SRectangle(0, 0, 0, 0);
-	rotation = 0;
-	rotationCenter = D3DXVECTOR2(0, 0);
-	backgroundImage = NULL;
-	backgroundColor = D3DXCOLOR(0,0,0,0);
-	transparency = 1;
-	layer = 0;
-	backgroundX = 0;
-	backgroundY = 0;
-	backgroundPosition = Normal;
-	backgroundMode = Positioning;
 	//padding = D3DXVECTOR4(0,0,0,0);
 }
 
@@ -129,39 +118,39 @@ SUIProperties::BackgroundMode SUIProperties::StringToBackgroundMode( SPString mo
 
 SUIProperties::BackgroundPosition SUIProperties::StringToBackgroundPosition( SPString modeName )
 {
-	if(modeName ==  L"Normal")
+	if(SPStringHelper::EqualsIgnoreCase(modeName, L"Normal"))
 	{
 		return Normal;
 	}
-	else if (modeName == L"TopLeft")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"TopLeft"))
 	{
 		return TopLeft;
 	}
-	else if (modeName == L"TopRight")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"TopRight"))
 	{
 		return TopRight;
 	}
-	else if (modeName == L"BottomLeft")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"BottomLeft"))
 	{
 		return BottomLeft;
 	}
-	else if (modeName == L"BottomRight")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"BottomRight"))
 	{
 		return BottomRight;
 	}
-	else if (modeName == L"BottomCenter")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"BottomCenter"))
 	{
 		return BottomCenter;
 	}
-	else if (modeName == L"CenterLeft")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"CenterLeft"))
 	{
 		return CenterLeft;
 	}
-	else if (modeName == L"CenterRight")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"CenterRight"))
 	{
 		return CenterRight;
 	}
-	else if (modeName == L"CenterAll")
+	else if (SPStringHelper::EqualsIgnoreCase(modeName, L"CenterAll"))
 	{
 		return CenterAll;
 	}
@@ -169,6 +158,105 @@ SUIProperties::BackgroundPosition SUIProperties::StringToBackgroundPosition( SPS
 	SPLogHelper::WriteLog(L"[SpeShow] Invalid Background Position: " + modeName + L". Defaulting to 'Normal'.");
 
 	return Normal;
+}
+
+void SUIProperties::operator=( SUIProperties& target )
+{
+	if(target.x)
+	{
+		this->x = new int(*target.x);
+	}
+
+	if(target.y)
+	{
+		this->y = new int(*target.y);
+	}
+
+	if(target.width)
+	{
+		this->width = new int(*target.width);
+	}
+
+	if(target.height)
+	{
+		this->height = new int(*target.height);
+	}
+
+	if (target.rotation)
+	{
+		this->rotation = new float(*target.rotation);
+	}
+
+	if (target.rotationCenterX)
+	{
+		this->rotationCenterX = new float(*target.rotationCenterX);
+	}
+
+	if (target.rotationCenterY)
+	{
+		this->rotationCenterY = new float(*target.rotationCenterY);
+	}
+
+	if (target.backgroundImage)
+	{
+		this->backgroundImage = target.backgroundImage;
+	}
+
+	if (target.backgroundColor)
+	{
+		this->backgroundColor = new D3DCOLOR(*target.backgroundColor);
+	}
+
+	if (target.transparency)
+	{
+		this->transparency = new float(*target.transparency);
+	}
+
+	if (target.layer)
+	{
+		this->layer = new float(*target.layer);
+	}
+
+	if (target.backgroundX)
+	{
+		this->backgroundX = new int(*target.backgroundX);
+	}
+
+	if (target.backgroundY)
+	{
+		this->backgroundY = new int(*target.backgroundY);
+	}
+
+	if (target.backgroundMode)
+	{
+		this->backgroundMode = new BackgroundMode(*target.backgroundMode);
+	}
+
+	if (target.backgroundPosition)
+	{
+		this->backgroundPosition = new BackgroundPosition(*target.backgroundPosition);
+	}
+}
+
+void SUIProperties::Init()
+{
+	//rectangle = new SRectangle(0, 0, 0, 0);
+	x = new int(0);
+	y = new int(0);
+	width = new int(0);
+	height = new int(0);
+	rotation = new float(0);
+	//rotationCenter = new D3DXVECTOR2(0, 0);
+	rotationCenterX = new float(0);
+	rotationCenterY = new float(0);
+	backgroundImage = NULL;
+	backgroundColor = new D3DCOLOR();
+	transparency = new float(1);
+	layer = new float(0);
+	backgroundX = new int(0);
+	backgroundY = new int(0);
+	backgroundMode = new BackgroundMode();
+	backgroundPosition = new BackgroundPosition();
 }
 
 

@@ -36,8 +36,8 @@ public:
 	{
 		// Render video texture on screen.
 		SPSpriteManager::GetSingleton()->RenderOnScreen(texture, NULL, SPRectangle(0,0,
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth,
-			SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight),
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth,
+			SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight),
 			SPColor::White, 1, NULL);
 
 		return SPGame::Draw(timeDelta);

@@ -83,6 +83,7 @@ public:
 	static ImagePosition StringToPositionMode(SPString modeName);
 
 	virtual Handle<Object> GetV8Obj();
+	virtual Handle<Object> SaveAsObj();
 
 };
 

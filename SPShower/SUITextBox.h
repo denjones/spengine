@@ -55,6 +55,7 @@ protected:
 	SUITextBlock	lines;
 	bool			isAutoHeight;
 	bool			isAnonymousFont;
+	SUITextList	textToAdd;
 
 public:
 	bool IsAutoHeight();
@@ -111,6 +112,7 @@ public:
 
 	virtual void RefreshText();
 	virtual void AddText(SUIText text);	
+	virtual void AddTextWithoutLock(SUIText text);	
 	virtual void Clear();
 	virtual void NewLine();
 	//virtual bool AddTextDirectly(SUITextSpanPtr textSpan);
@@ -128,6 +130,7 @@ public:
 	virtual void LoadFromString(SPString stringStream);
 	virtual SPString SaveAsString();
 	virtual Handle<Object> GetV8Obj();
+	virtual Handle<Object> SaveAsObj();
 
 private:
 	bool IsPunctuation(SPString character);

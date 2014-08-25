@@ -26,6 +26,7 @@ public:
 
 	Handle<Value> GetFunction(SV8FunctionHandle handle);
 	SV8FunctionHandle RegisterFunction(Handle<v8::Function> origin);
+	void Clear();
 
 	virtual Handle<Object> SaveAsObj();
 	virtual void LoadFromObj( Handle<Object> obj );

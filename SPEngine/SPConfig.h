@@ -7,6 +7,7 @@
 
 #pragma once
 #include <sxp.h>
+#include "SPPointer.h"
 
 using namespace std;
 
@@ -64,6 +65,8 @@ namespace SPEngine
 		bool SaveAsFile(string path);
 		D3DPRESENT_PARAMETERS ToD3DParameters();
 	};
+
+	typedef SPPointer<SPConfig> SPConfigPtr;
 }
 
 

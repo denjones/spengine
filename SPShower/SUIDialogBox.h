@@ -21,6 +21,8 @@ public:
 	float GetSpeed();
 	void SetNextLineTex(SPTexturePtr setTex);
 	void SetNextPageTex(SPTexturePtr setTex);
+	SPTexturePtr GetNextLineTex();
+	SPTexturePtr GetNextPageTex();
 	bool IsDisplaying();
 	bool IsDisplayAllDone();
 
@@ -49,6 +51,8 @@ public:
 	virtual SPString SaveAsString();
 
 	virtual Handle<Object> GetV8Obj();
+	virtual Handle<Object> SaveAsObj();
+	virtual void LoadFromObj( Handle<Object> obj );
 
 };
 

@@ -176,6 +176,11 @@ namespace SPEngine
 		textures[num] = tex;
 	}
 
+	SPEffect::ValueMap SPEffect::GetValues()
+	{
+		return values;
+	}
+
 	SPEffect::ValuePair::ValuePair( void* setData, DWORD setLength )
 	{
 		pData = NULL;

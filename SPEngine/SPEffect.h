@@ -52,6 +52,7 @@ namespace SPEngine
 		void SetVector(string index, D3DXVECTOR4 constant);
 		void SetMatrix( string index, D3DXMATRIX constant );
 		void SetValue(string index, void* pData, DWORD length);
+		ValueMap GetValues();
 
 	public:
 		void ApplyEffect();

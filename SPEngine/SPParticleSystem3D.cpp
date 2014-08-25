@@ -11,6 +11,7 @@
 #include "SPDevice.h"
 #include "SPConfigManager.h"
 #include "SPParticleSystemTexture.h"
+#include "SPGameManager.h"
 
 using namespace SPEngine;
 using namespace SPEngine::SPVertex;
@@ -149,8 +150,8 @@ void SPEngine::SPParticleSystem3D::LoadWith2D(
 	BoundingBox tempBox;
 	if(!renderTarget)
 	{
-		renderWidth = SPConfigManager::GetSingleton()->GetCurrentConfig().workingWidth;
-		renderHeight = SPConfigManager::GetSingleton()->GetCurrentConfig().workingHeight;
+		renderWidth = SPConfigManager::GetSingleton()->GetCurrentConfig()->workingWidth;
+		renderHeight = SPConfigManager::GetSingleton()->GetCurrentConfig()->workingHeight;
 	}else
 	{
 		renderWidth = renderTarget->GetWidth();
@@ -228,6 +229,8 @@ bool SPEngine::SPParticleSystem3D::Init(SPTexturePtr texPtr, bool if3D)
 
 	HRESULT hr = 0;
 	
+	SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 	hr = SPDevice::GetSingleton()->GetD3DDevice()->CreateVertexBuffer(
 		vbSize * sizeof(NormalTexColorVertex) * 6,
 		//D3DUSAGE_DYNAMIC | D3DUSAGE_POINTS | D3DUSAGE_WRITEONLY,
@@ -236,6 +239,8 @@ bool SPEngine::SPParticleSystem3D::Init(SPTexturePtr texPtr, bool if3D)
 		D3DPOOL_DEFAULT,
 		&vb,
 		0);
+
+	SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 
 	if(FAILED(hr))
 	{
@@ -257,8 +262,11 @@ bool SPEngine::SPParticleSystem3D::Init(SPTexturePtr texPtr, bool if3D)
 	//	&i, NULL,
 	//	&tex);
 
-	height = texturePtr->GetHeight();
-	width = texturePtr->GetWidth();
+	if(texturePtr)
+	{
+		height = texturePtr->GetHeight();
+		width = texturePtr->GetWidth();
+	}
 
 	//height = i.Height;
 	//width = i.Width;

@@ -181,7 +181,14 @@ void SV8TemplParticleSystem::TexSetter( Local<String> property, Local<Value> val
 		return;
 	}
 
-	handle->SetTexture(SV8Function::GetTextureFromObj(value->ToObject()));
+	if (value->IsString())
+	{
+		handle->SetTexture(SPTextureManager::GetSingleton()->GetTexture(SPV8ScriptEngine::StringToSPString(value->ToString())));
+	}
+	else if(value->IsObject())
+	{
+		handle->SetTexture(SV8Function::GetTextureFromObj(value->ToObject()));
+	}
 }
 
 void SV8TemplParticleSystem::BornXMinGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )

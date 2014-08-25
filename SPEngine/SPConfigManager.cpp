@@ -8,6 +8,7 @@ namespace SPEngine
 {
 	SPConfigManager::SPConfigManager(void)
 	{
+		currentConfig = new SPConfig();
 	}
 
 
@@ -28,34 +29,34 @@ namespace SPEngine
 		if (file)
 		{
 			fclose(file);
-			currentConfig.LoadFromFile(configFile);			
+			currentConfig->LoadFromFile(configFile);			
 		}
 		else
 		{
-			currentConfig.SaveAsFile(configFile);	
+			currentConfig->SaveAsFile(configFile);	
 		}		
 
 		return true;
 	}
 
-	bool SPConfigManager::SetConfig( SPConfig &config )
+	bool SPConfigManager::SetConfig( SPConfigPtr config )
 	{
 		modificationLock.Lock();
 		currentConfig = config;
-		currentConfig.SaveAsFile(configFile);
+		currentConfig->SaveAsFile(configFile);
 		modificationLock.Unlock();
 
 		return true;
 	}
 
-	SPEngine::SPConfig SPConfigManager::GetCurrentConfig()
+	SPEngine::SPConfigPtr SPConfigManager::GetCurrentConfig()
 	{
 		return currentConfig;
 	}
 
 	void SPConfigManager::SetDebug( bool on )
 	{
-		currentConfig.debug = on;
+		currentConfig->debug = on;
 	}
 
 }

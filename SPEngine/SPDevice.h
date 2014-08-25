@@ -28,13 +28,13 @@ namespace SPEngine
 		SPDevice(void);
 		virtual ~SPDevice(void);
 
-		bool InitializeD3D( SPConfig config );
+		bool InitializeD3D( SPConfigPtr config );
 		bool CreateD3DObject();
-		bool CreateD3DDevice( SPConfig config );
+		bool CreateD3DDevice( SPConfigPtr config );
 		bool ReleaseDevice();
 		bool ReleaseObject();
 
-		bool ResetDevice( SPConfig config );
+		bool ResetDevice( SPConfigPtr config );
 	};
 }
 

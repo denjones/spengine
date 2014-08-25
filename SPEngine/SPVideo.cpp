@@ -61,7 +61,8 @@ namespace SPEngine
 	{
 		if (state != STATE_PAUSED && state != STATE_STOPPED)
 		{
-			throw exception("VFW_E_WRONG_STATE");
+			//throw exception("VFW_E_WRONG_STATE");
+			return;
 		}
 
 		assert(data->GetGraph()); // If state is correct, the graph should exist.
@@ -82,7 +83,8 @@ namespace SPEngine
 	{
 		if (state != STATE_RUNNING)
 		{
-			throw exception("VFW_E_WRONG_STATE");
+			//throw exception("VFW_E_WRONG_STATE");
+			return;
 		}
 
 		assert(data->GetGraph()); // If state is correct, the graph should exist.
@@ -104,7 +106,8 @@ namespace SPEngine
 	{
 		if (state != STATE_RUNNING && state != STATE_PAUSED)
 		{
-			throw exception("VFW_E_WRONG_STATE");
+			//throw exception("VFW_E_WRONG_STATE");
+			return;
 		}
 
 		assert(data->GetGraph()); // If state is correct, the graph should exist.
@@ -145,7 +148,8 @@ namespace SPEngine
 	{
 		if (!data->GetControl()  || !data->GetSeek())
 		{
-			throw exception("E_UNEXPECTED");
+			//throw exception("E_UNEXPECTED");
+			return;
 		}
 
 		HRESULT hr = S_OK;

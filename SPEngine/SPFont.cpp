@@ -53,6 +53,8 @@ namespace SPEngine
 		DWORD		PitchAndFamily, 
 		SPString	FontName )
 	{
+		SPGameManager::GetSingleton()->GetGame()->LockDrawing();
+
 		unloaded = true;
 		float rate = SPFontManager::GetSingleton()->GetSizeRate();
 
@@ -62,6 +64,7 @@ namespace SPEngine
 			CharSet, OutputPrecision, Quality,
 			PitchAndFamily, FontName.c_str(), &font)))
 		{		
+			SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 			return false;
 		}
 
@@ -76,6 +79,8 @@ namespace SPEngine
 		miplevel = MipLevels;
 		name = FontName;
 		unloaded = false;
+
+		SPGameManager::GetSingleton()->GetGame()->UnlockDrawing();
 
 		return true;
 	}

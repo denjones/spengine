@@ -89,7 +89,30 @@ void SV8TemplDialogBox::SpeedSetter( Local<String> property, Local<Value> value,
 
 void SV8TemplDialogBox::NextLineImageGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
-	
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
+
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIDialogBox* textBox = (SUIDialogBox*)field->Value();
+	if (textBox == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	if (textBox->GetNextLineTex())
+	{
+		SPTexturePtr tex = textBox->GetNextLineTex();
+		info.GetReturnValue().Set(SV8Function::GetObjFromTexture(tex));
+	}
+	else
+	{
+		info.GetReturnValue().Set(Undefined(isolate));
+	}	
 }
 
 void SV8TemplDialogBox::NextLineImageSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )
@@ -132,7 +155,30 @@ void SV8TemplDialogBox::NextLineImageSetter( Local<String> property, Local<Value
 
 void SV8TemplDialogBox::NextPageImageGetter( Local<String> property, const PropertyCallbackInfo<Value>& info )
 {
+	if(!SPV8ScriptEngine::GetSingleton())
+	{
+		return;
+	}
 
+	Isolate* isolate = SPV8ScriptEngine::GetSingleton()->GetIsolate();
+	Handle<External> field = Handle<External>::Cast(info.Holder()->GetInternalField(0));
+	SUIDialogBox* textBox = (SUIDialogBox*)field->Value();
+	if (textBox == NULL)
+	{
+		isolate->ThrowException(
+			Exception::ReferenceError(SPV8ScriptEngine::SPStringToString(L"Null Reference.")));
+		return;
+	}
+
+	if (textBox->GetNextPageTex())
+	{
+		SPTexturePtr tex = textBox->GetNextPageTex();
+		info.GetReturnValue().Set(SV8Function::GetObjFromTexture(tex));
+	}
+	else
+	{
+		info.GetReturnValue().Set(Undefined(isolate));
+	}	
 }
 
 void SV8TemplDialogBox::NextPageImageSetter( Local<String> property, Local<Value> value, const PropertyCallbackInfo<void>& info )

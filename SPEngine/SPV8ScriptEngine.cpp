@@ -321,7 +321,7 @@ namespace SPEngine
 	{
 		SPV8ScriptEngine* engine = (SPV8ScriptEngine*)context;
 
-		if (SPConfigManager::GetSingleton()->GetCurrentConfig().debug)
+		if (SPConfigManager::GetSingleton()->GetCurrentConfig()->debug)
 		{
 			//AllocConsole();
 			HWND hWnd = GetConsoleWindow();
